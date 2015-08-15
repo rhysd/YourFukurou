@@ -1,0 +1,27 @@
+{
+  "name": "stream-app",
+  "productName": "Stream",
+  "version": "0.0.0",
+  "description": "App to manage various timeline events (Twitter, GitHub issues, Feedly and so on)",
+  "main": "./build/browser/main.js",
+  "bin": {
+    "stream": "./bin/cli.js"
+  },
+  "author": "rhysd <lin90162@yahoo.co.jp>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rhysd/Stream.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rhysd/Stream/issues"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "electron-prebuilt": "^0.30.4",
+    "eslint-plugin-react": "^3.2.2"
+  },
+  "scripts": {
+    "start": "./bin/cli.js"
+  }
+}
