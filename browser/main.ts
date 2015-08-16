@@ -1,8 +1,9 @@
 import * as app from "app";
-import * as path from "path";
-import * as fs from "fs";
 import BrowserWindow = require("browser-window");
+import * as path from "path";
 import {openExternal} from "shell";
+import SourceLoader from "./source-loader";
+import Source from "./source";
 
 require("crash-reporter").start();
 
@@ -14,8 +15,12 @@ console.log("  Chrome version " + versions.chrome);
 console.log("  io.js version " + versions.node);
 // }}}
 
-// Main Window {{{
-var mainWindow = null;
+var mainWindow: GitHubElectron.BrowserWindow = null;
+var sources: Source[] = [];
+global.load_paths = [
+    path.join(app.getAppPath(), "stream"),
+    path.join(app.getPath("userData"), "stream", "node_modules")
+];
 
 app.on("window-all-closed", function(){ app.quit(); });
 
@@ -27,7 +32,10 @@ app.on("ready", function(){
         }
     );
 
-    mainWindow.loadUrl("https://github.com/rhysd/Stream");
+    const loader = new SourceLoader(global.load_paths, mainWindow);
+
+    const html = "file://" + path.resolve(__dirname, "..", "..", "index.html");
+    mainWindow.loadUrl(html);
 
     mainWindow.on("closed", function(){
         mainWindow = null;
@@ -37,6 +45,10 @@ app.on("ready", function(){
         e.preventDefault();
         openExternal(url);
     });
+
+    // TODO: User should select streams to load
+    sources.push(loader.load("dummy"));
+
+    mainWindow.openDevTools();
 });
-// }}}
 

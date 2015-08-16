@@ -1,6 +1,9 @@
 require 'fileutils'
 include FileUtils
 
+ROOT = __dir__.freeze
+BIN = "#{ROOT}/node_modules/.bin".freeze
+
 def cmd_exists?(cmd)
   File.exists?(cmd) && File.executable?(cmd)
 end
@@ -32,15 +35,23 @@ end
 task :build_browser_src => %i(typings) do
   ensure_cmd 'tsc'
 
-  sh 'tsc -p browser'
+  sh "tsc -p #{ROOT}/browser"
 end
 
 task :build_renderer_src do
   directory 'build/renderer'
-  sh './node_modules/.bin/browserify -g babelify -o build/renderer/index.js renderer/index.jsx'
+  sh "#{BIN}/browserify -g babelify -o #{ROOT}/build/renderer/index.js #{ROOT}/renderer/index.jsx"
 end
 
 task :build_plugin_src do
+  Dir['stream/*'].each do |d|
+    if File.exists?("#{d}/src/sink.jsx")
+      sh "#{BIN}/browserify -g babelify -o #{d}/sink.js #{d}/src/sink.jsx"
+    end
+    if File.exists?("#{d}/src/source.js")
+      sh "#{BIN}/babel -o #{d}/source.js #{d}/src/source.js"
+    end
+  end
   # TODO: Currently nothing to do
 end
 

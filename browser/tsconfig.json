@@ -4,9 +4,12 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "outDir": "../build/browser",
+    "noImplicitAny": true,
     "target": "es5"
   },
   "files": [
+    "source.ts",
+    "source-loader.ts",
     "lib.d.ts",
     "main.ts"
   ]

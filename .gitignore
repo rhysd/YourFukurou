@@ -5,3 +5,4 @@ build/browser
 app.asar
 typings
 build
+stream/*/*.js
