@@ -54,20 +54,38 @@ export default class SinkLoader {
         return Promise.all(promises);
     }
 
+    loadStyleSheets(elem, stylesheets, loaded) {
+        for (const style of stylesheets) {
+            const p = path.join(path.dirname(loaded.path), style);
+            let link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.className = 'sink-' + loaded.name;
+            link.href = 'file://' + p;
+            elem.appendChild(link);
+            console.log('Loaded CSS: ' + p);
+        }
+    }
+
+    loadScripts(elem, scripts, loaded) {
+        for (const s of scripts) {
+            const p = path.join(path.dirname(loaded.path), s);
+            let script = document.createElement('script');
+            script.setAttribute('src', 'file://' + p);
+            script.className = 'sink-' + loaded.name;
+            elem.appendChild(script);
+            console.log('Loaded Script: ' + p);
+        }
+    }
+
     loadAllPluginCSS(elem) {
         for (const l of this.loaded_sinks) {
             for (const sink of global.StreamApp.getSinks(l.name)) {
                 if ('stylesheets' in sink) {
-                    for (const style of sink.stylesheets) {
-                        const p = path.join(path.dirname(l.path), style);
-                        let link = document.createElement('link');
-                        link.rel = 'stylesheet';
-                        link.type = 'text/css';
-                        link.className = 'sink-' +sink.name;
-                        link.href = 'file://' + p;
-                        elem.appendChild(link);
-                        console.log('Loaded CSS: ' + p);
-                    }
+                    this.loadStyleSheets(elem, sink.stylesheets, l);
+                }
+                if ('scripts' in sink) {
+                    this.loadScripts(elem, sink.scripts, l);
                 }
             }
         }
