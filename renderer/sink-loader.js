@@ -55,16 +55,20 @@ export default class SinkLoader {
     }
 
     loadAllPluginCSS(elem) {
-        for (const sink of this.loaded_sinks) {
-            const p = path.join(path.dirname(sink.path), 'style.css');
-            if (fs.existsSync(p)) {
-                let link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.type = 'text/css';
-                link.className = 'sink-' +sink.name;
-                link.href = 'file://' + p;
-                elem.appendChild(link);
-                console.log('Loaded CSS: ' + p);
+        for (const l of this.loaded_sinks) {
+            for (const sink of global.StreamApp.getSinks(l.name)) {
+                if ('stylesheets' in sink) {
+                    for (const style of sink.stylesheets) {
+                        const p = path.join(path.dirname(l.path), style);
+                        let link = document.createElement('link');
+                        link.rel = 'stylesheet';
+                        link.type = 'text/css';
+                        link.className = 'sink-' +sink.name;
+                        link.href = 'file://' + p;
+                        elem.appendChild(link);
+                        console.log('Loaded CSS: ' + p);
+                    }
+                }
             }
         }
     }

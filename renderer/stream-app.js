@@ -23,5 +23,9 @@ export default class StreamAppClass {
             this.router.routeMessage(parts[0], parts[1], data);
         });
     }
+
+    getSinks(source_name) {
+        return this.router.sinks.filter(sink => sink.source === source_name);
+    }
 }
 

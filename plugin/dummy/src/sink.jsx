@@ -20,6 +20,10 @@ class Count extends React.Component {
 StreamApp.registerSink({
     source: "dummy",
 
+    stylesheets: [
+        "style.css"
+    ],
+
     init: function() {
         // Initialize something here
     },
