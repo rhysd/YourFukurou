@@ -1,6 +1,7 @@
 import * as app from "app";
 import BrowserWindow = require("browser-window");
 import * as path from "path";
+import * as fs from "fs";
 import {openExternal} from "shell";
 import SourceLoader from "./source-loader";
 import Source from "./source";
@@ -16,6 +17,7 @@ console.log("  io.js version " + versions.node);
 // }}}
 
 var mainWindow: GitHubElectron.BrowserWindow = null;
+var react_extension_loaded = false;
 var sources: Source[] = [];
 global.load_paths = [
     path.join(app.getAppPath(), "plugin"),
@@ -45,6 +47,16 @@ app.on("ready", function(){
         e.preventDefault();
         openExternal(url);
     });
+
+    mainWindow.on("devtools-opened", function(){
+        if (!react_extension_loaded) {
+            const extension_path = path.join(__dirname, "..", "..", "devtools_extension", "react-devtools");
+            if (fs.existsSync(extension_path)) {
+                BrowserWindow.addDevToolsExtension(extension_path);
+            }
+            react_extension_loaded = true;
+        }
+    })
 
     // TODO: User should select streams to load
     sources.push(loader.load("dummy"));

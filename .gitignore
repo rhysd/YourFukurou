@@ -5,4 +5,5 @@ build/browser
 app.asar
 typings
 build
-stream/*/*.js
+plugin/*/*.js
+devtools_extension
