@@ -53,4 +53,19 @@ export default class SinkLoader {
         }
         return Promise.all(promises);
     }
+
+    loadAllPluginCSS(elem) {
+        for (const sink of this.loaded_sinks) {
+            const p = path.join(path.dirname(sink.path), 'style.css');
+            if (fs.existsSync(p)) {
+                let link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.className = 'sink-' +sink.name;
+                link.href = 'file://' + p;
+                elem.appendChild(link);
+                console.log('Loaded CSS: ' + p);
+            }
+        }
+    }
 }

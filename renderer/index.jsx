@@ -11,7 +11,7 @@ global.StreamApp = new StreamApp();
 loader.loadAllSinks(document.head).then(loaded => {
     console.log('loaded sources: ' + loaded.map(l => `'${l.name}'`).join(' '));
 
-    // TODO: Load plugins' stylesheets
+    loader.loadAllPluginCSS(document.head);
 
     React.render(
             <Root router={global.StreamApp.router} />,
