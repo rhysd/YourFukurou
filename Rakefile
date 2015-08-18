@@ -43,21 +43,22 @@ task :build_renderer_src do
   sh "#{BIN}/browserify -g babelify -o #{ROOT}/build/renderer/index.js #{ROOT}/renderer/index.jsx"
 end
 
-task :build_plugin_src do
-  Dir['plugin/*'].each do |d|
-    if File.exists?("#{d}/src/sink.jsx")
-      sh "#{BIN}/browserify -g babelify -o #{d}/sink.js #{d}/src/sink.jsx"
-    end
-    if File.exists?("#{d}/src/source.js")
-      sh "#{BIN}/babel -o #{d}/source.js #{d}/src/source.js"
-    end
-    if File.exists?("#{d}/src/tsconfig.json")
+task :build_plugin_jsx_src do
+  Dir['plugin/*/src/sink.jsx'].each do |jsx|
+      sh "#{BIN}/browserify -g babelify -o #{File.dirname(File.dirname(jsx))}/sink.js #{jsx}"
+  end
+end
+
+task :build_plugin_ts_src do
+  Dir['plugin/*/src'].each do |dir|
+    if File.exists?("#{dir}/tsconfig.json")
       ensure_cmd 'tsc'
-      sh "tsc -p #{d}/src"
+      sh "tsc -p #{dir}"
     end
   end
-  # TODO: Currently nothing to do
 end
+
+task :build_plugin_src => %i(build_plugin_jsx_src build_plugin_ts_src)
 
 task :build => %i(dep build_browser_src build_renderer_src build_plugin_src)
 
