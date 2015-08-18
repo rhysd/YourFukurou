@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "outDir": "..",
+    "noImplicitAny": true,
+    "target": "es5"
+  },
+  "files": [
+    "source.ts",
+    "node-twitter.d.ts",
+    "lib.d.ts"
+  ]
+}

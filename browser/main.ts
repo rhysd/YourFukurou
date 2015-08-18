@@ -60,7 +60,7 @@ app.on("ready", function(){
     })
 
     // TODO: User should select streams to load
-    sources.push(loader.load("dummy"));
+    sources.push(loader.load("twitter"));
 
     mainWindow.openDevTools();
 

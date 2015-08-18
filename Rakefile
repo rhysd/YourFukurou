@@ -51,6 +51,10 @@ task :build_plugin_src do
     if File.exists?("#{d}/src/source.js")
       sh "#{BIN}/babel -o #{d}/source.js #{d}/src/source.js"
     end
+    if File.exists?("#{d}/src/tsconfig.json")
+      ensure_cmd 'tsc'
+      sh "tsc -p #{d}/src"
+    end
   end
   # TODO: Currently nothing to do
 end
