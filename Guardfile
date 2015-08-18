@@ -11,7 +11,7 @@ guard :shell do
     system 'rake build_renderer_src'
   end
 
-  watch %r(^stream/.+/src/.+\.jsx?$) do |m|
+  watch %r(^plugin/.+/src/.+\.jsx?$) do |m|
     puts "#{Time.now}: #{m[0]}"
     system 'rake build_plugin_src'
   end

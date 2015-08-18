@@ -44,7 +44,7 @@ task :build_renderer_src do
 end
 
 task :build_plugin_src do
-  Dir['stream/*'].each do |d|
+  Dir['plugin/*'].each do |d|
     if File.exists?("#{d}/src/sink.jsx")
       sh "#{BIN}/browserify -g babelify -o #{d}/sink.js #{d}/src/sink.jsx"
     end

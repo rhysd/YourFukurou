@@ -24,7 +24,6 @@ export default class Feed extends React.Component {
     render() {
         return (
             <div className="feed">
-                Hello world!  I'm feed component.
                 {this.state.children}
             </div>
         );

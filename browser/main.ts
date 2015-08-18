@@ -18,8 +18,8 @@ console.log("  io.js version " + versions.node);
 var mainWindow: GitHubElectron.BrowserWindow = null;
 var sources: Source[] = [];
 global.load_paths = [
-    path.join(app.getAppPath(), "stream"),
-    path.join(app.getPath("userData"), "stream", "node_modules")
+    path.join(app.getAppPath(), "plugin"),
+    path.join(app.getPath("userData"), "plugin", "node_modules")
 ];
 
 app.on("window-all-closed", function(){ app.quit(); });
