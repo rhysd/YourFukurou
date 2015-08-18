@@ -2,6 +2,7 @@ import * as app from "app";
 import BrowserWindow = require("browser-window");
 import * as path from "path";
 import * as fs from "fs";
+import * as ipc from "ipc";
 import {openExternal} from "shell";
 import SourceLoader from "./source-loader";
 import Source from "./source";
@@ -62,5 +63,14 @@ app.on("ready", function(){
     sources.push(loader.load("dummy"));
 
     mainWindow.openDevTools();
+
+    ipc.on("renderer-ready", (event: Event, required_sources: string[]) => {
+        console.log("main.ts: Initialize sources: " + required_sources);
+        for (const src of sources) {
+            if (required_sources.indexOf(src.source_name) !== -1) {
+                src.initialize();
+            }
+        }
+    });
 });
 

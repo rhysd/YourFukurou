@@ -14,5 +14,11 @@ export default class Source {
                 }
             );
     }
+
+    initialize() {
+        if ('initialize' in this.raw_source) {
+            this.raw_source.initialize();
+        }
+    }
 }
 

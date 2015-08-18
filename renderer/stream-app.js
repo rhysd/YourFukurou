@@ -22,6 +22,7 @@ export default class StreamAppClass {
 
             this.router.routeMessage(parts[0], parts[1], data);
         });
+        ipc.send('renderer-ready', this.router.sinks.map(sink => sink.source));
     }
 
     getSinks(source_name) {

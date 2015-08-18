@@ -1,8 +1,9 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 declare module StreamApp {
-    class RawSource {
-        constructor(output: (data: any) => void);
+    interface RawSource {
+        constructor(output: (data: any) => void): void;
+        initialize?: () => void;
     }
 }
 
