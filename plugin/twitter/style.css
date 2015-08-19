@@ -13,3 +13,13 @@
 .lock-icon {
   margin-left: 0.5em;
 }
+.retweeter-avatar {
+  width: 2.0em;
+  height: 2.0em;
+}
+.external-link {
+  cursor: pointer;
+}
+.tweet-link {
+  color: inherit;
+}
