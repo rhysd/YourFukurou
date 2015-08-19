@@ -5,59 +5,50 @@ class Tweet extends React.Component {
         super(props);
     }
 
-    build_tweet_component(t) {
+    buildRetweetedByComponent() {
+        if (!('retweeted_status' in this.props.tweet)) {
+            return <span></span>;
+        }
+
         return (
-            <div className="ui comments tweet">
-                <div className="comment">
-                    <a className="avatar" href={"https://twitter.com/" + t.user.screen_name}>
-                        <img src={t.user.profile_image_url} />
-                    </a>
-                    <div className="content">
-                        <a className="author" href={"https://twitter.com/" + t.user.screen_name}>
-                            @{t.user.screen_name}
-                        </a>
-                        <div className="metadata">
-                            <span className="date created-at">{t.created_at}</span>
-                        </div>
-                        <div className="text">
-                            {t.text}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <span className="retweeted-by">
+                <i className="fa fa-retweet"></i> Retweeted by @{this.props.tweet.user.screen_name}
+            </span>
         );
     }
 
-    build_retweet_component(t, user) {
-        return (
-            <div className="ui comments tweet">
-                <div className="comment">
-                    <a className="avatar" href={"https://twitter.com/" + t.user.screen_name}>
-                        <img src={t.user.profile_image_url} />
-                    </a>
-                    <div className="content">
-                        <a className="author" href={"https://twitter.com/" + t.user.screen_name}>
-                            @{t.user.screen_name}
-                        </a>
-                        <div className="metadata">
-                            <span className="retweeted-by"><i className="fa fa-retweet"></i> Retweeted by @{user.screen_name}</span>
-                            <span className="date created-at">{t.created_at}</span>
-                        </div>
-                        <div className="text">
-                            {t.text}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+    makeCreatedAtLabel(tw) {
+        if (tw.created_at === undefined) {
+            return "";
+        }
+        var d = new Date(tw.created_at);
+        return `${("0" + d.getHours()).slice(-2)}:${("0" + d.getMinutes()).slice(-2)} ${d.getMonth()+1}/${d.getDate()} ${d.getYear() + 1900}`;
     }
 
     render() {
-        if ('retweeted_status' in this.props.tweet) {
-            return this.build_retweet_component(this.props.tweet.retweeted_status, this.props.tweet.user);
-        } else {
-            return this.build_tweet_component(this.props.tweet);
-        }
+        const tw = this.props.tweet.retweeted_status || this.props.tweet;
+
+        return (
+            <div className="ui comments tweet">
+                <div className="comment">
+                    <a className="avatar" href={"https://twitter.com/" + tw.user.screen_name}>
+                        <img src={tw.user.profile_image_url} />
+                    </a>
+                    <div className="content">
+                        <a className="author" href={"https://twitter.com/" + tw.user.screen_name}>
+                            @{tw.user.screen_name}
+                        </a>
+                        <div className="metadata tweet-secondary">
+                            {this.buildRetweetedByComponent()}
+                            <span className="date created-at">{this.makeCreatedAtLabel(tw)}</span>
+                        </div>
+                        <div className="text">
+                            {tw.text}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 }
 

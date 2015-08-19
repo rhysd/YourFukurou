@@ -21,7 +21,7 @@ export default class MessageRouter {
             console.log(`MessageRouter: Message to ${stream_name} is ignored because Renderer doesn't exist`);
             return;
         }
-        console.log('MessageRouter: Data received: ' + data);
+        console.log('MessageRouter: Route data to stream: ' + stream_name);
         stream_renderers[stream_name](receiver(data));
     }
 
