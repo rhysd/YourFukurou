@@ -7,12 +7,12 @@ class Tweet extends React.Component {
 
     buildRetweetedByComponent() {
         if (!('retweeted_status' in this.props.tweet)) {
-            return <span className="retweeted_status"></span>;
+            return <span className="retweeted-by"></span>;
         }
 
         return (
             <span className="retweeted-by">
-                <i className="fa fa-retweet"></i> Retweeted by @{this.props.tweet.user.screen_name}
+                <i className="fa fa-retweet"></i> Retweeted by {this.buildUserNameComponent(this.props.tweet.user)}
             </span>
         );
     }
@@ -23,6 +23,14 @@ class Tweet extends React.Component {
         }
         var d = new Date(tw.created_at);
         return `${("0" + d.getHours()).slice(-2)}:${("0" + d.getMinutes()).slice(-2)} ${d.getMonth()+1}/${d.getDate()} ${d.getYear() + 1900}`;
+    }
+
+    buildUserNameComponent(user) {
+        return (
+            <span className="tweet-username">
+                @{user.screen_name}{user.protected ? <i className="fa fa-lock lock-icon"></i> : ""}
+            </span>
+        );
     }
 
     render() {
@@ -37,7 +45,7 @@ class Tweet extends React.Component {
                     <div className="content">
                         <div className="secondary">
                             <a className="author" href={"https://twitter.com/" + tw.user.screen_name}>
-                                @{tw.user.screen_name}
+                                {this.buildUserNameComponent(tw.user)}
                             </a>
                             <div className="metadata tweet-info">
                                 {this.buildRetweetedByComponent()}
