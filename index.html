@@ -3,6 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <title>Stream</title>
+
+    <link rel="stylesheet" href="bower_components/semantic-ui/dist/semantic.min.css" />
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" href="styles/style.css" />
   </head>
   <body>
@@ -10,6 +13,8 @@
 
   <script>
     var remote = require('remote');
+    var jQuery = require(remote.require('app').getAppPath() + "/bower_components/jquery/dist/jquery.js");
   </script>
+  <script src="bower_components/semantic-ui/dist/semantic.min.js"></script>
   <script src="build/renderer/index.js"></script>
 </html>
