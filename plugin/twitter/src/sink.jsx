@@ -7,7 +7,7 @@ class Tweet extends React.Component {
 
     buildRetweetedByComponent() {
         if (!('retweeted_status' in this.props.tweet)) {
-            return <span></span>;
+            return <span className="retweeted_status"></span>;
         }
 
         return (
@@ -35,12 +35,14 @@ class Tweet extends React.Component {
                         <img src={tw.user.profile_image_url} />
                     </a>
                     <div className="content">
-                        <a className="author" href={"https://twitter.com/" + tw.user.screen_name}>
-                            @{tw.user.screen_name}
-                        </a>
-                        <div className="metadata tweet-secondary">
-                            {this.buildRetweetedByComponent()}
-                            <span className="date created-at">{this.makeCreatedAtLabel(tw)}</span>
+                        <div className="secondary">
+                            <a className="author" href={"https://twitter.com/" + tw.user.screen_name}>
+                                @{tw.user.screen_name}
+                            </a>
+                            <div className="metadata tweet-info">
+                                {this.buildRetweetedByComponent()}
+                                <span className="date created-at">{this.makeCreatedAtLabel(tw)}</span>
+                            </div>
                         </div>
                         <div className="text">
                             {tw.text}
