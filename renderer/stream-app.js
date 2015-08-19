@@ -14,13 +14,13 @@ export default class StreamAppClass {
 
     startReceiving() {
         ipc.on("stream-message", (channel, data) => {
-            const parts = channel.split("-");
-            if (parts.length !== 2) {
+            const sep_idx = channel.indexOf("-");
+            if (sep_idx === -1) {
                 console.log("Invalid channel: " + channel);
                 return;
             }
 
-            this.router.routeMessage(parts[0], parts[1], data);
+            this.router.routeMessage(channel.slice(0, sep_idx), channel.slice(sep_idx + 1), data);
         });
         ipc.send('renderer-ready', this.router.sinks.map(sink => sink.source));
     }

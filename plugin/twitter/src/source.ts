@@ -36,7 +36,7 @@ class TwitterSource {
             });
 
             stream.on("end", (response: Object) => {
-                console.log("plugin-twitter: End message on stream: ", response.toJSON());
+                console.log("plugin-twitter: End message on stream: ", response);
 
                 // Note: Reconnect
                 this.start_streaming(params);
