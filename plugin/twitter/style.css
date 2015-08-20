@@ -14,8 +14,9 @@
   margin-left: 0.5em;
 }
 .retweeter-avatar {
-  width: 2.0em;
-  height: 2.0em;
+  border-radius: 20%;
+  width: 1.2em;
+  height: 1.2em;
 }
 .external-link {
   cursor: pointer;

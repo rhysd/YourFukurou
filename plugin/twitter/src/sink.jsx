@@ -105,7 +105,7 @@ StreamApp.registerSink({
 
     streams: {
         tweet: function(json) {
-            return <Tweet tweet={json} />;
+            return <Tweet tweet={json} key={"twitter-" + json.id_str}/>;
         }
     }
 });
