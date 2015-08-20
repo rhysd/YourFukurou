@@ -1,4 +1,6 @@
-import React from "react";
+import React from "react/addons";
+
+let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 export default class Feed extends React.Component {
     constructor(props) {
@@ -29,7 +31,9 @@ export default class Feed extends React.Component {
     render() {
         return (
             <div className="feed">
-                {this.state.children}
+                <ReactCSSTransitionGroup transitionName="feedNewItem" transitionAppear={true}>
+                    {this.state.children}
+                </ReactCSSTransitionGroup>
             </div>
         );
     }

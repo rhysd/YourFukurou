@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react/addons";
 import Feed from "./feed.jsx";
 
 export default class Root extends React.Component {

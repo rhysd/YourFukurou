@@ -11,3 +11,10 @@ body {
 .feed {
   margin-top: 1rem;
 }
+.feedNewItem-enter {
+  opacity: 0.01;
+}
+.feedNewItem-enter.feedNewItem-enter-active {
+  opacity: 1;
+  transition: opacity .5s ease-in;
+}
