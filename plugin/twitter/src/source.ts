@@ -14,6 +14,15 @@ class TwitterSource {
             access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
         });
 
+        this.client.get("statuses/home_timeline", {}, (err, tweets, response) => {
+            if (err) {
+                console.error("Plugin twitter: Fetch error: " + err);
+                return;
+            }
+
+            this.send("tweets", tweets);
+        });
+
         this.start_streaming({});
     }
 

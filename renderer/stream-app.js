@@ -22,7 +22,7 @@ export default class StreamAppClass {
 
             this.router.routeMessage(channel.slice(0, sep_idx), channel.slice(sep_idx + 1), data);
         });
-        ipc.send('renderer-ready', this.router.sinks.map(sink => sink.source));
+        ipc.send("renderer-ready", this.router.sinks.map(sink => sink.source));
     }
 
     getSinks(source_name) {

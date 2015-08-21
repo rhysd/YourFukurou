@@ -12,7 +12,7 @@ declare module Twitter {
 
     export class TwitterClient {
         constructor(auth: AuthInfo);
-        get(path: string, opt?: Object, callback?: (data: any) => void): TwitterClient;
+        get(path: string, opt?: Object, callback?: (err: Error, tweets: Object[], response: any) => void): TwitterClient;
         post(url: string, content?: Object, content_type?: string, callback?: (data: any) => void): TwitterClient;
         verifyCredentials(callback: (data: any) => void): TwitterClient;
 

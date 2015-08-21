@@ -17,7 +17,11 @@ StreamApp.registerSink({
 
     streams: {
         tweet: function(json) {
-            return <Tweet tweet={json} key={"twitter-" + json.id_str}/>;
+            return <Tweet tweet={json} key={json.id_str}/>;
+        },
+
+        tweets: function(json_array) {
+            return json_array.map(json => <Tweet tweet={json} key={json.id_str}/>)
         }
     }
 });
