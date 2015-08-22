@@ -1,4 +1,6 @@
 import * as Twitter from "twitter";
+import * as fs from "fs";
+import * as path from "path";
 
 class TwitterSource {
     client: Twitter.TwitterClient;
@@ -14,14 +16,37 @@ class TwitterSource {
             access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
         });
 
-        this.client.get("statuses/home_timeline", {}, (err, tweets, response) => {
-            if (err) {
-                console.error("Plugin twitter: Fetch error: " + err);
-                return;
-            }
+        const test_file = path.join(__dirname, "tweets.json");
+        if (fs.existsSync(test_file)) {
+            console.log("Load from tweets.json");
+            fs.readFile(test_file, {encoding: "utf8"}, (err, data) => {
+                if (err) {
+                    return;
+                }
 
-            this.send("tweets", tweets);
-        });
+                let tws = JSON.parse(data);
+                let send = this.send;
+                let send_delayed = () => {
+                    if (tws.length === 0) {
+                        return;
+                    }
+                    send("tweet", tws.shift(1));
+                    setTimeout(send_delayed, 1000);
+                };
+
+                send_delayed();
+                return;
+            });
+        } else {
+            this.client.get("statuses/home_timeline", {}, (err, tweets, response) => {
+                if (err) {
+                    console.error("Plugin twitter: Fetch error: " + err);
+                    return;
+                }
+
+                this.send("tweets", tweets);
+            });
+        }
 
         this.start_streaming({});
     }
