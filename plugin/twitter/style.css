@@ -24,3 +24,6 @@
 .tweet-link {
   color: inherit;
 }
+.ui.comments .comment .text.tweet-text {
+  white-space: pre-wrap;
+}

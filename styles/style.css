@@ -9,7 +9,10 @@ body {
   flex-direction: row;
 }
 .feed {
-  margin-top: 1rem;
+  padding-top: 1rem;
+  max-width: 650px;
+  box-sizing: border-box;
+  border: solid 1px #eeeeee;
 }
 .feedNewItem-enter {
   opacity: 0.01;

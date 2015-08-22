@@ -145,7 +145,7 @@ export default class Tweet extends React.Component {
                                 </span>
                             </div>
                         </div>
-                        <div className="text">
+                        <div className="text tweet-text">
                             {(new TweetTextBuilder(tw)).build()}
                         </div>
                     </div>
