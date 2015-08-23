@@ -40,12 +40,12 @@ end
 
 task :build_renderer_src do
   directory 'build/renderer'
-  sh "#{BIN}/browserify -g babelify -o #{ROOT}/build/renderer/index.js #{ROOT}/renderer/index.jsx"
+  sh "#{BIN}/browserify -t babelify -d -o #{ROOT}/build/renderer/index.js #{ROOT}/renderer/index.jsx"
 end
 
 task :build_plugin_jsx_src do
   Dir['plugin/*/src/sink.jsx'].each do |jsx|
-      sh "#{BIN}/browserify -g babelify -o #{File.dirname(File.dirname(jsx))}/sink.js #{jsx}"
+      sh "#{BIN}/browserify -t babelify -d -o #{File.dirname(File.dirname(jsx))}/sink.js #{jsx}"
   end
 end
 

@@ -5,7 +5,8 @@
     "preserveConstEnums": true,
     "outDir": "../build/browser",
     "noImplicitAny": true,
-    "target": "es5"
+    "target": "es5",
+    "sourceMap": true
   },
   "files": [
     "source.ts",

@@ -7,3 +7,4 @@ typings
 build
 plugin/*/*.js
 devtools_extension
+*.js.map
