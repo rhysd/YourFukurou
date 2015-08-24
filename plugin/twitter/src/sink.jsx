@@ -10,10 +10,9 @@ StreamApp.registerSink({
         "style.css"
     ],
 
-    initialize: function() {
-        // TODO: Not implemented yet
+    // initialize: function() {
         // Initialize UI here
-    },
+    // },
 
     streams: {
         tweet: function(json) {

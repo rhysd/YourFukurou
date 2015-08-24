@@ -8,16 +8,16 @@ global.React = React;
 const loader = new SinkLoader();
 global.StreamApp = new StreamApp();
 
-loader.loadAllSinks(document.head).then(loaded => {
-    console.log('loaded sources: ' + loaded.map(l => `'${l.name}'`).join(' '));
+loader.loadAllSinks(document.head)
+      .then(loader.loadPluginAssets(document.head))
+      .then(sinks => {
+          console.log('Loaded sources: ' + sinks.map(l => `'${l.source}'`).join(' '));
 
-    loader.loadAllPluginCSS(document.head);
+          React.render(
+                  <Root router={global.StreamApp.router} />,
+                  document.body
+              );
 
-    React.render(
-            <Root router={global.StreamApp.router} />,
-            document.body
-        );
-
-    global.StreamApp.startReceiving();
-});
+          global.StreamApp.startReceiving();
+      });
 

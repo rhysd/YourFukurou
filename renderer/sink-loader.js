@@ -33,61 +33,76 @@ export default class SinkLoader {
         return sinks;
     }
 
-    loadSink(sink, elem) {
+    loadScript(src_path, parent, class_name) {
         let deferred = Promise.defer();
         let script = document.createElement('script');
-        script.setAttribute('src', 'file://' + sink.path);
-        script.className = 'sink-' + sink.name;
-        script.onload = function() {
-            deferred.resolve(sink);
+        script.setAttribute('src', 'file://' + src_path);
+        if (class_name !== undefined) {
+            script.className = class_name;
+        }
+        script.onload = () => {
+            deferred.resolve();
         };
-        elem.appendChild(script);
-        this.loaded_sinks.push(sink);
+        parent.appendChild(script);
         return deferred.promise;
     }
 
-    loadAllSinks(elem) {
-        let promises = [];
-        for (const s of this.findAllSinks()) {
-            promises.push(this.loadSink(s, elem));
-        }
-        return Promise.all(promises);
+    loadSink(sink, elem) {
+        return this.loadScript(sink.path, elem, 'sink-' + sink.name)
+                   .then(() => {
+                       this.loaded_sinks.push(sink);
+                       return sink;
+                   });
     }
 
-    loadStyleSheets(elem, stylesheets, loaded) {
-        for (const style of stylesheets) {
-            const p = path.join(path.dirname(loaded.path), style);
+    loadAllSinks(elem) {
+        return Promise.all(
+            this.findAllSinks().map(s => this.loadSink(s, elem))
+        ).then(loaded_sinks => {
+            // TODO:
+            // Consider the duplicate of loaded_sinks' names.
+            // (Should do unique() by the name?)
+            let ret = [];
+            for (const loaded of loaded_sinks) {
+                for (const sink of global.StreamApp.getSinks(loaded.name)) {
+                    sink.path = loaded.path;
+                    ret.push(sink);
+                }
+            }
+            return ret;
+        });
+    }
+
+    loadStyleSheets(elem, sink) {
+        for (const style of sink.stylesheets || []) {
+            const p = path.join(path.dirname(sink.path), style);
             let link = document.createElement('link');
             link.rel = 'stylesheet';
             link.type = 'text/css';
-            link.className = 'sink-' + loaded.name;
+            link.className = 'sink-' + sink.name;
             link.href = 'file://' + p;
             elem.appendChild(link);
             console.log('Loaded CSS: ' + p);
         }
     }
 
-    loadScripts(elem, scripts, loaded) {
-        for (const s of scripts) {
-            const p = path.join(path.dirname(loaded.path), s);
-            let script = document.createElement('script');
-            script.setAttribute('src', 'file://' + p);
-            script.className = 'sink-' + loaded.name;
-            elem.appendChild(script);
-            console.log('Loaded Script: ' + p);
-        }
-    }
+    loadPluginAssets(elem) {
+        return loaded_sinks => {
+            for (const sink of loaded_sinks) {
+                this.loadStyleSheets(elem, sink);
 
-    loadAllPluginCSS(elem) {
-        for (const l of this.loaded_sinks) {
-            for (const sink of global.StreamApp.getSinks(l.name)) {
-                if ('stylesheets' in sink) {
-                    this.loadStyleSheets(elem, sink.stylesheets, l);
-                }
-                if ('scripts' in sink) {
-                    this.loadScripts(elem, sink.scripts, l);
-                }
+                Promise.all(
+                    (sink.scripts || []).map(script => this.loadScript(
+                        path.join(path.dirname(sink.path), script),
+                        elem
+                    ))
+                ).then(() => {
+                    if ('initialize' in sink) {
+                        sink.initialize();
+                    }
+                });
             }
-        }
+            return loaded_sinks;
+        };
     }
 }
