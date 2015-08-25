@@ -122,11 +122,25 @@ export default class Tweet extends React.Component {
         );
     }
 
+    onFocus(e) {
+        // TODO:
+        // Update the element by changing state and 
+        console.log('Tweet::onFocus');
+        console.log(e);
+    }
+
+    onBlur(e) {
+        // TODO:
+        // Update the element by changing state and 
+        console.log('Tweet::onBlur');
+        console.log(e);
+    }
+
     render() {
         const tw = this.props.tweet.retweeted_status || this.props.tweet;
 
         return (
-            <div className="ui comments tweet">
+            <div className="ui comments tweet" onFocus={this.onFocus} onBlur={this.onBlur} tabIndex="0" ref="foo">
                 <div className="comment">
                     <ExternalLink role="avatar" url={"https://twitter.com/" + tw.user.screen_name}>
                         <img src={tw.user.profile_image_url} />
