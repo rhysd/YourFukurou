@@ -3,7 +3,7 @@ import Tweet from "./tweet-component.jsx";
 // Note:
 // Do not execute heavy process here.
 // It should be done in 'init' hook.
-StreamApp.registerSink({
+StreamApp.dispatcher.registerSink({
     source: "twitter",
 
     stylesheets: [

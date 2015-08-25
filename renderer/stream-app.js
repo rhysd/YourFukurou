@@ -1,8 +1,11 @@
-import MessageRouter from './message-router.js';
+import MessageRouter from "./message-router.js";
+import React from "react";
 
 const ipc = global.require("ipc");
+const path = global.require("path");
+const app = remote.require("app");
 
-export default class StreamAppClass {
+class StreamDispatcher {
     constructor() {
         this.router = new MessageRouter();
     }
@@ -12,7 +15,7 @@ export default class StreamAppClass {
         this.router.addSink(sink);
     }
 
-    startReceiving() {
+    start() {
         ipc.on("stream-message", (channel, data) => {
             const sep_idx = channel.indexOf("-");
             if (sep_idx === -1) {
@@ -30,3 +33,9 @@ export default class StreamAppClass {
     }
 }
 
+export let dispatcher = new StreamDispatcher();
+
+export function require_relative(mod) {
+    const absolute_path = path.join(app.getAppPath(), "build", "renderer", mod);
+    return global.require(absolute_path);
+}

@@ -57,9 +57,10 @@ app.on("ready", function(){
             }
             react_extension_loaded = true;
         }
-    })
+    });
 
     // TODO: User should select streams to load
+    // TODO: Load required sources after all sinks are loaded
     sources.push(loader.load("twitter"));
 
     mainWindow.openDevTools();

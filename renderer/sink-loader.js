@@ -1,5 +1,5 @@
-const fs = remote.require('fs');
-const path = remote.require('path');
+const fs = global.require('fs');
+const path = global.require('path');
 
 export default class SinkLoader {
     constructor() {
@@ -64,7 +64,7 @@ export default class SinkLoader {
             // (Should do unique() by the name?)
             let ret = [];
             for (const loaded of loaded_sinks) {
-                for (const sink of global.StreamApp.getSinks(loaded.name)) {
+                for (const sink of global.StreamApp.dispatcher.getSinks(loaded.name)) {
                     sink.path = loaded.path;
                     ret.push(sink);
                 }
