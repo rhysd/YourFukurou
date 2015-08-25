@@ -47,8 +47,12 @@ export default class SinkLoader {
         return deferred.promise;
     }
 
+    fetchRequirePlugin(path) {
+        return new Promise(resolve => resolve(global.require(path)));
+    }
+
     loadSink(sink, elem) {
-        return this.loadScript(sink.path, elem, 'sink-' + sink.name)
+        return this.fetchRequirePlugin(sink.path)
                    .then(() => {
                        this.loaded_sinks.push(sink);
                        return sink;
