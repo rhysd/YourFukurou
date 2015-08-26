@@ -39,7 +39,6 @@ export default class Feed extends React.Component {
                 added.push(
                     <div className="feed-item-wrapper" key={"feedItem-" + item_id} data-item-id={item_id}>
                         <Item {...props}/>
-                        <div className="ui divider feed-divider"></div>
                     </div>
                 );
             }

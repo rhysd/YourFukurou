@@ -1,4 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin');
+
+html {
+  font-family: sans-serif;
+}
 body {
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  overflow-x: hidden;
+  background: #ffffff;
+  color: rgba(0, 0, 0, 0.87);
+  font-smoothing: antialiased;
   margin: 0px;
   padding: 0px;
 }
@@ -9,14 +20,13 @@ body {
   flex-direction: row;
 }
 .feed {
-  padding-top: 1rem;
-  max-width: 650px;
+  width: 100%;
   box-sizing: border-box;
-  border: solid 1px #eeeeee;
 }
 .feed-item-wrapper {
   margin: 0px;
   padding: 0px;
+  border-bottom: solid 1px rgba(34, 36, 38, 0.15);
 }
 .feedNewItem-enter {
   opacity: 0.01;
@@ -25,3 +35,4 @@ body {
   opacity: 1;
   transition: opacity .5s ease-in;
 }
+

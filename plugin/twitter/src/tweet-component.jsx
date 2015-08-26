@@ -32,7 +32,7 @@ class TweetTextBuilder {
         return this.text === '';
     }
 
-    buildTextLink(url) {
+    renderTextLink(url) {
         for (const u of this.urls) {
             if (u.url === url) {
                 return <ExternalLink role="text-link" url={u.expanded_url} key={this.id++}>{u.display_url}</ExternalLink>;
@@ -72,9 +72,9 @@ class TweetTextBuilder {
         if (m[0].startsWith('@')) {
             this.built.push(<ExternalLink role="user-link" url={"https://twitter.com/" + m[0].substr(1)} key={this.id++}>{m[0]}</ExternalLink>);
         } else if (m[0].startsWith('http')) {
-            this.built.push(this.buildTextLink(m[0]));
+            this.built.push(this.renderTextLink(m[0]));
         } else {
-            console.log('<TweetTextBuilder>: Invalid match: ' + m[0]);
+            console.log('TweetTextBuilder: Invalid match: ' + m[0]);
         }
 
         this.text = this.text.substring(m[0].length + m.index);
@@ -94,16 +94,16 @@ export default class Tweet extends React.Component {
         this.state = {item_status: feed_store.getItem(this.props.item_id)};
     }
 
-    buildRetweetedByComponent() {
+    renderRetweetedByComponent() {
         if (this.props.tweet.retweeted_status === undefined) {
             return <span className="retweeted-by"></span>;
         }
 
         return (
             <span className="retweeted-by">
-                <i className="fa fa-retweet"></i> Retweeted by <ExternalLink role="retweeter" url={"https://twitter.com/" + this.props.tweet.user.screen_name}>
-                    <img className="retweeter-avatar" src={this.props.tweet.user.profile_image_url}/>
-                </ExternalLink> {this.buildUserNameComponent(this.props.tweet.user)}
+                <i className="fa fa-retweet"></i> Retweeted by <ExternalLink url={"https://twitter.com/" + this.props.tweet.user.screen_name}>
+                    <img className="retweet-author" src={this.props.tweet.user.profile_image_url}/>
+                </ExternalLink> {this.renderUserNameComponent(this.props.tweet.user, "retweet-author")}
             </span>
         );
     }
@@ -116,9 +116,9 @@ export default class Tweet extends React.Component {
         return `${("0" + d.getHours()).slice(-2)}:${("0" + d.getMinutes()).slice(-2)} ${d.getMonth()+1}/${d.getDate()} ${d.getYear() + 1900}`;
     }
 
-    buildUserNameComponent(user) {
+    renderUserNameComponent(user, class_name) {
         return (
-            <span className="tweet-username">
+            <span className={class_name}>
                 @{user.screen_name}{user.protected ? <i className="fa fa-lock lock-icon"></i> : ""}
             </span>
         );
@@ -128,31 +128,29 @@ export default class Tweet extends React.Component {
         const tw = this.props.tweet.retweeted_status || this.props.tweet;
 
         return (
-            <div className="ui comments tweet">
-                <div className="comment">
-                    <ExternalLink role="avatar" url={"https://twitter.com/" + tw.user.screen_name}>
+            <div className="tweet">
+                <div className="avatar">
+                    <ExternalLink url={"https://twitter.com/" + tw.user.screen_name}>
                         <img src={tw.user.profile_image_url} />
                     </ExternalLink>
-                    <div className="content">
-                        <div className="secondary">
-                            <ExternalLink role="author" url={"https://twitter.com/" + tw.user.screen_name}>
-                                {this.buildUserNameComponent(tw.user)}
+                </div>
+                <div className="content">
+                    <div className="secondary">
+                        <ExternalLink url={"https://twitter.com/" + tw.user.screen_name}>
+                            {this.renderUserNameComponent(tw.user, "author")}
+                        </ExternalLink>
+                        {this.renderRetweetedByComponent()}
+                        <span className="created-at">
+                            <ExternalLink role="tweet-link" url={"https://twitter.com/" + tw.user.screen_name + "/status/" + tw.id_str}>
+                                {this.makeCreatedAtLabel(tw)}
                             </ExternalLink>
-                            <div className="metadata tweet-info">
-                                {this.buildRetweetedByComponent()}
-                                <span className="date created-at">
-                                    <ExternalLink role="tweet-link" url={"https://twitter.com/" + tw.user.screen_name + "/status/" + tw.id_str}>
-                                        {this.makeCreatedAtLabel(tw)}
-                                    </ExternalLink>
-                                </span>
-                            </div>
-                        </div>
-                        <div className="text tweet-text">
-                            {(new TweetTextBuilder(tw)).build()}
-                        </div>
+                        </span>
+                    </div>
+                    <div className="text">
+                        {(new TweetTextBuilder(tw)).build()}
                     </div>
                 </div>
-            </div>
+        </div>
         );
     }
 }

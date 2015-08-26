@@ -26,16 +26,17 @@ class TwitterSource {
 
                 let tws = JSON.parse(data);
                 let send = this.send;
+                let count = 0;
                 let send_delayed = () => {
-                    if (tws.length === 0) {
+                    if (count >= 5 || tws.length === 0) {
                         return;
                     }
                     send("tweet", tws.shift(1));
+                    ++count;
                     setTimeout(send_delayed, 1000);
                 };
 
                 send_delayed();
-                return;
             });
         } else {
             this.client.get("statuses/home_timeline", {}, (err, tweets, response) => {
