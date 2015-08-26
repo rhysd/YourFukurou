@@ -14,6 +14,10 @@ body {
   box-sizing: border-box;
   border: solid 1px #eeeeee;
 }
+.feed-item-wrapper {
+  margin: 0px;
+  padding: 0px;
+}
 .feedNewItem-enter {
   opacity: 0.01;
 }
