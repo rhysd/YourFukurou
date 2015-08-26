@@ -48,16 +48,12 @@ export default class SinkLoader {
     }
 
     fetchRequire(path) {
-        return new Promise(resolve => {
-            const required = global.require(path);
-            console.log(required);
-            resolve(required);
-        });
+        return new Promise(resolve => resolve(global.require(path)));
     }
 
     loadSink(sink, elem) {
         return this.fetchRequire(sink.path)
-                   .then((required) => {
+                   .then(() => {
                        this.loaded_sinks.push(sink);
                        return sink;
                    });

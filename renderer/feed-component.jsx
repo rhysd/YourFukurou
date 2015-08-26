@@ -1,4 +1,5 @@
 import React from "react/addons";
+import feed_store from "./feed-store";
 
 let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
@@ -28,10 +29,15 @@ export default class Feed extends React.Component {
             for (const i of new_item instanceof Array ? new_item : [new_item]) {
                 const Item = i.type;
                 const item_id = this.counter++;
+                feed_store.register(item_id, {
+                    focused: false,
+                    expanded: true
+                });
+
                 let props = i.props;
                 props.item_id = item_id;
                 added.push(
-                    <div className="feed-item-wrapper" key={item_id}>
+                    <div className="feed-item-wrapper" key={"feedItem-" + item_id} data-item-id={item_id}>
                         <Item {...props}/>
                         <div className="ui divider feed-divider"></div>
                     </div>
@@ -43,6 +49,10 @@ export default class Feed extends React.Component {
     }
 
     render() {
+        if (this.state.children.length > 2) {
+            const k = this.state.children[2].props["data-item-id"];
+            feed_store.update(k, {focused: true, expanded: false});
+        }
         return (
             <div className="feed">
                 <ReactCSSTransitionGroup transitionName="feedNewItem">

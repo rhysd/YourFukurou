@@ -1,5 +1,5 @@
 import React from "react/addons";
-import Feed from "./feed.jsx";
+import Feed from "./feed-component.jsx";
 
 export default class Root extends React.Component {
     constructor(props) {

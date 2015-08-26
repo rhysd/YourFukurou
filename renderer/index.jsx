@@ -1,5 +1,5 @@
 import React from 'react/addons';
-import Root from './root.jsx';
+import Root from './root-component.jsx';
 import SinkLoader from './sink-loader.js';
 import * as StreamApp from './stream-app.js';
 

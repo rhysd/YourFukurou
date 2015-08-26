@@ -1,4 +1,5 @@
 const openExternal = global.require("shell").openExternal;
+let feed_store = StreamApp.getStore("feed");
 
 class ExternalLink extends React.Component {
     constructor(props) {
@@ -90,6 +91,7 @@ class TweetTextBuilder {
 export default class Tweet extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {item_status: feed_store.getItem(this.props.item_id)};
     }
 
     buildRetweetedByComponent() {
@@ -122,25 +124,11 @@ export default class Tweet extends React.Component {
         );
     }
 
-    onFocus(e) {
-        // TODO:
-        // Update the element by changing state and 
-        console.log('Tweet::onFocus');
-        console.log(e);
-    }
-
-    onBlur(e) {
-        // TODO:
-        // Update the element by changing state and 
-        console.log('Tweet::onBlur');
-        console.log(e);
-    }
-
     render() {
         const tw = this.props.tweet.retweeted_status || this.props.tweet;
 
         return (
-            <div className="ui comments tweet" onFocus={this.onFocus} onBlur={this.onBlur} tabIndex="0" ref="foo">
+            <div className="ui comments tweet">
                 <div className="comment">
                     <ExternalLink role="avatar" url={"https://twitter.com/" + tw.user.screen_name}>
                         <img src={tw.user.profile_image_url} />
