@@ -1,10 +1,13 @@
+const ipc = global.require("ipc");
+
 export default class MessageRouter {
     constructor() {
         this.sinks = [];
         this.renderers = {};
     }
 
-    addSink(sink) {
+    registerSink(sink) {
+        // TODO: Validate sink
         this.sinks.push(sink);
     }
 
@@ -14,6 +17,10 @@ export default class MessageRouter {
         }
         // TODO: Multiple renderers should be registered for the same stream
         this.renderers[source_name][stream_name] = renderer;
+    }
+
+    getSinks(source_name) {
+        return this.sinks.filter(sink => sink.source === source_name);
     }
 
     invokeRenderer(receiver, stream_name, stream_renderers, data) {
@@ -53,4 +60,18 @@ export default class MessageRouter {
             }
         }
     }
+
+    start() {
+        ipc.on("stream-message", (channel, data) => {
+            const sep_idx = channel.indexOf("-");
+            if (sep_idx === -1) {
+                console.log("Invalid channel: " + channel);
+                return;
+            }
+
+            this.routeMessage(channel.slice(0, sep_idx), channel.slice(sep_idx + 1), data);
+        });
+        ipc.send("renderer-ready", this.sinks.map(sink => sink.source));
+    }
 }
+

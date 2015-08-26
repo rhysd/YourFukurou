@@ -47,13 +47,17 @@ export default class SinkLoader {
         return deferred.promise;
     }
 
-    fetchRequirePlugin(path) {
-        return new Promise(resolve => resolve(global.require(path)));
+    fetchRequire(path) {
+        return new Promise(resolve => {
+            const required = global.require(path);
+            console.log(required);
+            resolve(required);
+        });
     }
 
     loadSink(sink, elem) {
-        return this.fetchRequirePlugin(sink.path)
-                   .then(() => {
+        return this.fetchRequire(sink.path)
+                   .then((required) => {
                        this.loaded_sinks.push(sink);
                        return sink;
                    });
@@ -68,7 +72,7 @@ export default class SinkLoader {
             // (Should do unique() by the name?)
             let ret = [];
             for (const loaded of loaded_sinks) {
-                for (const sink of global.StreamApp.dispatcher.getSinks(loaded.name)) {
+                for (const sink of global.StreamApp.router.getSinks(loaded.name)) {
                     sink.path = loaded.path;
                     ret.push(sink);
                 }
