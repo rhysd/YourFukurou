@@ -1,5 +1,9 @@
 .external-link {
   cursor: pointer;
+  color: #2185d0;
+}
+.external-link:hover {
+  color: #1678c2;
 }
 .tweet-link {
   color: inherit;
@@ -67,9 +71,12 @@
   white-space: pre-wrap;
 }
 .tweet[data-focused=true] {
-  padding: 1em 1em 1em;
-  display: flex;
-  flex-direction: row;
   color: #ffffff;
-  background-color: #000000;
+  background-color: #2a0d6a;
+}
+.tweet[data-focused=true] .content .secondary {
+  color: rgba(255, 255, 255, 0.4);
+}
+.tweet[data-focused=true] .content .secondary .author {
+  color: #ffffff;
 }
