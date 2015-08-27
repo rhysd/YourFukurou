@@ -91,7 +91,20 @@ class TweetTextBuilder {
 export default class Tweet extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {item_status: feed_store.getItem(this.props.item_id)};
+        this.state = feed_store.getItem(this.props.item_id);
+    }
+
+    componentDidMount() {
+        this.store_listener = (key, new_state) => {
+            if (key === this.props.item_id) {
+                this.state = new_state;
+            }
+        }
+        feed_store.on("changed", this.store_listener);
+    }
+
+    componentWillUnmount() {
+        feed_store.removeListener("changed", this.store_listener);
     }
 
     renderRetweetedByComponent() {

@@ -48,10 +48,6 @@ export default class Feed extends React.Component {
     }
 
     render() {
-        if (this.state.children.length > 2) {
-            const k = this.state.children[2].props["data-item-id"];
-            feed_store.update(k, {focused: true, expanded: false});
-        }
         return (
             <div className="feed">
                 <ReactCSSTransitionGroup transitionName="feedNewItem">

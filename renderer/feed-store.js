@@ -8,12 +8,12 @@ export default new class FeedStore extends EventEmitter {
 
     register(key, item) {
         this.items[key] = item;
-        this.emit('added', key);
+        this.emit('added', key, this.items[key]);
     }
 
     update(key, item) {
         this.items[key] = item;
-        this.emit('changed', key)
+        this.emit('changed', key, this.items[key])
     }
 
     getAll() {
