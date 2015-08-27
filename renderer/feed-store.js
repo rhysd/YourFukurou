@@ -10,6 +10,10 @@ class FeedStore extends EventEmitter {
         this.ids = [];
     }
 
+    getFocusedId() {
+        return this.ids[this.focused_item_idx];
+    }
+
     getAllIds() {
         return this.ids;
     }
@@ -75,6 +79,13 @@ store.dispatch_token = Dispatcher.register(action => {
             break;
         case ActionKind.FocusLast:
             _focusByIdx(0);
+            break;
+        case ActionKind.Blur:
+            if (store.focused_item_idx === null) {
+                return;
+            }
+            feed_item_store.updateItem(store.focused_item_idx, "focused", false);
+            store.focused_item_idx = null;
             break;
         default:
             break;

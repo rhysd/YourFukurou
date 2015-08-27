@@ -40,3 +40,8 @@ export function focusLast() {
     });
 }
 
+export function blur() {
+    Dispatcher.dispatch({
+        type: ActionKind.Blur
+    });
+}

@@ -97,7 +97,6 @@ export default class Tweet extends React.Component {
     componentDidMount() {
         this.store_listener = (key, new_state) => {
             if (key === this.props.item_id) {
-                console.log("Tweet updated: " + JSON.stringify(new_state));
                 this.setState(new_state);
             }
         }
