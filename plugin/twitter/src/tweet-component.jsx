@@ -1,5 +1,5 @@
 const openExternal = global.require("shell").openExternal;
-let feed_store = StreamApp.getStore("feed");
+let feed_item_store = StreamApp.getStore("feed-item");
 
 class ExternalLink extends React.Component {
     constructor(props) {
@@ -91,20 +91,21 @@ class TweetTextBuilder {
 export default class Tweet extends React.Component {
     constructor(props) {
         super(props);
-        this.state = feed_store.getItem(this.props.item_id);
+        this.state = feed_item_store.getItem(this.props.item_id);
     }
 
     componentDidMount() {
         this.store_listener = (key, new_state) => {
             if (key === this.props.item_id) {
-                this.state = new_state;
+                console.log("Tweet updated: " + JSON.stringify(new_state));
+                this.setState(new_state);
             }
         }
-        feed_store.on("changed", this.store_listener);
+        feed_item_store.on("changed", this.store_listener);
     }
 
     componentWillUnmount() {
-        feed_store.removeListener("changed", this.store_listener);
+        feed_item_store.removeListener("changed", this.store_listener);
     }
 
     renderRetweetedByComponent() {
@@ -141,7 +142,7 @@ export default class Tweet extends React.Component {
         const tw = this.props.tweet.retweeted_status || this.props.tweet;
 
         return (
-            <div className="tweet">
+            <div className="tweet" data-focused={this.state.focused}>
                 <div className="avatar">
                     <ExternalLink url={"https://twitter.com/" + tw.user.screen_name}>
                         <img src={tw.user.profile_image_url} />

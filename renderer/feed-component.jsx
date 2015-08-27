@@ -29,7 +29,7 @@ export default class Feed extends React.Component {
             for (const i of new_item instanceof Array ? new_item : [new_item]) {
                 const Item = i.type;
                 const item_id = this.counter++;
-                feed_store.register(item_id, {
+                feed_store.createItem(item_id, {
                     focused: false,
                     expanded: true
                 });
@@ -37,7 +37,7 @@ export default class Feed extends React.Component {
                 let props = i.props;
                 props.item_id = item_id;
                 added.push(
-                    <div className="feed-item-wrapper" key={"feedItem-" + item_id} data-item-id={item_id}>
+                    <div className="feed-item-wrapper" key={"feedItem-" + item_id} data-item-id={item_id} onClick={this.onItemClick.bind(this, item_id)}>
                         <Item {...props}/>
                     </div>
                 );
@@ -45,6 +45,11 @@ export default class Feed extends React.Component {
             const new_children = added.concat(this.state.children);
             this.setState({children: new_children});
         });
+    }
+
+    onItemClick(item_id) {
+        console.log("clicked: " + item_id);
+        feed_store.focusTo(item_id);
     }
 
     render() {

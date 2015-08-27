@@ -61,9 +61,15 @@
   margin-right: 0.5em;
   flex: none;
 }
-
 .tweet .content .text {
   display: inline;
   margin: 0.3em;
   white-space: pre-wrap;
+}
+.tweet[data-focused=true] {
+  padding: 1em 1em 1em;
+  display: flex;
+  flex-direction: row;
+  color: #ffffff;
+  background-color: #000000;
 }
