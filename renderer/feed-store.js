@@ -1,85 +1,82 @@
 import {EventEmitter} from "events";
+import Dispatcher from "./dispatcher";
+import {ActionKind} from "./constants";
 import feed_item_store from "./feed-item-store";
 
-export default new class FeedStore extends EventEmitter {
+class FeedStore extends EventEmitter {
     constructor() {
         super();
         this.focused_item_idx = null;
         this.ids = [];
     }
 
-    // TODO
-    // Use constants for event name
+    getAllIds() {
+        return this.ids;
+    }
+}
 
-    // TODO:
-    // Use Dispatcher
-    // Actions {{{
+// TODO
+// Use constants for event name
 
-    createItem(id, item) {
-        this.ids.push(id);
-        feed_item_store.register(id, item);
+let store = new FeedStore();
+export default store;
+
+
+function _focusByIdx(idx) {
+    const new_id = store.ids[idx];
+    if (new_id === undefined) {
+        return;
     }
 
-    _focusByIdx(idx) {
-        const new_id = this.ids[idx];
-        if (new_id === undefined) {
+    if (store.focused_item_idx !== null) {
+        const prev_id = store.ids[store.focused_item_idx];
+        if (new_id === prev_id) {
             return;
         }
+        feed_item_store.updateItem(prev_id, "focused", false);
+    }
 
-        if (this.focused_item_idx !== null) {
-            const prev_id = this.ids[this.focused_item_idx];
-            if (new_id === prev_id) {
+    store.focused_item_idx = idx;
+    feed_item_store.updateItem(new_id, "focused", true);
+    store.emit("focus-changed");
+}
+
+function _focusFirst() {
+    store._focusByIdx(store.ids.length - 1);
+}
+
+
+store.dispatch_token = Dispatcher.register(action => {
+    switch(action.type) {
+        case ActionKind.AddItem:
+            store.ids.push(action.id);
+            break;
+        case ActionKind.FocusTo:
+            _focusByIdx(store.ids.indexOf(action.id));
+            break;
+        case ActionKind.FocusNext:
+            if (store.focused_item_idx === null) {
+                _focusFirst();
                 return;
             }
-            feed_item_store.update(prev_id, "focused", false);
-        }
 
-        this.focused_item_idx = idx;
-        feed_item_store.update(new_id, "focused", true);
-        this.emit("focus-changed");
+            _focusByIdx(store.focused_item_idx - 1);
+            break;
+        case ActionKind.FocusPrev:
+            if (store.focused_item_idx === null) {
+                _focusFirst();
+                return;
+            }
+
+            _focusByIdx(store.focused_item_idx + 1);
+            break;
+        case ActionKind.FocusFirst:
+            _focusFirst();
+            break;
+        case ActionKind.FocusLast:
+            _focusByIdx(0);
+            break;
+        default:
+            break;
     }
-
-    focusTo(new_id) {
-        const new_idx = this.ids.indexOf(new_id);
-        if (new_idx === -1) {
-            return;
-        }
-        this._focusByIdx(new_idx);
-    }
-
-    focusNext() {
-        if (this.focused_item_idx === null) {
-            this.focusFirst();
-            return;
-        }
-
-        if (this.focused_item_idx === 0) {
-            return;
-        }
-
-        this.focusTo(this.focused_item_idx - 1);
-    }
-
-    focusPrev() {
-        // Note: If no item is focused, focus head
-        if (this.focused_item_idx === null) {
-            this.focusFirst();
-            return;
-        }
-
-        if (this.focused_item_idx === this.ids.length - 1) {
-            return;
-        }
-
-        this.focusTo(this.focused_item_idx + 1);
-    }
-
-    focusHead() {
-        this._focusByIdx(this.ids.length - 1);
-    }
-
-    focusLast() {
-        this._focusByIdx(0);
-    }
-    // }}}
-}
+});

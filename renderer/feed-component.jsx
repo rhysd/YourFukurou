@@ -1,5 +1,6 @@
 import React from "react/addons";
 import feed_store from "./feed-store";
+import * as FeedAction from "./feed-actions";
 
 let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
@@ -29,7 +30,7 @@ export default class Feed extends React.Component {
             for (const i of new_item instanceof Array ? new_item : [new_item]) {
                 const Item = i.type;
                 const item_id = this.counter++;
-                feed_store.createItem(item_id, {
+                FeedAction.addItem(item_id, {
                     focused: false,
                     expanded: true
                 });
@@ -49,7 +50,7 @@ export default class Feed extends React.Component {
 
     onItemClick(item_id) {
         console.log("clicked: " + item_id);
-        feed_store.focusTo(item_id);
+        FeedAction.focusTo(item_id);
     }
 
     render() {

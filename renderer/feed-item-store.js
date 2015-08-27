@@ -1,26 +1,20 @@
 import {EventEmitter} from "events";
+import Dispatcher from "./dispatcher";
+import {ActionKind} from "./constants";
 
-export default new class FeedItemStore extends EventEmitter {
+class FeedItemStore extends EventEmitter {
     constructor() {
         super();
         this.items = {};
         this.setMaxListeners(0);  // Do not limit number of listeners
     }
 
-    // TODO:
-    // Use Dispatcher
-
-    register(id, item) {
-        this.items[id] = item;
-        this.emit("added", id, this.items[id]);
-    }
-
-    updateItem(id, item) {
-        this.items[id] = item;
+    updateWholeItem(id, updated) {
+        this.items[id] = updated;
         this.emit("changed", id, this.items[id]);
     }
 
-    update(id, key, value) {
+    updateItem(id, key, value) {
         this.items[id][key] = value;
         this.emit("changed", id, this.items[id]);
     }
@@ -34,3 +28,28 @@ export default new class FeedItemStore extends EventEmitter {
     }
 }
 
+let store = new FeedItemStore();
+export default store;
+
+store.dispatch_token = Dispatcher.register(action => {
+    switch(action.type) {
+        case ActionKind.AddItem: {
+            let {id, val} = action;
+            store.items[id] = val;
+            store.emit("added", id, store.items[id]);
+            break;
+        }
+        case ActionKind.UpdateWholeItem: {
+            let {id, updated} = action;
+            store.updateWholeItem(id, updated);
+            break;
+        }
+        case ActionKind.UpdateItem: {
+            let {id, key, value} = action;
+            store.updateItem(id, key, value);
+            break;
+        }
+        default:
+            break;
+    }
+});
