@@ -11,6 +11,7 @@
   "files": [
     "source.ts",
     "source-loader.ts",
+    "window-state.ts",
     "lib.d.ts",
     "main.ts"
   ]

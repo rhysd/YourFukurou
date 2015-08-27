@@ -6,6 +6,7 @@ import * as ipc from "ipc";
 import {openExternal} from "shell";
 import SourceLoader from "./source-loader";
 import Source from "./source";
+import WindowState from "./window-state";
 
 require("crash-reporter").start();
 
@@ -20,6 +21,7 @@ console.log("  io.js version " + versions.node);
 var mainWindow: GitHubElectron.BrowserWindow = null;
 var react_extension_loaded = false;
 var sources: Source[] = [];
+var window_state = new WindowState();
 global.load_paths = [
     path.join(app.getAppPath(), "plugin"),
     path.join(app.getPath("userData"), "plugin", "node_modules")
@@ -29,10 +31,7 @@ app.on("window-all-closed", function(){ app.quit(); });
 
 app.on("ready", function(){
     mainWindow = new BrowserWindow(
-        {
-            width: 800,
-            height: 800,
-        }
+        window_state.restoreBounds({width: 800, height: 1000})
     );
 
     const loader = new SourceLoader(global.load_paths, mainWindow);
@@ -40,6 +39,9 @@ app.on("ready", function(){
     const html = "file://" + path.resolve(__dirname, "..", "..", "index.html");
     mainWindow.loadUrl(html);
 
+    mainWindow.on("close", function(){
+        window_state.saveBounds(mainWindow);
+    });
     mainWindow.on("closed", function(){
         mainWindow = null;
     });
@@ -63,7 +65,7 @@ app.on("ready", function(){
     // TODO: Load required sources after all sinks are loaded
     sources.push(loader.load("twitter"));
 
-    mainWindow.openDevTools();
+    window_state.restoreDevTools(mainWindow);
 
     ipc.on("renderer-ready", (event: Event, required_sources: string[]) => {
         console.log("main.ts: Initialize sources: " + required_sources);
