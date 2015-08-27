@@ -84,7 +84,7 @@ store.dispatch_token = Dispatcher.register(action => {
             if (store.focused_item_idx === null) {
                 return;
             }
-            feed_item_store.updateItem(store.focused_item_idx, "focused", false);
+            feed_item_store.updateItem(store.getFocusedId(), "focused", false);
             store.focused_item_idx = null;
             break;
         default:

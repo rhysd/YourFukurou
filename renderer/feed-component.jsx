@@ -49,9 +49,9 @@ export default class Feed extends React.Component {
     }
 
     onItemClick(item_id) {
-        console.log("clicked: " + item_id);
         const focused_id = feed_store.getFocusedId();
-        if (focused_id && focused_id === item_id) {
+        if (focused_id !== undefined && focused_id === item_id) {
+            console.log("blur!");
             FeedAction.blur();
         } else {
             FeedAction.focusTo(item_id);
