@@ -15,8 +15,7 @@ class ExternalLink extends React.Component {
     }
 }
 
-// TODO: Analyze #hash
-class TweetTextBuilder {
+class TweetTextParser {
     constructor(tweet) {
         let e = document.createElement('div');
         e.innerHTML = tweet.text;
@@ -74,7 +73,7 @@ class TweetTextBuilder {
         } else if (m[0].startsWith('http')) {
             this.built.push(this.renderTextLink(m[0]));
         } else {
-            console.log('TweetTextBuilder: Invalid match: ' + m[0]);
+            console.log('TweetTextParser: Invalid match: ' + m[0]);
         }
 
         this.text = this.text.substring(m[0].length + m.index);
@@ -97,6 +96,7 @@ export default class Tweet extends React.Component {
     componentDidMount() {
         this.store_listener = (key, new_state) => {
             if (key === this.props.item_id) {
+                // TODO: Do not emplace new state
                 this.setState(new_state);
             }
         }
@@ -160,7 +160,7 @@ export default class Tweet extends React.Component {
                         </span>
                     </div>
                     <div className="text">
-                        {(new TweetTextBuilder(tw)).build()}
+                        {(new TweetTextParser(tw)).build()}
                     </div>
                 </div>
         </div>

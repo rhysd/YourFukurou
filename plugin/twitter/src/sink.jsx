@@ -17,15 +17,15 @@ StreamApp.router.registerSink({
     streams: {
         tweet: function(json) {
             return {
-                type: Tweet,
+                component: Tweet,
                 props: {tweet: json}
             };
         },
 
         tweets: function(json_array) {
-            return json_array.map(
+            return json_array.reverse().map(
                 json => ({
-                    type: Tweet,
+                    component: Tweet,
                     props: {tweet: json}
                 })
             );

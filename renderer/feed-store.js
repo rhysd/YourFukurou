@@ -60,11 +60,11 @@ function _focusByIdx(idx) {
 
     store.focused_item_idx = idx;
     _updateItemState(new_id, "focused", true);
-    store.emit("focus-changed");
+    store.emit("focus-changed", new_id);
 }
 
 function _focusFirst() {
-    store._focusByIdx(store.ids.length - 1);
+    _focusByIdx(store.ids.length - 1);
 }
 
 
@@ -102,13 +102,16 @@ store.dispatch_token = Dispatcher.register(action => {
         case ActionKind.FocusLast:
             _focusByIdx(0);
             break;
-        case ActionKind.Blur:
+        case ActionKind.Blur: {
             if (store.focused_item_idx === null) {
                 return;
             }
+            const id = store.getFocusedId();
             _updateItem(store.getFocusedId(), "focused", false);
             store.focused_item_idx = null;
+            store.emit("focus-changed", id);
             break;
+        }
         case ActionKind.UpdateItem: {
             let {id, updated} = action;
             _updateItem(id, updated);

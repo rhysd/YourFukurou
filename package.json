@@ -18,6 +18,8 @@
   "license": "MIT",
   "dependencies": {
     "flux": "^2.1.1",
+    "mousetrap": "^1.5.3",
+    "object-assign": "^4.0.1",
     "react": "^0.13.3",
     "twitter": "^1.2.5"
   },

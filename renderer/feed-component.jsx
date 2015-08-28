@@ -28,7 +28,7 @@ export default class Feed extends React.Component {
         this.props.router.registerRenderer(source_name, stream_name, new_item => {
             let added = [];
             for (const i of new_item instanceof Array ? new_item : [new_item]) {
-                const Item = i.type;
+                const Item = i.component;
                 const item_id = this.counter++;
                 FeedAction.addItem(item_id, {
                     focused: false,
@@ -37,7 +37,7 @@ export default class Feed extends React.Component {
 
                 let props = i.props;
                 props.item_id = item_id;
-                added.push(
+                added.unshift(
                     <div className="feed-item-wrapper" key={"feedItem-" + item_id} data-item-id={item_id} onClick={this.onItemClick.bind(this, item_id)}>
                         <Item {...props}/>
                     </div>
