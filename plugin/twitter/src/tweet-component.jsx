@@ -1,3 +1,5 @@
+import assign from "object-assign";
+
 const openExternal = global.require("shell").openExternal;
 let feed_store = StreamApp.getStore("feed");
 
@@ -96,8 +98,7 @@ export default class Tweet extends React.Component {
     componentDidMount() {
         this.store_listener = (key, new_state) => {
             if (key === this.props.item_id) {
-                // TODO: Do not emplace new state
-                this.setState(new_state);
+                this.setState(assign({}, new_state));
             }
         }
         feed_store.on("item-changed", this.store_listener);
