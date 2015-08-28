@@ -40,14 +40,11 @@
 .tweet .content .secondary {
   display: inline-flex;
   margin-left: 0.5em;
-  color: rgba(0, 0, 0, 0.4);
-  font-size: 0.875em;
   vertical-align: middle;
   flex-direction: row;
 }
 .tweet .content .secondary .author {
   display: inline;
-  font-size: 1rem;
   font-weight: bold;
   color: #000000;
   flex: none;
@@ -59,6 +56,8 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 0.875em;
+  color: rgba(0, 0, 0, 0.4);
 }
 .tweet .content .secondary .retweeted-by img.retweet-author {
   height: 1.5em;
@@ -70,10 +69,13 @@
   flex: none;
   white-space: nowrap;
   overflow: hidden;
+  font-size: 0.875em;
+  color: rgba(0, 0, 0, 0.4);
 }
 .tweet .content .text {
   display: inline;
-  margin: 0.3em;
+  margin-left: 0.5em;
+  margin-top: 0.5em;
   white-space: pre-wrap;
 }
 .tweet[data-focused=true] {
