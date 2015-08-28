@@ -1,20 +1,21 @@
-.external-link {
-  cursor: pointer;
-  color: #2185d0;
-}
-.external-link:hover {
-  color: #1678c2;
-}
-.tweet-link {
-  color: inherit;
-}
-.lock-icon {
-  margin-left: 0.5em;
-}
 .tweet {
   padding: 0.7em 0.7em 0.7em;
   display: flex;
   flex-direction: row;
+}
+.tweet .external-link {
+  cursor: pointer;
+  color: #2185d0;
+  text-decoration: none;
+}
+.tweet .external-link:hover {
+  color: #1678c2;
+}
+.tweet .tweet-link {
+  color: inherit;
+}
+.tweet .lock-icon {
+  margin-left: 0.5em;
 }
 .tweet .avatar {
   display block;
