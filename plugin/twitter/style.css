@@ -12,7 +12,7 @@
   margin-left: 0.5em;
 }
 .tweet {
-  padding: 1em 1em 1em;
+  padding: 0.7em 0.7em 0.7em;
   display: flex;
   flex-direction: row;
 }
@@ -55,6 +55,9 @@
   display: inline;
   margin-left: 0.5em;
   flex: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .tweet .content .secondary .retweeted-by img.retweet-author {
   height: 1.5em;
@@ -64,6 +67,8 @@
   display: inline;
   margin-right: 0.5em;
   flex: none;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .tweet .content .text {
   display: inline;
@@ -72,11 +77,20 @@
 }
 .tweet[data-focused=true] {
   color: #ffffff;
-  background-color: #2a0d6a;
+  background-color: #298cda;
 }
 .tweet[data-focused=true] .content .secondary {
   color: rgba(255, 255, 255, 0.4);
 }
 .tweet[data-focused=true] .content .secondary .author {
   color: #ffffff;
+}
+.tweet[data-focused=true] .external-link {
+  color: #e0e9f4;
+}
+.tweet[data-focused=true] .text .external-link {
+  text-decoration: underline;
+}
+.tweet[data-focused=true] .avatar img {
+  border: solid 1px rgba(255, 255, 255, 0.4);
 }
