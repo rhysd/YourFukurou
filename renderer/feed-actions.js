@@ -45,3 +45,20 @@ export function blur() {
         type: ActionKind.Blur
     });
 }
+
+export function updateItem(id, new_item) {
+    Dispatcher.dispatch({
+        type: ActionKind.UpdateItem,
+        id: id,
+        updated: new_item
+    });
+}
+
+export function updateItemState(id, key, value) {
+    Dispatcher.dispatch({
+        type: ActionKind.UpdateItemState,
+        id: id,
+        key: key,
+        value: value
+    });
+}

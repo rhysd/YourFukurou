@@ -6,6 +6,6 @@ export var ActionKind = {
     FocusFirst: Symbol("focus-first"),
     FocusLast: Symbol("focus-last"),
     Blur: Symbol("blur"),
-    UpdateWholeItem: Symbol("update-whole"),
-    UpdateItem: Symbol("update-item")
+    UpdateItem: Symbol("update-item"),
+    UpdateItemState: Symbol("update-item-state")
 };

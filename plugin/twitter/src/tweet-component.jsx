@@ -1,5 +1,5 @@
 const openExternal = global.require("shell").openExternal;
-let feed_item_store = StreamApp.getStore("feed-item");
+let feed_store = StreamApp.getStore("feed");
 
 class ExternalLink extends React.Component {
     constructor(props) {
@@ -91,7 +91,7 @@ class TweetTextBuilder {
 export default class Tweet extends React.Component {
     constructor(props) {
         super(props);
-        this.state = feed_item_store.getItem(this.props.item_id);
+        this.state = feed_store.getItemState(this.props.item_id);
     }
 
     componentDidMount() {
@@ -100,11 +100,11 @@ export default class Tweet extends React.Component {
                 this.setState(new_state);
             }
         }
-        feed_item_store.on("changed", this.store_listener);
+        feed_store.on("item-changed", this.store_listener);
     }
 
     componentWillUnmount() {
-        feed_item_store.removeListener("changed", this.store_listener);
+        feed_store.removeListener("item-changed", this.store_listener);
     }
 
     renderRetweetedByComponent() {

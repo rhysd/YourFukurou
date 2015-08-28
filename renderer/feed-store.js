@@ -1,13 +1,14 @@
 import {EventEmitter} from "events";
 import Dispatcher from "./dispatcher";
 import {ActionKind} from "./constants";
-import feed_item_store from "./feed-item-store";
 
 class FeedStore extends EventEmitter {
     constructor() {
         super();
         this.focused_item_idx = null;
         this.ids = [];
+        this.items = {};
+        this.setMaxListeners(0);  // Do not limit number of listeners
     }
 
     getFocusedId() {
@@ -17,6 +18,14 @@ class FeedStore extends EventEmitter {
     getAllIds() {
         return this.ids;
     }
+
+    getAllItemState() {
+        return this.items;
+    }
+
+    getItemState(id) {
+        return this.items[id];
+    }
 }
 
 // TODO
@@ -25,6 +34,15 @@ class FeedStore extends EventEmitter {
 let store = new FeedStore();
 export default store;
 
+function _updateItem(id, updated) {
+    store.items[id] = updated;
+    store.emit("item-changed", id, store.items[id]);
+}
+
+function _updateItemState(id, key, value) {
+    store.items[id][key] = value;
+    store.emit("item-changed", id, store.items[id]);
+}
 
 function _focusByIdx(idx) {
     const new_id = store.ids[idx];
@@ -37,11 +55,11 @@ function _focusByIdx(idx) {
         if (new_id === prev_id) {
             return;
         }
-        feed_item_store.updateItem(prev_id, "focused", false);
+        _updateItemState(prev_id, "focused", false);
     }
 
     store.focused_item_idx = idx;
-    feed_item_store.updateItem(new_id, "focused", true);
+    _updateItemState(new_id, "focused", true);
     store.emit("focus-changed");
 }
 
@@ -52,9 +70,13 @@ function _focusFirst() {
 
 store.dispatch_token = Dispatcher.register(action => {
     switch(action.type) {
-        case ActionKind.AddItem:
-            store.ids.push(action.id);
+        case ActionKind.AddItem: {
+            let {id, val} = action;
+            store.ids.push(id);
+            store.items[id] = val;
+            store.emit("item-added", id, store.items[id]);
             break;
+        }
         case ActionKind.FocusTo:
             _focusByIdx(store.ids.indexOf(action.id));
             break;
@@ -84,9 +106,19 @@ store.dispatch_token = Dispatcher.register(action => {
             if (store.focused_item_idx === null) {
                 return;
             }
-            feed_item_store.updateItem(store.getFocusedId(), "focused", false);
+            _updateItem(store.getFocusedId(), "focused", false);
             store.focused_item_idx = null;
             break;
+        case ActionKind.UpdateItem: {
+            let {id, updated} = action;
+            _updateItem(id, updated);
+            break;
+        }
+        case ActionKind.UpdateItemState: {
+            let {id, key, value} = action;
+            _updateItem(id, key, value);
+            break;
+        }
         default:
             break;
     }
