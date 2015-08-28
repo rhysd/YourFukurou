@@ -20,7 +20,12 @@ def ensure_cmd(cmd)
   end
 end
 
-file "node_modules" do
+file 'bower_components' do
+  ensure_cmd 'bower'
+  sh 'bower install'
+end
+
+file 'node_modules' do
   ensure_cmd 'npm'
   sh 'npm install --dev'
 end
@@ -62,4 +67,10 @@ end
 task :build_plugin_src => %i(build_plugin_jsx_src build_plugin_ts_src)
 
 task :build => %i(dep build_browser_src build_renderer_src build_plugin_src)
+
+task :run do
+  sh "#{ROOT}/bin/cli.js"
+end
+
+task :all => %i(build run)
 
