@@ -1,19 +1,5 @@
 import TwitterText from "twitter-text";
-
-const openExternal = global.require("shell").openExternal;
-
-function _openExternalLink(event) {
-    event.preventDefault();
-    let target = event.target;
-    while (target !== null) {
-        if (target.href !== undefined && target.className.indexOf("external-link") !== -1) {
-            openExternal(target.href);
-            return;
-        }
-        target = target.parentNode;
-    }
-    console.log("_openExternalLink: Unexpected link", event.target);
-}
+import {openExternalLink} from "./external-link.jsx";
 
 export default class TweetText extends React.Component {
     constructor(props) {
@@ -25,7 +11,7 @@ export default class TweetText extends React.Component {
         const forEach = Array.prototype.forEach;
         forEach.call(body_node.querySelectorAll("a"), anchor => {
             anchor.className = "external-link";
-            anchor.onclick = _openExternalLink;
+            anchor.onclick = openExternalLink;
         });
     }
 

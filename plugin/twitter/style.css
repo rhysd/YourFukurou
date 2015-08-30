@@ -11,9 +11,6 @@
 .tweet .external-link:hover {
   color: #1678c2;
 }
-.tweet .tweet-link {
-  color: inherit;
-}
 .tweet .lock-icon {
   margin-left: 0.5em;
 }
@@ -71,6 +68,9 @@
   overflow: hidden;
   font-size: 0.875em;
   color: rgba(0, 0, 0, 0.4);
+}
+.tweet .content .secondary .created-at .external-link {
+  color: inherit;
 }
 .tweet .content .tweet-text {
   display: inline;

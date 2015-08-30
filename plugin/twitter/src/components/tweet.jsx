@@ -1,21 +1,8 @@
 import assign from "object-assign";
 import TweetText from "./tweet-text.jsx";
+import ExternalLink, {openExternalLink} from "./external-link.jsx";
 
-const openExternal = global.require("shell").openExternal;
 let feed_store = StreamApp.getStore("feed");
-
-function _openExternalLink(event) {
-    event.preventDefault();
-    let target = event.target;
-    while (target !== null) {
-        if (target.href !== undefined && target.className.indexOf("external-link") !== -1) {
-            openExternal(target.href);
-            return;
-        }
-        target = target.parentNode;
-    }
-    console.log("_openExternalLink: Unexpected link", event.target);
-}
 
 export default class Tweet extends React.Component {
     constructor(props) {
@@ -34,9 +21,9 @@ export default class Tweet extends React.Component {
 
         return (
             <span className="retweeted-by">
-                <i className="fa fa-retweet"></i> Retweeted by <a className="external-link" href={"https://twitter.com/" + this.props.tweet.user.screen_name} onClick={_openExternalLink}>
+                <i className="fa fa-retweet"></i> Retweeted by <ExternalLink url={"https://twitter.com/" + this.props.tweet.user.screen_name}>
                     <img className="retweet-author" src={this.props.tweet.user.profile_image_url}/>
-                </a> {this.renderUserNameComponent(this.props.tweet.user, "retweet-author")}
+                </ExternalLink> {this.renderUserNameComponent(this.props.tweet.user, "retweet-author")}
             </span>
         );
     }
@@ -72,20 +59,20 @@ export default class Tweet extends React.Component {
         return (
             <div className="tweet" data-focused={this.state.focused}>
                 <div className="avatar">
-                    <a className="external-link" href={"https://twitter.com/" + tw.user.screen_name} onClick={_openExternalLink}>
+                    <ExternalLink url={"https://twitter.com/" + tw.user.screen_name}>
                         <img src={tw.user.profile_image_url} />
-                    </a>
+                    </ExternalLink>
                 </div>
                 <div className="content">
                     <div className="secondary">
-                        <a className="external-link" href={"https://twitter.com/" + tw.user.screen_name} onClick={_openExternalLink}>
+                        <ExternalLink url={"https://twitter.com/" + tw.user.screen_name}>
                             {this.renderUserNameComponent(tw.user, "author")}
-                        </a>
+                        </ExternalLink>
                         {this.renderRetweetedByComponent()}
                         <span className="created-at">
-                            <a className="external-link tweet-link" href={"https://twitter.com/" + tw.user.screen_name + "/status/" + tw.id_str} onClick={_openExternalLink}>
+                            <ExternalLink className="tweet-link" url={"https://twitter.com/" + tw.user.screen_name + "/status/" + tw.id_str}>
                                 {this.makeCreatedAtLabel(tw)}
-                            </a>
+                            </ExternalLink>
                         </span>
                     </div>
                     <TweetText status={tw} />
