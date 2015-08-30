@@ -60,7 +60,7 @@ function _focusByIdx(idx) {
 
     store.focused_item_idx = idx;
     _updateItemState(new_id, "focused", true);
-    store.emit("focus-changed", new_id);
+    store.emit("item-focused", new_id);
 }
 
 function _focusFirst() {
@@ -115,7 +115,7 @@ store.dispatch_token = Dispatcher.register(action => {
             const id = store.getFocusedId();
             _updateItemState(store.getFocusedId(), "focused", false);
             store.focused_item_idx = null;
-            store.emit("focus-changed", id);
+            store.emit("item-blured", id);
             break;
         }
 
