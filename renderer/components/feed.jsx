@@ -1,6 +1,6 @@
 import React from "react/addons";
-import feed_store from "../feed-store";
 import * as FeedAction from "../feed-actions";
+import FeedItem from "./feed-item.jsx";
 
 let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
@@ -38,23 +38,14 @@ export default class Feed extends React.Component {
                 let props = i.props;
                 props.item_id = item_id;
                 added.unshift(
-                    <div className="feed-item-wrapper" key={"feedItem-" + item_id} data-item-id={item_id} onClick={this.onItemClick.bind(this, item_id)}>
+                    <FeedItem key={"feedItem-" + item_id} item_id={item_id}>
                         <Item {...props}/>
-                    </div>
+                    </FeedItem>
                 );
             }
             const new_children = added.concat(this.state.children);
             this.setState({children: new_children});
         });
-    }
-
-    onItemClick(item_id) {
-        const focused_id = feed_store.getFocusedId();
-        if (focused_id !== undefined && focused_id === item_id) {
-            FeedAction.blur();
-        } else {
-            FeedAction.focusTo(item_id);
-        }
     }
 
     render() {
