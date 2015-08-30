@@ -1,5 +1,5 @@
 import React from 'react/addons';
-import Root from './root-component.jsx';
+import Root from './components/root.jsx';
 import SinkLoader from './sink-loader.js';
 import * as StreamApp from './stream-app.js';
 import KeymapHandler from './keymap-handler.js';

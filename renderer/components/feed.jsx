@@ -1,6 +1,6 @@
 import React from "react/addons";
-import feed_store from "./feed-store";
-import * as FeedAction from "./feed-actions";
+import feed_store from "../feed-store";
+import * as FeedAction from "../feed-actions";
 
 let ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
