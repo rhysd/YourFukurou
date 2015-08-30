@@ -50,8 +50,8 @@ task :build_renderer_src do
 end
 
 task :build_plugin_jsx_src do
-  Dir['plugin/*/src/sink.jsx'].each do |jsx|
-      sh "#{BIN}/browserify -t babelify -d -o #{File.dirname(File.dirname(jsx))}/sink.js #{jsx}"
+  Dir['plugin/*/src/sink.{js,jsx}'].each do |js|
+      sh "#{BIN}/browserify -t babelify -d -o #{File.dirname(File.dirname(js))}/sink.js #{js}"
   end
 end
 

@@ -72,7 +72,7 @@
   font-size: 0.875em;
   color: rgba(0, 0, 0, 0.4);
 }
-.tweet .content .text {
+.tweet .content .tweet-text {
   display: inline;
   margin-left: 0.5em;
   margin-top: 0.5em;
@@ -91,7 +91,7 @@
 .tweet[data-focused=true] .external-link {
   color: #e0e9f4;
 }
-.tweet[data-focused=true] .text .external-link {
+.tweet[data-focused=true] .tweet-text .external-link {
   text-decoration: underline;
 }
 .tweet[data-focused=true] .avatar img {

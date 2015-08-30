@@ -1,5 +1,5 @@
 import assign from "object-assign";
-import TwitterText from "twitter-text";
+import TweetText from "./tweet-text.jsx";
 
 const openExternal = global.require("shell").openExternal;
 let feed_store = StreamApp.getStore("feed");
@@ -64,13 +64,6 @@ export default class Tweet extends React.Component {
             }
         }
         feed_store.on("item-changed", this.store_listener);
-
-        const body_node = this.refs.tweet_body.getDOMNode();
-        const forEach = Array.prototype.forEach;
-        forEach.call(body_node.querySelectorAll("a"), anchor => {
-            anchor.className = "external-link";
-            anchor.onclick = _openExternalLink;
-        });
     }
 
     render() {
@@ -95,7 +88,7 @@ export default class Tweet extends React.Component {
                             </a>
                         </span>
                     </div>
-                    <div className="text" ref="tweet_body" dangerouslySetInnerHTML={{__html: TwitterText.autoLink(tw.text, {urlEntities: tw.entities.urls})}} />
+                    <TweetText status={tw} />
                 </div>
         </div>
         );

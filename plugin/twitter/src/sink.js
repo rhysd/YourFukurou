@@ -1,4 +1,4 @@
-import Tweet from "./tweet-component.jsx";
+import Tweet from "./components/tweet.jsx";
 
 // Note:
 // Do not execute heavy process here.
