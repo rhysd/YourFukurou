@@ -1,6 +1,8 @@
 import assign from "object-assign";
 import TweetText from "./tweet-text.jsx";
 import ExternalLink, {openExternalLink} from "./external-link.jsx";
+import * as Action from "../actions";
+import StatusStore from "../store";
 
 let feed_store = StreamApp.getStore("feed");
 
@@ -8,10 +10,7 @@ export default class Tweet extends React.Component {
     constructor(props) {
         super(props);
         this.state = feed_store.getItemState(this.props.item_id);
-    }
-
-    componentWillUnmount() {
-        feed_store.removeListener("item-changed", this.store_listener);
+        Action.addStatus(this.props.item_id, this.props.tweet);
     }
 
     renderRetweetedByComponent() {
@@ -51,6 +50,10 @@ export default class Tweet extends React.Component {
             }
         }
         feed_store.on("item-changed", this.store_listener);
+    }
+
+    componentWillUnmount() {
+        feed_store.removeListener("item-changed", this.store_listener);
     }
 
     render() {

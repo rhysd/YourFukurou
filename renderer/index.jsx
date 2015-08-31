@@ -25,11 +25,23 @@ loader.loadAllSinks(document.head)
           StreamApp.router.start();
 
           // TODO: Temporary keymaps
-          keymap_handler.registerKeyMaps({
+          let keymap_handler = new KeymapHandler({
               "j": "FocusNext",
               "k": "FocusPrev",
               "g g": "FocusFirst",
               "shift+g": "FocusLast"
           });
+
+          for (const sink of sinks) {
+              if (sink.local_keymaps !== undefined) {
+                  keymap_handler.registerKeyMaps(sink.source, sink.local_keymaps);
+              }
+
+              if (sink.action_map !== undefined) {
+                  keymap_handler.registerActions(sink.source, sink.action_map);
+              }
+          }
+
+          global.StreamApp.keymap_handler = keymap_handler;
       });
 

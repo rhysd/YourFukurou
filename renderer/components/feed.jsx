@@ -32,7 +32,9 @@ export default class Feed extends React.Component {
                 const item_id = this.counter++;
                 FeedAction.addItem(item_id, {
                     focused: false,
-                    expanded: true
+                    expanded: true,
+                    source: source_name,
+                    stream: stream_name
                 });
 
                 let props = i.props;
