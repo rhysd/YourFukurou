@@ -59,6 +59,7 @@
 .tweet .content .secondary .retweeted-by img.retweet-author {
   height: 1.5em;
   width: 1.5em;
+  border-radius: 0.25em;
 }
 .tweet .content .secondary .created-at {
   display: inline;

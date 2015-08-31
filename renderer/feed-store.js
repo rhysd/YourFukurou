@@ -15,6 +15,10 @@ class FeedStore extends EventEmitter {
         return this.ids[this.focused_item_idx];
     }
 
+    getFocusedItemState() {
+        return this.items[this.getFocusedId()];
+    }
+
     getAllIds() {
         return this.ids;
     }

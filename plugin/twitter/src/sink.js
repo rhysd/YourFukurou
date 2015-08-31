@@ -1,4 +1,7 @@
 import Tweet from "./components/tweet.jsx";
+import * as Actions from "./actions";
+
+let feed_store = StreamApp.getStore("feed");
 
 // Note:
 // Do not execute heavy process here.
@@ -13,6 +16,15 @@ StreamApp.router.registerSink({
     // initialize: function() {
         // Initialize UI here
     // },
+
+    // TODO: Temporary keymaps (users should determine)
+    local_keymaps: {
+        "l": "TwitterOpenLinksInTweet"
+    },
+
+    action_map: {
+        TwitterOpenLinksInTweet: Actions.openLink
+    },
 
     streams: {
         tweet: function(json) {
