@@ -5,8 +5,10 @@ import feed_store from "./feed-store";
 export default class KeymapHandler {
     constructor(global_keymaps) {
         this.keymaps = {};
+        this.action_map = {};
+
         this.global_keymaps = global_keymaps;
-        this.action_map = {
+        this.global_action_map = {
             FocusNext: FeedAction.focusNext,
             FocusPrev: FeedAction.focusPrev,
             FocusFirst: FeedAction.focusFirst,
@@ -14,7 +16,7 @@ export default class KeymapHandler {
         };
 
         for (const k in global_keymaps) {
-            const action = this.action_map[global_keymaps[k]];
+            const action = this.global_action_map[global_keymaps[k]];
             if (action !== undefined) {
                 Mousetrap.bind(k, action);
             }
@@ -33,7 +35,7 @@ export default class KeymapHandler {
         this.keymaps[source][key] = action_name;
 
         if (this.global_keymaps[key] === undefined) {
-            Mousetrap.bind(key, this.selectAction(key, action_name));
+            Mousetrap.bind(key, this.selectAction(source, action_name));
         }
     }
 
@@ -43,48 +45,33 @@ export default class KeymapHandler {
         }
     }
 
-    registerAction(action_name, action) {
-        this.action_map[action_name] = action;
+    registerAction(source, action_name, action) {
+        if (this.action_map[source] === undefined) {
+            this.action_map[source] = {};
+        }
+        this.action_map[source][action_name] = action;
     }
 
-    registerActions(action_map) {
+    registerActions(source, action_map) {
         for (const action_name in action_map) {
-            this.registerAction(action_name, action_map[action_name]);
+            this.registerAction(source, action_name, action_map[action_name]);
         }
     }
 
-    selectAction(key, action_name) {
+    selectAction(source, action_name) {
+        // Broadcast key to sources
         return () => {
-            console.log("key: " + key + ", action: " + action_name);
-
-            // Broadcast key to sources
             const id = feed_store.getFocusedId();
             const item = feed_store.getItemState(id);
-            if (!item || !item.source) {
+            if (!item || !item.source || item.source !== source) {
                 return;
             }
 
-            const keymaps = this.keymaps[item.source];
-            if (keymaps === undefined) {
-                return;
-            }
-
-            console.log('keymaps: ', keymaps);
-
-            const action_name2 = keymaps[key];
-            if (action_name2 === undefined) {
-                return;
-            }
-            console.log('action_name2: ', action_name2);
-
-            const action = this.action_map[action_name2];
+            const action = this.action_map[source][action_name];
             if (action === undefined) {
                 return;
             }
 
-            // TODO: Choose action_name or action_name2
-
-            console.log('action: ', action);
             action(id);
         };
     }

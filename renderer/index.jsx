@@ -38,7 +38,7 @@ loader.loadAllSinks(document.head)
               }
 
               if (sink.action_map !== undefined) {
-                  keymap_handler.registerActions(sink.action_map);
+                  keymap_handler.registerActions(sink.source, sink.action_map);
               }
           }
 
