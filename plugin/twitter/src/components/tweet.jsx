@@ -2,6 +2,7 @@ import assign from "object-assign";
 import TweetText from "./tweet-text.jsx";
 import ExternalLink, {openExternalLink} from "./external-link.jsx";
 import * as Action from "../actions";
+import StatusStore from "../store";
 
 let feed_store = StreamApp.getStore("feed");
 

@@ -4,7 +4,6 @@ export var ActionKind = {
 };
 
 export function openLink(id) {
-    console.log('dispatched!: ', id);
     StreamApp.dispatcher.dispatch({
         type: ActionKind.OpenLinks,
         id: id

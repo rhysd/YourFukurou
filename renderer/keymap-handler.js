@@ -12,6 +12,13 @@ export default class KeymapHandler {
             FocusFirst: FeedAction.focusFirst,
             FocusLast: FeedAction.focusLast
         };
+
+        for (const k in global_keymaps) {
+            const action = this.action_map[global_keymaps[k]];
+            if (action !== undefined) {
+                Mousetrap.bind(k, action);
+            }
+        }
     }
 
     registerKeyMap(key, source, action_name) {
@@ -25,7 +32,9 @@ export default class KeymapHandler {
 
         this.keymaps[source][key] = action_name;
 
-        Mousetrap.bind(key, this.selectAction(key, action_name));
+        if (this.global_keymaps[key] === undefined) {
+            Mousetrap.bind(key, this.selectAction(key, action_name));
+        }
     }
 
     registerKeyMaps(source, keymaps) {
@@ -45,10 +54,6 @@ export default class KeymapHandler {
     }
 
     selectAction(key, action_name) {
-        if (this.global_keymaps[key] !== undefined) {
-            return this.global_keymaps[key];
-        }
-
         return () => {
             console.log("key: " + key + ", action: " + action_name);
 
