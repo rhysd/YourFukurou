@@ -1,17 +1,9 @@
-import assign from "object-assign";
 import TweetText from "./tweet-text.jsx";
-import QuotedTweet from "./quoted-tweet.jsx";
-import ExternalLink, {openExternalLink} from "./external-link.jsx";
-import * as Action from "../actions";
-import StatusStore from "../store";
+import ExternalLink from "./external-link.jsx";
 
-let feed_store = StreamApp.getStore("feed");
-
-export default class Tweet extends React.Component {
+export default class QuotedTweet extends React.Component {
     constructor(props) {
         super(props);
-        this.state = feed_store.getItemState(this.props.item_id);
-        Action.addStatus(this.props.item_id, this.props.tweet);
     }
 
     renderRetweetedByComponent() {
@@ -44,24 +36,11 @@ export default class Tweet extends React.Component {
         );
     }
 
-    componentDidMount() {
-        this.store_listener = (key, new_state) => {
-            if (key === this.props.item_id) {
-                this.setState(assign({}, new_state));
-            }
-        }
-        feed_store.on("item-changed", this.store_listener);
-    }
-
-    componentWillUnmount() {
-        feed_store.removeListener("item-changed", this.store_listener);
-    }
-
     render() {
         const tw = this.props.tweet.retweeted_status || this.props.tweet;
 
         return (
-            <div className="tweet" data-focused={this.state.focused}>
+            <div className="tweet quoted">
                 <div className="avatar">
                     <ExternalLink url={"https://twitter.com/" + tw.user.screen_name}>
                         <img src={tw.user.profile_image_url} />
@@ -80,10 +59,8 @@ export default class Tweet extends React.Component {
                         </span>
                     </div>
                     <TweetText status={tw} />
-                    {tw.quoted_status ? <QuotedTweet tweet={tw.quoted_status}/> : ""}
                 </div>
             </div>
         );
     }
 }
-
