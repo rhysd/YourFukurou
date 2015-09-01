@@ -12,7 +12,8 @@ export default class KeymapHandler {
             FocusNext: FeedAction.focusNext,
             FocusPrev: FeedAction.focusPrev,
             FocusFirst: FeedAction.focusFirst,
-            FocusLast: FeedAction.focusLast
+            FocusLast: FeedAction.focusLast,
+            ToggleDevTools: () => remote.getCurrentWindow().toggleDevTools()
         };
 
         for (const k in global_keymaps) {
