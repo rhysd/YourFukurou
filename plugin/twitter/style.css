@@ -110,3 +110,9 @@
 .tweet .quoted .content .secondary .author {
   color: rgba(0, 0, 0, 0.4);
 }
+.tweet .image-preview img.media {
+  border-radius: 1.0em;
+  margin-top: 0.5em;
+  margin-left: 2em;
+  cursor: pointer;
+}

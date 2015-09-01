@@ -1,6 +1,7 @@
 import assign from "object-assign";
 import TweetText from "./tweet-text.jsx";
 import QuotedTweet from "./quoted-tweet.jsx";
+import ImagePreview from "./image-preview.jsx";
 import ExternalLink, {openExternalLink} from "./external-link.jsx";
 import * as Action from "../actions";
 import StatusStore from "../store";
@@ -81,6 +82,7 @@ export default class Tweet extends React.Component {
                     </div>
                     <TweetText status={tw} />
                     {tw.quoted_status ? <QuotedTweet tweet={tw.quoted_status}/> : ""}
+                    {tw.entities.media ? <ImagePreview media={tw.entities.media} item_id={this.props.item_id}/> : ""}
                 </div>
             </div>
         );
