@@ -10,7 +10,12 @@ StreamApp.router.registerSink({
     source: "twitter",
 
     stylesheets: [
-        "style.css"
+        "style.css",
+        "../../bower_components/lightbox2/dist/css/lightbox.css"
+    ],
+
+    scripts: [
+        "../../bower_components/lightbox2/dist/js/lightbox-plus-jquery.min.js"
     ],
 
     // initialize: function() {

@@ -7,6 +7,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "font-awesome": "~4.4.0"
+    "font-awesome": "~4.4.0",
+    "lightbox2": "~2.8.1"
   }
 }
