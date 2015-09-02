@@ -1,10 +1,13 @@
+import EventEmitter from "events";
 import {ActionKind} from "./actions";
 
 const openExternal = global.require("shell").openExternal;
 
-class TweetStatusStore {
+class TweetStatusStore extends EventEmitter {
     constructor() {
+        super();
         this.statuses = {};
+        this.setMaxListeners(0);
     }
 
     getAll() {
@@ -37,12 +40,17 @@ store.dispatch_token = StreamApp.dispatcher.register(action => {
                 break;
             }
 
+            store.emit("open-link-received", action.id);
             _openAllLinksInTweet(status);
             break;
         }
         case ActionKind.DumpCurrentStatus: {
             console.log("DumpCurrentStatus: " + action.id);
             console.log(JSON.stringify(store.getStatus(action.id), null, 2));
+            break;
+        }
+        case ActionKind.TogglePreview: {
+            store.emit("toggle-preview-received", action.id);
             break;
         }
         default:

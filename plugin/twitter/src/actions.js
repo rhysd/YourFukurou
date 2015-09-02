@@ -1,7 +1,8 @@
 export var ActionKind = {
     OpenLinks: Symbol("twitter-open-link"),
     AddStatus: Symbol("twitter-add-status"),
-    DumpCurrentStatus: Symbol("twitter-dump-current-status")
+    DumpCurrentStatus: Symbol("twitter-dump-current-status"),
+    TogglePreview: Symbol("twitter-open-preview")
 };
 
 export function openLink(id) {
@@ -22,6 +23,13 @@ export function addStatus(id, status) {
 export function dumpCurrentStatus(id) {
     StreamApp.dispatcher.dispatch({
         type: ActionKind.DumpCurrentStatus,
+        id: id
+    });
+}
+
+export function togglePreview(id) {
+    StreamApp.dispatcher.dispatch({
+        type: ActionKind.TogglePreview,
         id: id
     });
 }

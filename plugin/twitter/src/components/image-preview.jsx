@@ -1,13 +1,10 @@
+import status_store from "../store";
+
 const openExternal = global.require("shell").openExternal;
 
 export default class ImagePreview extends React.Component {
     constructor(props) {
         super(props);
-    }
-
-    onClick(medium, event) {
-        // TODO: Show preview in app
-        openExternal(medium.expanded_url);
     }
 
     getLargestSize(sizes) {
@@ -27,10 +24,34 @@ export default class ImagePreview extends React.Component {
 
     renderImage(medium, idx) {
         return (
-            <a className="media" href={medium.media_url + ":" + this.getLargestSize(medium.sizes)} key={this.props.item_id + "-" + idx} data-lightbox={"group-" + this.props.item_id} >
-                <img className="media" src={medium.media_url + ":thumb"} onClick={this.onClick.bind(this, medium)}/>
+            <a className="media" ref={"image" + idx} href={medium.media_url + ":" + this.getLargestSize(medium.sizes)} key={this.props.item_id + "-" + idx} data-lightbox={"group-" + this.props.item_id} >
+                <img className="media" src={medium.media_url + ":thumb"} />
             </a>
         );
+    }
+
+    doPreviewAction() {
+        let overlay = document.querySelector("#lightbox");
+        if (overlay.style.display === "none") {
+            lightbox.start($(this.refs.image0.getDOMNode()));
+        } else {
+            lightbox.end();
+        }
+    }
+
+    componentDidMount() {
+        this.listener = id => {
+            if (this.props.item_id === id) {
+                this.doPreviewAction();
+            }
+        }
+        status_store.on("toggle-preview-received", this.listener);
+    }
+
+    componentWillUnmount() {
+        if (this.listener) {
+            status_store.removeListener("toggle-preview-received", this.listener);
+        }
     }
 
     render() {
