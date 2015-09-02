@@ -63,7 +63,7 @@ export default class MessageRouter {
 
     start() {
         ipc.on("stream-message", (channel, data) => {
-            const sep_idx = channel.indexOf("-");
+            const sep_idx = channel.indexOf(":");
             if (sep_idx === -1) {
                 console.log("Invalid channel: " + channel);
                 return;

@@ -10,7 +10,7 @@ export default class Source {
         this.sender = window.webContents;
         this.raw_source = new RawSourceClass(
                 (stream_name: string, data: any) => {
-                    this.sender.send("stream-message", source_name + "-" + stream_name, data);
+                    this.sender.send("stream-message", source_name + ":" + stream_name, data);
                 }
             );
     }
