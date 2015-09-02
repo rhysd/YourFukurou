@@ -1,5 +1,8 @@
 import TwitterText from "twitter-text";
 import {openExternalLink} from "./external-link.jsx";
+import store from "../store";
+
+const openExternal = global.require("shell").openExternal;
 
 export default class TweetText extends React.Component {
     constructor(props) {
@@ -13,6 +16,21 @@ export default class TweetText extends React.Component {
             anchor.className = "external-link";
             anchor.onclick = openExternalLink;
         });
+
+        this.listener = id => {
+            if (id === this.props.item_id) {
+                for (const url of this.props.status.entities.urls) {
+                    openExternal(url.expanded_url);
+                }
+            }
+        };
+        store.on("open-links-received", this.listener);
+    }
+
+    componentWillUnmount() {
+        if (this.listener) {
+            store.removeListener("open-links-received", this.listener);
+        }
     }
 
     buildAutoLinkedHTML(status) {

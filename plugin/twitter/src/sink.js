@@ -30,7 +30,7 @@ StreamApp.router.registerSink({
     },
 
     action_map: {
-        TwitterOpenLinksInTweet: Actions.openLink,
+        TwitterOpenLinksInTweet: Actions.openLinks,
         TwitterDumpCurrentStatus: Actions.dumpCurrentStatus,
         TwitterTogglePreview: Actions.togglePreview
     },

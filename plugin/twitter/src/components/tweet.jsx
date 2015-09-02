@@ -3,8 +3,7 @@ import TweetText from "./tweet-text.jsx";
 import QuotedTweet from "./quoted-tweet.jsx";
 import ImagePreview from "./image-preview.jsx";
 import ExternalLink, {openExternalLink} from "./external-link.jsx";
-import * as Action from "../actions";
-import StatusStore from "../store";
+import store from "../store";
 
 let feed_store = StreamApp.getStore("feed");
 
@@ -12,7 +11,6 @@ export default class Tweet extends React.Component {
     constructor(props) {
         super(props);
         this.state = feed_store.getItemState(this.props.item_id);
-        Action.addStatus(this.props.item_id, this.props.tweet);
     }
 
     renderRetweetedByComponent() {
@@ -46,16 +44,25 @@ export default class Tweet extends React.Component {
     }
 
     componentDidMount() {
-        this.store_listener = (key, new_state) => {
+        this.item_changed_listener = (key, new_state) => {
             if (key === this.props.item_id) {
                 this.setState(assign({}, new_state));
             }
         }
-        feed_store.on("item-changed", this.store_listener);
+        feed_store.on("item-changed", this.item_changed_listener);
+
+        this.dump_current_status_received_listener = id => {
+            if (id === this.props.item_id) {
+                console.log("DumpCurrentStatus: " + id);
+                console.log(JSON.stringify(this.props.tweet, null, 2));
+            }
+        };
+        store.on("dump-current-status-received", this.dump_current_status_received_listener);
     }
 
     componentWillUnmount() {
-        feed_store.removeListener("item-changed", this.store_listener);
+        feed_store.removeListener("item-changed", this.item_changed_listener);
+        feed_store.removeListener("dump-current-status-received", this.dump_current_status_received_listener);
     }
 
     renderMedia(status) {
@@ -92,7 +99,7 @@ export default class Tweet extends React.Component {
                             </ExternalLink>
                         </span>
                     </div>
-                    <TweetText status={tw} />
+                    <TweetText status={tw} item_id={this.props.item_id}/>
                     {tw.quoted_status ? <QuotedTweet tweet={tw.quoted_status}/> : ""}
                     {this.renderMedia(tw)}
                 </div>

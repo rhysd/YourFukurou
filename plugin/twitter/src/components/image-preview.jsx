@@ -1,4 +1,4 @@
-import status_store from "../store";
+import store from "../store";
 
 const openExternal = global.require("shell").openExternal;
 
@@ -45,12 +45,12 @@ export default class ImagePreview extends React.Component {
                 this.doPreviewAction();
             }
         }
-        status_store.on("toggle-preview-received", this.listener);
+        store.on("toggle-preview-received", this.listener);
     }
 
     componentWillUnmount() {
         if (this.listener) {
-            status_store.removeListener("toggle-preview-received", this.listener);
+            store.removeListener("toggle-preview-received", this.listener);
         }
     }
 

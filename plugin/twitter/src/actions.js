@@ -1,35 +1,19 @@
 export var ActionKind = {
     OpenLinks: Symbol("twitter-open-link"),
-    AddStatus: Symbol("twitter-add-status"),
     DumpCurrentStatus: Symbol("twitter-dump-current-status"),
     TogglePreview: Symbol("twitter-open-preview")
 };
 
-export function openLink(id) {
-    StreamApp.dispatcher.dispatch({
-        type: ActionKind.OpenLinks,
-        id: id
-    });
+function createKeyInputAction(type) {
+    return id => {
+        StreamApp.dispatcher.dispatch({
+            type: type,
+            id: id
+        });
+    };
 }
 
-export function addStatus(id, status) {
-    StreamApp.dispatcher.dispatch({
-        type: ActionKind.AddStatus,
-        id: id,
-        status: status
-    });
-}
+export const openLinks = createKeyInputAction(ActionKind.OpenLinks);
+export const dumpCurrentStatus = createKeyInputAction(ActionKind.DumpCurrentStatus);
+export const togglePreview = createKeyInputAction(ActionKind.TogglePreview);
 
-export function dumpCurrentStatus(id) {
-    StreamApp.dispatcher.dispatch({
-        type: ActionKind.DumpCurrentStatus,
-        id: id
-    });
-}
-
-export function togglePreview(id) {
-    StreamApp.dispatcher.dispatch({
-        type: ActionKind.TogglePreview,
-        id: id
-    });
-}
