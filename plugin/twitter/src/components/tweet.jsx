@@ -58,6 +58,18 @@ export default class Tweet extends React.Component {
         feed_store.removeListener("item-changed", this.store_listener);
     }
 
+    renderMedia(status) {
+        if (status.extended_entities !== undefined && status.extended_entities.media !== undefined) {
+            return <ImagePreview media={status.extended_entities.media} item_id={this.props.item_id}/>;
+        }
+
+        if (status.entities.media !== undefined) {
+            return <ImagePreview media={status.entities.media} item_id={this.props.item_id}/>;
+        }
+
+        return "";
+    }
+
     render() {
         const tw = this.props.tweet.retweeted_status || this.props.tweet;
 
@@ -82,7 +94,7 @@ export default class Tweet extends React.Component {
                     </div>
                     <TweetText status={tw} />
                     {tw.quoted_status ? <QuotedTweet tweet={tw.quoted_status}/> : ""}
-                    {tw.entities.media ? <ImagePreview media={tw.entities.media} item_id={this.props.item_id}/> : ""}
+                    {this.renderMedia(tw)}
                 </div>
             </div>
         );
