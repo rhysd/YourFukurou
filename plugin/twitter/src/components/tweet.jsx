@@ -2,6 +2,7 @@ import assign from "object-assign";
 import TweetText from "./tweet-text.jsx";
 import QuotedTweet from "./quoted-tweet.jsx";
 import ImagePreview from "./image-preview.jsx";
+import IconCounter from "./icon-counter.jsx";
 import ExternalLink, {openExternalLink} from "./external-link.jsx";
 import store from "../store";
 
@@ -77,24 +78,6 @@ export default class Tweet extends React.Component {
         return "";
     }
 
-    // TODO: Make component
-    renderIconCounter(icon_name, color, count) {
-        if (count > 1000000) {
-            var count_str = (Math.floor(count / 10) / 100000) + "M";
-        } else if (count > 1000) {
-            // Note: Remove after first decimal place by `floor(count / 1000 * 100) / 100`
-            var count_str = (Math.floor(count / 10) / 100) + "K";
-        } else {
-            var count_str = count.toString();
-        }
-
-        return (
-            <span className="icon-counter" style={{color: color}}>
-                <i className={"fa " + icon_name} /> {" " + count_str}
-            </span>
-        );
-    }
-
     render() {
         const tw = this.props.tweet.retweeted_status || this.props.tweet;
 
@@ -112,8 +95,8 @@ export default class Tweet extends React.Component {
                         </ExternalLink>
                         {this.renderRetweetedByComponent()}
                         <span className="created-at">
-                            {this.renderIconCounter("fa-star", tw.favorited ? "orange" : "", tw.favorite_count)}
-                            {this.renderIconCounter("fa-retweet", tw.retweeted ? "darkgreen" : "", tw.retweet_count)}
+                            <IconCounter icon="fa-star" color={tw.favorited ? "orange" : ""} count={tw.favorite_count} />
+                            <IconCounter icon="fa-retweet" color={tw.favorited ? "forestgreen" : ""} count={tw.retweet_count} />
                             <ExternalLink className="tweet-link" url={"https://twitter.com/" + tw.user.screen_name + "/status/" + tw.id_str}>
                                 {this.makeCreatedAtLabel(tw)}
                             </ExternalLink>
