@@ -19,11 +19,13 @@ StreamApp.router.registerSink({
 
     // TODO: Temporary keymaps (users should determine)
     local_keymaps: {
-        "l": "TwitterOpenLinksInTweet"
+        "l": "TwitterOpenLinksInTweet",
+        "d": "TwitterDumpCurrentStatus"
     },
 
     action_map: {
-        TwitterOpenLinksInTweet: Actions.openLink
+        TwitterOpenLinksInTweet: Actions.openLink,
+        TwitterDumpCurrentStatus: Actions.dumpCurrentStatus
     },
 
     streams: {

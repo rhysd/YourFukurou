@@ -40,6 +40,11 @@ store.dispatch_token = StreamApp.dispatcher.register(action => {
             _openAllLinksInTweet(status);
             break;
         }
+        case ActionKind.DumpCurrentStatus: {
+            console.log("DumpCurrentStatus: " + action.id);
+            console.log(JSON.stringify(store.getStatus(action.id), null, 2));
+            break;
+        }
         default:
             break;
     }
