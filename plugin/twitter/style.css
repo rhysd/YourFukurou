@@ -70,6 +70,9 @@
   font-size: 0.875em;
   color: rgba(0, 0, 0, 0.4);
 }
+.tweet .content .secondary .icon-counter {
+  margin-right: 0.5em;
+}
 .tweet .content .secondary .created-at .external-link {
   color: inherit;
 }
