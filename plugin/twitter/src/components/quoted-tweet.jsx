@@ -41,26 +41,24 @@ export default class QuotedTweet extends React.Component {
 
         return (
             <div className="tweet quoted">
-                <div className="main">
-                    <div className="avatar">
+                <div className="avatar">
+                    <ExternalLink url={"https://twitter.com/" + tw.user.screen_name}>
+                        <img src={tw.user.profile_image_url} />
+                    </ExternalLink>
+                </div>
+                <div className="content">
+                    <div className="secondary">
                         <ExternalLink url={"https://twitter.com/" + tw.user.screen_name}>
-                            <img src={tw.user.profile_image_url} />
+                            {this.renderUserNameComponent(tw.user, "author")}
                         </ExternalLink>
-                    </div>
-                    <div className="content">
-                        <div className="secondary">
-                            <ExternalLink url={"https://twitter.com/" + tw.user.screen_name}>
-                                {this.renderUserNameComponent(tw.user, "author")}
+                        {this.renderRetweetedByComponent()}
+                        <span className="created-at">
+                            <ExternalLink className="tweet-link" url={"https://twitter.com/" + tw.user.screen_name + "/status/" + tw.id_str}>
+                                {this.makeCreatedAtLabel(tw)}
                             </ExternalLink>
-                            {this.renderRetweetedByComponent()}
-                            <span className="created-at">
-                                <ExternalLink className="tweet-link" url={"https://twitter.com/" + tw.user.screen_name + "/status/" + tw.id_str}>
-                                    {this.makeCreatedAtLabel(tw)}
-                                </ExternalLink>
-                            </span>
-                        </div>
-                        <TweetText status={tw} />
+                        </span>
                     </div>
+                    <TweetText status={tw} />
                 </div>
             </div>
         );

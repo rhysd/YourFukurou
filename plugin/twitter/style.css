@@ -1,10 +1,6 @@
 .tweet {
   padding: 0.7em 0.7em 0.7em;
   display: flex;
-  flex-direction: column;
-}
-.tweet .main {
-  display: flex;
   flex-direction: row;
 }
 .tweet .external-link {
@@ -49,24 +45,14 @@
   font-weight: bold;
   color: #000000;
 }
-.tweet .secondary .retweeted-by {
+.tweet .secondary .user-name {
   margin-left: 0.5em;
-  flex: auto;
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
   font-size: 0.875em;
   color: rgba(0, 0, 0, 0.4);
-}
-.tweet .secondary .retweeted-by img.retweeted-avatar {
-  display: block;
-  height: 1.5em;
-  width: 1.5em;
-  border-radius: 0.25em;
-  margin-right: 0.25em;
-  margin-left: 0.25em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex: auto;
 }
 .tweet .secondary .created-at {
   margin-right: 0.5em;
@@ -126,18 +112,35 @@
   cursor: pointer;
 }
 .tweet .footer {
+  margin-top: 0.7em;
   font-size: 0.875em;
-  color: rgba(0, 0, 0, 0.3);
+  color: rgba(0, 0, 0, 0.4);
   overflow: hidden;
   display: flex;
+  align-items: center;
 }
-.tweet .footer .expander {
+.tweet .footer .retweeted-by {
+  margin-left: 0.5em;
   flex: auto;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.tweet .footer .icon-counter,
-.tweet .footer .icon {
-  flex: none;
-  margin-top: 0.7em;
-  margin-left: 1em;
-  margin-right: 1em;
+.tweet .footer .retweeted-by img.retweeted-avatar {
+  display: block;
+  height: 1.5em;
+  width: 1.5em;
+  border-radius: 0.25em;
+  margin-right: 0.25em;
+  margin-left: 0.25em;
+}
+.tweet .footer .icon-counter:not(:last-child),
+.tweet .footer .icon:not(:last-child) {
+  width: 5em;
+}
+.tweet .footer .icon-counter:last-child,
+.tweet .footer .icon:last-child {
+  margin-right: 0.7em;
 }
