@@ -79,9 +79,15 @@ export default class Tweet extends React.Component {
         return `${("0" + d.getHours()).slice(-2)}:${("0" + d.getMinutes()).slice(-2)} ${d.getMonth()+1}/${d.getDate()} ${d.getYear() + 1900}`;
     }
 
+    // TODO: Temporary
     sendReply() {
         const t = this.props.tweet.retweeted_status || this.props.tweet;
         openExternal("https://twitter.com/intent/tweet?in_reply_to=" + t.id_str);
+    }
+
+    // TODO: Temporary
+    sendTweet() {
+        openExternal("https://twitter.com/intent/tweet");
     }
 
     componentDidMount() {
@@ -106,12 +112,20 @@ export default class Tweet extends React.Component {
             }
         };
         store.on("send-reply-received", this.send_reply_listener);
+
+        this.send_tweet_listener = id => {
+            if (id === this.props.item_id) {
+                this.sendTweet();
+            }
+        };
+        store.on("send-tweet-received", this.send_tweet_listener);
     }
 
     componentWillUnmount() {
         feed_store.removeListener("item-changed", this.item_changed_listener);
         feed_store.removeListener("dump-current-status-received", this.dump_current_status_received_listener);
         feed_store.removeListener("send-reply-received", this.send_reply_listener);
+        feed_store.removeListener("send-tweet-received", this.send_tweet_listener);
     }
 
     // TODO:

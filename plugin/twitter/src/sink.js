@@ -27,11 +27,13 @@ StreamApp.router.registerSink({
         "l": "TwitterOpenLinksInTweet",
         "d": "TwitterDumpCurrentStatus",
         "p": "TwitterTogglePreview",
-        "r": "TwitterSendReply"
+        "r": "TwitterSendReply",
+        "t": "TwitterSendTweet"
     },
 
     action_map: {
         TwitterSendReply: Actions.sendReply,
+        TwitterSendTweet: Actions.sendTweet,
         TwitterOpenLinksInTweet: Actions.openLinks,
         TwitterDumpCurrentStatus: Actions.dumpCurrentStatus,
         TwitterTogglePreview: Actions.togglePreview

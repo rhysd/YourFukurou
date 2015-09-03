@@ -29,6 +29,10 @@ store.dispatch_token = StreamApp.dispatcher.register(action => {
             store.emit("send-reply-received", action.id);
             break;
         }
+        case ActionKind.SendTweet: {
+            store.emit("send-tweet-received", action.id);
+            break;
+        }
         default:
             break;
     }
