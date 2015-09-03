@@ -8,24 +8,66 @@ import store from "../store";
 
 let feed_store = StreamApp.getStore("feed");
 
-export default class Tweet extends React.Component {
+class UserName extends React.Component {
     constructor(props) {
         super(props);
-        this.state = feed_store.getItemState(this.props.item_id);
     }
 
-    renderRetweetedByComponent() {
-        if (this.props.tweet.retweeted_status === undefined) {
+    render() {
+        return (
+            <span className={this.props.name}>
+                @{this.props.user.screen_name}{this.props.user.protected ? <i className="fa fa-lock lock-icon"></i> : ""}
+            </span>
+        );
+    }
+}
+
+class RetweetedBy extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        if (this.props.status === undefined) {
             return <span className="retweeted-by"></span>;
         }
 
         return (
             <span className="retweeted-by">
-                <i className="fa fa-retweet"></i> Retweeted by <ExternalLink url={"https://twitter.com/" + this.props.tweet.user.screen_name}>
-                    <img className="retweet-author" src={this.props.tweet.user.profile_image_url}/>
-                </ExternalLink> {this.renderUserNameComponent(this.props.tweet.user, "retweet-author")}
+                <i className="fa fa-retweet"></i> Retweeted by <ExternalLink url={"https://twitter.com/" + this.props.user.screen_name}>
+                    <img className="retweet-author" src={this.props.user.profile_image_url}/>
+                </ExternalLink> <UserName user={this.props.user} name="retweet-author"/>
             </span>
         );
+    }
+}
+
+class Footer extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        let children = [];
+        let counter = 0;
+        for (const item of this.props.children) {
+            children.push(item);
+            children.push(<div className="expander" key={counter++}/>);
+        }
+
+        return (
+            <div className="footer">
+                <div className="expander"/>
+                {children}
+            </div>
+        );
+    }
+}
+
+export default class Tweet extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = feed_store.getItemState(this.props.item_id);
     }
 
     makeCreatedAtLabel(tw) {
@@ -34,14 +76,6 @@ export default class Tweet extends React.Component {
         }
         var d = new Date(tw.created_at);
         return `${("0" + d.getHours()).slice(-2)}:${("0" + d.getMinutes()).slice(-2)} ${d.getMonth()+1}/${d.getDate()} ${d.getYear() + 1900}`;
-    }
-
-    renderUserNameComponent(user, class_name) {
-        return (
-            <span className={class_name}>
-                @{user.screen_name}{user.protected ? <i className="fa fa-lock lock-icon"></i> : ""}
-            </span>
-        );
     }
 
     componentDidMount() {
@@ -66,6 +100,11 @@ export default class Tweet extends React.Component {
         feed_store.removeListener("dump-current-status-received", this.dump_current_status_received_listener);
     }
 
+    // TODO:
+    // 'extended_entities' may contains not only image but video and animated GIF.
+    //
+    //   https://dev.twitter.com/overview/api/entities-in-twitter-objects
+    //
     renderMedia(status) {
         if (status.extended_entities !== undefined && status.extended_entities.media !== undefined) {
             return <ImagePreview media={status.extended_entities.media} item_id={this.props.item_id}/>;
@@ -92,9 +131,9 @@ export default class Tweet extends React.Component {
                     <div className="content">
                         <div className="secondary">
                             <ExternalLink url={"https://twitter.com/" + tw.user.screen_name}>
-                                {this.renderUserNameComponent(tw.user, "author")}
+                                <UserName user={tw.user} name="author"/>
                             </ExternalLink>
-                            {this.renderRetweetedByComponent()}
+                            <RetweetedBy user={this.props.tweet.user} status={this.props.tweet.retweeted_status}/>
                             <span className="created-at">
                                 <ExternalLink className="tweet-link" url={"https://twitter.com/" + tw.user.screen_name + "/status/" + tw.id_str}>
                                     {this.makeCreatedAtLabel(tw)}
@@ -106,17 +145,12 @@ export default class Tweet extends React.Component {
                         {this.renderMedia(tw)}
                     </div>
                 </div>
-                <div className="footer">
-                    <div className="expander"/>
+                <Footer>
                     <span className="icon"><i className="fa fa-reply"/></span>
-                    <div className="expander"/>
                     <IconCounter icon="fa-star" color={tw.favorited ? "orange" : ""} count={tw.favorite_count} />
-                    <div className="expander"/>
                     <IconCounter icon="fa-retweet" color={tw.favorited ? "forestgreen" : ""} count={tw.retweet_count} />
-                    <div className="expander"/>
                     <span className="icon"><i className="fa fa-ellipsis-h"/></span>
-                    <div className="expander"/>
-                </div>
+                </Footer>
             </div>
         );
     }

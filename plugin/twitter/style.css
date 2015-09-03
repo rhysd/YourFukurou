@@ -20,9 +20,9 @@
 }
 .tweet .avatar {
   display block;
-  width: 48px;
-  height: 48px;
-  margin-right: 8px;
+  width: 3.0em;
+  height: 3.0em;
+  margin-right: 0.30em;
   flex: none;
 }
 .tweet .avatar img {
