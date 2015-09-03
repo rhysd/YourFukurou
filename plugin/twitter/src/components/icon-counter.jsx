@@ -8,10 +8,10 @@ export default class IconCounter extends React.Component {
         if (c === 0) {
             return "";
         } if (c > 1000000) {
-            return (Math.floor(c / 10) / 100000) + "M";
+            return (Math.floor(c / 100000) / 10) + "M";
         } else if (c > 1000) {
-            // Note: Remove after first decimal place by `floor(count / 1000 * 100) / 100`
-            return (Math.floor(c / 10) / 100) + "K";
+            // Note: Remove after first decimal place by `floor(count / 1000 * 10) / 10`
+            return (Math.floor(c / 100) / 10) + "K";
         } else {
             return c.toString();
         }
@@ -20,7 +20,7 @@ export default class IconCounter extends React.Component {
     render() {
         return (
              <span className="icon-counter" style={{color: this.props.color}}>
-                 <i className={"fa " + this.props.icon} /> {" " + this.makeCount()}
+                 <i className={"fa " + this.props.icon} /><span className="count"> {this.makeCount()}</span>
              </span>
          );
     }
