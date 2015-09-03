@@ -17,10 +17,18 @@ export default class FeedItem extends React.Component {
     }
 
     componentDidMount() {
+        // Note:
+        // When user is not at top of page, do not scroll by adding new item
+        if (document.body.scrollTop !== 0) {
+            // Note: 1 for divisor
+            window.scrollBy(0, this.refs.item_root.getDOMNode().clientHeight + 1);
+        }
+
         this.focused = (key, new_state) => {
             if (key !== this.props.item_id) {
                 return;
             }
+
             const node = this.refs.item_root.getDOMNode();
 
             const node_top = node.offsetTop;
