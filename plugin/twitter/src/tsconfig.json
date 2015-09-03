@@ -10,6 +10,7 @@
   },
   "files": [
     "source.ts",
+    "authenticate.ts",
     "node-twitter.d.ts",
     "lib.d.ts"
   ]

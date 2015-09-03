@@ -13,6 +13,9 @@
     },
     "github-electron/github-electron-main.d.ts": {
       "commit": "5109e1269d6ab8e8e73b1a5e85d8ceb836d3099f"
+    },
+    "es6-promise/es6-promise.d.ts": {
+      "commit": "7c228c09302f51d19b6b93fcfc5decaf8e8bbaa2"
     }
   }
 }
