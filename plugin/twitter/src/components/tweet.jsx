@@ -33,11 +33,11 @@ class RetweetedBy extends React.Component {
         }
 
         return (
-            <span className="retweeted-by">
+            <div className="retweeted-by">
                 <i className="fa fa-retweet"></i> Retweeted by <ExternalLink url={"https://twitter.com/" + this.props.user.screen_name}>
-                    <img className="retweet-author" src={this.props.user.profile_image_url}/>
+                    <img className="retweeted-avatar" src={this.props.user.profile_image_url}/>
                 </ExternalLink> <UserName user={this.props.user} name="retweet-author"/>
-            </span>
+            </div>
         );
     }
 }

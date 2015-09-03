@@ -39,36 +39,37 @@
   flex-direction: column;
 }
 .tweet .secondary {
-  display: inline-flex;
+  display: flex;
   margin-left: 0.5em;
   vertical-align: middle;
   flex-direction: row;
+  align-items: center;
 }
 .tweet .secondary .author {
-  display: inline;
   font-weight: bold;
   color: #000000;
-  flex: none;
 }
 .tweet .secondary .retweeted-by {
-  display: inline;
   margin-left: 0.5em;
   flex: auto;
+  display: flex;
+  align-items: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 0.875em;
   color: rgba(0, 0, 0, 0.4);
 }
-.tweet .secondary .retweeted-by img.retweet-author {
+.tweet .secondary .retweeted-by img.retweeted-avatar {
+  display: block;
   height: 1.5em;
   width: 1.5em;
   border-radius: 0.25em;
+  margin-right: 0.25em;
+  margin-left: 0.25em;
 }
 .tweet .secondary .created-at {
-  display: inline;
   margin-right: 0.5em;
-  flex: none;
   white-space: nowrap;
   overflow: hidden;
   font-size: 0.875em;
