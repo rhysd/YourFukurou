@@ -83,28 +83,39 @@ export default class Tweet extends React.Component {
 
         return (
             <div className="tweet" data-focused={this.state.focused}>
-                <div className="avatar">
-                    <ExternalLink url={"https://twitter.com/" + tw.user.screen_name}>
-                        <img src={tw.user.profile_image_url} />
-                    </ExternalLink>
-                </div>
-                <div className="content">
-                    <div className="secondary">
+                <div className="main" data-focused={this.state.focused}>
+                    <div className="avatar">
                         <ExternalLink url={"https://twitter.com/" + tw.user.screen_name}>
-                            {this.renderUserNameComponent(tw.user, "author")}
+                            <img src={tw.user.profile_image_url} />
                         </ExternalLink>
-                        {this.renderRetweetedByComponent()}
-                        <span className="created-at">
-                            <IconCounter icon="fa-star" color={tw.favorited ? "orange" : ""} count={tw.favorite_count} />
-                            <IconCounter icon="fa-retweet" color={tw.favorited ? "forestgreen" : ""} count={tw.retweet_count} />
-                            <ExternalLink className="tweet-link" url={"https://twitter.com/" + tw.user.screen_name + "/status/" + tw.id_str}>
-                                {this.makeCreatedAtLabel(tw)}
-                            </ExternalLink>
-                        </span>
                     </div>
-                    <TweetText status={tw} item_id={this.props.item_id}/>
-                    {tw.quoted_status ? <QuotedTweet tweet={tw.quoted_status}/> : ""}
-                    {this.renderMedia(tw)}
+                    <div className="content">
+                        <div className="secondary">
+                            <ExternalLink url={"https://twitter.com/" + tw.user.screen_name}>
+                                {this.renderUserNameComponent(tw.user, "author")}
+                            </ExternalLink>
+                            {this.renderRetweetedByComponent()}
+                            <span className="created-at">
+                                <ExternalLink className="tweet-link" url={"https://twitter.com/" + tw.user.screen_name + "/status/" + tw.id_str}>
+                                    {this.makeCreatedAtLabel(tw)}
+                                </ExternalLink>
+                            </span>
+                        </div>
+                        <TweetText status={tw} item_id={this.props.item_id}/>
+                        {tw.quoted_status ? <QuotedTweet tweet={tw.quoted_status}/> : ""}
+                        {this.renderMedia(tw)}
+                    </div>
+                </div>
+                <div className="footer">
+                    <div className="expander"/>
+                    <span className="icon"><i className="fa fa-reply"/></span>
+                    <div className="expander"/>
+                    <IconCounter icon="fa-star" color={tw.favorited ? "orange" : ""} count={tw.favorite_count} />
+                    <div className="expander"/>
+                    <IconCounter icon="fa-retweet" color={tw.favorited ? "forestgreen" : ""} count={tw.retweet_count} />
+                    <div className="expander"/>
+                    <span className="icon"><i className="fa fa-ellipsis-h"/></span>
+                    <div className="expander"/>
                 </div>
             </div>
         );
