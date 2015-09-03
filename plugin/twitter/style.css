@@ -136,6 +136,9 @@
   margin-right: 0.25em;
   margin-left: 0.25em;
 }
+.tweet .footer .icon {
+  cursor: pointer;
+}
 .tweet .footer .icon-counter:not(:last-child),
 .tweet .footer .icon:not(:last-child) {
   width: 5em;

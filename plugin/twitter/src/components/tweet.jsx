@@ -7,6 +7,7 @@ import ExternalLink, {openExternalLink} from "./external-link.jsx";
 import store from "../store";
 
 let feed_store = StreamApp.getStore("feed");
+const openExternal = global.require("shell").openExternal;
 
 class UserName extends React.Component {
     constructor(props) {
@@ -78,6 +79,11 @@ export default class Tweet extends React.Component {
         return `${("0" + d.getHours()).slice(-2)}:${("0" + d.getMinutes()).slice(-2)} ${d.getMonth()+1}/${d.getDate()} ${d.getYear() + 1900}`;
     }
 
+    sendReply() {
+        const t = this.props.tweet.retweeted_status || this.props.tweet;
+        openExternal("https://twitter.com/intent/tweet?in_reply_to=" + t.id_str);
+    }
+
     componentDidMount() {
         this.item_changed_listener = (key, new_state) => {
             if (key === this.props.item_id) {
@@ -93,11 +99,19 @@ export default class Tweet extends React.Component {
             }
         };
         store.on("dump-current-status-received", this.dump_current_status_received_listener);
+
+        this.send_reply_listener = id => {
+            if (id === this.props.item_id) {
+                this.sendReply();
+            }
+        };
+        store.on("send-reply-received", this.send_reply_listener);
     }
 
     componentWillUnmount() {
         feed_store.removeListener("item-changed", this.item_changed_listener);
         feed_store.removeListener("dump-current-status-received", this.dump_current_status_received_listener);
+        feed_store.removeListener("send-reply-received", this.send_reply_listener);
     }
 
     // TODO:
@@ -144,7 +158,7 @@ export default class Tweet extends React.Component {
                     {this.renderMedia(tw)}
                     <div className="footer">
                         <RetweetedBy user={this.props.tweet.user} status={this.props.tweet.retweeted_status}/>
-                        <span className="icon"><i className="fa fa-reply"/></span>
+                        <span className="icon" onClick={this.sendReply.bind(this)}><i className="fa fa-reply"/></span>
                         <IconCounter icon="fa-star" color={tw.favorited ? "orange" : ""} count={tw.favorite_count} />
                         <IconCounter icon="fa-retweet" color={tw.favorited ? "forestgreen" : ""} count={tw.retweet_count} />
                         <span className="icon"><i className="fa fa-ellipsis-h"/></span>

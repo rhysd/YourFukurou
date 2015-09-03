@@ -25,6 +25,10 @@ store.dispatch_token = StreamApp.dispatcher.register(action => {
             store.emit("toggle-preview-received", action.id);
             break;
         }
+        case ActionKind.SendReply: {
+            store.emit("send-reply-received", action.id);
+            break;
+        }
         default:
             break;
     }
