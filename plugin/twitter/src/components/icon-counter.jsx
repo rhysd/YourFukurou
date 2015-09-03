@@ -5,7 +5,9 @@ export default class IconCounter extends React.Component {
 
     makeCount() {
         const c = this.props.count;
-        if (c > 1000000) {
+        if (c === 0) {
+            return "";
+        } if (c > 1000000) {
             return (Math.floor(c / 10) / 100000) + "M";
         } else if (c > 1000) {
             // Note: Remove after first decimal place by `floor(count / 1000 * 100) / 100`
