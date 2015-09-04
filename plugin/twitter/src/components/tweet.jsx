@@ -80,13 +80,17 @@ export default class Tweet extends React.Component {
     }
 
     // TODO: Temporary
-    sendReply() {
+    sendReply(event) {
+        event.preventDefault();
+        event.stopPropagation();
         const t = this.props.tweet.retweeted_status || this.props.tweet;
         openExternal("https://twitter.com/intent/tweet?in_reply_to=" + t.id_str);
     }
 
     // TODO: Temporary
-    sendTweet() {
+    sendTweet(event) {
+        event.preventDefault();
+        event.stopPropagation();
         openExternal("https://twitter.com/intent/tweet");
     }
 

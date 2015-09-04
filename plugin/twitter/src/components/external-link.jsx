@@ -2,6 +2,7 @@ const openExternal = global.require("shell").openExternal;
 
 export function openExternalLink(event) {
     event.preventDefault();
+    event.stopPropagation();
     let target = event.target;
     while (target !== null) {
         if (target.href !== undefined && target.className.indexOf("external-link") !== -1) {
