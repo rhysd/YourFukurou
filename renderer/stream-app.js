@@ -15,3 +15,7 @@ export function getStore(name) {
     console.error("Ignored invalid store name: " + name);
     return null;
 }
+
+export function getSource(name) {
+    return remote.getGlobal('sources')[name];
+}

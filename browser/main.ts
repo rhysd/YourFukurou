@@ -20,7 +20,7 @@ console.log("  io.js version " + versions.node);
 
 var mainWindow: GitHubElectron.BrowserWindow = null;
 var react_extension_loaded = false;
-var sources: Source[] = [];
+global.sources = [];
 var window_state = new WindowState();
 global.load_paths = [
     path.join(app.getAppPath(), "plugin"),
@@ -70,7 +70,7 @@ app.on("ready", function(){
         for (const src of required_sources) {
             const loaded = loader.load(src.source);
             if (loaded !== null) {
-                sources.push(loaded);
+                global.sources.push(loaded.raw_source);
             }
         }
     });

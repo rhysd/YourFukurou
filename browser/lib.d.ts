@@ -10,6 +10,7 @@ declare module StreamApp {
 declare module NodeJS {
     interface Global {
         load_paths: string[];
+        sources: StreamApp.RawSource[];
     }
 }
 
