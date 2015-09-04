@@ -31,44 +31,63 @@ class TwitterSource {
                 access_token_secret: tokens.access_token_secret,
             });
 
-            const test_file = path.join(__dirname, "tweets.json");
-            if (fs.existsSync(test_file)) {
-                console.log("Load from tweets.json");
-                fs.readFile(test_file, {encoding: "utf8"}, (err, data) => {
-                    if (err) {
-                        return;
-                    }
+            this.start_sending();
+        }).catch((error: Error) => {
+            console.log("OAuth authentication failed.");
+            console.log(error.message);
 
-                    let tws = JSON.parse(data);
-                    let send = this.send;
-                    let count = 0;
-                    let send_delayed = () => {
-                        if (count >= 5 || tws.length === 0) {
-                            return;
-                        }
-                        send("tweet", tws.shift(1));
-                        ++count;
-                        setTimeout(send_delayed, 1000);
-                    };
+            const access_token = process.env.TWITTER_ACCESS_TOKEN;
+            const access_secret = process.env.TWITTER_ACCESS_TOKEN_SECRET;
 
-                    send_delayed();
+            if (access_token && access_secret) {
+                this.client = new Twitter({
+                    consumer_key:        consumer_key,
+                    consumer_secret:     consumer_secret,
+                    access_token_key:    access_token,
+                    access_token_secret: access_secret,
                 });
+                this.start_sending();
             } else {
-                this.client.get("statuses/home_timeline", {}, (err, tweets, response) => {
-                    if (err) {
-                        console.error("Plugin twitter: Fetch error: " + err);
+                console.log("Gave up authentication...");
+            }
+        });
+    }
+
+    start_sending() {
+        const test_file = path.join(__dirname, "tweets.json");
+        if (fs.existsSync(test_file)) {
+            console.log("Load from tweets.json");
+            fs.readFile(test_file, {encoding: "utf8"}, (err, data) => {
+                if (err) {
+                    return;
+                }
+
+                let tws = JSON.parse(data);
+                let send = this.send;
+                let count = 0;
+                let send_delayed = () => {
+                    if (count >= 5 || tws.length === 0) {
                         return;
                     }
+                    send("tweet", tws.shift(1));
+                    ++count;
+                    setTimeout(send_delayed, 1000);
+                };
 
-                    this.send("tweets", tweets);
-                });
-            }
+                send_delayed();
+            });
+        } else {
+            this.client.get("statuses/home_timeline", {}, (err, tweets, response) => {
+                if (err) {
+                    console.error("Plugin twitter: Fetch error: " + err);
+                    return;
+                }
 
-            this.start_streaming({});
-        });
+                this.send("tweets", tweets);
+            });
+        }
 
-        return;
-
+        this.start_streaming({});
     }
 
     start_streaming(params: Object) {

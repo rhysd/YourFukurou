@@ -10,10 +10,10 @@ export default function authenticate(consumer_key: string, consumer_secret: stri
         });
 
         authenticator.getRequestToken((error, request_token, request_token_secret) => {
-            console.log("request token: " + request_token);
 
             if (error) {
                 reject(error);
+                return;
             }
 
             let login_window = new BrowserWindow({
@@ -28,24 +28,26 @@ export default function authenticate(consumer_key: string, consumer_secret: stri
                 event.preventDefault();
 
                 const match = url.match(/\?oauth_token=([^&]*)&oauth_verifier=([^&]*)/);
-                if (match) {
-                    authenticator.getAccessToken(request_token, request_token_secret, match[2], (err, access_token, access_token_secret) => {
-                        console.log("access token: " + access_token);
-
-                        if (err) {
-                            reject(err);
-                        }
-
-                        setTimeout(() => {
-                            login_window.close();
-                        }, 0);
-
-                        resolve({
-                            access_token: access_token,
-                            access_token_secret: access_token_secret,
-                        });
-                    });
+                if (!match) {
+                    return;
                 }
+
+                authenticator.getAccessToken(request_token, request_token_secret, match[2], (err, access_token, access_token_secret) => {
+                    console.log("access token: " + access_token);
+
+                    if (err) {
+                        setTimeout(() => login_window.close(), 0);
+                        reject(err);
+                        return;
+                    }
+
+                    resolve({
+                        access_token: access_token,
+                        access_token_secret: access_token_secret,
+                    });
+
+                    setTimeout(() => login_window.close(), 0);
+                });
             });
 
             login_window.on("closed", () => {
