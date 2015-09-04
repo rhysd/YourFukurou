@@ -2,9 +2,7 @@ export default class DummySource {
     constructor(send) {
         this.send = send;
         this.count = 0;
-    }
 
-    initialize() {
         setTimeout(this.countup, 1000, this);
     }
 

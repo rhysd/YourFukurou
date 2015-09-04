@@ -71,7 +71,7 @@ export default class MessageRouter {
 
             this.routeMessage(channel.slice(0, sep_idx), channel.slice(sep_idx + 1), data);
         });
-        ipc.send("renderer-ready", this.sinks.map(sink => sink.source));
+        ipc.send("renderer-ready", this.sinks);
     }
 }
 

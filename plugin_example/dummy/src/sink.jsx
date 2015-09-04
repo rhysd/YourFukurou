@@ -24,7 +24,7 @@ StreamApp.registerSink({
         "style.css"
     ],
 
-    init: function() {
+    initialize: function() {
         // Initialize something here
     },
 

@@ -8,9 +8,6 @@ class TwitterSource {
     client: Twitter.TwitterClient;
 
     constructor(public send: (stream: string, data: any) => void) {
-    }
-
-    initialize() {
         const consumer_key = "nlJrrGNz9N5Vc0CwHIwESaEti";
         const consumer_secret = "xwyFlPHNYgUh2ZyVDzvMXCHbna6QzejpPjadalONvPMfehapw2";
         const tokens_file = path.join(app.getPath("userData"), "tokens.json");

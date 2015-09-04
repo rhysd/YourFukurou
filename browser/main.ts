@@ -61,17 +61,16 @@ app.on("ready", function(){
         }
     });
 
-    // TODO: User should select streams to load
-    // TODO: Load required sources after all sinks are loaded
-    sources.push(loader.load("twitter"));
-
     window_state.restoreDevTools(mainWindow);
 
-    ipc.on("renderer-ready", (event: Event, required_sources: string[]) => {
-        console.log("main.ts: Initialize sources: " + required_sources);
-        for (const src of sources) {
-            if (required_sources.indexOf(src.source_name) !== -1) {
-                src.initialize();
+    ipc.on("renderer-ready", (event: Event, required_sources: any[]) => {
+        console.log("main.ts: Initialize sources: " + required_sources.map(s => s.source));
+
+        // TODO: User should select streams to load
+        for (const src of required_sources) {
+            const loaded = loader.load(src.source);
+            if (loaded !== null) {
+                sources.push(loaded);
             }
         }
     });
