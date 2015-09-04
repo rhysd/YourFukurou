@@ -34,8 +34,6 @@ export default class ImagePreview extends React.Component {
         let overlay = document.querySelector("#lightbox");
         if (overlay.style.display === "none") {
             lightbox.start($(this.refs.image0.getDOMNode()));
-        } else {
-            lightbox.end();
         }
     }
 
