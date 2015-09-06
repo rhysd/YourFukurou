@@ -14,12 +14,12 @@ class TwitterSource {
 
         new Promise(resolve => {
             try {
-                resolve(fs.readFileSync(tokens_file));
+                resolve(fs.readFileSync(tokens_file, {encoding: "utf8"}));
             } catch (e) {
                 resolve(authenticate(consumer_key, consumer_secret));
             }
         }).then((tokens: any) => {
-            fs.writeFile(tokens_file, JSON.stringify(tokens));
+            fs.writeFile(tokens_file, JSON.stringify(tokens), {encoding: "utf8"});
 
             this.client = new Twitter({
                 consumer_key:        consumer_key,
