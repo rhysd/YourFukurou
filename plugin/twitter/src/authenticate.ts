@@ -19,8 +19,9 @@ export default function authenticate(consumer_key: string, consumer_secret: stri
             let login_window = new BrowserWindow({
                 width: 800,
                 height: 600,
-                "web-preference": {
+                "web-preferences": {
                     "web-security": true,
+                    "node-integration": false,
                 },
             });
 
