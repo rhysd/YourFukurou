@@ -19,9 +19,9 @@ export default class FeedItem extends React.Component {
     componentDidMount() {
         // Note:
         // When user is not at top of page, do not scroll by adding new item
-        if (document.body.scrollTop !== 0) {
+        if (this.props.feed_node.scrollTop !== 0) {
             // Note: 1 for divisor
-            window.scrollBy(0, this.refs.item_root.getDOMNode().clientHeight + 1);
+            this.props.feed_node.scrollTop += React.findDOMNode(this.refs.item_root).clientHeight + 1;
         }
 
         this.focused = (key, new_state) => {
@@ -29,17 +29,17 @@ export default class FeedItem extends React.Component {
                 return;
             }
 
-            const node = this.refs.item_root.getDOMNode();
+            const node = React.findDOMNode(this.refs.item_root);
 
             const node_top = node.offsetTop;
-            const window_top = document.body.scrollTop;
+            const feed_top = this.props.feed_node.scrollTop;
             const node_bottom = node_top + node.clientHeight;
-            const window_bottom = window_top + window.innerHeight;
+            const feed_bottom = feed_top + window.innerHeight;
 
-            if (node_bottom > window_bottom) {
-                window.scrollBy(0, node_bottom - window_bottom);
-            } else if (window_top > node_top) {
-                window.scrollBy(0, node_top - window_top);
+            if (node_bottom > feed_bottom) {
+                node.scrollIntoView(false);
+            } else if (feed_top > node_top) {
+                node.scrollIntoView(true);
             }
         };
 

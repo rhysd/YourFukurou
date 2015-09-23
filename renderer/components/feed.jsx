@@ -40,7 +40,7 @@ export default class Feed extends React.Component {
                 let props = i.props;
                 props.item_id = item_id;
                 added.unshift(
-                    <FeedItem key={"feedItem-" + item_id} item_id={item_id}>
+                    <FeedItem key={"feedItem-" + item_id} item_id={item_id} feed_node={React.findDOMNode(this.refs.feed_root)}>
                         <Item {...props}/>
                     </FeedItem>
                 );
@@ -52,7 +52,7 @@ export default class Feed extends React.Component {
 
     render() {
         return (
-            <div className="feed">
+            <div className="feed" ref="feed_root">
                 <ReactCSSTransitionGroup transitionName="feedNewItem">
                     {this.state.children}
                 </ReactCSSTransitionGroup>
