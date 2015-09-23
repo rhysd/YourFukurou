@@ -46,6 +46,7 @@ body {
 .side-menu .side-menu-item {
   color: #333333 !important;
   cursor: pointer;
+  margin-bottom: 1em;
 }
 
 .side-menu .menu-panel .app-menu {

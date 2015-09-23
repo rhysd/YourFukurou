@@ -1,5 +1,6 @@
 import Tweet from "./components/tweet.jsx";
 import * as Actions from "./actions";
+import * as Menu from "./components/menu.jsx";
 
 let feed_store = StreamApp.getStore("feed");
 
@@ -37,6 +38,11 @@ StreamApp.router.registerSink({
         TwitterOpenLinksInTweet: Actions.openLinks,
         TwitterDumpCurrentStatus: Actions.dumpCurrentStatus,
         TwitterTogglePreview: Actions.togglePreview
+    },
+
+    menu: {
+        item: Menu.getMenuItem(),
+        body: Menu.getMenuBody()
     },
 
     streams: {

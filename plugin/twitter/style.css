@@ -147,3 +147,25 @@
 .tweet .footer .icon:last-child {
   margin-right: 0.7em;
 }
+
+.twitter-source-menu-body {
+  background-color: #2185d0;
+  height: 100%;
+  padding: 1em;
+}
+.twitter-source-menu-body .avatar {
+  min-width: 3.0em;
+  min-height: 3.0em;
+  width: 3.0em;
+  height: 3.0em;
+  margin-right: 0.30em;
+  background-color: white;
+  text-align: center;
+  display: flex;
+  border-radius: 4px;
+}
+.twitter-source-menu-body .avatar .fa {
+  color: #aaaaaa;
+  flex: auto;
+  margin: auto;
+}
