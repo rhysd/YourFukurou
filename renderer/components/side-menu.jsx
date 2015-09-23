@@ -33,10 +33,28 @@ export default class SideMenu extends React.Component {
             panel: React.findDOMNode(this.refs.primary),
             menu: React.findDOMNode(this.refs.secondary),
         });
+
+        this.item_listener = () => this.forceUpdate();
+        this.toggle_listener = () => {
+            if (this.state.selected === null) {
+                const menus = MenuStore.getAll();
+                if (menus.length > 0) {
+                    this.showMenuPanel(menus[0].name);
+                }
+            } else {
+                this.slideout.toggle()
+            }
+        };
+        MenuStore.on("item-added", this.item_listener);
+        MenuStore.on("toggle-requested", this.toggle_listener);
     }
 
-    onItemClicked(name) {
-        console.log('Clicked: ' + name);
+    componentWillUnmount() {
+        this.item_listener && MenuStore.removeListener("item-added", this.item_listener);
+        this.toggle_listener && MenuStore.removeListener("toggle-requested", this.toggle_listener);
+    }
+
+    showMenuPanel(name) {
         this.setState({
             selected: MenuStore.lookUpByName(name).body
         });
@@ -49,7 +67,7 @@ export default class SideMenu extends React.Component {
 
         for (const m of MenuStore.getAll()) {
             items.push(
-                <MenuItem key={key++} onClick={this.onItemClicked.bind(this)} {...m}/>
+                <MenuItem key={key++} onClick={this.showMenuPanel.bind(this)} {...m}/>
             );
         }
 

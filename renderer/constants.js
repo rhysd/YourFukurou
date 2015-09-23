@@ -8,5 +8,6 @@ export var ActionKind = {
     Blur: Symbol("blur"),
     UpdateItem: Symbol("update-item"),
     UpdateItemState: Symbol("update-item-state"),
-    AddMenuItem: Symbol("add-menu-item")
+    AddMenuItem: Symbol("add-menu-item"),
+    ToggleMenu: Symbol("toggle-menu")
 };

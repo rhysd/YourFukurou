@@ -9,3 +9,9 @@ export function addMenuItem(name, menu_item, menu_body) {
         body: menu_body
     });
 }
+
+export function toggleMenu() {
+    Dispatcher.dispatch({
+        type: ActionKind.ToggleMenu
+    });
+}

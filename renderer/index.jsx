@@ -42,7 +42,8 @@ loader.loadAllSinks(document.head)
               "k": "FocusPrev",
               "g g": "FocusFirst",
               "shift+g": "FocusLast",
-              "mod+shift+i": "ToggleDevTools"
+              "mod+shift+i": "ToggleDevTools",
+              "m": "ToggleMenu"
           });
 
           for (const sink of sinks) {

@@ -33,6 +33,12 @@ store.dispatch_token = Dispatcher.register(action => {
             item: action.item,
             body: action.body
         });
+        store.emit('item-added');
+        break;
+    }
+
+    case ActionKind.ToggleMenu: {
+        store.emit('toggle-requested');
         break;
     }
 

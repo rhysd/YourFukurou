@@ -1,6 +1,7 @@
 import assign from "object-assign";
 import * as FeedAction from "./feed-actions";
 import feed_store from "./feed-store";
+import * as MenuAction from "./menu-actions";
 
 export default class KeymapHandler {
     constructor(global_keymaps) {
@@ -13,7 +14,8 @@ export default class KeymapHandler {
             FocusPrev: FeedAction.focusPrev,
             FocusFirst: FeedAction.focusFirst,
             FocusLast: FeedAction.focusLast,
-            ToggleDevTools: () => remote.getCurrentWindow().toggleDevTools()
+            ToggleDevTools: () => remote.getCurrentWindow().toggleDevTools(),
+            ToggleMenu: MenuAction.toggleMenu
         };
 
         for (const k in global_keymaps) {
