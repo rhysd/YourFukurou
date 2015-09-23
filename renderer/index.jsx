@@ -1,5 +1,6 @@
 import React from 'react/addons';
 import Root from './components/root.jsx';
+import AppMenuBody from './components/app-menu-body.jsx';
 import SinkLoader from './sink-loader';
 import * as StreamApp from './stream-app';
 import KeymapHandler from './keymap-handler';
@@ -19,7 +20,7 @@ loader.loadAllSinks(document.head)
           MenuActions.addMenuItem(
                   "_",
                   <i className="fa fa-bars fa-2x"/>,
-                  <div>Hello, world</div>
+                  <AppMenuBody/>
               );
 
           for (const s of sinks) {

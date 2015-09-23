@@ -24,6 +24,7 @@ body {
   height: 100%;
   width: 100%;
 }
+
 .side-menu {
   height: 100%;
 }
@@ -31,6 +32,7 @@ body {
   display: flex;
   flex-direction: row;
   height: 100%;
+  background-color: white;
 }
 .side-menu .main-menu {
   padding: 1em;
@@ -39,9 +41,35 @@ body {
   height: 100%;
 }
 .side-menu .menu-panel {
-  color: #333333;
   height: 100%;
 }
+.side-menu .side-menu-item {
+  color: #333333 !important;
+  cursor: pointer;
+}
+
+.side-menu .menu-panel .app-menu {
+    background-color: #53aca0;
+    padding: 1em;
+    height: 100%;
+}
+.side-menu .menu-panel .app-menu-items {
+    margin-bottom: 1em;
+    background-color: white;
+    border-radius: 0.2em;
+    font-size: 16px;
+    color: #333333;
+}
+.side-menu .menu-panel .app-menu-items .fa {
+    margin-left: 0.2em;
+    min-width: 2em;
+}
+.side-menu .menu-panel .app-menu-item {
+    border-bottom: solid 1px #ddd;
+    padding: 0.2em;
+    cursor: pointer;
+}
+
 .feed {
   width: 100%;
   box-sizing: border-box;
