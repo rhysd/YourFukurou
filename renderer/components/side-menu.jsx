@@ -39,7 +39,7 @@ export default class SideMenu extends React.Component {
             if (this.state.selected === null) {
                 const menus = MenuStore.getAll();
                 if (menus.length > 0) {
-                    this.showMenuPanel(menus[0].name);
+                    this.toggleMenuPanel(menus[0].name);
                 }
             } else {
                 this.slideout.toggle()
@@ -54,11 +54,19 @@ export default class SideMenu extends React.Component {
         this.toggle_listener && MenuStore.removeListener("toggle-requested", this.toggle_listener);
     }
 
-    showMenuPanel(name) {
+    toggleMenuPanel(name) {
+        const previous = this.state.selected;
+
         this.setState({
-            selected: MenuStore.lookUpByName(name).body
+            selected: MenuStore.lookUpByName(name)
         });
-        this.slideout.toggle();
+        if (this.slideout.isOpen()) {
+            if (previous && previous.name === name) {
+                this.slideout.close();
+            }
+        } else {
+            this.slideout.open();
+        }
     }
 
     renderMenuItems() {
@@ -67,7 +75,7 @@ export default class SideMenu extends React.Component {
 
         for (const m of MenuStore.getAll()) {
             items.push(
-                <MenuItem key={key++} onClick={this.showMenuPanel.bind(this)} {...m}/>
+                <MenuItem key={key++} onClick={this.toggleMenuPanel.bind(this)} {...m}/>
             );
         }
 
@@ -78,7 +86,7 @@ export default class SideMenu extends React.Component {
         return (
             <div className="side-menu">
                 <nav className="menu-panel" ref="secondary">
-                    {this.state.selected || undefined}
+                    {this.state.selected ? this.state.selected.body : undefined}
                 </nav>
                 <main className="main-panel" ref="primary">
                     <div className="main-menu">
