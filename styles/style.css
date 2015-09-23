@@ -3,11 +3,12 @@
 html {
   font-family: sans-serif;
   height: 100%;
+  overflow: hidden;
 }
 body {
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 14px;
-  overflow-x: hidden;
+  overflow: hidden;
   background: #ffffff;
   color: rgba(0, 0, 0, 0.87);
   font-smoothing: antialiased;
@@ -20,26 +21,31 @@ body {
   outline: none;
 }
 .root {
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: row;
+  height: 100%;
+  width: 100%;
+}
+.side-menu {
+  height: 100%;
 }
 .side-menu .main-panel {
   display: flex;
   flex-direction: row;
+  height: 100%;
 }
 .side-menu .main-menu {
   padding: 1em;
   background-color: #dcddde;
   flex: none;
+  height: 100%;
 }
 .side-menu .menu-panel {
-    color: #333333;
+  color: #333333;
+  height: 100%;
 }
 .feed {
   width: 100%;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 .feed-item {
   margin: 0px;

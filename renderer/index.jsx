@@ -1,12 +1,12 @@
 import React from 'react/addons';
 import Root from './components/root.jsx';
-import SinkLoader from './sink-loader.js';
-import * as StreamApp from './stream-app.js';
-import KeymapHandler from './keymap-handler.js';
+import SinkLoader from './sink-loader';
+import * as StreamApp from './stream-app';
+import KeymapHandler from './keymap-handler';
+import * as MenuActions from './menu-actions';
 
 global.StreamApp = StreamApp;
-global.React = React;
-
+global.React = React; 
 const loader = new SinkLoader();
 
 // TODO: Temporary mappings
@@ -15,7 +15,18 @@ let keymap_handler = new KeymapHandler();
 loader.loadAllSinks(document.head)
       .then(loader.loadPluginAssets(document.head))
       .then(sinks => {
-          console.log('Loaded sources: ' + sinks.map(l => `'${l.source}'`).join(' '));
+
+          MenuActions.addMenuItem(
+                  "_",
+                  <i className="fa fa-bars fa-2x"/>,
+                  <div>Hello, world</div>
+              );
+
+          for (const s of sinks) {
+              if (s.menu && s.menu.item && s.menu.body) {
+                  MenuActions.addMenuItem(s.source, s.menu.item, s.menu.body);
+              }
+          }
 
           React.render(
                   <Root router={StreamApp.router} />,

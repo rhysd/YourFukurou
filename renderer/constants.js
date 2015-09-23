@@ -7,5 +7,6 @@ export var ActionKind = {
     FocusLast: Symbol("focus-last"),
     Blur: Symbol("blur"),
     UpdateItem: Symbol("update-item"),
-    UpdateItemState: Symbol("update-item-state")
+    UpdateItemState: Symbol("update-item-state"),
+    AddMenuItem: Symbol("add-menu-item")
 };
