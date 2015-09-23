@@ -3,6 +3,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as app from "app";
 import authenticate from "./authenticate";
+import {IncomingMessage} from "http";
 
 class TwitterSource {
     client: Twitter.TwitterClient;
@@ -14,7 +15,7 @@ class TwitterSource {
 
         new Promise(resolve => {
             try {
-                resolve(fs.readFileSync(tokens_file, {encoding: "utf8"}));
+                resolve(JSON.parse(fs.readFileSync(tokens_file, {encoding: "utf8"})));
             } catch (e) {
                 resolve(authenticate(consumer_key, consumer_secret));
             }
@@ -105,8 +106,8 @@ class TwitterSource {
                 console.log("plugin-twitter: Error on stream: " + error.toString());
             });
 
-            stream.on("end", (response: Object) => {
-                console.log("plugin-twitter: End message on stream: ", response);
+            stream.on("end", (response: IncomingMessage) => {
+                console.log("plugin-twitter: End message on stream: ", response.statusCode);
 
                 // Note: Reconnect
                 this.start_streaming(params);

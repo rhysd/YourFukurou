@@ -1,5 +1,6 @@
 import React from "react/addons";
 import Feed from "./feed.jsx";
+import SideMenu from "./side-menu.jsx";
 
 export default class Root extends React.Component {
     constructor(props) {
@@ -19,7 +20,9 @@ export default class Root extends React.Component {
         // TODO: Now there is only one feed
         return (
             <div className="root">
-                <Feed sources={sources} router={this.props.router} />
+                <SideMenu ref="side_menu">
+                    <Feed sources={sources} router={this.props.router} ref="main" />
+                </SideMenu>
             </div>
         );
     }

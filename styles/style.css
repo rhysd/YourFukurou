@@ -2,6 +2,7 @@
 
 html {
   font-family: sans-serif;
+  height: 100%;
 }
 body {
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -24,6 +25,18 @@ body {
   display: flex;
   flex-direction: row;
 }
+.side-menu .main-panel {
+  display: flex;
+  flex-direction: row;
+}
+.side-menu .main-menu {
+  padding: 1em;
+  background-color: #dcddde;
+  flex: none;
+}
+.side-menu .menu-panel {
+    color: #333333;
+}
 .feed {
   width: 100%;
   box-sizing: border-box;
@@ -41,3 +54,27 @@ body {
   transition: opacity .5s ease-in;
 }
 
+.slideout-menu {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 0;
+  width: 256px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: none;
+}
+.slideout-panel {
+  position:relative;
+  z-index: 1;
+}
+.slideout-open,
+.slideout-open body,
+.slideout-open .slideout-panel {
+  overflow: hidden;
+}
+.slideout-open .slideout-menu {
+  display: block;
+}

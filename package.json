@@ -22,6 +22,7 @@
     "node-twitter-api": "^1.6.0",
     "object-assign": "^4.0.1",
     "react": "^0.13.3",
+    "slideout": "^0.1.9",
     "twitter": "^1.2.5",
     "twitter-text": "^1.13.1"
   },
