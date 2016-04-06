@@ -3,14 +3,14 @@
     "module": "commonjs",
     "removeComments": true,
     "preserveConstEnums": true,
-    "outDir": "..",
+    "outDir": "./js",
     "noImplicitAny": true,
     "target": "es5",
-    "sourceMap": true
+    "sourceMap": true,
+    "jsx": "react"
   },
   "files": [
-    "source.ts",
-    "authenticate.ts",
+    "index.tsx",
     "lib.d.ts"
   ]
 }

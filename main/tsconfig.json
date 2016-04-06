@@ -3,16 +3,13 @@
     "module": "commonjs",
     "removeComments": true,
     "preserveConstEnums": true,
-    "outDir": "../build/browser",
+    "outDir": "../build",
     "noImplicitAny": true,
     "target": "es5",
     "sourceMap": true
   },
   "files": [
-    "source.ts",
-    "source-loader.ts",
-    "window-state.ts",
-    "lib.d.ts",
-    "main.ts"
+    "main.ts",
+    "lib.d.ts"
   ]
 }

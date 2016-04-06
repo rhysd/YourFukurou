@@ -1,26 +1,11 @@
 #! /usr/bin/env node
-
 'use strict';
 
-var child_process = require('child_process');
+var spawn = require('child_process').spawn;
 var electron = require('electron-prebuilt');
 var join = require('path').join;
-var existsSync = require('fs').existsSync;
 
-var argv = [join(__dirname, '..')];
-var detach_idx = process.argv.indexOf('--detach');
-var detached = detach_idx !== -1;
-if (detached) {
-    process.argv.splice(detach_idx, 1);
-}
+var argv = process.argv;
+argv.unshift(join(__dirname, '..'));
 
-if (detached) {
-    child_process.spawn(electron, argv, {
-        stdio: 'ignore',
-        detached: true
-    }).unref();
-} else {
-    child_process.spawn(electron, argv, {
-        stdio: 'inherit'
-    });
-}
+spawn(electron, argv, { stdio: 'inherit' });

@@ -1,38 +1,50 @@
 {
-  "name": "stream-app",
-  "productName": "Stream",
-  "version": "0.0.1",
-  "description": "App to manage various timeline events (Twitter, GitHub issues, Feedly and so on)",
-  "main": "./build/browser/main.js",
-  "bin": {
-    "stream": "./bin/cli.js"
+  "name": "yourfukurou",
+  "productName": "YourFukurou",
+  "version": "0.0.0",
+  "description": "Twitter client for perspecuity of timeline",
+  "main": "build/main.js",
+  "bin": "./bin/cli.js",
+  "scripts": {
+    "dep": "npm install && typings install",
+    "build-main": "tsc -p main",
+    "build-renderer": "tsc -p renderer && browserify renderer/js -o build/renderer.js",
+    "build": "npm run build-main && npm run build-renderer",
+    "app": "./bin/cli.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "rhysd <lin90162@yahoo.co.jp>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rhysd/Stream.git"
+    "url": "git+https://github.com/rhysd/YourFukurou.git"
   },
-  "bugs": {
-    "url": "https://github.com/rhysd/Stream/issues"
-  },
+  "keywords": [
+    "Twitter",
+    "client",
+    "Electron",
+    "linux",
+    "mac",
+    "windows"
+  ],
+  "author": "rhysd <lin90162@yahoo.co.jp>",
   "license": "MIT",
-  "dependencies": {
-    "flux": "^2.1.1",
-    "mousetrap": "^1.5.3",
-    "node-twitter-api": "^1.6.0",
-    "object-assign": "^4.0.1",
-    "react": "^0.13.3",
-    "slideout": "^0.1.9",
-    "twitter": "^1.2.5",
-    "twitter-text": "^1.13.1"
+  "bugs": {
+    "url": "https://github.com/rhysd/YourFukurou/issues"
   },
+  "homepage": "https://github.com/rhysd/YourFukurou#readme",
   "devDependencies": {
-    "babel": "^5.8.21",
-    "babelify": "^6.1.3",
-    "browserify": "^11.0.1",
-    "electron-prebuilt": "^0.30.4"
+    "browserify": "^13.0.0",
+    "electron-packager": "^6.0.0",
+    "typescript": "^1.8.9",
+    "typings": "^0.7.12"
   },
-  "scripts": {
-    "start": "./bin/cli.js"
+  "dependencies": {
+    "electron-prebuilt": "^0.37.4",
+    "immutable": "^3.7.6",
+    "loglevel": "^1.4.0",
+    "react": "^0.14.8",
+    "react-dom": "^0.14.8",
+    "react-redux": "^4.4.1",
+    "redux": "^3.3.1",
+    "redux-thunk": "^2.0.1"
   }
 }

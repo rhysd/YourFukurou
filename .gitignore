@@ -1,10 +1,6 @@
-bower_components
-node_modules
-npm-debug.log
-build/browser
-app.asar
-typings
-build
-plugin/*/*.js
-devtools_extension
-*.js.map
+/bower_components
+/node_modules
+/npm-debug.log
+/build
+/typings
+/renderer/js

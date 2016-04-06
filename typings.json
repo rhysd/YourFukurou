@@ -1,0 +1,15 @@
+{
+  "name": "yourfukurou",
+  "version": false,
+  "dependencies": {},
+  "ambientDependencies": {
+    "github-electron": "registry:dt/github-electron#0.37.4+20160404092711",
+    "loglevel": "registry:dt/loglevel#1.4.0+20160316155526",
+    "node": "registry:dt/node#4.0.0+20160330064709",
+    "react": "registry:dt/react#0.14.0+20160319053454",
+    "react-dom": "registry:dt/react-dom#0.14.0+20160316155526",
+    "react-redux": "registry:dt/react-redux#4.4.0+20160406115600",
+    "redux": "registry:dt/redux#3.3.1+20160326112656",
+    "redux-thunk": "registry:dt/redux-thunk#2.0.1+20160317120654"
+  }
+}
