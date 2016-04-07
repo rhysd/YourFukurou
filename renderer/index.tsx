@@ -1,7 +1,12 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import {render} from 'react-dom';
+import {Provider} from 'react-redux';
+import Store from './store';
+import App from './components/app';
 
-ReactDOM.render(
-    <div>hello, world</div>,
+render(
+    <Provider store={Store}>
+        <App/>
+    </Provider>,
     document.getElementById('yourfukurou')
 );
