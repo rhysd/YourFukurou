@@ -29,7 +29,6 @@ function authenticate_with_request_tokens(
 
         login_window.webContents.on('will-navigate', (event: Event, url: string) => {
             event.preventDefault();
-            console.log(url);
 
             const match = url.match(/\?oauth_token=([^&]*)&oauth_verifier=([^&]*)/);
             if (!match) {
@@ -45,14 +44,14 @@ function authenticate_with_request_tokens(
                     return;
                 }
 
-                const tokens = {
-                    access_token: access_token,
-                    access_token_secret: access_token_secret,
+                const access = {
+                    token: access_token,
+                    token_secret: access_token_secret,
                 };
 
-                resolve(tokens);
+                resolve(access);
 
-                writeFile(config_path, JSON.stringify(tokens), e => {
+                writeFile(config_path, JSON.stringify(access), e => {
                     if (e) {
                         log.warn('Failed to store tokens to a token.json', e);
                     }
@@ -82,7 +81,6 @@ export function authenticate(consumer_key: string, consumer_secret: string): Pro
         });
 
         api.getRequestToken((err, request_token, request_token_secret) => {
-            console.log('bar!', err);
             if (err) {
                 reject(err);
                 return;
@@ -101,6 +99,10 @@ export function load_cached_tokens(): Promise<AccessToken> {
                 reject(err);
                 return;
             }
+
+            // TODO:
+            // Verify tokens
+
             resolve(JSON.parse(str) as AccessToken);
         });
     });

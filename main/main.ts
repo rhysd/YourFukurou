@@ -2,12 +2,16 @@ import {join} from 'path';
 import {app, BrowserWindow} from 'electron';
 import {authenticate, load_cached_tokens} from './authenticator';
 import log from './log';
+import IpcSender from './ipc_sender';
+import Twitter from './twitter';
 
 const load_cache = load_cached_tokens();
+const consumer_key = 'H4fJ2rgNuH2UiOXuPBjHpl9zL';
+const consumer_secret = 'azYRjJn6emdsOIUhepy0Wygmaq9PltEnpsx4P4BfU1HMp5Unmm';
 
 app.once('window-all-closed', () => app.quit());
 
-function open_window(tokens: AccessToken) {
+function open_window(access: AccessToken) {
     'use strict';
 
     const index_html = 'file://' + join(__dirname, '..', 'index.html');
@@ -18,6 +22,17 @@ function open_window(tokens: AccessToken) {
 
     win.once('closed', () => { win = null; });
 
+    win.webContents.on('dom-ready', () => {
+        const twitter = new Twitter();
+        twitter.prepare_client({
+            consumer_key,
+            consumer_secret,
+            access_token_key: access.token,
+            access_token_secret: access.token_secret,
+        });
+        const sender = new IpcSender(win.webContents);
+        twitter.start_streaming(sender).catch(e => log.error(e));
+    });
     win.loadURL(index_html);
 
     if (process.env.NODE_ENV === 'development') {
@@ -29,7 +44,14 @@ function open_window(tokens: AccessToken) {
 app.once(
     'ready',
     () => load_cache
-        .catch(_ => authenticate('H4fJ2rgNuH2UiOXuPBjHpl9zL', 'azYRjJn6emdsOIUhepy0Wygmaq9PltEnpsx4P4BfU1HMp5Unmm'))
+        .catch(_ => authenticate(consumer_key, consumer_secret))
+        .catch(e => {
+            log.error(e);
+            return {
+                token: process.env.YOURFUKUROU_ACCESS_TOKEN,
+                token_secret: process.env.YOURFUKUROU_ACCESS_TOKEN_SECRET,
+            };
+        })
         .then(open_window)
         .catch(e => log.error(e))
 );

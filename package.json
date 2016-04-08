@@ -47,6 +47,7 @@
     "react-dom": "^15.0.0",
     "react-redux": "^4.4.1",
     "redux": "^3.3.1",
-    "redux-thunk": "^2.0.1"
+    "redux-thunk": "^2.0.1",
+    "twitter": "^1.2.5"
   }
 }
