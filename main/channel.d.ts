@@ -1,0 +1,1 @@
+type Channel = 'yf:tweet';

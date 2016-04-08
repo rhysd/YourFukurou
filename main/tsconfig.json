@@ -9,7 +9,9 @@
     "sourceMap": true
   },
   "files": [
-    "main.ts",
-    "lib.d.ts"
+    "channel.d.ts",
+    "ipc_sender.ts",
+    "lib.d.ts",
+    "main.ts"
   ]
 }
