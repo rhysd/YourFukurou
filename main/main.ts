@@ -13,6 +13,11 @@ app.once('ready', () => {
     win.once('closed', () => { win = null; });
 
     win.loadURL(index_html);
+
+    if (process.env.NODE_ENV === 'development') {
+        win.webContents.on('devtools-opened', () => setImmediate(() => win.focus()));
+        win.webContents.openDevTools({detach: true});
+    }
 });
 
 
