@@ -9,9 +9,11 @@
     "sourceMap": true
   },
   "files": [
+    "authenticator.ts",
     "channel.d.ts",
     "ipc_sender.ts",
     "lib.d.ts",
-    "main.ts"
+    "main.ts",
+    "node-twitter-api.d.ts"
   ]
 }
