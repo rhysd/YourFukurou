@@ -8,7 +8,7 @@
   "scripts": {
     "dep": "npm install && typings install",
     "build-main": "tsc -p main",
-    "build-renderer": "tsc -p renderer && browserify renderer/js -o build/renderer.js",
+    "build-renderer": "tsc -p renderer && browserify --ignore electron renderer/js -o build/renderer.js",
     "build": "npm run build-main && npm run build-renderer",
     "app": "./bin/cli.js",
     "watch": "guard --watchdir main renderer",
@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "electron-prebuilt": "^0.37.4",
+    "font-awesome": "^4.5.0",
     "immutable": "^3.7.6",
     "loglevel": "^1.4.0",
     "node-twitter-api": "^1.7.0",

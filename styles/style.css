@@ -1,7 +1,58 @@
-body {
+html, body {
   margin: 0px;
+  height: 100%;
+  width: 100%;
 }
 #yourfukurou {
   width: 100%;
   height: 100%;
+}
+
+.spacer {
+  flex: auto;
+}
+
+.app-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.side-menu {
+  display: flex;
+  flex-direction: column;
+  padding-top: 32px; /* for title bar inset */
+  height: calc(100% - 32px);
+  width: 80px;
+  background-color: #333333;
+  color: #eeeeee;
+  flex: none;
+  align-items: center;
+}
+.side-menu > * {
+  margin-top: 8px;
+}
+.side-menu__button {
+  font-size: 30px;
+  text-align: center;
+  color: #888888;
+  cursor: pointer;
+}
+.side-menu__button_active {
+  font-size: 30px;
+  text-align: center;
+  color: #eeeeee;
+  cursor: pointer;
+}
+.side-menu__settings {
+  font-size: 20px;
+  color: #888888;
+  cursor: pointer;
+}
+
+.avatar {
+  cursor: pointer;
+}
+.avatar__inner {
+  border-radius: calc(100% / 6);
 }

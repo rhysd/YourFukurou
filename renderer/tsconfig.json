@@ -10,6 +10,10 @@
     "jsx": "react"
   },
   "files": [
+    "components/app.tsx",
+    "components/avatar.tsx",
+    "components/icon_button.tsx",
+    "components/side_menu.tsx",
     "index.tsx",
     "lib.d.ts"
   ]
