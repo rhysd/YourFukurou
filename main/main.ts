@@ -18,21 +18,25 @@ function open_window(access: AccessToken) {
     let win = new BrowserWindow({
         width: 800,
         height: 600,
+        titleBarStyle: 'hidden-inset',
     });
 
     win.once('closed', () => { win = null; });
 
-    win.webContents.on('dom-ready', () => {
-        const twitter = new Twitter();
-        twitter.prepare_client({
-            consumer_key,
-            consumer_secret,
-            access_token_key: access.token,
-            access_token_secret: access.token_secret,
+    if (access.token && access.token_secret) {
+        win.webContents.on('dom-ready', () => {
+            const twitter = new Twitter();
+            twitter.prepare_client({
+                consumer_key,
+                consumer_secret,
+                access_token_key: access.token,
+                access_token_secret: access.token_secret,
+            });
+            const sender = new IpcSender(win.webContents);
+            twitter.start_streaming(sender).catch(e => log.error(e));
         });
-        const sender = new IpcSender(win.webContents);
-        twitter.start_streaming(sender).catch(e => log.error(e));
-    });
+    }
+
     win.loadURL(index_html);
 
     if (process.env.NODE_ENV === 'development') {
@@ -41,17 +45,20 @@ function open_window(access: AccessToken) {
     }
 }
 
+function fallback_to_env(e: Error): AccessToken {
+    'use strict';
+    log.error(e);
+    return {
+        token: process.env.YOURFUKUROU_ACCESS_TOKEN,
+        token_secret: process.env.YOURFUKUROU_ACCESS_TOKEN_SECRET,
+    };
+}
+
 app.once(
     'ready',
     () => load_cache
         .catch(_ => authenticate(consumer_key, consumer_secret))
-        .catch(e => {
-            log.error(e);
-            return {
-                token: process.env.YOURFUKUROU_ACCESS_TOKEN,
-                token_secret: process.env.YOURFUKUROU_ACCESS_TOKEN_SECRET,
-            };
-        })
+        .catch(fallback_to_env)
         .then(open_window)
         .catch(e => log.error(e))
 );

@@ -1,4 +1,7 @@
 import * as TwitterClient from 'twitter';
+import {app} from 'electron';
+import {join} from 'path';
+import {readFile} from 'fs';
 import log from './log';
 import IpcSender from './ipc_sender';
 import {IncomingMessage} from 'http';
@@ -18,6 +21,9 @@ export default class Twitter {
         if (!this.client) {
             log.error('Client is not created yet');
             return;
+        }
+        if (process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS !== '') {
+            return this.send_dummy_stream();
         }
         return this.send_home_timeline()
             .catch(e => log.error('Failed to send home timeline', e))
@@ -66,6 +72,35 @@ export default class Twitter {
     send_stream(params: Object = {}) {
         this.client.stream('user', params, stream => {
             this.subscribe_stream(stream);
+        });
+    }
+
+    send_dummy_stream() {
+        const dummy_json_path = join(app.getPath('userData'), 'tweets.json');
+        return new Promise<void>((resolve, reject) => {
+            readFile(dummy_json_path, 'utf8', (err, data) => {
+                if (err) {
+                    log.error('File not found: ' + dummy_json_path);
+                    reject();
+                    return;
+                }
+                const tweets = JSON.parse(data) as Object[];
+                let idx = 0;
+
+                const random_range =
+                    (min: number, max: number) => Math.random() * (max - min) + min;
+
+                const send_all = () => {
+                    this.sender.send('yf:tweet', tweets[idx]);
+                    ++idx;
+                    if (idx < tweets.length) {
+                        setTimeout(send_all, random_range(500, 5000));
+                    }
+                };
+
+                send_all();
+                resolve();
+            });
         });
     }
 }
