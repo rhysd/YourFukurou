@@ -45,20 +45,10 @@ function open_window(access: AccessToken) {
     }
 }
 
-function fallback_to_env(e: Error): AccessToken {
-    'use strict';
-    log.error(e);
-    return {
-        token: process.env.YOURFUKUROU_ACCESS_TOKEN,
-        token_secret: process.env.YOURFUKUROU_ACCESS_TOKEN_SECRET,
-    };
-}
-
 app.once(
     'ready',
     () => load_cache
         .catch(_ => authenticate(consumer_key, consumer_secret))
-        .catch(fallback_to_env)
         .then(open_window)
         .catch(e => log.error(e))
 );

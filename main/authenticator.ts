@@ -93,6 +93,17 @@ export function authenticate(consumer_key: string, consumer_secret: string): Pro
 export function load_cached_tokens(): Promise<AccessToken> {
     'use strict';
 
+    if (process.env.YOURFUKUROU_ACCESS_TOKEN &&
+        process.env.YOURFUKUROU_ACCESS_TOKEN_SECRET) {
+        // TODO:
+        // Verify tokens
+
+        return Promise.resolve({
+            token: process.env.YOURFUKUROU_ACCESS_TOKEN,
+            token_secret: process.env.YOURFUKUROU_ACCESS_TOKEN_SECRET,
+        });
+    }
+
     return new Promise((resolve, reject) => {
         readFile(config_path, 'utf8', (err, str) => {
             if (err) {
