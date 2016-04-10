@@ -4,10 +4,10 @@ export enum Kind {
 
 export interface Action {
     type: Kind;
-    tweet?: Object;
+    tweet?: TweetStatus;
 }
 
-export function addTweetToTimeline(tweet: Object) {
+export function addTweetToTimeline(tweet: TweetStatus) {
     'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({

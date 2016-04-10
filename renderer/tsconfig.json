@@ -15,9 +15,13 @@
     "components/avatar.tsx",
     "components/icon_button.tsx",
     "components/side_menu.tsx",
+    "components/tweet/index.tsx",
+    "components/tweet/primary.tsx",
+    "components/tweet/secondary.tsx",
     "index.tsx",
     "ipc_channel_proxy.ts",
     "lib.d.ts",
+    "tweet.d.ts",
     "twitter-text.d.ts"
   ]
 }

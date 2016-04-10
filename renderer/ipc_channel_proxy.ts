@@ -19,7 +19,7 @@ export default class IpcChannelProxy {
     }
 
     start() {
-        this.subscribe('yf:tweet', (_: Electron.IpcRendererEvent, tweet: Object) => {
+        this.subscribe('yf:tweet', (_: Electron.IpcRendererEvent, tweet: TweetStatus) => {
             Store.dispatch(addTweetToTimeline(tweet));
         });
         return this;

@@ -3,12 +3,28 @@ const remote = global.require('electron').remote;
 
 interface AvatarProps extends React.Props<any> {
     screenName: string;
-    imageUrl?: string;
+    imageUrl: string;
+    size?: number;
+}
+
+function getStyle(props: AvatarProps) {
+    const length = props.size ? `${props.size}px` : 'auto';
+    return {
+        width: length,
+        height: length,
+    };
 }
 
 const Avatar = (props: AvatarProps) => (
-    <div className="avatar" onClick={() => remote.shell.openExternal(`https://twitter.com/${props.screenName}`)}>
-        <img className="avatar__inner" src={props.imageUrl}/>
+    <div
+        className="avatar"
+        onClick={() => remote.shell.openExternal(`https://twitter.com/${props.screenName}`)}
+    >
+        <img
+            className="avatar__inner"
+            src={props.imageUrl}
+            style={getStyle(props)}
+        />
     </div>
 );
 
