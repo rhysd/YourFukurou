@@ -83,7 +83,8 @@ body {
 }
 .tweet__secondary {
   flex: none;
-  width: 80px;
+  width: 20%;
+  max-width: 100px;
 }
 .tweet__primary {
   flex: auto;

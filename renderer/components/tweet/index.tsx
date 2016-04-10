@@ -3,6 +3,11 @@ import Avatar from '../avatar';
 import TweetPrimary from './primary';
 import TweetSecondary from './secondary';
 
+// TODO:
+// Enable to expand/contract tweet panel like as YoruFukurou
+// TODO:
+// Enable to focus/unfocus tweet panel like as YoruFukurou
+
 interface TweetProps extends React.Props<any> {
     status: TweetStatus;
 }
