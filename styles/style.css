@@ -8,6 +8,7 @@ body {
   margin: 0px;
   height: 100%;
   width: 100%;
+  overflow: hidden;
 }
 #yourfukurou {
   width: 100%;
@@ -34,6 +35,7 @@ body {
   color: #eeeeee;
   flex: none;
   align-items: center;
+  overflow: hidden;
 }
 .side-menu > * {
   margin-top: 8px;
@@ -67,6 +69,7 @@ body {
   flex: auto;
   width: auto;
   height: 100%;
+  overflow: auto;
 }
 
 .tweet__body {
