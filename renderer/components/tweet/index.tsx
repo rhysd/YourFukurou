@@ -11,7 +11,7 @@ const Tweet = (props: TweetProps) => {
     const tw = props.status.retweeted_status || props.status;
     return <div className="tweet__body">
         <div className="tweet__icon">
-            <Avatar size={48} screenName={tw.user.screen_name} imageUrl={tw.user.profile_image_url_https}/>
+            <Avatar size={48} screenName={tw.user.screen_name} imageUrl={tw.user.profile_image_url_https} border="#d0d0d0"/>
         </div>
         <TweetSecondary status={props.status}/>
         <TweetPrimary status={props.status}/>

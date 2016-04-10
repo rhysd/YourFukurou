@@ -5,13 +5,16 @@ interface AvatarProps extends React.Props<any> {
     screenName: string;
     imageUrl: string;
     size?: number;
+    border?: string;
 }
 
 function getStyle(props: AvatarProps) {
     const length = props.size ? `${props.size}px` : 'auto';
+    const border = props.border ? `1px solid ${props.border}` : undefined;
     return {
         width: length,
         height: length,
+        border,
     };
 }
 
