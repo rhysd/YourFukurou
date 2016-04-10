@@ -1,5 +1,5 @@
-Hackable Twitter Client
-=======================
+Hackable YoruFukurou (Nightowl) Alternative
+===========================================
 
 Goals :bird::
 

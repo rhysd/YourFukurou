@@ -10,11 +10,14 @@
     "jsx": "react"
   },
   "files": [
+    "../main/channel.d.ts",
     "components/app.tsx",
     "components/avatar.tsx",
     "components/icon_button.tsx",
     "components/side_menu.tsx",
     "index.tsx",
-    "lib.d.ts"
+    "ipc_channel_proxy.ts",
+    "lib.d.ts",
+    "twitter-text.d.ts"
   ]
 }
