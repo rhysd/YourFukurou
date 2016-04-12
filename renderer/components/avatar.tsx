@@ -26,6 +26,7 @@ const Avatar = (props: AvatarProps) => (
         <img
             className="avatar__inner"
             src={props.imageUrl}
+            alt={props.screenName}
             style={getStyle(props)}
         />
     </div>

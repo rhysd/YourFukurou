@@ -65,11 +65,18 @@ body {
   border-radius: calc(100% / 6);
 }
 
+.external-link {
+  cursor: pointer;
+  color: #2185d0;
+  text-decoration: none;
+}
+
 .timeline {
   flex: auto;
   width: auto;
   height: 100%;
   overflow: auto;
+  padding: 4px;
 }
 
 .tweet__body {
@@ -84,7 +91,24 @@ body {
 .tweet__secondary {
   flex: none;
   width: 20%;
-  max-width: 100px;
+  max-width: 120px;
+  display: flex;
+  flex-direction: column;
+  padding-right: 8px;
+}
+.tweet__secondary-name {
+  flex: none;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.tweet__secondary-retweetedby {
+  flex: none;
+  margin-top: auto;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #777777;
 }
 .tweet__primary {
   flex: auto;

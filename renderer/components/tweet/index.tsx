@@ -19,7 +19,7 @@ const Tweet = (props: TweetProps) => {
             <Avatar size={48} screenName={tw.user.screen_name} imageUrl={tw.user.profile_image_url_https} border="#d0d0d0"/>
         </div>
         <TweetSecondary status={props.status}/>
-        <TweetPrimary status={props.status}/>
+        <TweetPrimary status={tw}/>
     </div>;
 }
 export default Tweet;

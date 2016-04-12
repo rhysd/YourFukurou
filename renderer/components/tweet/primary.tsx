@@ -1,25 +1,9 @@
 import * as React from 'react';
 import {autoLink, htmlEscape} from 'twitter-text';
-
-const openExternal = global.require('electron').shell.openExternal;
+import {openExternalLink} from './external-link';
 
 interface TweetPrimaryProps extends React.Props<any> {
     status: TweetStatus;
-}
-
-function openExternalLink(event: MouseEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    let target = event.target as Node;
-    while (target !== null) {
-        const t = target as HTMLAnchorElement;
-        if (t.href !== undefined && t.className.indexOf("external-link") !== -1) {
-            openExternal(t.href);
-            return;
-        }
-        target = target.parentNode;
-    }
-    console.log("_openExternalLink: Unexpected link", event.target);
 }
 
 export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}> {

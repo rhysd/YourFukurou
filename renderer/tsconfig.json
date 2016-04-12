@@ -18,6 +18,7 @@
     "components/tweet/index.tsx",
     "components/tweet/primary.tsx",
     "components/tweet/secondary.tsx",
+    "components/tweet/external-link.tsx",
     "index.tsx",
     "ipc_channel_proxy.ts",
     "lib.d.ts",
