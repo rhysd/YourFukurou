@@ -5,13 +5,21 @@ interface TweetSecondaryProps extends React.Props<any> {
     status: TweetStatus;
 }
 
-function userLink(screen_name: string) {
-    return `https://twitter.com/${screen_name}`;
+function userLink(screen_name: string, color?: string) {
+    return (
+        <ExternalLink
+            url={`https://twitter.com/${screen_name}`}
+            color={color}
+            title={'@' + screen_name}
+        >
+            {'@' + screen_name}
+        </ExternalLink>
+    );
 }
 
 function retweetedBy(user: TweetUser) {
     return <span>
-        <i className="fa fa-retweet"/> by @{user.screen_name}
+        <i className="fa fa-retweet"/> {userLink(user.screen_name, '#777777')}
     </span>;
 }
 
@@ -20,10 +28,8 @@ const TweetSecondary = (props: TweetSecondaryProps) => {
     const status = is_retweet ? props.status.retweeted_status : props.status;
     const n = status.user.screen_name;
     return <div className="tweet__secondary">
-        <div className="tweet__secondary-name">
-            <ExternalLink url={userLink(status.user.screen_name)}>
-                {'@' + status.user.screen_name}
-            </ExternalLink>
+        <div className="tweet__secondary-screenname">
+            {userLink(status.user.screen_name)}
         </div>
         <div className="tweet__secondary-name" title={status.user.name}>
             {status.user.name}

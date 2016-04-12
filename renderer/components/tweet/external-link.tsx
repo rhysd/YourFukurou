@@ -18,10 +18,18 @@ export function openExternalLink(event: MouseEvent) {
 
 interface ExternalLinkProps extends React.Props<any> {
     url: string;
+    color?: string;
+    title?: string;
 }
 
 const ExternalLink = (props: ExternalLinkProps) => (
-    <a className="external-link" href={props.url} onClick={openExternalLink}>
+    <a
+        className="external-link"
+        href={props.url}
+        style={{color: props.color}}
+        title={props.title}
+        onClick={openExternalLink}
+    >
         {props.children}
     </a>
 );
