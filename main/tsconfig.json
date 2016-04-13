@@ -14,7 +14,7 @@
     "ipc_sender.ts",
     "lib.d.ts",
     "main.ts",
-    "node-twitter-api.d.ts",
+    "node-oauth.d.ts",
     "node-twitter.d.ts",
     "twitter.ts"
   ]

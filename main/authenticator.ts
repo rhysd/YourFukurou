@@ -6,13 +6,13 @@
 import {readFile, writeFile} from 'fs';
 import {join} from 'path';
 import {BrowserWindow, app} from 'electron';
-import * as API from 'node-twitter-api';
 import log from './log';
+import {OAuth} from 'oauth';
 
 const config_path = join(app.getPath('userData'), 'tokens.json');
 
 function authenticate_with_request_tokens(
-        api: TwitterAPI.Authenticator,
+        oauth: OAuth,
         request_token: string,
         request_token_secret: string): Promise<AccessToken> {
     'use strict';
@@ -35,8 +35,8 @@ function authenticate_with_request_tokens(
                 return;
             }
 
-            api.getAccessToken(request_token, request_token_secret, match[2], (err, access_token, access_token_secret) => {
-                log.debug('access token: ' + access_token);
+            oauth.getOAuthAccessToken(request_token, request_token_secret, match[2], (err, token, token_secret) => {
+                log.debug('access token: ' + token);
 
                 if (err) {
                     setTimeout(() => login_window.close(), 0);
@@ -45,8 +45,8 @@ function authenticate_with_request_tokens(
                 }
 
                 const access = {
-                    token: access_token,
-                    token_secret: access_token_secret,
+                    token,
+                    token_secret,
                 };
 
                 resolve(access);
@@ -64,7 +64,7 @@ function authenticate_with_request_tokens(
             login_window = null;
         });
 
-        const login_url = api.getAuthUrl(request_token);
+        const login_url = `https://twitter.com/oauth/authenticate?oauth_token=${request_token}`;
         log.debug('Start authentication: ' + login_url);
         login_window.loadURL(login_url);
     });
@@ -74,18 +74,21 @@ export function authenticate(consumer_key: string, consumer_secret: string): Pro
     'use strict';
 
     return new Promise((resolve, reject) => {
-        const api = new API({
-            consumerKey: consumer_key,
-            consumerSecret: consumer_secret,
-            callback: 'https://example.com',
-        });
-
-        api.getRequestToken((err, request_token, request_token_secret) => {
+        const oauth = new OAuth(
+            'https://twitter.com/oauth/request_token',
+            'https://twitter.com/oauth/access_token',
+            consumer_key,
+            consumer_secret,
+            '1.0A',
+            'https://example.com', // Note: Will not be used
+            'HMAC-SHA1'
+        );
+        oauth.getOAuthRequestToken((err, token, token_secret) => {
             if (err) {
                 reject(err);
                 return;
             }
-            resolve(authenticate_with_request_tokens(api, request_token, request_token_secret));
+            resolve(authenticate_with_request_tokens(oauth, token, token_secret));
         });
     });
 }
