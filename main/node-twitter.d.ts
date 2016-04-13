@@ -6,11 +6,12 @@ declare module NodeTwitter {
         access_token_secret: string;
     }
 
-    export interface TwitterStream {
-        on(event_name: 'data', callback: (json: Object) => void): TwitterClient;
-        on(event_name: 'error', callback: (err: Error) => void): TwitterClient;
-        on(event_name: 'end', callback: (response: any) => void): TwitterClient;
-        on(event_name: string, callback: Function): TwitterClient;
+    export interface TwitterStream extends NodeJS.EventEmitter {
+        on(event_name: 'data', callback: (json: Object) => void): this;
+        on(event_name: 'error', callback: (err: Error) => void): this;
+        on(event_name: 'end', callback: (response: any) => void): this;
+        on(event_name: string, callback: Function): this;
+        destroy(): void;
     }
 
     export class TwitterClient {

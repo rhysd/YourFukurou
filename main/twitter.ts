@@ -11,26 +11,31 @@ import {IncomingMessage} from 'http';
 export default class Twitter {
     private client: NodeTwitter.TwitterClient;
     private sender: IpcSender;
+    private stream: NodeTwitter.TwitterStream;
 
-    prepare_client(tokens: NodeTwitter.AuthInfo) {
+    constructor() {
+        this.stream = null;
+    }
+
+    prepareClient(tokens: NodeTwitter.AuthInfo) {
         this.client = new TwitterClient(tokens);
     }
 
-    start_streaming(to: IpcSender, params: Object = {}) {
+    startStreaming(to: IpcSender, params: Object = {}) {
         this.sender = to;
         if (!this.client) {
             log.error('Client is not created yet');
             return;
         }
         if (process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS) {
-            return this.send_dummy_stream();
+            return this.sendDummyStream();
         }
-        return this.send_home_timeline()
+        return this.sendHomeTimeline()
             .catch(e => log.error('Failed to send home timeline', e))
-            .then(() => this.send_stream(params));
+            .then(() => this.sendStream(params));
     }
 
-    send_home_timeline(params: Object = {}) {
+    sendHomeTimeline(params: Object = {}) {
         return new Promise<void>((resolve, reject) => {
             this.client.get('statuses/home_timeline', params, (err, tweets, _) => {
                 if (err) {
@@ -45,7 +50,7 @@ export default class Twitter {
         });
     }
 
-    subscribe_stream(stream: NodeTwitter.TwitterStream, params: Object = {}) {
+    subscribeStream(stream: NodeTwitter.TwitterStream, params: Object = {}) {
         stream.on('data', json => {
             if (json === undefined) {
                 return;
@@ -68,18 +73,19 @@ export default class Twitter {
             log.error('End message on stream, will reconnect after 3secs: ', response.statusCode);
             // TODO:
             // Handle the tweets while stream was not connected
-            setTimeout(3000, () => this.send_stream(params));
+            setTimeout(3000, () => this.sendStream(params));
         });
     }
 
-    send_stream(params: Object = {}) {
+    sendStream(params: Object = {}) {
         this.client.stream('user', params, stream => {
             log.debug('Stream connected: ', stream);
-            this.subscribe_stream(stream);
+            this.stream = stream;
+            this.subscribeStream(stream);
         });
     }
 
-    send_dummy_stream() {
+    sendDummyStream() {
         const dummy_json_path = join(app.getPath('userData'), 'tweets.json');
         return new Promise<void>((resolve, reject) => {
             readFile(dummy_json_path, 'utf8', (err, data) => {
@@ -106,5 +112,20 @@ export default class Twitter {
                 resolve();
             });
         });
+    }
+
+    stopStreaming() {
+        if (this.stream === null) {
+            return;
+        }
+        this.stream.removeAllListeners('data');
+        this.stream.removeAllListeners('error');
+        this.stream.removeAllListeners('end');
+        this.stream.destroy();
+        this.stream = null;
+    }
+
+    isStopped() {
+        return this.stream === null;
     }
 }

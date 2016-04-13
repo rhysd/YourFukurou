@@ -1,5 +1,5 @@
 import {join} from 'path';
-import {app, BrowserWindow} from 'electron';
+import {app, BrowserWindow, powerMonitor} from 'electron';
 import {authenticate, load_cached_tokens} from './authenticator';
 import log from './log';
 import IpcSender from './ipc_sender';
@@ -26,14 +26,22 @@ function open_window(access: AccessToken) {
     if (access.token && access.token_secret) {
         win.webContents.on('dom-ready', () => {
             const twitter = new Twitter();
-            twitter.prepare_client({
+            twitter.prepareClient({
                 consumer_key,
                 consumer_secret,
                 access_token_key: access.token,
                 access_token_secret: access.token_secret,
             });
             const sender = new IpcSender(win.webContents);
-            twitter.start_streaming(sender).catch(e => log.error(e));
+
+            powerMonitor.on('suspend', () => twitter.stopStreaming());
+            powerMonitor.on('resume', () => {
+                if (twitter.isStopped()) {
+                    twitter.startStreaming(sender).catch(e => log.error(e));
+                }
+            });
+
+            twitter.startStreaming(sender).catch(e => log.error(e));
         });
     }
 
