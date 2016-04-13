@@ -35,7 +35,7 @@ const TweetSecondary = (props: TweetSecondaryProps) => {
             {status.user.name}
         </div>
         <div className="tweet__secondary-retweetedby">
-            {is_retweet ? retweetedBy(props.status.user) : retweetedBy(props.status.user)}
+            {is_retweet ? retweetedBy(props.status.user) : undefined}
         </div>
     </div>;
 };

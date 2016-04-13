@@ -4,3 +4,4 @@
 /build
 /typings
 /renderer/js
+/env.sh

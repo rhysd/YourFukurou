@@ -6,8 +6,8 @@ import IpcSender from './ipc_sender';
 import Twitter from './twitter';
 
 const load_cache = load_cached_tokens();
-const consumer_key = 'H4fJ2rgNuH2UiOXuPBjHpl9zL';
-const consumer_secret = 'azYRjJn6emdsOIUhepy0Wygmaq9PltEnpsx4P4BfU1HMp5Unmm';
+const consumer_key = process.env.YOURFUKUROU_CONSUMER_KEY || 'H4fJ2rgNuH2UiOXuPBjHpl9zL';
+const consumer_secret = process.env.YOURFUKUROU_CONSUMER_KEY_SECRET || 'azYRjJn6emdsOIUhepy0Wygmaq9PltEnpsx4P4BfU1HMp5Unmm';
 
 app.once('window-all-closed', () => app.quit());
 
