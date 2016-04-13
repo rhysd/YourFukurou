@@ -11,6 +11,7 @@
     "build-renderer": "tsc -p renderer && browserify renderer/js -o build/renderer.js",
     "build": "npm run build-main && npm run build-renderer",
     "app": "./bin/cli.js",
+    "debug": "NODE_ENV=development ./bin/cli.js",
     "dummy": "NODE_ENV=development YOURFUKUROU_DUMMY_TWEETS=true ./bin/cli.js",
     "watch": "guard --watchdir main renderer",
     "test": "echo \"Error: no test specified\" && exit 1"

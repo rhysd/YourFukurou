@@ -22,12 +22,27 @@ export default class Twitter {
             log.error('Client is not created yet');
             return;
         }
-        if (process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS !== '') {
+        if (process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS) {
             return this.send_dummy_stream();
         }
         return this.send_home_timeline()
             .catch(e => log.error('Failed to send home timeline', e))
             .then(() => this.send_stream(params));
+    }
+
+    send_home_timeline(params: Object = {}) {
+        return new Promise<void>((resolve, reject) => {
+            this.client.get('statuses/home_timeline', params, (err, tweets, _) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                for (const tw of tweets) {
+                    this.sender.send('yf:tweet', tw);
+                }
+                resolve();
+            });
+        });
     }
 
     subscribe_stream(stream: NodeTwitter.TwitterStream, params: Object = {}) {
@@ -50,27 +65,16 @@ export default class Twitter {
         });
 
         stream.on('end', (response: IncomingMessage) => {
-            log.error('End message on stream: ', response.statusCode);
+            log.error('End message on stream, will reconnect after 3secs: ', response.statusCode);
+            // TODO:
+            // Handle the tweets while stream was not connected
             setTimeout(3000, () => this.send_stream(params));
-        });
-    }
-
-    send_home_timeline(params: Object = {}) {
-        return new Promise<void>((resolve, reject) => {
-            this.client.get('statuses/home_timeline', params, (err, tweets, _) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                for (const tw of tweets) {
-                    this.sender.send('yf:tweet', tw);
-                }
-            });
         });
     }
 
     send_stream(params: Object = {}) {
         this.client.stream('user', params, stream => {
+            log.debug('Stream connected: ', stream);
             this.subscribe_stream(stream);
         });
     }
