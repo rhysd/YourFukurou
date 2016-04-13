@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {autoLink, htmlEscape} from 'twitter-text';
+import {autoLink} from 'twitter-text';
 import {openExternalLink} from './external-link';
 
 interface TweetPrimaryProps extends React.Props<any> {
@@ -39,7 +39,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
     }
 
     buildHTML() {
-        return autoLink(htmlEscape(this.props.status.text), this.getEntities());
+        return autoLink(this.props.status.text, this.getEntities());
     }
 
     render() {
