@@ -1,6 +1,7 @@
 import * as React from 'react';
-import {autoLink} from 'twitter-text';
+import {autoLinkEntities, EntityWithIndices} from 'twitter-text';
 import {openExternalLink} from './external-link';
+import log from '../../log';
 
 interface TweetPrimaryProps extends React.Props<any> {
     status: TweetStatus;
@@ -21,7 +22,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
             return [];
         }
         let es = this.props.status.entities;
-        let ret: any[] = [];
+        let ret = [] as EntityWithIndices[];
         const push = Array.prototype.push;
         if (es.urls) {
             push.apply(ret, es.urls);
@@ -39,13 +40,13 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
     }
 
     buildHTML() {
-        return autoLink(this.props.status.text, this.getEntities());
+        return autoLinkEntities(this.props.status.text, this.getEntities());
     }
 
     render() {
         return <div
             className="tweet__primary"
-            ref={ref => { this.body = ref; }}
+            ref={r => { this.body = r; }}
             dangerouslySetInnerHTML={{__html: this.buildHTML()}}
         />;
     }

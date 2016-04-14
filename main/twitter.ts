@@ -27,12 +27,16 @@ export default class Twitter {
             log.error('Client is not created yet');
             return;
         }
+        if (this.stream !== null) {
+            log.debug('Starting stream while previous stream is not disconnected. Will disconnect.');
+            this.stopStreaming();
+        }
         if (process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS) {
             return this.sendDummyStream();
         }
         return this.sendHomeTimeline()
             .catch(e => log.error('Failed to send home timeline', e))
-            .then(() => this.connectStream(params));
+            .then(() => this.connectToStream(params));
     }
 
     sendHomeTimeline(params: Object = {}) {
@@ -67,22 +71,30 @@ export default class Twitter {
         });
 
         stream.on('error', (err: Error) => {
-            log.error(err);
+            log.error('Error occurred on stream, will reconnect after 3secs: ', err);
+            setTimeout(3000, () => this.connectToStream(params));
         });
 
         stream.on('end', (response: IncomingMessage) => {
             log.error('Unexpected end message on stream, will reconnect after 3secs: ', response.statusCode);
             // TODO:
             // Handle the tweets while stream was not connected
-            setTimeout(3000, () => this.connectStream(params));
+            setTimeout(3000, () => this.connectToStream(params));
         });
     }
 
-    connectStream(params: Object = {}) {
+    connectToStream(params: Object = {}) {
         this.client.stream('user', params, stream => {
             log.debug('Stream connected');
             this.stream = stream;
             this.subscribeStream(stream);
+        });
+    }
+
+    fetchStreaming(params: Object = {}) {
+        return new Promise<void>(resolve => {
+            this.connectToStream(params);
+            resolve();
         });
     }
 
