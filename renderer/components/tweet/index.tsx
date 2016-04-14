@@ -14,7 +14,7 @@ interface TweetProps extends React.Props<any> {
 
 const Tweet = (props: TweetProps) => {
     const tw = props.status.retweeted_status || props.status;
-    return <div className="tweet__body">
+    return <div className="tweet__body animated fadeIn">
         <TweetIcon user={tw.user}/>
         <TweetSecondary status={props.status}/>
         <TweetPrimary status={tw}/>

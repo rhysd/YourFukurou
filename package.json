@@ -41,6 +41,7 @@
     "typings": "^0.7.12"
   },
   "dependencies": {
+    "animate.css": "^3.5.1",
     "electron-prebuilt": "^0.37.4",
     "font-awesome": "^4.5.0",
     "immutable": "^3.7.6",
