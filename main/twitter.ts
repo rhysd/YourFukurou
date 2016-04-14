@@ -32,7 +32,7 @@ export default class Twitter {
         }
         return this.sendHomeTimeline()
             .catch(e => log.error('Failed to send home timeline', e))
-            .then(() => this.sendStream(params));
+            .then(() => this.connectStream(params));
     }
 
     sendHomeTimeline(params: Object = {}) {
@@ -42,6 +42,7 @@ export default class Twitter {
                     reject(err);
                     return;
                 }
+                log.debug('statuses/home_timeline: Got tweets: ' + tweets.length);
                 for (const tw of tweets) {
                     this.sender.send('yf:tweet', tw);
                 }
@@ -70,22 +71,23 @@ export default class Twitter {
         });
 
         stream.on('end', (response: IncomingMessage) => {
-            log.error('End message on stream, will reconnect after 3secs: ', response.statusCode);
+            log.error('Unexpected end message on stream, will reconnect after 3secs: ', response.statusCode);
             // TODO:
             // Handle the tweets while stream was not connected
-            setTimeout(3000, () => this.sendStream(params));
+            setTimeout(3000, () => this.connectStream(params));
         });
     }
 
-    sendStream(params: Object = {}) {
+    connectStream(params: Object = {}) {
         this.client.stream('user', params, stream => {
-            log.debug('Stream connected: ', stream);
+            log.debug('Stream connected');
             this.stream = stream;
             this.subscribeStream(stream);
         });
     }
 
     sendDummyStream() {
+        log.debug('Starting to send dummy stream');
         const dummy_json_path = join(app.getPath('userData'), 'tweets.json');
         return new Promise<void>((resolve, reject) => {
             readFile(dummy_json_path, 'utf8', (err, data) => {
@@ -116,12 +118,14 @@ export default class Twitter {
 
     stopStreaming() {
         if (this.stream === null) {
+            log.debug('Stream already stopped');
             return;
         }
         this.stream.removeAllListeners('data');
         this.stream.removeAllListeners('error');
         this.stream.removeAllListeners('end');
         this.stream.destroy();
+        log.debug('Stream disconnected');
         this.stream = null;
     }
 

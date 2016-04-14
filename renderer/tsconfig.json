@@ -22,6 +22,7 @@
     "index.tsx",
     "ipc_channel_proxy.ts",
     "lib.d.ts",
+    "log.ts",
     "tweet.d.ts"
   ]
 }

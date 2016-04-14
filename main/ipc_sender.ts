@@ -1,4 +1,5 @@
 import {BrowserWindow} from 'electron';
+import log from './log';
 
 export default class IpcSender {
     constructor(

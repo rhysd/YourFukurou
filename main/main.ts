@@ -41,9 +41,9 @@ function open_window(access: AccessToken) {
                 twitter.stopStreaming();
             });
             powerMonitor.on('resume', () => {
-                log.debug("PC's resuming, start streaming: " + twitter.isStopped());
+                log.debug("PC's resuming, will reconnect after 3secs: " + twitter.isStopped());
                 if (twitter.isStopped()) {
-                    twitter.startStreaming(sender).catch(e => log.error(e));
+                    setTimeout(() => twitter.connectStreaming().catch(e => log.error(e)), 3000);
                 }
             });
 

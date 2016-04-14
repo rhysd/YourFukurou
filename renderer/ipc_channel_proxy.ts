@@ -1,6 +1,7 @@
 const {ipcRenderer: ipc} = global.require('electron');
 import {addTweetToTimeline} from './actions';
 import Store from './store';
+import log from './log';
 
 interface Listeners {
     [c: string]: Electron.IpcRendererEventListener;
@@ -14,6 +15,7 @@ export default class IpcChannelProxy {
     }
 
     subscribe(c: Channel, cb: Electron.IpcRendererEventListener) {
+        log.debug('Received channel ' + c);
         ipc.on(c, cb);
         this.listeners[c] = cb;
     }
@@ -22,6 +24,7 @@ export default class IpcChannelProxy {
         this.subscribe('yf:tweet', (_: Electron.IpcRendererEvent, tweet: TweetStatus) => {
             Store.dispatch(addTweetToTimeline(tweet));
         });
+        log.debug('Started to receive messages');
         return this;
     }
 
@@ -29,5 +32,7 @@ export default class IpcChannelProxy {
         for (const c in this.listeners) {
             ipc.removeListener(c, this.listeners[c]);
         }
+        this.listeners = {};
+        log.debug('Terminated receivers');
     }
 }
