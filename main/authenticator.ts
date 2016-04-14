@@ -29,6 +29,7 @@ function authenticate_with_request_tokens(
 
         login_window.webContents.on('will-navigate', (event: Event, url: string) => {
             event.preventDefault();
+            log.debug('Login window: will-navigate: ', url);
 
             const match = url.match(/\?oauth_token=([^&]*)&oauth_verifier=([^&]*)/);
             if (!match) {
@@ -84,6 +85,7 @@ export function authenticate(consumer_key: string, consumer_secret: string): Pro
             'HMAC-SHA1'
         );
         oauth.getOAuthRequestToken((err, token, token_secret) => {
+            log.debug('Request token: ' + token);
             if (err) {
                 reject(err);
                 return;
@@ -98,6 +100,8 @@ export function load_cached_tokens(): Promise<AccessToken> {
 
     if (process.env.YOURFUKUROU_ACCESS_TOKEN &&
         process.env.YOURFUKUROU_ACCESS_TOKEN_SECRET) {
+        log.debug('Access tokens from environment variables: ' + process.env.YOURFUKUROU_ACCESS_TOKEN);
+
         // TODO:
         // Verify tokens
 
@@ -110,6 +114,7 @@ export function load_cached_tokens(): Promise<AccessToken> {
     return new Promise((resolve, reject) => {
         readFile(config_path, 'utf8', (err, str) => {
             if (err) {
+                log.debug('Failed to load access token cache: ' + config_path);
                 reject(err);
                 return;
             }
@@ -117,6 +122,7 @@ export function load_cached_tokens(): Promise<AccessToken> {
             // TODO:
             // Verify tokens
 
+            log.debug('Loaded access token cache');
             resolve(JSON.parse(str) as AccessToken);
         });
     });

@@ -13,6 +13,7 @@ app.once('window-all-closed', () => app.quit());
 
 function open_window(access: AccessToken) {
     'use strict';
+    log.debug('Starting to open window');
 
     const index_html = 'file://' + join(__dirname, '..', 'index.html');
     let win = new BrowserWindow({
@@ -25,6 +26,7 @@ function open_window(access: AccessToken) {
 
     if (access.token && access.token_secret) {
         win.webContents.on('dom-ready', () => {
+            log.debug('dom-ready: Ready to connect to Twitter API');
             const twitter = new Twitter();
             twitter.prepareClient({
                 consumer_key,
@@ -34,8 +36,12 @@ function open_window(access: AccessToken) {
             });
             const sender = new IpcSender(win.webContents);
 
-            powerMonitor.on('suspend', () => twitter.stopStreaming());
+            powerMonitor.on('suspend', () => {
+                log.debug("PC's going to suspend, stop streaming");
+                twitter.stopStreaming();
+            });
             powerMonitor.on('resume', () => {
+                log.debug("PC's resuming, start streaming: " + twitter.isStopped());
                 if (twitter.isStopped()) {
                     twitter.startStreaming(sender).catch(e => log.error(e));
                 }
@@ -43,6 +49,8 @@ function open_window(access: AccessToken) {
 
             twitter.startStreaming(sender).catch(e => log.error(e));
         });
+    } else {
+        log.error('Failed to get access tokens');
     }
 
     win.loadURL(index_html);
