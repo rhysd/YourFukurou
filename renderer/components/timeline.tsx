@@ -10,6 +10,8 @@ const Timeline = (props: TimelineProps) => {
     const size = props.tweets.size;
     // Note:
     // Use `size - idx` to give persistent keys to corresponding tweets
+    // TODO:
+    // Determine the position to insert with ordered by id
     return <div className="timeline">
         {props.tweets.map((tw, idx) => <Tweet status={tw} key={size - idx}/>).toArray()}
     </div>
