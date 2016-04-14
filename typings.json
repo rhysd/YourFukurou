@@ -12,6 +12,7 @@
     "react-dom": "registry:dt/react-dom#0.14.0+20160316155526",
     "react-redux": "registry:dt/react-redux#4.4.0+20160406115600",
     "redux": "registry:dt/redux#3.3.1+20160326112656",
-    "redux-thunk": "registry:dt/redux-thunk#2.0.1+20160317120654"
+    "redux-thunk": "registry:dt/redux-thunk#2.0.1+20160317120654",
+    "twitter-text": "registry:dt/twitter-text#1.13.4+20160412151713"
   }
 }
