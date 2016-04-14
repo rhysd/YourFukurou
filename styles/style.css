@@ -11,7 +11,7 @@ html {
 }
 body {
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   margin: 0px;
   height: 100%;
   width: 100%;
@@ -108,6 +108,7 @@ body {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  color: var(--weak-text-link-color);
 }
 .tweet__secondary-name {
   flex: none;

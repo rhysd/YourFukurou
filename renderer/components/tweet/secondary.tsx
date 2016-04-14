@@ -30,6 +30,9 @@ const TweetSecondary = (props: TweetSecondaryProps) => {
     return <div className="tweet__secondary">
         <div className="tweet__secondary-screenname">
             {userLink(status.user.screen_name)}
+            {status.user.protected
+                ? <i className="fa fa-lock" style={{marginLeft: '4px'}}/>
+                : undefined}
         </div>
         <div className="tweet__secondary-name" title={status.user.name}>
             {status.user.name}
