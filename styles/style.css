@@ -1,3 +1,10 @@
+:root {
+  --background-color-dark: #333333;
+  --color-dark-active: #eeeeee;
+  --color-dark-inactive: #888888;
+  --text-link-color: #2185d0;
+  --weak-text-link-color: #777777;
+}
 html {
   width: 100%;
   height: 100%;
@@ -31,7 +38,7 @@ body {
   padding-top: 32px; /* for title bar inset */
   height: calc(100% - 32px);
   width: 80px;
-  background-color: #333333;
+  background-color: var(--background-color-dark);
   color: #eeeeee;
   flex: none;
   align-items: center;
@@ -43,18 +50,18 @@ body {
 .side-menu__button {
   font-size: 30px;
   text-align: center;
-  color: #888888;
+  color: var(--color-dark-inactive);
   cursor: pointer;
 }
 .side-menu__button_active {
   font-size: 30px;
   text-align: center;
-  color: #eeeeee;
+  color: var(--color-dark-active);
   cursor: pointer;
 }
 .side-menu__settings {
   font-size: 20px;
-  color: #888888;
+  color: var(--color-dark-inactive);
   cursor: pointer;
 }
 
@@ -67,7 +74,7 @@ body {
 
 .external-link {
   cursor: pointer;
-  color: #2185d0;
+  color: var(--text-link-color);
   text-decoration: none;
 }
 
@@ -116,7 +123,7 @@ body {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: #777777;
+  color: var(--weak-text-link-color);
   font-size: 0.8rem;
 }
 .tweet__primary {
