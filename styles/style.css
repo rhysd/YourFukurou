@@ -3,7 +3,7 @@
   --color-dark-active: #eeeeee;
   --color-dark-inactive: #888888;
   --text-link-color: #2185d0;
-  --weak-text-link-color: #777777;
+  --weak-text-link-color: #888888;
 }
 html {
   width: 100%;
@@ -77,6 +77,9 @@ body {
   color: var(--text-link-color);
   text-decoration: none;
 }
+.external-link:hover {
+  text-decoration: underline;
+}
 
 .timeline {
   flex: auto;
@@ -115,7 +118,7 @@ body {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   font-weight: bold;
 }
 .tweet__secondary-retweetedby {
@@ -130,4 +133,16 @@ body {
 .tweet__primary {
   flex: auto;
   width: auto;
+  display: flex;
+  flex-direction: column;
+}
+.tweet__primary-text {
+  flex: auto;
+}
+.tweet__primary-createdby {
+  flex: none;
+  color: var(--weak-text-link-color);
+  font-size: 0.7rem;
+  text-align: right;
+  margin-top: 4px;
 }

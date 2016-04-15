@@ -43,12 +43,25 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         return autoLinkEntities(this.props.status.text, this.getEntities());
     }
 
+    createdAt() {
+        const created_at = this.props.status.created_at;
+        if (created_at === undefined) {
+            return '';
+        }
+        const d = new Date(created_at);
+        return `${('0' + d.getHours()).slice(-2)}:${('0' + d.getMinutes()).slice(-2)} ${d.getMonth()+1}/${d.getDate()} ${d.getFullYear()}`;
+    }
+
     render() {
-        return <div
-            className="tweet__primary"
-            ref={r => { this.body = r; }}
-            dangerouslySetInnerHTML={{__html: this.buildHTML()}}
-        />;
+        return <div className="tweet__primary" ref={r => { this.body = r; }}>
+            <div
+                className="tweet__primary-text"
+                dangerouslySetInnerHTML={{__html: this.buildHTML()}}
+            />
+            <div className="tweet__primary-createdby">
+                {this.createdAt()}
+            </div>
+        </div>;
     }
 }
 
