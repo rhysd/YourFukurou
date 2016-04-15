@@ -40,7 +40,9 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
     }
 
     buildHTML() {
-        return autoLinkEntities(this.props.status.text, this.getEntities());
+        return autoLinkEntities(this.props.status.text, this.getEntities(), {
+            urlEntities: this.props.status.entities.urls,
+        });
     }
 
     createdAt() {
