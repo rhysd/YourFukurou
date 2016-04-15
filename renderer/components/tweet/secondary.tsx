@@ -1,8 +1,9 @@
 import * as React from 'react';
 import ExternalLink from './external-link';
+import Tweet from '../../item/tweet';
 
 interface TweetSecondaryProps extends React.Props<any> {
-    status: TweetStatus;
+    status: Tweet;
 }
 
 function userLink(screen_name: string, color?: string) {
@@ -17,29 +18,32 @@ function userLink(screen_name: string, color?: string) {
     );
 }
 
-function retweetedBy(user: TweetUser) {
-    return <span>
-        <i className="fa fa-retweet"/> {userLink(user.screen_name, '#777777')}
-    </span>;
+function retweetedBy(tw: Tweet) {
+    if (!tw.isRetweet()) {
+        return undefined;
+    }
+
+    return (
+        <div className="tweet__secondary-retweetedby">
+            <i className="fa fa-retweet"/> {userLink(tw.user.screen_name, '#777777')}
+        </div>
+    );
 }
 
 const TweetSecondary = (props: TweetSecondaryProps) => {
-    const is_retweet = !!props.status.retweeted_status;
-    const status = is_retweet ? props.status.retweeted_status : props.status;
-    const n = status.user.screen_name;
+    const status = props.status.getMainStatus();
+    const user = status.user;
     return <div className="tweet__secondary">
         <div className="tweet__secondary-screenname">
-            {userLink(status.user.screen_name)}
-            {status.user.protected
+            {userLink(user.screen_name)}
+            {user.protected
                 ? <i className="fa fa-lock" style={{marginLeft: '4px'}}/>
                 : undefined}
         </div>
-        <div className="tweet__secondary-name" title={status.user.name}>
-            {status.user.name}
+        <div className="tweet__secondary-name" title={user.name}>
+            {user.name}
         </div>
-        <div className="tweet__secondary-retweetedby">
-            {is_retweet ? retweetedBy(props.status.user) : undefined}
-        </div>
+        {retweetedBy(props.status)}
     </div>;
 };
 export default TweetSecondary;

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import TweetItem from '../../item/tweet';
 import TweetPrimary from './primary';
 import TweetSecondary from './secondary';
 import TweetIcon from './icon';
@@ -9,7 +10,7 @@ import TweetIcon from './icon';
 // Enable to focus/unfocus tweet panel like as YoruFukurou
 
 interface TweetProps extends React.Props<Tweet> {
-    status: TweetStatus;
+    status: TweetItem;
 }
 
 export default class Tweet extends React.Component<TweetProps, {}> {
@@ -25,7 +26,7 @@ export default class Tweet extends React.Component<TweetProps, {}> {
     }
 
     render() {
-        const tw = this.props.status.retweeted_status || this.props.status;
+        const tw = this.props.status.getMainStatus();
         return <div className="tweet__body animated fadeIn" ref={r => { this.node = r; }}>
             <TweetIcon user={tw.user}/>
             <TweetSecondary status={this.props.status}/>

@@ -1,4 +1,4 @@
-interface TweetUser {
+interface UserJson {
     utc_offset: number;
     listed_count: number;
     profile_use_background_image: boolean;
@@ -39,7 +39,7 @@ interface TweetUser {
     contributors_enabled: boolean;
 }
 
-interface TweetStatus {
+interface TweetJson {
     entities?: {
         media: {
             type: string;
@@ -160,8 +160,8 @@ interface TweetStatus {
     source: string;
     retweet_count: number;
     geo: any;
-    retweeted_status?: TweetStatus;
-    user: TweetUser;
-    quoted_status?: TweetStatus;
+    retweeted_status?: TweetJson;
+    user: UserJson;
+    quoted_status?: TweetJson;
 }
 

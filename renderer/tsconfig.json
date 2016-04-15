@@ -22,8 +22,10 @@
     "components/tweet/external-link.tsx",
     "index.tsx",
     "ipc_channel_proxy.ts",
+    "item/item.ts",
+    "item/tweet.ts",
     "lib.d.ts",
     "log.ts",
-    "tweet.d.ts"
+    "twitter-api.d.ts"
   ]
 }

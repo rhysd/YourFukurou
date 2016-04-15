@@ -1,13 +1,15 @@
+import Tweet from './item/tweet';
+
 export enum Kind {
     AddTweetToTimeline,
 }
 
 export interface Action {
     type: Kind;
-    tweet?: TweetStatus;
+    tweet?: Tweet;
 }
 
-export function addTweetToTimeline(tweet: TweetStatus) {
+export function addTweetToTimeline(tweet: Tweet) {
     'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({

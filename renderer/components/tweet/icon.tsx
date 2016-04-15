@@ -1,24 +1,21 @@
 import * as React from 'react';
 import Avatar from '../avatar';
+import {TwitterUser} from '../../item/tweet';
 
 const re_normal_size = /normal(?=\.\w+$)/i;
 
 interface TweetIconProps extends React.Props<any> {
-    user: TweetUser;
+    user: TwitterUser;
 }
 
-const TweetIcon = (props: TweetIconProps) => {
-    let profile_url = props.user.profile_image_url_https;
-    if (window.devicePixelRatio || 1 >= 1.5) {
-        profile_url = profile_url.replace(re_normal_size, 'bigger');
-    }
-    return <div className="tweet__icon">
+const TweetIcon = (props: TweetIconProps) => (
+    <div className="tweet__icon">
         <Avatar
         size={48}
          screenName={props.user.screen_name}
-         imageUrl={profile_url}
+         imageUrl={props.user.icon_url}
          border="#d0d0d0"
         />
-    </div>;
-}
+    </div>
+);
 export default TweetIcon;

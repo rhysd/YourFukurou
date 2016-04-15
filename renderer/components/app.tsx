@@ -4,21 +4,22 @@ import {List} from 'immutable';
 import {State} from '../reducers';
 import SideMenu from './side_menu';
 import Timeline from './timeline';
+import Item from '../item/item';
 
 interface AppProps {
-    tweets: List<TweetStatus>;
+    items: List<Item>;
 }
 
 const App = (props: AppProps) => (
     <div className="app-root">
         <SideMenu/>
-        <Timeline tweets={props.tweets}/>
+        <Timeline items={props.items}/>
     </div>
 );
 
 function select(state: State): AppProps {
     return {
-        tweets: state.current_tweets
+        items: state.current_items
     };
 }
 
