@@ -11,15 +11,22 @@ const consumer_secret = process.env.YOURFUKUROU_CONSUMER_KEY_SECRET || 'azYRjJn6
 
 app.once('window-all-closed', () => app.quit());
 
+function isRunFromNpmPackageOnDarwin() {
+    'use strict';
+    return process.platform === 'darwin' && app.getAppPath().indexOf('/YourFukurou.app/') === -1;
+}
+
 function open_window(access: AccessToken) {
     'use strict';
     log.debug('Starting to open window');
 
     const index_html = 'file://' + join(__dirname, '..', 'index.html');
+    const icon_path = join(__dirname, '..', 'images', 'icon.png');
     let win = new BrowserWindow({
         width: 800,
         height: 600,
         titleBarStyle: 'hidden-inset',
+        icon: icon_path,
     });
 
     win.once('closed', () => { win = null; });
@@ -54,6 +61,10 @@ function open_window(access: AccessToken) {
     }
 
     win.loadURL(index_html);
+
+    if (isRunFromNpmPackageOnDarwin()) {
+        app.dock.setIcon(icon_path);
+    }
 
     if (process.env.NODE_ENV === 'development') {
         win.webContents.on('devtools-opened', () => setImmediate(() => win.focus()));
