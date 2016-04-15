@@ -64,6 +64,7 @@ export default class Twitter {
             if (!('text' in json)) {
                 // TODO:
                 // Ignore activities except for tweets
+                log.info('Ignored message on stream: ', json);
                 return;
             }
 

@@ -5,8 +5,6 @@ import Store from './store';
 import IpcChannelProxy from './ipc_channel_proxy';
 import App from './components/app';
 
-console.log(global.process.env.NODE_ENV);
-
 render(
     <Provider store={Store}>
         <App/>

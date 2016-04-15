@@ -46,6 +46,7 @@
     "font-awesome": "^4.5.0",
     "immutable": "^3.7.6",
     "loglevel": "^1.4.0",
+    "loglevel-message-prefix": "^1.1.0",
     "oauth": "github:rhysd/node-oauth",
     "object-assign": "^4.0.1",
     "react": "^15.0.0",

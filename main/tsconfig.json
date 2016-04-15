@@ -13,6 +13,7 @@
     "channel.d.ts",
     "ipc_sender.ts",
     "lib.d.ts",
+    "loglevel-message-prefix.d.ts",
     "main.ts",
     "node-oauth.d.ts",
     "node-twitter.d.ts",
