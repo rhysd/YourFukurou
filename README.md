@@ -1,4 +1,4 @@
-Hackable [YoruFukurou](https://sites.google.com/site/yorufukurou/home-en) Alternative
+<img src="images/icon.png" width="70"/>Hackable [YoruFukurou](https://sites.google.com/site/yorufukurou/home-en) Alternative
 =====================================================================================
 
 Goals :bird::
