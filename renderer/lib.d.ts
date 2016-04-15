@@ -7,3 +7,8 @@ declare module NodeJS {
     }
 }
 
+type MessageKind = 'info' | 'error';
+interface MessageInfo {
+    text: string;
+    kind: MessageKind;
+}

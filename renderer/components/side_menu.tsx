@@ -1,8 +1,15 @@
 import * as React from 'react';
 import IconButton from './icon_button';
 import Avatar from './avatar';
+import {showMessage} from '../actions';
+import {connect} from 'react-redux';
 
 interface SideMenuProps extends React.Props<any> {
+    dispatch?: Redux.Dispatch;
+}
+
+function notImplementedYet(props: SideMenuProps) {
+    props.dispatch(showMessage('Sorry, this feature is not implemented yet.', 'error'));
 }
 
 const SideMenu = (props: SideMenuProps) => (
@@ -14,15 +21,15 @@ const SideMenu = (props: SideMenuProps) => (
                 "http://pbs.twimg.com/profile_images/3626384430/3a64cf406665c1940d68ab737003605c_normal.jpeg"}
             size={48}
         />
-        <IconButton className="side-menu__button" name="pencil-square-o" tip="New Tweet"/>
+        <IconButton className="side-menu__button" name="pencil-square-o" tip="New Tweet" onClick={() => notImplementedYet(props)}/>
         <IconButton className="side-menu__button_active" name="comment-o" tip="Home"/>
-        <IconButton className="side-menu__button" name="comments" tip="Notifications"/>
-        <IconButton className="side-menu__button" name="envelope-o" tip="Direct Messages"/>
-        <IconButton className="side-menu__button" name="search" tip="Search"/>
+        <IconButton className="side-menu__button" name="comments" tip="Notifications" onClick={() => notImplementedYet(props)}/>
+        <IconButton className="side-menu__button" name="envelope-o" tip="Direct Messages" onClick={() => notImplementedYet(props)}/>
+        <IconButton className="side-menu__button" name="search" tip="Search" onClick={() => notImplementedYet(props)}/>
         <div className="spacer"/>
         <div>
-            <IconButton className="side-menu__settings" name="gear" tip="Settings"/>
+            <IconButton className="side-menu__settings" name="gear" tip="Settings" onClick={() => notImplementedYet(props)}/>
         </div>
     </div>
 );
-export default SideMenu;
+export default connect()(SideMenu);

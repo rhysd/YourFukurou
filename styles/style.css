@@ -4,6 +4,11 @@
   --color-dark-inactive: #888888;
   --text-link-color: #2185d0;
   --weak-text-link-color: #888888;
+  --background-color-error: #ffc7c7;
+  --color-error: #ff4f44;
+  --background-color-info: #e4fdda;
+  --color-info: #209010;
+  --sidemenu-width: 80px;
 }
 html {
   width: 100%;
@@ -37,7 +42,7 @@ body {
   flex-direction: column;
   padding-top: 32px; /* for title bar inset */
   height: calc(100% - 32px);
-  width: 80px;
+  width: var(--sidemenu-width);
   background-color: var(--background-color-dark);
   color: #eeeeee;
   flex: none;
@@ -145,4 +150,37 @@ body {
   font-size: 0.7rem;
   text-align: right;
   margin-top: 4px;
+}
+
+.message__body {
+  width: calc(100% - var(--sidemenu-width));
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  padding: 8px 0;
+  z-index: 1;
+  opacity: 0.9;
+  margin-left: var(--sidemenu-width);
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+}
+.message__body.message__body_error {
+  color: var(--color-error);
+  background-color: var(--background-color-error);
+}
+.message__body.message__body_info {
+  color: var(--color-info);
+  background-color: var(--background-color-info);
+}
+.message__text {
+  flex: auto;
+  text-align: center;
+  font-size: 1rem;
+}
+.message__x-btn {
+  flex: none;
+  margin-right: 8px;
+  font-size: 1rem;
 }
