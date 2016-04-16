@@ -20,6 +20,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
     }
 
     render() {
+        const s = this.props.status.getMainStatus();
         return (
             <div
                 className="tweet__primary"
@@ -29,7 +30,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
             >
                 <div
                     className="tweet__primary-text"
-                    dangerouslySetInnerHTML={{__html: this.props.status.buildLinkedHTML()}}
+                    dangerouslySetInnerHTML={{__html: s.buildLinkedHTML()}}
                 />
                 <div className="tweet__primary-footer" >
                     <div
@@ -37,9 +38,9 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                         style={{display: 'none'}}
                         ref={r => {this.actions_elem = r; }}
                     >
-                        <TweetActionButton kind="reply" status={this.props.status}/>
-                        <TweetActionButton kind="retweet" status={this.props.status}/>
-                        <TweetActionButton kind="like" status={this.props.status}/>
+                        <TweetActionButton kind="reply" status={s}/>
+                        <TweetActionButton kind="retweet" status={s}/>
+                        <TweetActionButton kind="like" status={s}/>
                     </div>
                     <div className="spacer"/>
                     <div className="tweet__primary-createdby">

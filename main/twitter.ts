@@ -1,5 +1,5 @@
 import * as TwitterClient from 'twitter';
-import {app} from 'electron';
+import {app, ipcMain as ipc} from 'electron';
 import {join} from 'path';
 import {readFile} from 'fs';
 import log from './log';
@@ -17,8 +17,26 @@ export default class Twitter {
         this.stream = null;
     }
 
+    subscribe(c: ChannelFromRenderer, cb: Electron.IpcMainEventListener) {
+        ipc.on(c, cb);
+    }
+
+    sendApiFailure(err: NodeTwitter.ApiError[]) {
+        this.sender.send('yf:api-failure', err[0].message);
+    }
+
     prepareClient(tokens: NodeTwitter.AuthInfo) {
         this.client = new TwitterClient(tokens);
+        this.subscribe('yf:request-retweet', (_: Electron.IpcMainEvent, tweet_id: string) => {
+            this.client.post('statuses/retweet/' + tweet_id, (err: NodeTwitter.ApiError[], tweet: any, res: any) => {
+                if (err) {
+                    log.debug(`Retweet failed: ${tweet_id}: ${JSON.stringify(err)}: ${JSON.stringify(res)}`);
+                    this.sendApiFailure(err);
+                    return;
+                }
+                log.debug('Retweet success: ', tweet.id);
+            });
+        });
     }
 
     startStreaming(to: IpcSender, params: Object = {}) {
@@ -43,6 +61,7 @@ export default class Twitter {
         return new Promise<void>((resolve, reject) => {
             this.client.get('statuses/home_timeline', params, (err, tweets, _) => {
                 if (err) {
+                    this.sendApiFailure(err);
                     reject(err);
                     return;
                 }

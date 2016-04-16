@@ -4,6 +4,14 @@ import {Action, Kind} from './actions';
 import Item from './item/item';
 import Separator from './item/separator';
 
+const electron = global.require('electron');
+const ipc = electron.ipcRenderer;
+
+function sendToMain(ch: ChannelFromRenderer, ...args: any[]) {
+    'use strict';
+    ipc.send(ch, ...args);
+}
+
 export interface State {
     current_items: List<Item>;
     current_message: MessageInfo;
@@ -44,6 +52,12 @@ export default function root(state: State = init, action: Action) {
             const next_state = assign({}, state) as State;
             next_state.current_items = state.current_items.unshift(action.item);
             return next_state;
+        }
+        case Kind.SendRetweet: {
+            // Note:
+            // The retweeted status will be sent on stream
+            sendToMain('yf:request-retweet', action.tweet_id);
+            return state;
         }
         default:
             break;

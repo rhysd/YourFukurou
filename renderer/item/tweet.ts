@@ -36,7 +36,7 @@ export default class Tweet implements Item {
     }
 
     get id() {
-        return this.json.id;
+        return this.json.id_str;
     }
 
     get created_at() {
@@ -50,7 +50,6 @@ export default class Tweet implements Item {
     get favorited() {
         return this.json.favorited;
     }
-
 
     getMainStatus() {
         if (this.json.retweeted_status) {

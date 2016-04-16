@@ -7,6 +7,7 @@ export enum Kind {
     ShowMessage,
     DismissMessage,
     AddSeparator,
+    SendRetweet,
 }
 
 export interface Action {
@@ -14,6 +15,7 @@ export interface Action {
     item?: Item;
     text?: string;
     msg_kind?: MessageKind;
+    tweet_id?: string;
 }
 
 export function addTweetToTimeline(item: Tweet) {
@@ -52,6 +54,16 @@ export function addSeparator() {
         setImmediate(() => dispatch({
             type: Kind.AddSeparator,
             item: new Separator(),
+        }));
+    };
+}
+
+export function sendRetweet(tweet_id: string) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.SendRetweet,
+            tweet_id,
         }));
     };
 }

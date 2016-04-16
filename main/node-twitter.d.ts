@@ -20,10 +20,15 @@ declare module NodeTwitter {
         destroy(): void;
     }
 
+    export interface ApiError {
+        code: number;
+        message: string;
+    }
+
     export class TwitterClient {
         constructor(auth: AuthInfo);
-        get(path: string, opt?: Object, callback?: (err: Error, tweets: Object[], response: any) => void): TwitterClient;
-        post(url: string, content?: Object, content_type?: string, callback?: (data: any) => void): TwitterClient;
+        get(path: string, opt?: Object, callback?: (err: ApiError[], tweets: Object[], response: any) => void): TwitterClient;
+        post(url: string, content?: Object, content_type?: string, callback?: (err: ApiError[], data: any, response: any) => void): TwitterClient;
         verifyCredentials(callback: (data: any) => void): TwitterClient;
 
         search(query: string, params?: Object, callback?: (data: any) => void): TwitterClient;

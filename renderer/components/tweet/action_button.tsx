@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import Tweet from '../../item/tweet';
 import IconButton from '../icon_button';
-import {showMessage} from '../../actions';
+import {showMessage, sendRetweet} from '../../actions';
 
 type TweetActionKind = 'reply' | 'like' | 'retweet';
 
@@ -24,7 +24,14 @@ function onLikeClicked(props: TweetActionButtonProps) {
 
 function onRetweetClicked(props: TweetActionButtonProps) {
     'use strict';
-    notImplementedYet(props);
+    if (props.status.user.protected) {
+        props.dispatch(showMessage("Cannot retweet protected user's tweet", 'error'));
+        return;
+    }
+
+    props.dispatch(sendRetweet(props.status.id));
+    // TODO:
+    // Implement cancel retweet
 }
 
 function onReplyClicked(props: TweetActionButtonProps) {
@@ -57,7 +64,7 @@ function getColor(props: TweetActionButtonProps) {
     switch (props.kind) {
         case 'retweet': {
             if (props.status.retweeted) {
-                return '#4fff44';
+                return '#44ff4f';
             } else {
                 return undefined;
             }

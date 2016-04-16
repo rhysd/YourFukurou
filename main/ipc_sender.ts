@@ -6,7 +6,7 @@ export default class IpcSender {
         public sender: Electron.WebContents = BrowserWindow.getFocusedWindow().webContents
     ) {}
 
-    send(channel: Channel, ...args: any[]) {
+    send(channel: ChannelFromMain, ...args: any[]) {
         log.debug('Send to channel: ' + channel);
         this.sender.send(channel, ...args);
     }

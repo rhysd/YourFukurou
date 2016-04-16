@@ -30,7 +30,7 @@ export default class Tweet extends React.Component<TweetProps, {}> {
         return <div className="tweet__body animated fadeIn" ref={r => { this.node = r; }} >
             <TweetIcon user={tw.user}/>
             <TweetSecondary status={this.props.status}/>
-            <TweetPrimary status={tw}/>
+            <TweetPrimary status={this.props.status}/>
         </div>;
     }
 }
