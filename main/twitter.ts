@@ -61,14 +61,17 @@ export default class Twitter {
                 return;
             }
 
-            if (!('text' in json)) {
-                // TODO:
-                // Ignore activities except for tweets
-                log.info('Ignored message on stream: ' + JSON.stringify(json));
+            if (json.text) {
+                this.sender.send('yf:tweet', json);
                 return;
             }
 
-            this.sender.send('yf:tweet', json);
+            if (json.friends) {
+                this.sender.send('yf:friends', json.friends);
+                return;
+            }
+
+            log.info('Ignored message on stream: ' + JSON.stringify(json));
         });
 
         stream.on('error', (err: Error) => {

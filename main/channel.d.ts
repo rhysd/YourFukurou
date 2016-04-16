@@ -1,1 +1,4 @@
-type Channel = 'yf:tweet' | 'yf:connection-failure';
+type Channel
+    = 'yf:tweet'
+    | 'yf:connection-failure'
+    | 'yf:friends';

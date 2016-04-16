@@ -6,8 +6,14 @@ declare module NodeTwitter {
         access_token_secret: string;
     }
 
+    interface StreamResponse {
+        text?: string;
+        friends?: number[];
+        // TODO: Add more
+    }
+
     export interface TwitterStream extends NodeJS.EventEmitter {
-        on(event_name: 'data', callback: (json: Object) => void): this;
+        on(event_name: 'data', callback: (json: StreamResponse) => void): this;
         on(event_name: 'error', callback: (err: Error) => void): this;
         on(event_name: 'end', callback: (response: any) => void): this;
         on(event_name: string, callback: Function): this;
@@ -51,7 +57,7 @@ declare module NodeTwitter {
 }
 
 
-declare module "twitter" {
-    var tw: typeof NodeTwitter.TwitterClient;
+declare module 'twitter' {
+    const tw: typeof NodeTwitter.TwitterClient;
     export = tw;
 }
