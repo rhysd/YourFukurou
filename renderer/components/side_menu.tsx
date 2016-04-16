@@ -22,7 +22,7 @@ const SideMenu = (props: SideMenuProps) => (
             size={48}
         />
         <IconButton
-            className="side-menu__button"
+            className="side-menu__button side-menu__button_active"
             name="pencil-square-o"
             tip="New Tweet"
             onClick={() => notImplementedYet(props)}

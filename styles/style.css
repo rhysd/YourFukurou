@@ -65,6 +65,7 @@ body {
 .side-menu__settings {
   font-size: 20px;
   color: var(--color-dark-inactive);
+  cursor: pointer;
 }
 
 .avatar {

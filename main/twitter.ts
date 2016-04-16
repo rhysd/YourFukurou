@@ -47,7 +47,7 @@ export default class Twitter {
                     return;
                 }
                 log.debug('statuses/home_timeline: Got tweets: ' + tweets.length);
-                for (const tw of tweets) {
+                for (const tw of tweets.reverse()) {
                     this.sender.send('yf:tweet', tw);
                 }
                 resolve();

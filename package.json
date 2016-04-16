@@ -2,7 +2,7 @@
   "name": "yourfukurou",
   "productName": "YourFukurou",
   "version": "0.0.0",
-  "description": "Twitter client for perspecuity of timeline",
+  "description": "Hackable YoruFukurou alternative",
   "main": "build/main.js",
   "bin": "./bin/cli.js",
   "scripts": {
