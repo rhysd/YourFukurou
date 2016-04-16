@@ -16,6 +16,7 @@
     "components/icon_button.tsx",
     "components/message.tsx",
     "components/side_menu.tsx",
+    "components/tweet/action_button.tsx",
     "components/tweet/icon.tsx",
     "components/tweet/index.tsx",
     "components/tweet/primary.tsx",

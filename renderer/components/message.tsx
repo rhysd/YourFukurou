@@ -6,6 +6,7 @@ import {dismissMessage} from '../actions';
 interface MessageProps extends React.Props<any> {
     text: string;
     kind: MessageKind;
+    duration?: number;
     dispatch?: Redux.Dispatch;
 };
 
@@ -25,7 +26,10 @@ class Message extends React.Component<MessageProps, {}> {
     }
 
     componentDidMount() {
-        setTimeout(() => this.setupDismiss(), 10000)
+        const duration = this.props.duration || 5000;
+        if (duration !== Infinity) {
+            setTimeout(() => this.setupDismiss(), duration);
+        }
     }
 
     render() {

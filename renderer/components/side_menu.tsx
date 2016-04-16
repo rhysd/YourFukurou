@@ -1,8 +1,8 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import IconButton from './icon_button';
 import Avatar from './avatar';
 import {showMessage} from '../actions';
-import {connect} from 'react-redux';
 
 interface SideMenuProps extends React.Props<any> {
     dispatch?: Redux.Dispatch;

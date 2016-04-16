@@ -43,6 +43,15 @@ export default class Tweet implements Item {
         return new Date(this.json.created_at);
     }
 
+    get retweeted() {
+        return this.json.retweeted;
+    }
+
+    get favorited() {
+        return this.json.favorited;
+    }
+
+
     getMainStatus() {
         if (this.json.retweeted_status) {
             return new Tweet(this.json.retweeted_status);

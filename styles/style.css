@@ -17,6 +17,7 @@ html {
 body {
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 12px;
+  -webkit-font-smoothing: antialiased;
   margin: 0px;
   height: 100%;
   width: 100%;
@@ -140,12 +141,26 @@ body {
 .tweet__primary-text {
   flex: auto;
 }
+.tweet__primary-footer {
+  flex: none;
+  display: flex;
+  margin-top: 4px;
+  font-size: 0.7rem;
+}
 .tweet__primary-createdby {
   flex: none;
   color: var(--weak-text-link-color);
-  font-size: 0.7rem;
   text-align: right;
-  margin-top: 4px;
+}
+
+.tweet-actions {
+  display: flex;
+  color: var(--weak-text-link-color);
+}
+.tweet-actions > * {
+  flex: auto;
+  cursor: pointer;
+  margin: 0 8px;
 }
 
 .message__body {
