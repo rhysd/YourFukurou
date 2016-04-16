@@ -73,14 +73,14 @@ export default class Twitter {
 
         stream.on('error', (err: Error) => {
             log.error('Error occurred on stream, will reconnect after 3secs: ', err);
-            setTimeout(3000, () => this.connectToStream(params));
+            this.reconnectToStream().catch(e => log.error(e));
         });
 
         stream.on('end', (response: IncomingMessage) => {
             log.error('Unexpected end message on stream, will reconnect after 3secs: ', response.statusCode);
             // TODO:
             // Handle the tweets while stream was not connected
-            setTimeout(3000, () => this.connectToStream(params));
+            this.reconnectToStream().catch(e => log.error(e));
         });
     }
 
@@ -92,10 +92,13 @@ export default class Twitter {
         });
     }
 
-    fetchStreaming(params: Object = {}) {
+    reconnectToStream(delay_ms: number = 3000, params: Object = {}) {
         return new Promise<void>(resolve => {
-            this.connectToStream(params);
-            resolve();
+            this.sender.send('yf:connection-failure');
+            setTimeout(delay_ms, () => {
+                this.connectToStream(params);
+                resolve();
+            });
         });
     }
 
@@ -118,6 +121,9 @@ export default class Twitter {
                 const send_all = () => {
                     this.sender.send('yf:tweet', tweets[idx]);
                     ++idx;
+                    if (random_range(0, 20) < 1) {
+                        this.sender.send('yf:connection-failure');
+                    }
                     if (idx < tweets.length) {
                         setTimeout(send_all, random_range(500, 5000));
                     }

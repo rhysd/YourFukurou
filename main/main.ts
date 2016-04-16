@@ -67,7 +67,7 @@ function open_window(access: AccessToken) {
             powerMonitor.on('resume', () => {
                 log.debug("PC's resuming, will reconnect after 3secs: " + twitter.isStopped());
                 if (twitter.isStopped()) {
-                    setTimeout(() => twitter.fetchStreaming().catch(e => log.error(e)), 3000);
+                    twitter.reconnectToStream().catch(e => log.error(e));
                 }
             });
 

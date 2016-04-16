@@ -22,6 +22,7 @@
     "components/tweet/primary.tsx",
     "components/tweet/secondary.tsx",
     "components/tweet/external-link.tsx",
+    "components/zigzag_separator.tsx",
     "index.tsx",
     "ipc_channel_proxy.ts",
     "item/item.ts",

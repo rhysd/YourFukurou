@@ -2,6 +2,7 @@ import {List} from 'immutable';
 import assign = require('object-assign');
 import {Action, Kind} from './actions';
 import Item from './item/item';
+import Separator from './item/separator';
 
 export interface State {
     current_items: List<Item>;
@@ -18,7 +19,7 @@ export default function root(state: State = init, action: Action) {
     switch (action.type) {
         case Kind.AddTweetToTimeline: {
             const next_state = assign({}, state) as State;
-            next_state.current_items = state.current_items.unshift(action.tweet);
+            next_state.current_items = state.current_items.unshift(action.item);
             return next_state;
         }
         case Kind.ShowMessage: {
@@ -32,6 +33,16 @@ export default function root(state: State = init, action: Action) {
         case Kind.DismissMessage: {
             const next_state = assign({}, state) as State;
             next_state.current_message = null;
+            return next_state;
+        }
+        case Kind.AddSeparator: {
+            if (state.current_items.last() instanceof Separator) {
+                // Note:
+                // Do not add multiple separators continuously
+                return state;
+            }
+            const next_state = assign({}, state) as State;
+            next_state.current_items = state.current_items.unshift(action.item);
             return next_state;
         }
         default:

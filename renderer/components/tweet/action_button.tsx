@@ -4,7 +4,7 @@ import Tweet from '../../item/tweet';
 import IconButton from '../icon_button';
 import {showMessage} from '../../actions';
 
-type TweetActionKind = 'reply' | 'fav' | 'retweet';
+type TweetActionKind = 'reply' | 'like' | 'retweet';
 
 interface TweetActionButtonProps extends React.Props<any> {
     status: Tweet;
@@ -17,7 +17,7 @@ function notImplementedYet(props: TweetActionButtonProps) {
     props.dispatch(showMessage('Sorry, this feature is not implemented yet.', 'error'));
 }
 
-function onFavClicked(props: TweetActionButtonProps) {
+function onLikeClicked(props: TweetActionButtonProps) {
     'use strict';
     notImplementedYet(props);
 }
@@ -37,7 +37,7 @@ function onClick(props: TweetActionButtonProps) {
     switch (props.kind) {
         case 'reply': onReplyClicked(props); break;
         case 'retweet': onRetweetClicked(props); break;
-        case 'fav': onFavClicked(props); break;
+        case 'like': onLikeClicked(props); break;
         default: break;
     }
 }
@@ -47,7 +47,7 @@ function getIcon(k: TweetActionKind) {
     switch (k) {
         case 'reply': return 'reply';
         case 'retweet': return 'retweet';
-        case 'fav': return 'heart';
+        case 'like': return 'heart';
         default: return '';
     }
 }
@@ -62,7 +62,7 @@ function getColor(props: TweetActionButtonProps) {
                 return undefined;
             }
         }
-        case 'fav': {
+        case 'like': {
             if (props.status.favorited) {
                 return '#ff4f44';
             } else {
