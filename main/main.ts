@@ -1,5 +1,6 @@
 import {join} from 'path';
 import {app, BrowserWindow, powerMonitor} from 'electron';
+import windowState = require('electron-window-state');
 import {authenticate, load_cached_tokens} from './authenticator';
 import log from './log';
 import IpcSender from './ipc_sender';
@@ -21,17 +22,31 @@ function open_window(access: AccessToken) {
     'use strict';
     log.debug('Starting to open window');
 
+    const win_state = windowState({
+        defaultWidth: 600,
+        defaultHeight: 800,
+    });
+
     const index_html = 'file://' + join(__dirname, '..', 'index.html');
     const icon_path = join(__dirname, '..', 'images', 'icon.png');
     let win = new BrowserWindow({
-        width: 800,
-        height: 600,
+        x: win_state.x,
+        y: win_state.y,
+        width: win_state.width,
+        height: win_state.height,
         titleBarStyle: 'hidden-inset',
         autoHideMenuBar: true,
         icon: icon_path,
     });
 
     win.once('closed', () => { win = null; });
+
+    if (win_state.isFullScreen) {
+        win.setFullScreen(true);
+    } else if (win_state.isMaximized) {
+        win.maximize();
+    }
+    win_state.manage(win);
 
     if (access.token && access.token_secret) {
         win.webContents.on('dom-ready', () => {
