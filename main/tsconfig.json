@@ -15,6 +15,7 @@
     "lib.d.ts",
     "loglevel-message-prefix.d.ts",
     "main.ts",
+    "menu.ts",
     "node-oauth.d.ts",
     "node-twitter.d.ts",
     "twitter.ts"

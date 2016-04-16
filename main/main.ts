@@ -4,6 +4,7 @@ import {authenticate, load_cached_tokens} from './authenticator';
 import log from './log';
 import IpcSender from './ipc_sender';
 import Twitter from './twitter';
+import setApplicationMenu from './menu';
 
 const load_cache = load_cached_tokens();
 const consumer_key = process.env.YOURFUKUROU_CONSUMER_KEY || 'H4fJ2rgNuH2UiOXuPBjHpl9zL';
@@ -26,6 +27,7 @@ function open_window(access: AccessToken) {
         width: 800,
         height: 600,
         titleBarStyle: 'hidden-inset',
+        autoHideMenuBar: true,
         icon: icon_path,
     });
 
@@ -65,6 +67,8 @@ function open_window(access: AccessToken) {
     if (isRunFromNpmPackageOnDarwin()) {
         app.dock.setIcon(icon_path);
     }
+
+    setApplicationMenu(win);
 
     if (process.env.NODE_ENV === 'development') {
         win.webContents.on('devtools-opened', () => setImmediate(() => win.focus()));
