@@ -30,9 +30,11 @@ export class TwitterUser {
 
 export default class Tweet implements Item {
     public user: TwitterUser;
+    private retweeted_status_memo: Tweet;
 
     constructor(public json: TweetJson) {
         this.user = new TwitterUser(json.user);
+        this.retweeted_status_memo = null;
     }
 
     get id() {
@@ -51,9 +53,19 @@ export default class Tweet implements Item {
         return this.json.favorited;
     }
 
+    get retweeted_status() {
+        if (!this.json.retweeted_status) {
+            return null;
+        }
+        if (this.retweeted_status_memo === null) {
+            this.retweeted_status_memo = new Tweet(this.json.retweeted_status);
+        }
+        return this.retweeted_status_memo;
+    }
+
     getMainStatus() {
         if (this.json.retweeted_status) {
-            return new Tweet(this.json.retweeted_status);
+            return this.retweeted_status;
         } else {
             return this;
         }
@@ -110,6 +122,10 @@ export default class Tweet implements Item {
         const d = date.getDate();
         const yyyy = date.getFullYear();
         return `${('0' + hh).slice(-2)}:${('0' + mm).slice(-2)} ${m + 1}/${d} ${yyyy}`;
+    }
+
+    clone() {
+        return new Tweet(this.json);
     }
 }
 

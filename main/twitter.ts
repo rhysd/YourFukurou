@@ -35,6 +35,7 @@ export default class Twitter {
                     return;
                 }
                 log.debug('Retweet success: ', tweet.id);
+                this.sender.send('yf:retweet-success', tweet);
             });
         });
         this.subscribe('yf:undo-retweet', (_: Electron.IpcMainEvent, tweet_id: string) => {
@@ -44,6 +45,7 @@ export default class Twitter {
                     this.sendApiFailure(err);
                     return;
                 }
+                this.sender.send('yf:unretweet-success', tweet);
                 log.debug('Unretweet success: ', tweet.id);
             });
         });
@@ -127,7 +129,7 @@ export default class Twitter {
     reconnectToStream(delay_ms: number = 3000, params: Object = {}) {
         return new Promise<void>(resolve => {
             this.sender.send('yf:connection-failure');
-            setTimeout(delay_ms, () => {
+            window.setTimeout(delay_ms, () => {
                 this.connectToStream(params);
                 resolve();
             });
@@ -157,7 +159,7 @@ export default class Twitter {
                         this.sender.send('yf:connection-failure');
                     }
                     if (idx < tweets.length) {
-                        setTimeout(send_all, random_range(500, 5000));
+                        window.setTimeout(send_all, random_range(500, 5000));
                     }
                 };
 

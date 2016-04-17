@@ -2,6 +2,7 @@ import {List} from 'immutable';
 import assign = require('object-assign');
 import {Action, Kind} from './actions';
 import Item from './item/item';
+import Tweet from './item/tweet';
 import Separator from './item/separator';
 
 const electron = global.require('electron');
@@ -21,6 +22,21 @@ const init: State = {
     current_items: List<Item>(),
     current_message: null,
 };
+
+function setRetweetedFlag(items: List<Item>, id: string, new_value: boolean) {
+    'use strict';
+    return items.map(i => {
+        if (i instanceof Tweet) {
+            const s = i.getMainStatus();
+            if (s.id === id) {
+                const cloned = s.clone();
+                cloned.json.retweeted = new_value;
+                return cloned;
+            }
+        }
+        return i;
+    }).toList();
+}
 
 export default function root(state: State = init, action: Action) {
     'use strict';
@@ -62,6 +78,17 @@ export default function root(state: State = init, action: Action) {
         case Kind.UndoRetweet: {
             sendToMain('yf:undo-retweet', action.tweet_id);
             return state;
+        }
+        case Kind.RetweetSucceeded: {
+            const next_state = assign({}, state) as State;
+            next_state.current_items = setRetweetedFlag(state.current_items, action.tweet_id, true);
+            console.log(next_state);
+            return next_state;
+        }
+        case Kind.UnretweetSucceeded: {
+            const next_state = assign({}, state) as State;
+            next_state.current_items = setRetweetedFlag(state.current_items, action.tweet_id, false);
+            return next_state;
         }
         default:
             break;
