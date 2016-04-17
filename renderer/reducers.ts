@@ -82,7 +82,6 @@ export default function root(state: State = init, action: Action) {
         case Kind.RetweetSucceeded: {
             const next_state = assign({}, state) as State;
             next_state.current_items = setRetweetedFlag(state.current_items, action.tweet_id, true);
-            console.log(next_state);
             return next_state;
         }
         case Kind.UnretweetSucceeded: {
