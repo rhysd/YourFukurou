@@ -8,6 +8,7 @@ export enum Kind {
     DismissMessage,
     AddSeparator,
     SendRetweet,
+    UndoRetweet,
 }
 
 export interface Action {
@@ -67,3 +68,14 @@ export function sendRetweet(tweet_id: string) {
         }));
     };
 }
+
+export function undoRetweet(tweet_id: string) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.UndoRetweet,
+            tweet_id,
+        }));
+    };
+}
+

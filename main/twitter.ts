@@ -37,6 +37,16 @@ export default class Twitter {
                 log.debug('Retweet success: ', tweet.id);
             });
         });
+        this.subscribe('yf:undo-retweet', (_: Electron.IpcMainEvent, tweet_id: string) => {
+            this.client.post('statuses/unretweet/' + tweet_id, (err: NodeTwitter.ApiError[], tweet: any, res: any) => {
+                if (err) {
+                    log.debug(`Unretweet failed: ${tweet_id}: ${JSON.stringify(err)}: ${JSON.stringify(res)}`);
+                    this.sendApiFailure(err);
+                    return;
+                }
+                log.debug('Unretweet success: ', tweet.id);
+            });
+        });
     }
 
     startStreaming(to: IpcSender, params: Object = {}) {

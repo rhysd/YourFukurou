@@ -59,6 +59,10 @@ export default function root(state: State = init, action: Action) {
             sendToMain('yf:request-retweet', action.tweet_id);
             return state;
         }
+        case Kind.UndoRetweet: {
+            sendToMain('yf:undo-retweet', action.tweet_id);
+            return state;
+        }
         default:
             break;
     }

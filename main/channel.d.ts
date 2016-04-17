@@ -5,4 +5,5 @@ type ChannelFromMain
     | 'yf:friends';
 
 type ChannelFromRenderer
-    = 'yf:request-retweet';
+    = 'yf:request-retweet'
+    | 'yf:undo-retweet';
