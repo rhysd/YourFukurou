@@ -66,7 +66,7 @@ function getColor(props: TweetActionButtonProps) {
     switch (props.kind) {
         case 'retweet': {
             if (props.status.retweeted) {
-                return '#44ff4f';
+                return '#19cf86';
             } else {
                 return undefined;
             }
