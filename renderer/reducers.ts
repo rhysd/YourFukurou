@@ -23,18 +23,23 @@ const init: State = {
     current_message: null,
 };
 
-function setRetweetedFlag(items: List<Item>, id: string, new_value: boolean) {
+function replaceStatus(items: List<Item>, status: Tweet) {
     'use strict';
-    return items.map(i => {
-        if (i instanceof Tweet) {
-            const s = i.getMainStatus();
-            if (s.id === id) {
-                const cloned = s.clone();
-                cloned.json.retweeted = new_value;
-                return cloned;
+    return items.map(item => {
+        if (item instanceof Tweet) {
+            const id = item.getMainStatus().id;
+            if (id === status.id) {
+                if (item.isRetweet()) {
+                    const cloned = item.clone();
+                    cloned.json.retweeted_status = status.json;
+                    return cloned;
+                } else {
+                    return status;
+                }
             }
+        } else {
+            return item;
         }
-        return i;
     }).toList();
 }
 
@@ -81,12 +86,12 @@ export default function root(state: State = init, action: Action) {
         }
         case Kind.RetweetSucceeded: {
             const next_state = assign({}, state) as State;
-            next_state.current_items = setRetweetedFlag(state.current_items, action.tweet_id, true);
+            next_state.current_items = replaceStatus(state.current_items, action.status.getMainStatus());
             return next_state;
         }
         case Kind.UnretweetSucceeded: {
             const next_state = assign({}, state) as State;
-            next_state.current_items = setRetweetedFlag(state.current_items, action.tweet_id, false);
+            next_state.current_items = replaceStatus(state.current_items, action.status);
             return next_state;
         }
         default:

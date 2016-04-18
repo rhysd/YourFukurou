@@ -19,6 +19,7 @@ export interface Action {
     text?: string;
     msg_kind?: MessageKind;
     tweet_id?: string;
+    status?: Tweet;
 }
 
 export function addTweetToTimeline(item: Tweet) {
@@ -81,22 +82,22 @@ export function undoRetweet(tweet_id: string) {
     };
 }
 
-export function retweetSucceeded(tweet_id: string) {
+export function retweetSucceeded(status: Tweet) {
     'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.RetweetSucceeded,
-            tweet_id,
+            status,
         }));
     };
 }
 
-export function unretweetSucceeded(tweet_id: string) {
+export function unretweetSucceeded(status: Tweet) {
     'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.UnretweetSucceeded,
-            tweet_id,
+            status,
         }));
     };
 }

@@ -6,6 +6,7 @@ import ZigZagSeparator from './zigzag_separator';
 import Item from '../item/item';
 import TweetItem from '../item/tweet';
 import Separator from '../item/separator';
+import log from '../log';
 
 interface TimelineProps extends React.Props<any> {
     message: MessageInfo;
@@ -19,7 +20,7 @@ function renderItem(i: Item, id: number) {
     } else if (i instanceof Separator) {
         return <ZigZagSeparator key={key}/>;
     } else {
-        log.error('Invalid item', key);
+        log.error('Invalid item', key, i);
         return undefined;
     }
 }

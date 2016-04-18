@@ -41,17 +41,21 @@ export default class IpcChannelProxy {
         });
         this.subscribe('yf:retweet-success', (_: Electron.IpcRendererEvent, json: TweetJson) => {
             log.debug('Received channel yf:retweet-success', json.id_str);
-            if (json.retweeted_status) {
-                Store.dispatch(retweetSucceeded(json.retweeted_status.id_str));
-            } else {
+            if (!json.retweeted_status) {
                 log.error('yf:retweet-success: Received status is not an retweet status: ', json);
+                return;
             }
+            json.retweeted_status.retweeted = true;
+            json.retweeted_status.retweet_count += 1;
+            Store.dispatch(retweetSucceeded(new Tweet(json)));
         });
         this.subscribe('yf:unretweet-success', (_: Electron.IpcRendererEvent, json: TweetJson) => {
             // Note:
             // The JSON is an original retweeted tweet
             log.debug('Received channel yf:unretweet-success', json.id_str);
-            Store.dispatch(unretweetSucceeded(json.id_str));
+            json.retweeted = false;
+            json.retweet_count -= 1;
+            Store.dispatch(unretweetSucceeded(new Tweet(json)));
         });
         log.debug('Started to receive messages');
         return this;
