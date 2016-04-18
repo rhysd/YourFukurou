@@ -37,9 +37,8 @@ function replaceStatus(items: List<Item>, status: Tweet) {
                     return status;
                 }
             }
-        } else {
-            return item;
         }
+        return item;
     }).toList();
 }
 

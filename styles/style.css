@@ -163,6 +163,13 @@ body {
   cursor: pointer;
   margin: 0 8px;
 }
+.tweet-actions__with-count {
+  display: flex;
+  min-width: 2em;
+}
+.tweet-actions__count {
+  margin-left: 4px;
+}
 
 .message__body {
   width: calc(100% - var(--sidemenu-width));

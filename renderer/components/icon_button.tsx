@@ -2,7 +2,7 @@ import * as React from 'react';
 
 interface IconButtonProps extends React.Props<any> {
     name: string;
-    className: string;
+    className?: string;
     color?: string;
     tip?: string;
     onClick?: (event?: MouseEvent) => void;

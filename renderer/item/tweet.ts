@@ -63,6 +63,22 @@ export default class Tweet implements Item {
         return this.retweeted_status_memo;
     }
 
+    get retweet_count() {
+        if (this.json.retweeted_status) {
+            return this.json.retweeted_status.retweet_count;
+        } else {
+            return this.json.retweet_count;
+        }
+    }
+
+    get favorite_count() {
+        if (this.json.retweeted_status) {
+            return this.json.retweeted_status.favorite_count;
+        } else {
+            return this.json.favorite_count;
+        }
+    }
+
     getMainStatus() {
         if (this.json.retweeted_status) {
             return this.retweeted_status;
