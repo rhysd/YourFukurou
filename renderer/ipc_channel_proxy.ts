@@ -8,6 +8,7 @@ import {
     likeSucceeded,
     unlikeSucceeded,
     setCurrentUser,
+    deleteStatus,
 } from './actions';
 import Store from './store';
 import log from './log';
@@ -77,6 +78,10 @@ export default class IpcChannelProxy {
         this.subscribe('yf:account', (_: Electron.IpcRendererEvent, json: UserJson) => {
             log.debug('Received channel yf:account', json.id_str);
             Store.dispatch(setCurrentUser(new TwitterUser(json)));
+        });
+        this.subscribe('yf:delete-status', (_: Electron.IpcRendererEvent, json: DeleteJson) => {
+            log.debug('Received channel yf:delete-status', json.status.id_str);
+            Store.dispatch(deleteStatus(json.status.id_str));
         });
         log.debug('Started to receive messages');
         return this;

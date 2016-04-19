@@ -165,3 +165,12 @@ interface TweetJson {
     quoted_status?: TweetJson;
 }
 
+interface DeleteJson {
+    status: {
+        id: number;
+        id_str: string;
+        user_id: number;
+        user_id_str: string;
+    };
+    timestamp_ms: string;
+}

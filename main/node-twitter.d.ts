@@ -9,6 +9,7 @@ declare module NodeTwitter {
     interface StreamResponse {
         text?: string;
         friends?: number[];
+        delete?: Object;
         // TODO: Add more
     }
 

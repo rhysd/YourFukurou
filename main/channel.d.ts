@@ -5,6 +5,7 @@ type ChannelFromMain
     | 'yf:like-success'
     | 'yf:unlike-success'
     | 'yf:account'
+    | 'yf:delete-status'
     | 'yf:api-failure'
     | 'yf:connection-failure'
     | 'yf:friends';

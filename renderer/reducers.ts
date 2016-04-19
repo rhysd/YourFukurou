@@ -120,6 +120,16 @@ export default function root(state: State = init, action: Action) {
             next_state.current_user = action.user;
             return next_state;
         }
+        case Kind.DeleteStatus: {
+            const id = action.tweet_id;
+            const next_state = assign({}, state) as State;
+            next_state.current_items = state.current_items.filter(
+                item => item instanceof Tweet
+                    ? item.getMainStatus().id !== id
+                    : true
+            ).toList();
+            return next_state;
+        }
         default:
             break;
     }

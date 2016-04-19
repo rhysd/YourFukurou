@@ -9,6 +9,7 @@ export enum Kind {
 
     AddTweetToTimeline,
     SetCurrentUser,
+    DeleteStatus,
 
     SendRetweet,
     UndoRetweet,
@@ -157,6 +158,16 @@ export function setCurrentUser(user: TwitterUser) {
         setImmediate(() => dispatch({
             type: Kind.SetCurrentUser,
             user,
+        }));
+    };
+}
+
+export function deleteStatus(tweet_id: string) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.DeleteStatus,
+            tweet_id,
         }));
     };
 }

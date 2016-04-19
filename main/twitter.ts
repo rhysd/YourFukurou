@@ -140,6 +140,11 @@ export default class Twitter {
                 return;
             }
 
+            if (json.delete) {
+                this.sender.send('yf:delete-status', json.delete);
+                return;
+            }
+
             if (json.friends) {
                 this.sender.send('yf:friends', json.friends);
                 return;
