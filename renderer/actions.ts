@@ -1,12 +1,14 @@
-import Tweet from './item/tweet';
+import Tweet, {TwitterUser} from './item/tweet';
 import Item from './item/item';
 import Separator from './item/separator';
 
 export enum Kind {
-    AddTweetToTimeline,
     ShowMessage,
     DismissMessage,
     AddSeparator,
+
+    AddTweetToTimeline,
+    SetCurrentUser,
 
     SendRetweet,
     UndoRetweet,
@@ -26,6 +28,7 @@ export interface Action {
     msg_kind?: MessageKind;
     tweet_id?: string;
     status?: Tweet;
+    user?: TwitterUser;
 }
 
 export function addTweetToTimeline(item: Tweet) {
@@ -148,3 +151,12 @@ export function unlikeSucceeded(status: Tweet) {
     };
 }
 
+export function setCurrentUser(user: TwitterUser) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.SetCurrentUser,
+            user,
+        }));
+    };
+}

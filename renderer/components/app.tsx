@@ -5,16 +5,18 @@ import {State} from '../reducers';
 import SideMenu from './side_menu';
 import Timeline from './timeline';
 import Item from '../item/item';
+import {TwitterUser} from '../item/tweet';
 
 interface AppProps {
     items: List<Item>;
     message: MessageInfo;
+    user: TwitterUser;
 }
 
 const App = (props: AppProps) => (
     <div className="app-root">
-        <SideMenu/>
-        <Timeline items={props.items} message={props.message}/>
+        <SideMenu user={props.user}/>
+        <Timeline {...props}/>
     </div>
 );
 
@@ -22,6 +24,7 @@ function select(state: State): AppProps {
     return {
         items: state.current_items,
         message: state.current_message,
+        user: state.current_user,
     };
 }
 

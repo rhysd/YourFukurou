@@ -9,8 +9,8 @@ import {IncomingMessage} from 'http';
 // TODO:
 // This class should be invoked from renderer for each Twitter account
 export default class Twitter {
+    public sender: IpcSender;
     private client: NodeTwitter.TwitterClient;
-    private sender: IpcSender;
     private stream: NodeTwitter.TwitterStream;
 
     constructor() {
@@ -45,8 +45,8 @@ export default class Twitter {
                 this.sendApiFailure(err);
                 return;
             }
-            log.debug('Like success: ', tweet.id);
             this.sender.send('yf:like-success', tweet);
+            log.debug('Like success: ' + tweet.id);
         });
     }
 
@@ -62,8 +62,8 @@ export default class Twitter {
                 this.sendApiFailure(err);
                 return;
             }
-            log.debug('Unlike success: ', tweet.id);
             this.sender.send('yf:unlike-success', tweet);
+            log.debug('Unlike success: ' + tweet.id);
         });
     }
 
@@ -74,8 +74,8 @@ export default class Twitter {
                 this.sendApiFailure(err);
                 return;
             }
-            log.debug('Retweet success: ', tweet.id);
             this.sender.send('yf:retweet-success', tweet);
+            log.debug('Retweet success: ' + tweet.id);
         });
     }
 
@@ -87,26 +87,29 @@ export default class Twitter {
                 return;
             }
             this.sender.send('yf:unretweet-success', tweet);
-            log.debug('Unretweet success: ', tweet.id);
+            log.debug('Unretweet success: ' + tweet.id);
         });
     }
 
-    startStreaming(to: IpcSender, params: Object = {}) {
-        this.sender = to;
-        if (!this.client) {
-            log.error('Client is not created yet');
-            return;
-        }
-        if (this.stream !== null) {
-            log.debug('Starting stream while previous stream is not disconnected. Will disconnect.');
-            this.stopStreaming();
-        }
-        if (process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS) {
-            return this.sendDummyStream();
-        }
-        return this.sendHomeTimeline()
-            .catch(e => log.error('Failed to send home timeline', e))
-            .then(() => this.connectToStream(params));
+    sendAuthenticatedAccount() {
+        const params = {
+            include_entities: true,
+        };
+        return new Promise<any>((resolve, reject) => {
+            this.client.get(
+                'account/verify_credentials',
+                params,
+                (err: NodeTwitter.ApiError[], account: any, res: any) => {
+                    if (err) {
+                        log.debug(`verify_credentials failed: ${JSON.stringify(err)}: ${JSON.stringify(account)}: ${JSON.stringify(res)}`);
+                        this.sendApiFailure(err);
+                        return;
+                    }
+                    this.sender.send('yf:account', account);
+                    log.debug(`Account: ${account.id_str}: ${account.screen_name}`);
+                }
+            );
+        });
     }
 
     sendHomeTimeline(params: Object = {}) {
@@ -159,10 +162,15 @@ export default class Twitter {
     }
 
     connectToStream(params: Object = {}) {
-        this.client.stream('user', params, stream => {
-            log.debug('Stream connected');
-            this.stream = stream;
-            this.subscribeStream(stream);
+        if (this.stream !== null) {
+            this.stopStreaming();
+        }
+        return new Promise<void>(resolve => {
+            this.client.stream('user', params, stream => {
+                log.debug('Stream connected');
+                this.stream = stream;
+                this.subscribeStream(stream);
+            });
         });
     }
 

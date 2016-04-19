@@ -4,6 +4,7 @@ type ChannelFromMain
     | 'yf:unretweet-success'
     | 'yf:like-success'
     | 'yf:unlike-success'
+    | 'yf:account'
     | 'yf:api-failure'
     | 'yf:connection-failure'
     | 'yf:friends';

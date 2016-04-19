@@ -2,7 +2,7 @@ import {List} from 'immutable';
 import assign = require('object-assign');
 import {Action, Kind} from './actions';
 import Item from './item/item';
-import Tweet from './item/tweet';
+import Tweet, {TwitterUser} from './item/tweet';
 import Separator from './item/separator';
 
 const electron = global.require('electron');
@@ -16,11 +16,13 @@ function sendToMain(ch: ChannelFromRenderer, ...args: any[]) {
 export interface State {
     current_items: List<Item>;
     current_message: MessageInfo;
+    current_user: TwitterUser;
 }
 
 const init: State = {
     current_items: List<Item>(),
     current_message: null,
+    current_user: null,
 };
 
 function updateStatus(items: List<Item>, status: Tweet) {
@@ -111,6 +113,11 @@ export default function root(state: State = init, action: Action) {
         case Kind.UnlikeSucceeded: {
             const next_state = assign({}, state) as State;
             next_state.current_items = updateStatus(state.current_items, action.status);
+            return next_state;
+        }
+        case Kind.SetCurrentUser: {
+            const next_state = assign({}, state) as State;
+            next_state.current_user = action.user;
             return next_state;
         }
         default:

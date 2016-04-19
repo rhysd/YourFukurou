@@ -3,8 +3,10 @@ import {connect} from 'react-redux';
 import IconButton from './icon_button';
 import Avatar from './avatar';
 import {showMessage} from '../actions';
+import {TwitterUser} from '../item/tweet';
 
 interface SideMenuProps extends React.Props<any> {
+    user: TwitterUser;
     dispatch?: Redux.Dispatch;
 }
 
@@ -15,10 +17,8 @@ function notImplementedYet(props: SideMenuProps) {
 const SideMenu = (props: SideMenuProps) => (
     <div className="side-menu">
         <Avatar
-            screenName="Linda_pp"
-            imageUrl={window.devicePixelRatio >= 1.5 ?
-                "http://pbs.twimg.com/profile_images/3626384430/3a64cf406665c1940d68ab737003605c_bigger.jpeg" :
-                "http://pbs.twimg.com/profile_images/3626384430/3a64cf406665c1940d68ab737003605c_normal.jpeg"}
+            screenName={props.user ? props.user.screen_name : ''}
+            imageUrl={props.user ? props.user.icon_url : undefined}
             size={48}
         />
         <IconButton

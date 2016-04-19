@@ -58,7 +58,7 @@ function open_window(access: AccessToken) {
                 access_token_key: access.token,
                 access_token_secret: access.token_secret,
             });
-            const sender = new IpcSender(win.webContents);
+            twitter.sender = new IpcSender(win.webContents);
 
             powerMonitor.on('suspend', () => {
                 log.debug("PC's going to suspend, stop streaming");
@@ -71,7 +71,18 @@ function open_window(access: AccessToken) {
                 }
             });
 
-            twitter.startStreaming(sender).catch(e => log.error('Unexpected error on streaming', e));
+            if (process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS) {
+                twitter
+                    .sendDummyStream()
+                    .catch(e => log.error('Unexpected error on dummy stream:', e));
+                return;
+            }
+
+            Promise.all([
+                twitter.sendHomeTimeline(),
+                twitter.sendAuthenticatedAccount(),
+            ]).then(() => twitter.connectToStream())
+              .catch(e => log.error('Unexpected error on streaming', e));
         });
     } else {
         log.error('Failed to get access tokens');

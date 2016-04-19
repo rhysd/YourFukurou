@@ -73,6 +73,7 @@ body {
 }
 .avatar__inner {
   border-radius: calc(100% / 6);
+  background-color: white;
 }
 
 .external-link {

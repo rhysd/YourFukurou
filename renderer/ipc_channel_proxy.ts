@@ -7,10 +7,11 @@ import {
     showMessage,
     likeSucceeded,
     unlikeSucceeded,
+    setCurrentUser,
 } from './actions';
 import Store from './store';
 import log from './log';
-import Tweet from './item/tweet';
+import Tweet, {TwitterUser} from './item/tweet';
 
 interface Listeners {
     [c: string]: Electron.IpcRendererEventListener;
@@ -72,6 +73,10 @@ export default class IpcChannelProxy {
         this.subscribe('yf:unlike-success', (_: Electron.IpcRendererEvent, json: TweetJson) => {
             log.debug('Received channel yf:unlike-success', json.id_str);
             Store.dispatch(unlikeSucceeded(new Tweet(json)));
+        });
+        this.subscribe('yf:account', (_: Electron.IpcRendererEvent, json: UserJson) => {
+            log.debug('Received channel yf:account', json.id_str);
+            Store.dispatch(setCurrentUser(new TwitterUser(json)));
         });
         log.debug('Started to receive messages');
         return this;

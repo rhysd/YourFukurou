@@ -3,7 +3,7 @@ const remote = global.require('electron').remote;
 
 interface AvatarProps extends React.Props<any> {
     screenName: string;
-    imageUrl: string;
+    imageUrl?: string;
     size?: number;
     border?: string;
 }
