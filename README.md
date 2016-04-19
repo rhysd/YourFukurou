@@ -3,12 +3,16 @@
 
 Goals :bird::
 
-- Perspicuity of timeline
+- Perspicuity
+  - Display as many tweets on timeline as possible
 - Everything can be done with keyboard
-- Performance for large timeline
+  - All actions can be done with key shortcuts
+  - Flexible and customizable keybindings system
+- High performance timeline management
 - Plugin architecture
-- Any timeline support
-- Cross platform
+  - Hooks for each Twitter activities and notification
+  - Enable to add other timelines rather than Twitter using React component
+- Cross platform (OS X, Windows, Linux)
 
 ## For Development
 
@@ -31,3 +35,4 @@ $ npm run dummy
 ## Credits
 
 Icon image was made by [Freepik](http://www.freepik.com) and is licensed by [Creative Commons BY 3.0](http://creativecommons.org/licenses/by/3.0/).
+
