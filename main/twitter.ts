@@ -95,18 +95,21 @@ export default class Twitter {
         const params = {
             include_entities: true,
         };
-        return new Promise<any>((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
             this.client.get(
                 'account/verify_credentials',
                 params,
                 (err: NodeTwitter.ApiError[], account: any, res: any) => {
                     if (err) {
                         log.debug(`verify_credentials failed: ${JSON.stringify(err)}: ${JSON.stringify(account)}: ${JSON.stringify(res)}`);
+                        err[0].message += ' Login again.';
                         this.sendApiFailure(err);
+                        reject(err);
                         return;
                     }
                     this.sender.send('yf:account', account);
                     log.debug(`Account: ${account.id_str}: ${account.screen_name}`);
+                    resolve();
                 }
             );
         });
