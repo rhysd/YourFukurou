@@ -7,10 +7,16 @@ export enum Kind {
     ShowMessage,
     DismissMessage,
     AddSeparator,
+
     SendRetweet,
     UndoRetweet,
     RetweetSucceeded,
     UnretweetSucceeded,
+
+    CreateLike,
+    DestroyLike,
+    LikeSucceeded,
+    UnlikeSucceeded,
 }
 
 export interface Action {
@@ -101,3 +107,44 @@ export function unretweetSucceeded(status: Tweet) {
         }));
     };
 }
+
+export function createLike(tweet_id: string) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.CreateLike,
+            tweet_id,
+        }));
+    };
+}
+
+export function destroyLike(tweet_id: string) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.DestroyLike,
+            tweet_id,
+        }));
+    };
+}
+
+export function likeSucceeded(status: Tweet) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.LikeSucceeded,
+            status,
+        }));
+    };
+}
+
+export function unlikeSucceeded(status: Tweet) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.UnlikeSucceeded,
+            status,
+        }));
+    };
+}
+

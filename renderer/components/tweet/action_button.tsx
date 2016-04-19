@@ -2,7 +2,13 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import Tweet from '../../item/tweet';
 import IconButton from '../icon_button';
-import {showMessage, sendRetweet, undoRetweet} from '../../actions';
+import {
+    showMessage,
+    sendRetweet,
+    undoRetweet,
+    createLike,
+    destroyLike,
+} from '../../actions';
 
 type TweetActionKind = 'reply' | 'like' | 'retweet';
 
@@ -19,7 +25,11 @@ function notImplementedYet(props: TweetActionButtonProps) {
 
 function onLikeClicked(props: TweetActionButtonProps) {
     'use strict';
-    notImplementedYet(props);
+    if (props.status.favorited) {
+        props.dispatch(destroyLike(props.status.id));
+    } else {
+        props.dispatch(createLike(props.status.id));
+    }
 }
 
 function onRetweetClicked(props: TweetActionButtonProps) {

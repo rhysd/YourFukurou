@@ -27,27 +27,67 @@ export default class Twitter {
 
     prepareClient(tokens: NodeTwitter.AuthInfo) {
         this.client = new TwitterClient(tokens);
-        this.subscribe('yf:request-retweet', (_: Electron.IpcMainEvent, tweet_id: string) => {
-            this.client.post('statuses/retweet/' + tweet_id, (err: NodeTwitter.ApiError[], tweet: any, res: any) => {
-                if (err) {
-                    log.debug(`Retweet failed: ${tweet_id}: ${JSON.stringify(err)}: ${JSON.stringify(res)}`);
-                    this.sendApiFailure(err);
-                    return;
-                }
-                log.debug('Retweet success: ', tweet.id);
-                this.sender.send('yf:retweet-success', tweet);
-            });
+        this.subscribe('yf:request-retweet', (_: Electron.IpcMainEvent, tweet_id: string) => this.retweet(tweet_id));
+        this.subscribe('yf:undo-retweet', (_: Electron.IpcMainEvent, tweet_id: string) => this.unretweet(tweet_id));
+        this.subscribe('yf:request-like', (_: Electron.IpcMainEvent, tweet_id: string) => this.like(tweet_id));
+        this.subscribe('yf:destroy-like', (_: Electron.IpcMainEvent, tweet_id: string) => this.unlike(tweet_id));
+    }
+
+    like(tweet_id: string) {
+        const params = {
+            id: tweet_id,
+            include_entities: true,
+        };
+
+        this.client.post('favorites/create', params, (err: NodeTwitter.ApiError[], tweet: any, res: any) => {
+            if (err) {
+                log.debug(`Like failed: ${tweet_id}: ${JSON.stringify(err)}: ${JSON.stringify(res)}`);
+                this.sendApiFailure(err);
+                return;
+            }
+            log.debug('Like success: ', tweet.id);
+            this.sender.send('yf:like-success', tweet);
         });
-        this.subscribe('yf:undo-retweet', (_: Electron.IpcMainEvent, tweet_id: string) => {
-            this.client.post('statuses/unretweet/' + tweet_id, (err: NodeTwitter.ApiError[], tweet: any, res: any) => {
-                if (err) {
-                    log.debug(`Unretweet failed: ${tweet_id}: ${JSON.stringify(err)}: ${JSON.stringify(res)}`);
-                    this.sendApiFailure(err);
-                    return;
-                }
-                this.sender.send('yf:unretweet-success', tweet);
-                log.debug('Unretweet success: ', tweet.id);
-            });
+    }
+
+    unlike(tweet_id: string) {
+        const params = {
+            id: tweet_id,
+            include_entities: true,
+        };
+
+        this.client.post('favorites/destroy', params, (err: NodeTwitter.ApiError[], tweet: any, res: any) => {
+            if (err) {
+                log.debug(`Unlike failed: ${tweet_id}: ${JSON.stringify(err)}: ${JSON.stringify(res)}`);
+                this.sendApiFailure(err);
+                return;
+            }
+            log.debug('Unlike success: ', tweet.id);
+            this.sender.send('yf:unlike-success', tweet);
+        });
+    }
+
+    retweet(tweet_id: string) {
+        this.client.post('statuses/retweet/' + tweet_id, (err: NodeTwitter.ApiError[], tweet: any, res: any) => {
+            if (err) {
+                log.debug(`Retweet failed: ${tweet_id}: ${JSON.stringify(err)}: ${JSON.stringify(res)}`);
+                this.sendApiFailure(err);
+                return;
+            }
+            log.debug('Retweet success: ', tweet.id);
+            this.sender.send('yf:retweet-success', tweet);
+        });
+    }
+
+    unretweet(tweet_id: string) {
+        this.client.post('statuses/unretweet/' + tweet_id, (err: NodeTwitter.ApiError[], tweet: any, res: any) => {
+            if (err) {
+                log.debug(`Unretweet failed: ${tweet_id}: ${JSON.stringify(err)}: ${JSON.stringify(res)}`);
+                this.sendApiFailure(err);
+                return;
+            }
+            this.sender.send('yf:unretweet-success', tweet);
+            log.debug('Unretweet success: ', tweet.id);
         });
     }
 

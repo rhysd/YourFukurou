@@ -5,6 +5,8 @@ import {
     retweetSucceeded,
     unretweetSucceeded,
     showMessage,
+    likeSucceeded,
+    unlikeSucceeded,
 } from './actions';
 import Store from './store';
 import log from './log';
@@ -45,6 +47,9 @@ export default class IpcChannelProxy {
                 log.error('yf:retweet-success: Received status is not an retweet status: ', json);
                 return;
             }
+            // Note:
+            // 'retweeted' field from API always returns 'false'
+            // so we need to handle it in our side.
             json.retweeted_status.retweeted = true;
             json.retweeted_status.retweet_count += 1;
             Store.dispatch(retweetSucceeded(new Tweet(json)));
@@ -53,9 +58,20 @@ export default class IpcChannelProxy {
             // Note:
             // The JSON is an original retweeted tweet
             log.debug('Received channel yf:unretweet-success', json.id_str);
+            // Note:
+            // 'retweeted' field from API always returns 'false'
+            // so we need to handle it in our side.
             json.retweeted = false;
             json.retweet_count -= 1;
             Store.dispatch(unretweetSucceeded(new Tweet(json)));
+        });
+        this.subscribe('yf:like-success', (_: Electron.IpcRendererEvent, json: TweetJson) => {
+            log.debug('Received channel yf:like-success', json.id_str);
+            Store.dispatch(likeSucceeded(new Tweet(json)));
+        });
+        this.subscribe('yf:unlike-success', (_: Electron.IpcRendererEvent, json: TweetJson) => {
+            log.debug('Received channel yf:unlike-success', json.id_str);
+            Store.dispatch(unlikeSucceeded(new Tweet(json)));
         });
         log.debug('Started to receive messages');
         return this;

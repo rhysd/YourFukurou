@@ -23,7 +23,7 @@ const init: State = {
     current_message: null,
 };
 
-function replaceStatus(items: List<Item>, status: Tweet) {
+function updateStatus(items: List<Item>, status: Tweet) {
     'use strict';
     return items.map(item => {
         if (item instanceof Tweet) {
@@ -85,12 +85,32 @@ export default function root(state: State = init, action: Action) {
         }
         case Kind.RetweetSucceeded: {
             const next_state = assign({}, state) as State;
-            next_state.current_items = replaceStatus(state.current_items, action.status.getMainStatus());
+            next_state.current_items = updateStatus(state.current_items, action.status.getMainStatus());
             return next_state;
         }
         case Kind.UnretweetSucceeded: {
             const next_state = assign({}, state) as State;
-            next_state.current_items = replaceStatus(state.current_items, action.status);
+            next_state.current_items = updateStatus(state.current_items, action.status);
+            return next_state;
+        }
+        case Kind.CreateLike: {
+            // Note:
+            // The likeed status will be sent on stream
+            sendToMain('yf:request-like', action.tweet_id);
+            return state;
+        }
+        case Kind.DestroyLike: {
+            sendToMain('yf:destroy-like', action.tweet_id);
+            return state;
+        }
+        case Kind.LikeSucceeded: {
+            const next_state = assign({}, state) as State;
+            next_state.current_items = updateStatus(state.current_items, action.status);
+            return next_state;
+        }
+        case Kind.UnlikeSucceeded: {
+            const next_state = assign({}, state) as State;
+            next_state.current_items = updateStatus(state.current_items, action.status);
             return next_state;
         }
         default:
