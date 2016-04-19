@@ -185,7 +185,7 @@ export default class Twitter {
     reconnectToStream(delay_ms: number = 3000, params: Object = {}) {
         return new Promise<void>(resolve => {
             this.sender.send('yf:connection-failure');
-            window.setTimeout(delay_ms, () => {
+            setTimeout(delay_ms, () => {
                 this.connectToStream(params);
                 resolve();
             });
@@ -215,7 +215,7 @@ export default class Twitter {
                         this.sender.send('yf:connection-failure');
                     }
                     if (idx < tweets.length) {
-                        window.setTimeout(send_all, random_range(500, 5000));
+                        setTimeout(send_all, random_range(500, 5000));
                     }
                 };
 
