@@ -37,7 +37,7 @@ function authenticate_with_request_tokens(
             }
 
             oauth.getOAuthAccessToken(request_token, request_token_secret, match[2], (err, token, token_secret) => {
-                log.debug('access token: ' + token);
+                log.debug('access token:', token);
 
                 if (err) {
                     setTimeout(() => login_window.close(), 0);
@@ -66,7 +66,7 @@ function authenticate_with_request_tokens(
         });
 
         const login_url = `https://twitter.com/oauth/authenticate?oauth_token=${request_token}`;
-        log.debug('Start authentication: ' + login_url);
+        log.debug('Start authentication:', login_url);
         login_window.loadURL(login_url);
     });
 }
@@ -85,7 +85,7 @@ export function authenticate(consumer_key: string, consumer_secret: string): Pro
             'HMAC-SHA1'
         );
         oauth.getOAuthRequestToken((err, token, token_secret) => {
-            log.debug('Request token: ' + token);
+            log.debug('Request token:', token);
             if (err) {
                 reject(err);
                 return;
@@ -100,7 +100,7 @@ export function load_cached_tokens(): Promise<AccessToken> {
 
     if (process.env.YOURFUKUROU_ACCESS_TOKEN &&
         process.env.YOURFUKUROU_ACCESS_TOKEN_SECRET) {
-        log.debug('Access tokens from environment variables: ' + process.env.YOURFUKUROU_ACCESS_TOKEN);
+        log.debug('Access tokens from environment variables:', process.env.YOURFUKUROU_ACCESS_TOKEN);
 
         // TODO:
         // Verify tokens
@@ -114,7 +114,7 @@ export function load_cached_tokens(): Promise<AccessToken> {
     return new Promise((resolve, reject) => {
         readFile(config_path, 'utf8', (err, str) => {
             if (err) {
-                log.debug('Failed to load access token cache: ' + config_path);
+                log.debug('Failed to load access token cache:', config_path);
                 reject(err);
                 return;
             }

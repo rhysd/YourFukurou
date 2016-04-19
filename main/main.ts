@@ -131,7 +131,7 @@ app.once(
     () => load_cache
         .catch(_ => authenticate(consumer_key, consumer_secret))
         .then(open_window)
-        .catch(e => log.error(e))
+        .catch(e => log.error('Unexpected error on "ready" callback:', e))
 );
 
 

@@ -41,12 +41,12 @@ export default class Twitter {
 
         this.client.post('favorites/create', params, (err: NodeTwitter.ApiError[], tweet: any, res: any) => {
             if (err) {
-                log.debug(`Like failed: ${tweet_id}: ${JSON.stringify(err)}: ${JSON.stringify(res)}`);
+                log.debug('Like failed:', tweet_id, err, res);
                 this.sendApiFailure(err);
                 return;
             }
             this.sender.send('yf:like-success', tweet);
-            log.debug('Like success: ' + tweet.id);
+            log.debug('Like success:', tweet.id);
         });
     }
 
@@ -58,36 +58,36 @@ export default class Twitter {
 
         this.client.post('favorites/destroy', params, (err: NodeTwitter.ApiError[], tweet: any, res: any) => {
             if (err) {
-                log.debug(`Unlike failed: ${tweet_id}: ${JSON.stringify(err)}: ${JSON.stringify(res)}`);
+                log.debug('Unlike failed:', tweet_id, err, res);
                 this.sendApiFailure(err);
                 return;
             }
             this.sender.send('yf:unlike-success', tweet);
-            log.debug('Unlike success: ' + tweet.id);
+            log.debug('Unlike success:', tweet.id);
         });
     }
 
     retweet(tweet_id: string) {
         this.client.post('statuses/retweet/' + tweet_id, (err: NodeTwitter.ApiError[], tweet: any, res: any) => {
             if (err) {
-                log.debug(`Retweet failed: ${tweet_id}: ${JSON.stringify(err)}: ${JSON.stringify(res)}`);
+                log.debug('Retweet failed:', tweet_id, err, res);
                 this.sendApiFailure(err);
                 return;
             }
             this.sender.send('yf:retweet-success', tweet);
-            log.debug('Retweet success: ' + tweet.id);
+            log.debug('Retweet success:', tweet.id);
         });
     }
 
     unretweet(tweet_id: string) {
         this.client.post('statuses/unretweet/' + tweet_id, (err: NodeTwitter.ApiError[], tweet: any, res: any) => {
             if (err) {
-                log.debug(`Unretweet failed: ${tweet_id}: ${JSON.stringify(err)}: ${JSON.stringify(res)}`);
+                log.debug('Unretweet failed:', tweet_id, err, res);
                 this.sendApiFailure(err);
                 return;
             }
             this.sender.send('yf:unretweet-success', tweet);
-            log.debug('Unretweet success: ' + tweet.id);
+            log.debug('Unretweet success:', tweet.id);
         });
     }
 
@@ -101,14 +101,14 @@ export default class Twitter {
                 params,
                 (err: NodeTwitter.ApiError[], account: any, res: any) => {
                     if (err) {
-                        log.debug(`verify_credentials failed: ${JSON.stringify(err)}: ${JSON.stringify(account)}: ${JSON.stringify(res)}`);
+                        log.debug('verify_credentials failed:', err, account, res);
                         err[0].message += ' Login again.';
                         this.sendApiFailure(err);
                         reject(err);
                         return;
                     }
                     this.sender.send('yf:account', account);
-                    log.debug(`Account: ${account.id_str}: ${account.screen_name}`);
+                    log.debug('Account:', account.id_str, account.screen_name);
                     resolve();
                 }
             );
@@ -117,13 +117,14 @@ export default class Twitter {
 
     sendHomeTimeline(params: Object = {}) {
         return new Promise<void>((resolve, reject) => {
-            this.client.get('statuses/home_timeline', params, (err, tweets, _) => {
+            this.client.get('statuses/home_timeline', params, (err, tweets, res) => {
                 if (err) {
+                    log.debug('Home timeline Failed: ', tweets, res);
                     this.sendApiFailure(err);
                     reject(err);
                     return;
                 }
-                log.debug('statuses/home_timeline: Got tweets: ' + tweets.length);
+                log.debug('statuses/home_timeline: Got tweets:', tweets.length);
                 for (const tw of tweets.reverse()) {
                     this.sender.send('yf:tweet', tw);
                 }
@@ -153,7 +154,7 @@ export default class Twitter {
                 return;
             }
 
-            log.info('Ignored message on stream: ' + JSON.stringify(json));
+            log.info('Ignored message on stream:', json);
         });
 
         stream.on('error', (err: Error) => {
@@ -198,7 +199,7 @@ export default class Twitter {
         return new Promise<void>((resolve, reject) => {
             readFile(dummy_json_path, 'utf8', (err, data) => {
                 if (err) {
-                    log.error('File not found: ' + dummy_json_path);
+                    log.error('File not found:', dummy_json_path);
                     reject();
                     return;
                 }
