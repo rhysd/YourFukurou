@@ -2,26 +2,15 @@ import {join} from 'path';
 import {Menu, shell, app} from 'electron';
 import openAboutWindow from 'about-window';
 
-function openAboutThisApp(main: Electron.BrowserWindow) {
-    'use strict';
-    const icon_path = join(__dirname, '..', 'images', 'icon.png');
-    let win = openAboutWindow({
-        icon_path,
-        copyright: 'Copyright (c) 2015 rhysd',
-    });
-    const closer = () => {
-        if (win !== null) { win.close(); }
-    };
-    main.on('closed', closer);
-    win.on('closed', () => main.removeListener('closed', closer));
-}
-
 export function createMenuTemplate(main: Electron.BrowserWindow) {
     'use strict';
     let help_submenu = [
         {
             label: 'About YourFukurou',
-            click: () => openAboutThisApp(main),
+            click: () => openAboutWindow({
+                icon_path: join(__dirname, '..', 'images', 'icon.png'),
+                copyright: 'Copyright (c) 2015 rhysd',
+            }),
         },
         // TODO:
         // Should add a usage documentation and a menu item to it.
@@ -110,7 +99,7 @@ export function createMenuTemplate(main: Electron.BrowserWindow) {
                     accelerator: 'CmdOrCtrl+W',
                     role: 'close',
                 },
-            ]
+            ],
         },
         {
             label: 'Help',
@@ -125,7 +114,10 @@ export function createMenuTemplate(main: Electron.BrowserWindow) {
             submenu: [
                 {
                     label: 'About YourFukurou',
-                    click: () => openAboutThisApp(main),
+                    click: () => openAboutWindow({
+                        icon_path: join(__dirname, '..', 'images', 'icon.png'),
+                        copyright: 'Copyright (c) 2015 rhysd',
+                    }),
                 },
                 {
                     type: 'separator',
@@ -164,7 +156,7 @@ export function createMenuTemplate(main: Electron.BrowserWindow) {
         });
         help_submenu.push(
             {
-                type: 'separator'
+                type: 'separator',
             },
             {
                 label: 'Bring All to Front',
@@ -172,7 +164,7 @@ export function createMenuTemplate(main: Electron.BrowserWindow) {
             }
         );
     }
-    return Menu.buildFromTemplate(template)
+    return Menu.buildFromTemplate(template);
 }
 
 export default function setApplicationMenu(main: Electron.BrowserWindow) {
