@@ -67,11 +67,11 @@ function open_window(access: AccessToken) {
             powerMonitor.on('resume', () => {
                 log.debug("PC's resuming, will reconnect after 3secs: " + twitter.isStopped());
                 if (twitter.isStopped()) {
-                    twitter.reconnectToStream().catch(e => log.error(e));
+                    twitter.reconnectToStream().catch(e => log.error('Unexpected error on streaming after reconnection', e));
                 }
             });
 
-            twitter.startStreaming(sender).catch(e => log.error(e));
+            twitter.startStreaming(sender).catch(e => log.error('Unexpected error on streaming', e));
         });
     } else {
         log.error('Failed to get access tokens');

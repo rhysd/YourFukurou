@@ -107,14 +107,14 @@ export default class Twitter {
 
         stream.on('error', (err: Error) => {
             log.error('Error occurred on stream, will reconnect after 3secs: ', err);
-            this.reconnectToStream().catch(e => log.error(e));
+            this.reconnectToStream().catch(e => log.error('Error on reconnecting because of stream error', e));
         });
 
         stream.on('end', (response: IncomingMessage) => {
             log.error('Unexpected end message on stream, will reconnect after 3secs: ', response.statusCode);
             // TODO:
             // Handle the tweets while stream was not connected
-            this.reconnectToStream().catch(e => log.error(e));
+            this.reconnectToStream().catch(e => log.error('Error on reconnecting because of unexpected stream end', e));
         });
     }
 
