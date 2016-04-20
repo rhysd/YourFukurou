@@ -181,11 +181,9 @@ export function deleteStatus(tweet_id: string) {
 
 export function changeEditorState(editor: EditorState) {
     'use strict';
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.ChangeEditorState,
-            editor,
-        }));
+    return {
+        type: Kind.ChangeEditorState,
+        editor,
     };
 }
 

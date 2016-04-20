@@ -13,17 +13,25 @@ interface TweetFormProps extends React.Props<any> {
 // We need to use CSSTransitionGroup to add open/close animation
 //   https://facebook.github.io/react/docs/animation.html
 class TweetForm extends React.Component<TweetFormProps, {}> {
-    node: HTMLElement;
+    refs: {
+        body: HTMLElement;
+        editor: HTMLElement;
+        [s: string]: React.Component<any, any> | Element;
+    }
 
     close() {
-        this.node.addEventListener('animationend', () => {
+        this.refs.body.addEventListener('animationend', () => {
             this.props.dispatch(changeEditorVisibility(false));
         });
-        this.node.className = 'tweet-form animated fadeOutUp';
+        this.refs.body.className = 'tweet-form animated fadeOutUp';
+    }
+
+    componentDidMount() {
+        this.refs.editor.focus();
     }
 
     render() {
-        return <div className="tweet-form animated fadeInDown" ref={r => { this.node = r; }}>
+        return <div className="tweet-form animated fadeInDown" ref="body">
             <IconButton
                 className="tweet-form__cancel-btn"
                 name="times"
@@ -33,7 +41,8 @@ class TweetForm extends React.Component<TweetFormProps, {}> {
             <div className="tweet-form__input">
                 <Editor
                     editorState={this.props.editor}
-                    onChange={editor => this.props.dispatch(changeEditorState(editor))}
+                    onChange={e => this.props.dispatch(changeEditorState(e))}
+                    ref="editor"
                 />
             </div>
         </div>;
