@@ -257,12 +257,18 @@ body {
   display: flex;
   animation-duration: 0.5s;
   -webkit-animation-duration: 0.5s;
+  align-items: center;
 }
 .tweet-form__input {
   background-color: white;
   width: 100%;
   flex: auto;
   border-radius: 4px;
-  min-height: 1rem;
   padding: 4px;
+}
+.tweet-form__cancel-btn {
+  color: var(--color-dark-active);
+  cursor: pointer;
+  margin-right: 8px;
+  font-size: 1em;
 }
