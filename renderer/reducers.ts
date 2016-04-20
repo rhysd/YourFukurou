@@ -1,5 +1,6 @@
 import {List} from 'immutable';
 import assign = require('object-assign');
+import {EditorState} from 'draft-js';
 import {Action, Kind} from './actions';
 import Item from './item/item';
 import Tweet, {TwitterUser} from './item/tweet';
@@ -17,12 +18,16 @@ export interface State {
     current_items: List<Item>;
     current_message: MessageInfo;
     current_user: TwitterUser;
+    editor: EditorState;
+    editor_open: boolean;
 }
 
 const init: State = {
     current_items: List<Item>(),
     current_message: null,
     current_user: null,
+    editor: EditorState.createEmpty(),
+    editor_open: false,
 };
 
 function updateStatus(items: List<Item>, status: Tweet) {
@@ -128,6 +133,21 @@ export default function root(state: State = init, action: Action) {
                     ? item.getMainStatus().id !== id
                     : true
             ).toList();
+            return next_state;
+        }
+        case Kind.ChangeEditorState: {
+            const next_state = assign({}, state) as State;
+            next_state.editor = action.editor;
+            return next_state;
+        }
+        case Kind.ChangeEditorVisibility: {
+            const next_state = assign({}, state) as State;
+            next_state.editor_open = action.visible;
+            return next_state;
+        }
+        case Kind.ToggleEditorVisibility: {
+            const next_state = assign({}, state) as State;
+            next_state.editor_open = !state.editor_open;
             return next_state;
         }
         default:

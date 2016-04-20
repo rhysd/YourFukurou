@@ -1,3 +1,4 @@
+import {EditorState} from 'draft-js';
 import Tweet, {TwitterUser} from './item/tweet';
 import Item from './item/item';
 import Separator from './item/separator';
@@ -20,6 +21,10 @@ export enum Kind {
     DestroyLike,
     LikeSucceeded,
     UnlikeSucceeded,
+
+    ChangeEditorState,
+    ChangeEditorVisibility,
+    ToggleEditorVisibility,
 }
 
 export interface Action {
@@ -30,6 +35,8 @@ export interface Action {
     tweet_id?: string;
     status?: Tweet;
     user?: TwitterUser;
+    editor?: EditorState;
+    visible?: boolean;
 }
 
 export function addTweetToTimeline(item: Tweet) {
@@ -168,6 +175,35 @@ export function deleteStatus(tweet_id: string) {
         setImmediate(() => dispatch({
             type: Kind.DeleteStatus,
             tweet_id,
+        }));
+    };
+}
+
+export function changeEditorState(editor: EditorState) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.ChangeEditorState,
+            editor,
+        }));
+    };
+}
+
+export function changeEditorVisibility(visible: boolean) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.ChangeEditorVisibility,
+            visible,
+        }));
+    };
+}
+
+export function toggleEditorVisibility() {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.ToggleEditorVisibility,
         }));
     };
 }

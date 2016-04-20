@@ -22,6 +22,7 @@ body {
   height: 100%;
   width: 100%;
   overflow: hidden;
+  background-color: white;
 }
 #yourfukurou {
   width: 100%;
@@ -37,6 +38,11 @@ body {
   height: 100%;
   display: flex;
 }
+.app-root__main {
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+}
 
 .side-menu {
   display: flex;
@@ -44,8 +50,8 @@ body {
   padding-top: 32px; /* for title bar inset */
   height: calc(100% - 32px);
   width: var(--sidemenu-width);
-  background-color: var(--background-color-dark);
   color: #eeeeee;
+  background-color: var(--background-color-dark);
   flex: none;
   align-items: center;
   overflow: hidden;
@@ -91,6 +97,7 @@ body {
   height: 100%;
   overflow: auto;
   padding: 4px;
+  background-color: white;
 }
 
 .tweet__body {
@@ -183,8 +190,8 @@ body {
   z-index: 1;
   opacity: 0.9;
   margin-left: var(--sidemenu-width);
-  -webkit-animation-duration: 0.5s;
   animation-duration: 0.5s;
+  -webkit-animation-duration: 0.5s;
 }
 .message__body.message__body_error {
   color: var(--color-error);
@@ -239,4 +246,23 @@ body {
 .zigzag-separator__bottom:before {
   background: linear-gradient(45deg, transparent 33.333%, #eeeeee 33.333%, #eeeeee 66.667%, transparent 66.667%), linear-gradient(-45deg, transparent 33.333%, #eeeeee 33.333%, #eeeeee 66.667%, transparent 66.667%);
   background-size: 20px 40px;
+}
+
+.tweet-form {
+  flex: none;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--background-color-dark);
+  padding: 8px;
+  display: flex;
+  animation-duration: 0.5s;
+  -webkit-animation-duration: 0.5s;
+}
+.tweet-form__input {
+  background-color: white;
+  width: 100%;
+  flex: auto;
+  border-radius: 4px;
+  min-height: 1rem;
+  padding: 4px;
 }
