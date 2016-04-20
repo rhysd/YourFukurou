@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import IconButton from './icon_button';
 import Avatar from './avatar';
-import {showMessage, openEditor} from '../actions';
+import {showMessage, toggleEditorVisibility} from '../actions';
 import {TwitterUser} from '../item/tweet';
 
 interface SideMenuProps extends React.Props<any> {
@@ -25,7 +25,7 @@ const SideMenu = (props: SideMenuProps) => (
             className="side-menu__button side-menu__button_active"
             name="pencil-square-o"
             tip="New Tweet"
-            onClick={() => props.dispatch(openEditor())}
+            onClick={() => props.dispatch(toggleEditorVisibility())}
         />
         <IconButton
             className="side-menu__button side-menu__button_active"

@@ -22,8 +22,9 @@ export enum Kind {
     LikeSucceeded,
     UnlikeSucceeded,
 
-    OpenEditor,
-    SaveAndCloseEditor,
+    ChangeEditorState,
+    ChangeEditorVisibility,
+    ToggleEditorVisibility,
 }
 
 export interface Action {
@@ -178,21 +179,31 @@ export function deleteStatus(tweet_id: string) {
     };
 }
 
-export function openEditor() {
+export function changeEditorState(editor: EditorState) {
     'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
-            type: Kind.OpenEditor,
+            type: Kind.ChangeEditorState,
+            editor,
         }));
     };
 }
 
-export function saveAndCloseEditor(editor: EditorState) {
+export function changeEditorVisibility(visible: boolean) {
     'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
-            type: Kind.SaveAndCloseEditor,
-            editor,
+            type: Kind.ChangeEditorVisibility,
+            visible,
+        }));
+    };
+}
+
+export function toggleEditorVisibility() {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.ToggleEditorVisibility,
         }));
     };
 }

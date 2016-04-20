@@ -135,15 +135,19 @@ export default function root(state: State = init, action: Action) {
             ).toList();
             return next_state;
         }
-        case Kind.OpenEditor: {
-            const next_state = assign({}, state) as State;
-            next_state.editor_open = true;
-            return next_state;
-        }
-        case Kind.SaveAndCloseEditor: {
+        case Kind.ChangeEditorState: {
             const next_state = assign({}, state) as State;
             next_state.editor = action.editor;
-            next_state.editor_open = false;
+            return next_state;
+        }
+        case Kind.ChangeEditorVisibility: {
+            const next_state = assign({}, state) as State;
+            next_state.editor_open = action.visible;
+            return next_state;
+        }
+        case Kind.ToggleEditorVisibility: {
+            const next_state = assign({}, state) as State;
+            next_state.editor_open = !state.editor_open;
             return next_state;
         }
         default:

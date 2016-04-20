@@ -1,67 +1,39 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Editor, EditorState} from 'draft-js';
-import {saveAndCloseEditor} from '../../actions';
+import {changeEditorState, changeEditorVisibility} from '../../actions';
 import IconButton from '../icon_button';
 
-interface TweetFormProps extends React.Props<TweetForm> {
+interface TweetFormProps extends React.Props<any> {
     editor: EditorState;
     dispatch?: Redux.Dispatch;
 }
 
-interface TweetFormState {
-    editor: EditorState;
-}
-
-// XXX:
-// We use component local state because when global state holding
-// an editor state and dispatching an action on every onChange callback,
-// editor update is a little slow and it breaks Japanese composition
-// in my local environment.
-//
 // TODO:
 // We need to use CSSTransitionGroup to add open/close animation
 //   https://facebook.github.io/react/docs/animation.html
-class TweetForm extends React.Component<TweetFormProps, TweetFormState> {
-    onChange: (e: EditorState) => void;
-    focus: () => void;
-    refs: {
-        node: HTMLElement;
-        editor: HTMLElement;
-        [s: string]: React.Component<any, any> | Element;
-    };
-
-    constructor(props: TweetFormProps) {
-        super(props);
-        this.state = {editor: props.editor};
-        this.onChange = editor => this.setState({editor});
-        this.focus = () => this.refs.editor.focus();
-    }
+class TweetForm extends React.Component<TweetFormProps, {}> {
+    node: HTMLElement;
 
     close() {
-        this.refs.node.addEventListener('animationend', () => {
-            this.props.dispatch(saveAndCloseEditor(this.state.editor));
+        this.node.addEventListener('animationend', () => {
+            this.props.dispatch(changeEditorVisibility(false));
         });
-        this.refs.node.className = 'tweet-form animated fadeOutUp';
-    }
-
-    componentDidMount() {
-        this.focus();
+        this.node.className = 'tweet-form animated fadeOutUp';
     }
 
     render() {
-        return <div className="tweet-form animated fadeInDown" ref="node">
+        return <div className="tweet-form animated fadeInDown" ref={r => { this.node = r; }}>
             <IconButton
                 className="tweet-form__cancel-btn"
                 name="times"
                 tip="cancel"
                 onClick={() => this.close()}
             />
-            <div className="tweet-form__input" onClick={this.focus}>
+            <div className="tweet-form__input">
                 <Editor
-                    editorState={this.state.editor}
-                    onChange={this.onChange}
-                    ref="editor"
+                    editorState={this.props.editor}
+                    onChange={editor => this.props.dispatch(changeEditorState(editor))}
                 />
             </div>
         </div>;
@@ -69,3 +41,4 @@ class TweetForm extends React.Component<TweetFormProps, TweetFormState> {
 }
 
 export default connect()(TweetForm);
+
