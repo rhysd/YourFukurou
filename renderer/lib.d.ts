@@ -12,3 +12,7 @@ interface MessageInfo {
     text: string;
     kind: MessageKind;
 }
+
+interface String {
+    contains: (sub: string) => boolean;
+}
