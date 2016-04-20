@@ -1,12 +1,17 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Editor, EditorState} from 'draft-js';
-import {changeEditorState, changeEditorVisibility} from '../../actions';
+import {changeEditorState, changeEditorVisibility, showMessage} from '../../actions';
 import IconButton from '../icon_button';
 
 interface TweetFormProps extends React.Props<any> {
     editor: EditorState;
     dispatch?: Redux.Dispatch;
+}
+
+function notImplementedYet(props: TweetFormProps) {
+    'use strict';
+    props.dispatch(showMessage('Sorry, this feature is not implemented yet.', 'error'));
 }
 
 // TODO:
@@ -43,6 +48,13 @@ class TweetForm extends React.Component<TweetFormProps, {}> {
                     editorState={this.props.editor}
                     onChange={e => this.props.dispatch(changeEditorState(e))}
                     ref="editor"
+                />
+            </div>
+            <div className="tweet-form__send-btn">
+                <IconButton
+                    name="twitter"
+                    tip="send tweet"
+                    onClick={() => notImplementedYet(this.props)}
                 />
             </div>
         </div>;

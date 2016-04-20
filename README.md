@@ -12,6 +12,8 @@ Goals :bird::
 - Plugin architecture
   - Hooks for each Twitter activities and notification
   - Enable to add other timelines rather than Twitter using React component
+- Layout customization using CSS
+  - Automatically loads `user.css` in data directory
 - Cross platform (OS X, Windows, Linux)
 
 ## For Development

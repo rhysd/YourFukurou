@@ -9,6 +9,7 @@
   --background-color-info: #e4fdda;
   --color-info: #209010;
   --sidemenu-width: 80px;
+  --color-twitter: #1da1f2;
 }
 html {
   width: 100%;
@@ -267,8 +268,18 @@ body {
   padding: 4px;
 }
 .tweet-form__cancel-btn {
+  flex: none;
   color: var(--color-dark-active);
   cursor: pointer;
   margin-right: 8px;
   font-size: 1em;
+}
+.tweet-form__send-btn {
+  flex: none;
+  color: white;
+  background-color: var(--color-twitter);
+  border-radius: 4px;
+  margin-left: 8px;
+  padding: 0 8px;
+  cursor: pointer;
 }
