@@ -51,7 +51,7 @@ export default class Twitter {
                 this.sendApiFailure(err);
                 return;
             }
-            this.sender.send('yf:update-status-sccess', tweet);
+            this.sender.send('yf:update-status-success', tweet);
             log.debug('Status update success:', tweet.id);
         });
     }
@@ -206,9 +206,13 @@ export default class Twitter {
         });
     }
 
+    sendConnectionFailure() {
+        this.sender.send('yf:connection-failure');
+    }
+
     reconnectToStream(delay_ms: number = 3000, params: Object = {}) {
         return new Promise<void>(resolve => {
-            this.sender.send('yf:connection-failure');
+            this.sendConnectionFailure();
             setTimeout(delay_ms, () => {
                 this.connectToStream(params);
                 resolve();
