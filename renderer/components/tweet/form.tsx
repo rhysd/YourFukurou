@@ -108,6 +108,7 @@ class TweetForm extends React.Component<TweetFormProps, {}> {
             <div className="tweet-form__input">
                 <Editor
                     editorState={this.props.editor}
+                    placeholder="Tweet..."
                     handleKeyCommand={this.keyCommandHandler}
                     handleReturn={this.returnHandler}
                     keyBindingFn={this.keyBindingHandler}
