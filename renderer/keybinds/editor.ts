@@ -2,8 +2,6 @@ import * as I from 'immutable';
 import * as React from 'react';
 import {KeyBindingUtil} from 'draft-js';
 import KeyBinds from './keybinds';
-import Store from '../store';
-import {showMessage} from '../actions';
 import log from '../log';
 
 const {
@@ -62,13 +60,7 @@ function getCodeWorkaround(e: React.KeyboardEvent) {
     }
 }
 
-const ActionHandlers = I.Map<EditorAction, () => void>({
-    'send-tweet': () => {
-        Store.dispatch(
-            showMessage('Sorry, this feature is not implemented yet.', 'error')
-        );
-    },
-});
+const ActionHandlers = I.Map<EditorAction, () => void>();
 
 export default class EditorKeymaps {
     private keybinds: KeyBinds<EditorAction>;
@@ -111,15 +103,19 @@ export default class EditorKeymaps {
 
     // Note:
     // draft-js distinguish 'Return' keydown event from other keydown events
-    handleReturn(e: React.KeyboardEvent) {
-        const resolved = this.keybinds.resolveEvent({
+
+    resolveReturnAction(e: React.KeyboardEvent) {
+        return this.keybinds.resolveEvent({
             charcode: 13,
             code: 'Enter',
             ctrlKey: isCtrlKeyCommand(e),
             altKey: isOptionKeyCommand(e),
             metaKey: hasCommandModifier(e),
         });
+    }
 
+    handleReturn(e: React.KeyboardEvent) {
+        const resolved = this.resolveReturnAction(e);
         if (resolved === null) {
             return false;
         }

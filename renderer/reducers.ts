@@ -55,6 +55,11 @@ function updateStatus(items: List<Item>, status: Tweet) {
 export default function root(state: State = init, action: Action) {
     'use strict';
     switch (action.type) {
+        case Kind.ChangeEditorState: {
+            const next_state = assign({}, state) as State;
+            next_state.editor = action.editor;
+            return next_state;
+        }
         case Kind.AddTweetToTimeline: {
             const next_state = assign({}, state) as State;
             next_state.current_items = state.current_items.unshift(action.item);
@@ -138,11 +143,6 @@ export default function root(state: State = init, action: Action) {
             ).toList();
             return next_state;
         }
-        case Kind.ChangeEditorState: {
-            const next_state = assign({}, state) as State;
-            next_state.editor = action.editor;
-            return next_state;
-        }
         case Kind.ChangeEditorVisibility: {
             const next_state = assign({}, state) as State;
             next_state.editor_open = action.visible;
@@ -151,6 +151,20 @@ export default function root(state: State = init, action: Action) {
         case Kind.ToggleEditorVisibility: {
             const next_state = assign({}, state) as State;
             next_state.editor_open = !state.editor_open;
+            return next_state;
+        }
+        case Kind.UpdateStatus: {
+            const next_state = assign({}, state) as State;
+
+            // Note:
+            // Add more status information (e.g. picture to upload)
+            sendToMain('yf:update-status', action.text, [
+                /* TODO: in_reply_to ids */
+            ]);
+
+            // Note: Reset context to clear text input
+            next_state.editor = EditorState.createEmpty();
+
             return next_state;
         }
         default:

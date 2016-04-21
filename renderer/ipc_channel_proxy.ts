@@ -83,6 +83,10 @@ export default class IpcChannelProxy {
             log.debug('Received channel yf:delete-status', json.status.id_str);
             Store.dispatch(deleteStatus(json.status.id_str));
         });
+        this.subscribe('yf:update-status-success', (_: Electron.IpcRendererEvent, json: TweetJson) => {
+            log.debug('Received channel yf:unlike-success', json.id_str);
+            Store.dispatch(showMessage('Tweeted!', 'info'));
+        });
         log.debug('Started to receive messages');
         return this;
     }

@@ -25,6 +25,8 @@ export enum Kind {
     ChangeEditorState,
     ChangeEditorVisibility,
     ToggleEditorVisibility,
+
+    UpdateStatus,
 }
 
 export interface Action {
@@ -202,6 +204,16 @@ export function toggleEditorVisibility() {
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.ToggleEditorVisibility,
+        }));
+    };
+}
+
+export function updateStatus(text: string) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.UpdateStatus,
+            text,
         }));
     };
 }

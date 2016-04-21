@@ -31,6 +31,29 @@ export default class Twitter {
         this.subscribe('yf:undo-retweet', (_: Electron.IpcMainEvent, tweet_id: string) => this.unretweet(tweet_id));
         this.subscribe('yf:request-like', (_: Electron.IpcMainEvent, tweet_id: string) => this.like(tweet_id));
         this.subscribe('yf:destroy-like', (_: Electron.IpcMainEvent, tweet_id: string) => this.unlike(tweet_id));
+        this.subscribe('yf:update-status', (_: Electron.IpcMainEvent, text: string, in_reply_to?: string) => this.updateStatus(text, in_reply_to));
+    }
+
+    updateStatus(text: string, in_reply_to?: string) {
+        // TODO
+        console.log('Update status!: ' + text);
+        const params = {
+            status: text,
+            in_reply_to_status_id: undefined as string,
+            trim_user: false,
+        };
+        if (in_reply_to) {
+            params.in_reply_to_status_id = in_reply_to;
+        }
+        this.client.post('statuses/update', params, (err: NodeTwitter.ApiError[], tweet: any, res: any) => {
+            if (err) {
+                log.debug('Status update failed:', text, in_reply_to, err, res);
+                this.sendApiFailure(err);
+                return;
+            }
+            this.sender.send('yf:update-status-sccess', tweet);
+            log.debug('Status update success:', tweet.id);
+        });
     }
 
     like(tweet_id: string) {

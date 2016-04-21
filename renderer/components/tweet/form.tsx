@@ -1,7 +1,12 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Editor, EditorState, getDefaultKeyBinding} from 'draft-js';
-import {changeEditorState, changeEditorVisibility, showMessage} from '../../actions';
+import {
+    changeEditorState,
+    changeEditorVisibility,
+    showMessage,
+    updateStatus,
+} from '../../actions';
 import IconButton from '../icon_button';
 import EditorKeybinds from '../../keybinds/editor';
 import log from '../../log';
@@ -52,7 +57,17 @@ class TweetForm extends React.Component<TweetFormProps, {}> {
         this.keyCommandHandler =
             cmd => this.props.keybinds.handleAction(cmd);
         this.returnHandler =
-            e => this.props.keybinds.handleReturn(e);
+            e => {
+                const a = this.props.keybinds.resolveReturnAction(e);
+                switch (a) {
+                    case 'send-tweet': {
+                        this.sendTweet();
+                        return true;
+                    }
+                    default:
+                        return false;
+                }
+            };
     }
 
     refs: {
@@ -66,6 +81,16 @@ class TweetForm extends React.Component<TweetFormProps, {}> {
             this.props.dispatch(changeEditorVisibility(false));
         });
         this.refs.body.className = 'tweet-form animated fadeOutUp';
+    }
+
+    sendTweet() {
+        const content = this.props.editor.getCurrentContent();
+        if (content.hasText()) {
+            this.props.dispatch(
+                updateStatus(content.getPlainText())
+            );
+            this.close();
+        }
     }
 
     componentDidMount() {
@@ -95,7 +120,7 @@ class TweetForm extends React.Component<TweetFormProps, {}> {
                 <IconButton
                     name="twitter"
                     tip="send tweet"
-                    onClick={() => notImplementedYet(this.props)}
+                    onClick={() => this.sendTweet()}
                 />
             </div>
         </div>;

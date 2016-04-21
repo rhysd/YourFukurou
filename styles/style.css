@@ -263,6 +263,7 @@ body {
 .tweet-form__input {
   background-color: white;
   width: 100%;
+  max-width: 100%;
   flex: auto;
   border-radius: 4px;
   padding: 4px;
