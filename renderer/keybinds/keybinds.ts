@@ -18,15 +18,39 @@ interface PreparsedSeq {
 const ReCharFromSeq = /[^+]+$/;
 const SpecialChars = {
     Enter: 'enter',
-    // TODO
+    Tab: 'tab',
+    Backspace: 'backspace',
+    PageUp: 'pageup',
+    PageDown: 'pagedown',
+    Escape: 'escape',
+    Space: 'space',
+    End: 'end',
+    Home: 'home',
+    ArrowLeft: 'left',
+    ArrowRight: 'right',
+    ArrowUp: 'up',
+    ArrowDown: 'down',
+    Insert: 'insert',
+    Delete: 'delete',
+    Help: 'help',
+    F1: 'f1',
+    F2: 'f2',
+    F3: 'f3',
+    F4: 'f4',
+    F5: 'f5',
+    F6: 'f6',
+    F7: 'f7',
+    F8: 'f8',
+    F9: 'f9',
+    F10: 'f10',
+    F11: 'f11',
+    F12: 'f12',
 } as {[c: string]: string};
 
 function getCharFrom(e: KeyEvent) {
     'use strict';
-    for (const c in SpecialChars) {
-        if (e.code === c) {
-            return SpecialChars[c];
-        }
+    if (e.code in SpecialChars) {
+        return SpecialChars[e.code];
     }
     return String.fromCharCode(e.charcode);
 }
@@ -83,7 +107,11 @@ export default class KeyBinds<ActionType> {
             e.altKey = true;
         }
         if (seq.contains('cmd+')) {
-            e.metaKey = true;
+            if (process.platform === 'darwin') {
+                e.metaKey = true;
+            } else {
+                e.ctrlKey = true;
+            }
         }
 
         return e;

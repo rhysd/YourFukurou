@@ -20,30 +20,25 @@ function isEditorAction(s: string): s is EditorAction {
     return s === 'send-tweet';
 }
 
-// TODO:
-// This is imported from neovim-component.  It should be reworked.
 function getCodeWorkaround(key_code: number) {
     'use strict';
     switch (key_code) {
-        case 0:   return 'Nul';
-        case 8:   return 'BS';
+        case 8:   return 'Backspace';
         case 9:   return 'Tab';
-        case 10:  return 'NL';
         case 13:  return 'Enter';
         case 33:  return 'PageUp';
         case 34:  return 'PageDown';
-        case 27:  return 'Esc';
+        case 27:  return 'Escape';
         case 32:  return 'Space';
         case 35:  return 'End';
         case 36:  return 'Home';
-        case 37:  return 'Left';
-        case 38:  return 'Up';
-        case 39:  return 'Right';
-        case 40:  return 'Down';
+        case 37:  return 'ArrowLeft';
+        case 38:  return 'ArrowUp';
+        case 39:  return 'ArrowRight';
+        case 40:  return 'ArrowDown';
         case 45:  return 'Insert';
-        case 46:  return 'Del';
+        case 46:  return 'Delete';
         case 47:  return 'Help';
-        case 92:  return 'Bslash';
         case 112: return 'F1';
         case 113: return 'F2';
         case 114: return 'F3';
