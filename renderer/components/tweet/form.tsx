@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {Editor, EditorState, getDefaultKeyBinding} from 'draft-js';
 import {
     changeEditorState,
-    changeEditorVisibility,
+    closeEditor,
     showMessage,
     updateStatus,
 } from '../../actions';
@@ -78,7 +78,7 @@ class TweetForm extends React.Component<TweetFormProps, {}> {
 
     close() {
         this.refs.body.addEventListener('animationend', () => {
-            this.props.dispatch(changeEditorVisibility(false));
+            this.props.dispatch(closeEditor());
         });
         this.refs.body.className = 'tweet-form animated fadeOutUp';
     }

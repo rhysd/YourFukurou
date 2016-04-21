@@ -23,8 +23,9 @@ export enum Kind {
     UnlikeSucceeded,
 
     ChangeEditorState,
-    ChangeEditorVisibility,
-    ToggleEditorVisibility,
+    OpenEditor,
+    CloseEditor,
+    ToggleEditor,
 
     UpdateStatus,
 }
@@ -38,7 +39,6 @@ export interface Action {
     status?: Tweet;
     user?: TwitterUser;
     editor?: EditorState;
-    visible?: boolean;
 }
 
 export function addTweetToTimeline(item: Tweet) {
@@ -189,21 +189,31 @@ export function changeEditorState(editor: EditorState) {
     };
 }
 
-export function changeEditorVisibility(visible: boolean) {
+export function openEditor(in_reply_to: Tweet = null) {
     'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
-            type: Kind.ChangeEditorVisibility,
-            visible,
+            type: Kind.OpenEditor,
+            status: in_reply_to,
         }));
     };
 }
 
-export function toggleEditorVisibility() {
+export function closeEditor() {
     'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
-            type: Kind.ToggleEditorVisibility,
+            type: Kind.CloseEditor,
+        }));
+    };
+}
+
+export function toggleEditor(in_reply_to: Tweet = null) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.ToggleEditor,
+            status: in_reply_to,
         }));
     };
 }

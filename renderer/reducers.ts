@@ -19,9 +19,11 @@ export interface State {
     current_items: List<Item>;
     current_message: MessageInfo;
     current_user: TwitterUser;
+
     editor: EditorState;
     editor_open: boolean;
     editor_keybinds: EditorKeybinds;
+    editor_in_reply_to_status: Tweet;
 }
 
 const init: State = {
@@ -31,6 +33,7 @@ const init: State = {
     editor: EditorState.createEmpty(),
     editor_open: false,
     editor_keybinds: new EditorKeybinds(),
+    editor_in_reply_to_status: null,
 };
 
 function updateStatus(items: List<Item>, status: Tweet) {
@@ -143,14 +146,22 @@ export default function root(state: State = init, action: Action) {
             ).toList();
             return next_state;
         }
-        case Kind.ChangeEditorVisibility: {
+        case Kind.OpenEditor: {
             const next_state = assign({}, state) as State;
-            next_state.editor_open = action.visible;
+            next_state.editor_open = true;
+            next_state.editor_in_reply_to_status = action.status;
             return next_state;
         }
-        case Kind.ToggleEditorVisibility: {
+        case Kind.CloseEditor: {
+            const next_state = assign({}, state) as State;
+            next_state.editor_open = false;
+            next_state.editor_in_reply_to_status = null;
+            return next_state;
+        }
+        case Kind.ToggleEditor: {
             const next_state = assign({}, state) as State;
             next_state.editor_open = !state.editor_open;
+            next_state.editor_in_reply_to_status = next_state.editor_open ?  action.status : null;
             return next_state;
         }
         case Kind.UpdateStatus: {
