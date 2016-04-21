@@ -1,6 +1,6 @@
 import {List} from 'immutable';
 import assign = require('object-assign');
-import {EditorState} from 'draft-js';
+import {EditorState, Modifier} from 'draft-js';
 import {Action, Kind} from './actions';
 import Item from './item/item';
 import Tweet, {TwitterUser} from './item/tweet';
@@ -150,6 +150,24 @@ export default function root(state: State = init, action: Action) {
             const next_state = assign({}, state) as State;
             next_state.editor_open = true;
             next_state.editor_in_reply_to_status = action.status;
+            if (next_state.editor_in_reply_to_status === null) {
+                return;
+            }
+
+            const next_content
+                = Modifier.replaceText(
+                    state.editor.getCurrentContent(),
+                    state.editor.getSelection(),
+                    `@${action.status.getMainStatus().user.screen_name} `
+                );
+            next_state.editor = EditorState.moveSelectionToEnd(
+                EditorState.push(
+                    state.editor,
+                    next_content,
+                    'insert-characters'
+                )
+            );
+
             return next_state;
         }
         case Kind.CloseEditor: {
@@ -169,12 +187,11 @@ export default function root(state: State = init, action: Action) {
 
             // Note:
             // Add more status information (e.g. picture to upload)
-            sendToMain('yf:update-status', action.text, [
-                /* TODO: in_reply_to ids */
-            ]);
+            sendToMain('yf:update-status', action.text, action.in_reply_to_id);
 
             // Note: Reset context to clear text input
             next_state.editor = EditorState.createEmpty();
+            next_state.editor_in_reply_to_status = null;
 
             return next_state;
         }

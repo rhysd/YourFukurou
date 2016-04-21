@@ -26,7 +26,7 @@ class Message extends React.Component<MessageProps, {}> {
     }
 
     componentDidMount() {
-        const duration = this.props.duration || 5000;
+        const duration = this.props.duration || 3000;
         if (duration !== Infinity) {
             setTimeout(() => this.setupDismiss(), duration);
         }

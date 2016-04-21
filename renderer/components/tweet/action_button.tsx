@@ -8,6 +8,7 @@ import {
     undoRetweet,
     createLike,
     destroyLike,
+    openEditor,
 } from '../../actions';
 
 type TweetActionKind = 'reply' | 'like' | 'retweet';
@@ -48,7 +49,7 @@ function onRetweetClicked(props: TweetActionButtonProps) {
 
 function onReplyClicked(props: TweetActionButtonProps) {
     'use strict';
-    notImplementedYet(props);
+    props.dispatch(openEditor(props.status));
 }
 
 function onClick(props: TweetActionButtonProps) {

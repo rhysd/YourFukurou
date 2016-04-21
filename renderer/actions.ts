@@ -39,6 +39,7 @@ export interface Action {
     status?: Tweet;
     user?: TwitterUser;
     editor?: EditorState;
+    in_reply_to_id?: string;
 }
 
 export function addTweetToTimeline(item: Tweet) {
@@ -218,12 +219,13 @@ export function toggleEditor(in_reply_to: Tweet = null) {
     };
 }
 
-export function updateStatus(text: string) {
+export function updateStatus(text: string, in_reply_to_id?: string) {
     'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.UpdateStatus,
             text,
+            in_reply_to_id,
         }));
     };
 }

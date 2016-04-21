@@ -7,7 +7,7 @@ import SideMenu from './side_menu';
 import Timeline from './timeline';
 import TweetForm from './tweet/form';
 import Item from '../item/item';
-import {TwitterUser} from '../item/tweet';
+import Tweet, {TwitterUser} from '../item/tweet';
 import EditorKeybinds from '../keybinds/editor';
 
 interface AppProps {
@@ -17,6 +17,7 @@ interface AppProps {
     editor: EditorState;
     editorOpen: boolean;
     editorKeybinds: EditorKeybinds;
+    inReplyTo: Tweet;
 }
 
 function renderForm(props: AppProps) {
@@ -24,6 +25,7 @@ function renderForm(props: AppProps) {
         return <TweetForm
             editor={props.editor}
             keybinds={props.editorKeybinds}
+            inReplyTo={props.inReplyTo}
         />;
     } else {
         return undefined;
@@ -48,6 +50,7 @@ function select(state: State): AppProps {
         editor: state.editor,
         editorOpen: state.editor_open,
         editorKeybinds: state.editor_keybinds,
+        inReplyTo: state.editor_in_reply_to_status,
     };
 }
 

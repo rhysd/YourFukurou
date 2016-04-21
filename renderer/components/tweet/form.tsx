@@ -9,11 +9,13 @@ import {
 } from '../../actions';
 import IconButton from '../icon_button';
 import EditorKeybinds from '../../keybinds/editor';
+import Tweet from '../../item/tweet';
 import log from '../../log';
 
 interface TweetFormProps extends React.Props<any> {
     editor: EditorState;
     keybinds: EditorKeybinds;
+    inReplyTo: Tweet;
     dispatch?: Redux.Dispatch;
 }
 
@@ -86,9 +88,8 @@ class TweetForm extends React.Component<TweetFormProps, {}> {
     sendTweet() {
         const content = this.props.editor.getCurrentContent();
         if (content.hasText()) {
-            this.props.dispatch(
-                updateStatus(content.getPlainText())
-            );
+            const irt = this.props.inReplyTo ? this.props.inReplyTo.getMainStatus().id : null;
+            this.props.dispatch(updateStatus(content.getPlainText(), irt));
             this.close();
         }
     }
