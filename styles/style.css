@@ -3,7 +3,7 @@
   --color-dark-active: #eeeeee;
   --color-dark-inactive: #888888;
   --text-link-color: #2185d0;
-  --weak-text-link-color: #888888;
+  --color-weak-text-link: #888888;
   --background-color-error: #ffc7c7;
   --color-error: #ff4f44;
   --background-color-info: #e4fdda;
@@ -123,7 +123,7 @@ body {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: var(--weak-text-link-color);
+  color: var(--color-weak-text-link);
 }
 .tweet__secondary-name {
   flex: none;
@@ -139,7 +139,7 @@ body {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: var(--weak-text-link-color);
+  color: var(--color-weak-text-link);
   font-size: 0.8rem;
 }
 .tweet__primary {
@@ -159,13 +159,13 @@ body {
 }
 .tweet__primary-createdby {
   flex: none;
-  color: var(--weak-text-link-color);
+  color: var(--color-weak-text-link);
   text-align: right;
 }
 
 .tweet-actions {
   display: flex;
-  color: var(--weak-text-link-color);
+  color: var(--color-weak-text-link);
 }
 .tweet-actions > * {
   flex: auto;
@@ -278,9 +278,14 @@ body {
 .tweet-form__send-btn {
   flex: none;
   color: white;
-  background-color: var(--color-twitter);
   border-radius: 4px;
   margin-left: 8px;
   padding: 4px 8px;
   cursor: pointer;
+}
+.tweet-form__send-btn.tweet-form__send-btn_active {
+  background-color: var(--color-twitter);
+}
+.tweet-form__send-btn.tweet-form__send-btn_inactive {
+  background-color: var(--color-weak-text-link);
 }

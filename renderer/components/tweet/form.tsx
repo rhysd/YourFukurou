@@ -98,6 +98,9 @@ class TweetForm extends React.Component<TweetFormProps, {}> {
     }
 
     render() {
+        const has_text = this.props.editor.getCurrentContent().hasText();
+        const btn_state = has_text ? 'tweet-form__send-btn_active' : 'tweet-form__send-btn_inactive';
+
         return <div className="tweet-form animated fadeInDown" ref="body">
             <IconButton
                 className="tweet-form__cancel-btn"
@@ -117,7 +120,7 @@ class TweetForm extends React.Component<TweetFormProps, {}> {
                     ref="editor"
                 />
             </div>
-            <div className="tweet-form__send-btn">
+            <div className={'tweet-form__send-btn ' + btn_state}>
                 <IconButton
                     name="twitter"
                     tip="send tweet"
