@@ -5,6 +5,7 @@ import {Action, Kind} from './actions';
 import Item from './item/item';
 import Tweet, {TwitterUser} from './item/tweet';
 import Separator from './item/separator';
+import EditorKeybinds from './keybinds/editor';
 
 const electron = global.require('electron');
 const ipc = electron.ipcRenderer;
@@ -20,6 +21,7 @@ export interface State {
     current_user: TwitterUser;
     editor: EditorState;
     editor_open: boolean;
+    editor_keybinds: EditorKeybinds;
 }
 
 const init: State = {
@@ -28,6 +30,7 @@ const init: State = {
     current_user: null,
     editor: EditorState.createEmpty(),
     editor_open: false,
+    editor_keybinds: new EditorKeybinds(),
 };
 
 function updateStatus(items: List<Item>, status: Tweet) {

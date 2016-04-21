@@ -1,7 +1,10 @@
-import KeyBinds from './keybinds';
 import * as I from 'immutable';
 import * as React from 'react';
 import {KeyBindingUtil} from 'draft-js';
+import KeyBinds from './keybinds';
+import Store from '../store';
+import {showMessage} from '../actions';
+import log from '../log';
 
 const {
     hasCommandModifier,
@@ -20,12 +23,13 @@ function isEditorAction(s: string): s is EditorAction {
     return s === 'send-tweet';
 }
 
-function getCodeWorkaround(key_code: number) {
+function getCodeWorkaround(e: React.KeyboardEvent) {
     'use strict';
-    switch (key_code) {
+    switch (e.keyCode) {
         case 8:   return 'Backspace';
         case 9:   return 'Tab';
-        case 13:  return 'Enter';
+        case 10:  return 'Enter';  // NL
+        case 13:  return 'Enter';  // CR
         case 33:  return 'PageUp';
         case 34:  return 'PageDown';
         case 27:  return 'Escape';
@@ -51,12 +55,19 @@ function getCodeWorkaround(key_code: number) {
         case 121: return 'F10';
         case 122: return 'F11';
         case 123: return 'F12';
-        default:  return null;
+        default:  {
+            const ch = String.fromCharCode(e.keyCode);
+            return e.shiftKey ? ch.toUpperCase() : ch.toLowerCase();
+        }
     }
 }
 
 const ActionHandlers = I.Map<EditorAction, () => void>({
-    'open-tweet-form': () => console.error('TODO'),
+    'send-tweet': () => {
+        Store.dispatch(
+            showMessage('Sorry, this feature is not implemented yet.', 'error')
+        );
+    },
 });
 
 export default class EditorKeymaps {
@@ -84,7 +95,7 @@ export default class EditorKeymaps {
     resolveEvent(e: React.KeyboardEvent) {
         return this.keybinds.resolveEvent({
             charcode: e.keyCode,
-            code: getCodeWorkaround(e.keyCode),
+            code: getCodeWorkaround(e),
             ctrlKey: isCtrlKeyCommand(e),
             altKey: isOptionKeyCommand(e),
             metaKey: hasCommandModifier(e),
@@ -93,8 +104,30 @@ export default class EditorKeymaps {
 
     handleAction(name: string | EditorAction) {
         if (isEditorAction(name)) {
-            this.keybinds.handleAction(name);
+            return this.keybinds.handleAction(name);
         }
+        return false;
+    }
+
+    // Note:
+    // draft-js distinguish 'Return' keydown event from other keydown events
+    handleReturn(e: React.KeyboardEvent) {
+        const resolved = this.keybinds.resolveEvent({
+            charcode: 13,
+            code: 'Enter',
+            ctrlKey: isCtrlKeyCommand(e),
+            altKey: isOptionKeyCommand(e),
+            metaKey: hasCommandModifier(e),
+        });
+
+        if (resolved === null) {
+            return false;
+        }
+
+        log.debug('Return key event is resolved to ', resolved);
+
+        this.keybinds.handleAction(resolved);
+        return true;
     }
 }
 

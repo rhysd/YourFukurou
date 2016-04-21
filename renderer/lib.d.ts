@@ -14,5 +14,5 @@ interface MessageInfo {
 }
 
 interface String {
-    contains: (sub: string) => boolean;
+    includes: (sub: string) => boolean;
 }

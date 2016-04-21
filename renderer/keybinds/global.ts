@@ -46,9 +46,9 @@ export default class GlobalKeyMaps {
         });
 
         if (resolved === null) {
-            return;
+            return false;
         }
 
-        this.keybinds.handleAction(resolved);
+        return this.keybinds.handleAction(resolved);
     }
 }

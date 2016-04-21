@@ -1,4 +1,5 @@
 import * as I from 'immutable';
+import log from '../log';
 
 export interface KeyEvent {
     code: string;
@@ -70,13 +71,15 @@ export default class KeyBinds<ActionType> {
             .map(
                 (kv: [string, ActionType]) =>
                     [this.parseSequence(kv[0]), kv[1]]
-            ).filter(kv => kv[0] !== null)
+            ).filter(kv => !!kv[0])
         );
+        log.debug('Editor keymap:', this.keymap);
     }
 
     registerSequence(seq: string, action: ActionType) {
         const preparsed = this.parseSequence(seq);
         if (preparsed === null) {
+            log.debug('Preparse failed for sequence ' + seq);
             return false;
         }
         this.keymap = this.keymap.set(preparsed, action);
@@ -93,28 +96,29 @@ export default class KeyBinds<ActionType> {
             return null;
         }
 
-        let e: PreparsedSeq = {
+        let p: PreparsedSeq = {
             char: m[0],
             ctrlKey: false,
             metaKey: false,
             altKey: false,
         };
 
-        if (seq.contains('ctrl+')) {
-            e.ctrlKey = true;
+        if (seq.includes('ctrl+')) {
+            p.ctrlKey = true;
         }
-        if (seq.contains('alt+')) {
-            e.altKey = true;
+        if (seq.includes('alt+')) {
+            p.altKey = true;
         }
-        if (seq.contains('cmd+')) {
+        if (seq.includes('cmd+')) {
             if (process.platform === 'darwin') {
-                e.metaKey = true;
+                p.metaKey = true;
             } else {
-                e.ctrlKey = true;
+                p.ctrlKey = true;
             }
         }
 
-        return e;
+        log.debug('Key sequence parsed correctly:', seq, p);
+        return p;
     }
 
     resolveEvent(key: KeyEvent): ActionType {
@@ -122,34 +126,45 @@ export default class KeyBinds<ActionType> {
             return null;
         }
 
-        const filtered = this.keymap
-                .keySeq()
-                .filter(p => {
-                    if ((key.ctrlKey !== p.ctrlKey) ||
-                        (key.metaKey !== p.metaKey) ||
-                        (key.altKey !== p.altKey)) {
-                        return false;
-                    }
-                    return getCharFrom(key) === p.char;
-                });
-
-        if (filtered.isEmpty()) {
+        if (!key.code) {
+            log.debug('Ignoring modifier-only key', key);
             return null;
         }
 
-        return this.keymap.get(filtered.first());
+        const filtered = this.keymap
+                .keySeq()
+                .filter(p =>
+                    (key.ctrlKey === p.ctrlKey) &&
+                    (key.metaKey === p.metaKey) &&
+                    (key.altKey === p.altKey) &&
+                    getCharFrom(key) === p.char
+                );
+
+        if (filtered.isEmpty()) {
+            log.debug('No action found for', key);
+            return null;
+        }
+
+        const resolved = filtered.first();
+        const corresponding = this.keymap.get(resolved);
+        log.debug('Key input is resolved to action:', key, resolved, corresponding);
+
+        return corresponding;
     }
 
     handleAction(action: ActionType) {
         if (!this.enabled) {
-            return;
+            return false;
         }
 
         const handler = this.handlers.get(action);
         if (!handler) {
-            return;
+            log.debug('Action handler not found for ' + action);
+            return false;
         }
 
         handler();
+        log.debug('Action ' + action + ' was handled.');
+        return true;
     }
 }
