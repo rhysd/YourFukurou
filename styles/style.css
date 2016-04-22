@@ -267,6 +267,18 @@ body {
   flex: auto;
   border-radius: 4px;
   padding: 4px;
+  position: relative;
+}
+.tweet-form__counter {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+}
+.tweet-form__counter.tweet-form__counter_normal {
+  color: var(--color-weak-text-link);
+}
+.tweet-form__counter.tweet-form__counter_over {
+  color: var(--color-error);
 }
 .tweet-form__cancel-btn {
   flex: none;

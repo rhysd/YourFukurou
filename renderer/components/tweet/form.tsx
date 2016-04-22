@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Editor, EditorState, getDefaultKeyBinding} from 'draft-js';
+import {getTweetLength} from 'twitter-text';
 import {
     changeEditorState,
     closeEditor,
@@ -100,7 +101,10 @@ class TweetForm extends React.Component<TweetFormProps, {}> {
 
     render() {
         const has_text = this.props.editor.getCurrentContent().hasText();
-        const btn_state = has_text ? 'tweet-form__send-btn_active' : 'tweet-form__send-btn_inactive';
+        const btn_state = has_text ? 'active' : 'inactive';
+
+        const char_count = getTweetLength(this.props.editor.getCurrentContent().getPlainText());
+        const count_state = char_count > 140 ? 'over' : 'normal';
 
         return <div className="tweet-form animated fadeInDown" ref="body">
             <IconButton
@@ -120,8 +124,11 @@ class TweetForm extends React.Component<TweetFormProps, {}> {
                     onChange={e => this.props.dispatch(changeEditorState(e))}
                     ref="editor"
                 />
+                <div className={'tweet-form__counter tweet-form__counter_' + count_state}>
+                    {char_count}
+                </div>
             </div>
-            <div className={'tweet-form__send-btn ' + btn_state}>
+            <div className={'tweet-form__send-btn tweet-form__send-btn_' + btn_state}>
                 <IconButton
                     name="twitter"
                     tip="send tweet"
