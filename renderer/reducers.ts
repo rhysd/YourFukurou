@@ -174,6 +174,15 @@ export default function root(state: State = init, action: Action) {
             const next_state = assign({}, state) as State;
             next_state.editor_open = false;
             next_state.editor_in_reply_to_status = null;
+            next_state.editor = EditorState.push(
+                state.editor,
+                Modifier.replaceText(
+                    state.editor.getCurrentContent(),
+                    state.editor.getSelection(),
+                    ''
+                ),
+                'remove-range'
+            );
             return next_state;
         }
         case Kind.ToggleEditor: {
