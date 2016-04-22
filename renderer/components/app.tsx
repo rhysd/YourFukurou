@@ -5,7 +5,7 @@ import {EditorState} from 'draft-js';
 import {State} from '../reducers';
 import SideMenu from './side_menu';
 import Timeline from './timeline';
-import TweetForm from './tweet/form';
+import TweetEditor from './tweet/editor';
 import Item from '../item/item';
 import Tweet, {TwitterUser} from '../item/tweet';
 import EditorKeybinds from '../keybinds/editor';
@@ -20,9 +20,9 @@ interface AppProps {
     inReplyTo: Tweet;
 }
 
-function renderForm(props: AppProps) {
+function renderEditor(props: AppProps) {
     if (props.editorOpen) {
-        return <TweetForm
+        return <TweetEditor
             editor={props.editor}
             keybinds={props.editorKeybinds}
             inReplyTo={props.inReplyTo}
@@ -36,7 +36,7 @@ const App = (props: AppProps) => (
     <div className="app-root">
         <SideMenu user={props.user}/>
         <div className="app-root__main">
-            {renderForm(props)}
+            {renderEditor(props)}
             <Timeline items={props.items} message={props.message}/>
         </div>
     </div>

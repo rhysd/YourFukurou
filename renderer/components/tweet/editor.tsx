@@ -13,14 +13,14 @@ import EditorKeybinds from '../../keybinds/editor';
 import Tweet from '../../item/tweet';
 import log from '../../log';
 
-interface TweetFormProps extends React.Props<any> {
+interface TweetEditorProps extends React.Props<any> {
     editor: EditorState;
     keybinds: EditorKeybinds;
     inReplyTo: Tweet;
     dispatch?: Redux.Dispatch;
 }
 
-function notImplementedYet(props: TweetFormProps) {
+function notImplementedYet(props: TweetEditorProps) {
     'use strict';
     props.dispatch(showMessage('Sorry, this feature is not implemented yet.', 'error'));
 }
@@ -28,12 +28,12 @@ function notImplementedYet(props: TweetFormProps) {
 // TODO:
 // We need to use CSSTransitionGroup to add open/close animation
 //   https://facebook.github.io/react/docs/animation.html
-class TweetForm extends React.Component<TweetFormProps, {}> {
+class TweetEditor extends React.Component<TweetEditorProps, {}> {
     keyBindingHandler: (e: React.KeyboardEvent) => string;
     keyCommandHandler: (cmd: string) => boolean;
     returnHandler: (e: React.KeyboardEvent) => boolean;
 
-    constructor(props: TweetFormProps) {
+    constructor(props: TweetEditorProps) {
         super(props);
         this.keyBindingHandler = e => {
             // Note: When RETURN key is pressed
@@ -139,5 +139,5 @@ class TweetForm extends React.Component<TweetFormProps, {}> {
     }
 }
 
-export default connect()(TweetForm);
+export default connect()(TweetEditor);
 
