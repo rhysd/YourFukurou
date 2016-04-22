@@ -280,6 +280,9 @@ body {
 .tweet-form__counter.tweet-form__counter_over {
   color: var(--color-error);
 }
+.tweet-form__screen-name, .tweet-form__hashtag {
+  color: var(--text-link-color);
+}
 .tweet-form__cancel-btn {
   flex: none;
   color: var(--color-dark-active);

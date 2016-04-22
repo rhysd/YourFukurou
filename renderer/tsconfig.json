@@ -23,6 +23,8 @@
     "components/tweet/primary.tsx",
     "components/tweet/secondary.tsx",
     "components/tweet/external-link.tsx",
+    "components/tweet/editor/screen_name_decorator.tsx",
+    "components/tweet/editor/hashtag_decorator.tsx",
     "components/zigzag_separator.tsx",
     "index.tsx",
     "ipc_channel_proxy.ts",

@@ -1,14 +1,24 @@
 import {List} from 'immutable';
 import assign = require('object-assign');
-import {EditorState, Modifier} from 'draft-js';
+import {EditorState, Modifier, CompositeDecorator} from 'draft-js';
 import {Action, Kind} from './actions';
 import Item from './item/item';
 import Tweet, {TwitterUser} from './item/tweet';
 import Separator from './item/separator';
 import EditorKeybinds from './keybinds/editor';
+import createScreenNameDecorator from './components/tweet/editor/screen_name_decorator';
+import createHashtagDecorator from './components/tweet/editor/hashtag_decorator';
 
 const electron = global.require('electron');
 const ipc = electron.ipcRenderer;
+
+// Note:
+// These are currently created statically.  But actually they should be created dynamically
+// with the state of reducer.
+const editorDecolator = new CompositeDecorator([
+    createScreenNameDecorator(),
+    createHashtagDecorator(),
+]);
 
 function sendToMain(ch: ChannelFromRenderer, ...args: any[]) {
     'use strict';
@@ -30,7 +40,7 @@ const init: State = {
     current_items: List<Item>(),
     current_message: null,
     current_user: null,
-    editor: EditorState.createEmpty(),
+    editor: EditorState.createEmpty(editorDecolator),
     editor_open: false,
     editor_keybinds: new EditorKeybinds(),
     editor_in_reply_to_status: null,
@@ -199,7 +209,7 @@ export default function root(state: State = init, action: Action) {
             sendToMain('yf:update-status', action.text, action.in_reply_to_id);
 
             // Note: Reset context to clear text input
-            next_state.editor = EditorState.createEmpty();
+            next_state.editor = EditorState.createEmpty(editorDecolator);
             next_state.editor_in_reply_to_status = null;
 
             return next_state;
