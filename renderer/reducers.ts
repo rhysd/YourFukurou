@@ -150,9 +150,16 @@ export default function root(state: State = init, action: Action) {
             const id = action.tweet_id;
             const next_state = assign({}, state) as State;
             next_state.current_items = state.current_items.filter(
-                item => item instanceof Tweet
-                    ? item.getMainStatus().id !== id
-                    : true
+                item => {
+                    if (item instanceof Tweet) {
+                        const s = item.getMainStatus();
+                        if (s.id === id) {
+                            log.debug('Deleted status:', s);
+                            return false;
+                        }
+                    }
+                    return true;
+                }
             ).toList();
             return next_state;
         }
