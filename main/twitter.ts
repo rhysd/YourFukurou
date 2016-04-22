@@ -21,8 +21,8 @@ export default class Twitter {
         ipc.on(c, cb);
     }
 
-    sendApiFailure(err: NodeTwitter.ApiError[]) {
-        this.sender.send('yf:api-failure', err[0].message);
+    sendApiFailure(err: NodeTwitter.ApiError[] | Error) {
+        this.sender.send('yf:api-failure', err instanceof Array ? err[0].message : err.message);
     }
 
     prepareClient(tokens: NodeTwitter.AuthInfo) {
@@ -112,7 +112,9 @@ export default class Twitter {
                 (err: NodeTwitter.ApiError[], account: any, res: any) => {
                     if (err) {
                         log.debug('verify_credentials failed:', err, account, res);
-                        err[0].message += ' Login again.';
+                        if (err[0] !== undefined) {
+                            err[0].message += ' Login again.';
+                        }
                         this.sendApiFailure(err);
                         reject(err);
                         return;

@@ -82,7 +82,7 @@ function open_window(access: AccessToken) {
             twitter
                 .sendAuthenticatedAccount()
                 .catch(err => {
-                    if (!err || err[0].code !== 32) {
+                    if (!err || err instanceof Error || err[0].code !== 32) {
                         log.error('Unexpected error on verifying account:', err);
                         return;
                     }
