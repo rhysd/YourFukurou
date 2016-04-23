@@ -7,8 +7,8 @@
   "bin": "./bin/cli.js",
   "scripts": {
     "dep": "npm install && typings install",
-    "build-main": "tsc -p main",
-    "build-renderer": "tsc -p renderer && browserify renderer/js -o build/renderer.js",
+    "build-main": "tsc --pretty -p main",
+    "build-renderer": "tsc --pretty -p renderer && browserify renderer/js -o build/renderer.js",
     "build": "npm run build-main && npm run build-renderer",
     "app": "./bin/cli.js",
     "debug": "NODE_ENV=development ./bin/cli.js",
