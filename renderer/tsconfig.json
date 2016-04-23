@@ -35,6 +35,7 @@
     "keybinds/editor.ts",
     "lib.d.ts",
     "log.ts",
+    "draft-js.d.ts",
     "twitter-api.d.ts"
   ]
 }

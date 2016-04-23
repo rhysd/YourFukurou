@@ -3,7 +3,7 @@ import {ContentBlock} from 'draft-js';
 
 const RE_HASHTAG = /\#\S+/g;
 
-function hashtagStrategy(contentBlock: ContentBlock, callback: Function) {
+function hashtagStrategy(contentBlock: ContentBlock, callback: (s: number, e: number) => void) {
     'use strict';
     const text = contentBlock.getText();
     while (true) {

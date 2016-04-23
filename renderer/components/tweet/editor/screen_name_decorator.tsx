@@ -3,7 +3,7 @@ import {ContentBlock} from 'draft-js';
 
 const RE_SCREEN_NAME = /@\w+/g;
 
-function screenNameStrategy(contentBlock: ContentBlock, callback: Function) {
+function screenNameStrategy(contentBlock: ContentBlock, callback: (s: number, e: number) => void) {
     'use strict';
     const text = contentBlock.getText();
     while (true) {
