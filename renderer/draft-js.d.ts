@@ -299,8 +299,6 @@ declare module 'draft-js' {
         hasEdgeWithin(blockKey: string, start: number, end: number): boolean;
         serialize(): string;
     }
-    export interface SelectionState extends Immutable.Map<string, any> {
-    }
 
     export type BlockMap = Immutable.OrderedMap<string, ContentBlock>;
     export class ContentState {

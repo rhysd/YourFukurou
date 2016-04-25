@@ -1,6 +1,6 @@
 import {List} from 'immutable';
 import assign = require('object-assign');
-import {EditorState, Modifier, CompositeDecorator, SelectionState} from 'draft-js';
+import {EditorState, Modifier, CompositeDecorator} from 'draft-js';
 import {Action, Kind} from './actions';
 import Item from './item/item';
 import Tweet, {TwitterUser} from './item/tweet';
@@ -8,7 +8,6 @@ import Separator from './item/separator';
 import EditorKeybinds from './keybinds/editor';
 import createScreenNameDecorator from './components/tweet/editor/screen_name_decorator';
 import createHashtagDecorator from './components/tweet/editor/hashtag_decorator';
-import EmojiCompleteDecorator from './components/tweet/editor/emoji_complete_decorator';
 
 const electron = global.require('electron');
 const ipc = electron.ipcRenderer;
@@ -19,7 +18,6 @@ const ipc = electron.ipcRenderer;
 const editorDecolator = new CompositeDecorator([
     createScreenNameDecorator(),
     createHashtagDecorator(),
-    EmojiCompleteDecorator,
 ]);
 
 function sendToMain(ch: ChannelFromRenderer, ...args: any[]) {
@@ -221,29 +219,6 @@ export default function root(state: State = init, action: Action) {
             next_state.editor = EditorState.createEmpty(editorDecolator);
             next_state.editor_in_reply_to_status = null;
 
-            return next_state;
-        }
-        case Kind.SelectAutoCompleteSuggestion: {
-            const selection = state.editor.getSelection();
-            const offset = selection.getAnchorOffset() - 1;
-            const content = state.editor.getCurrentContent();
-            const block_text = content.getBlockForKey(selection.getAnchorKey()).getText();
-            const idx = block_text.lastIndexOf(action.query, offset);
-            if (idx === -1 || (idx + action.query.length < offset)) {
-                return state;
-            }
-            const next_selection = selection.merge({
-                anchorOffset: idx,
-                focusOffset: idx + action.query.length,
-            }) as SelectionState;
-            const next_content = Modifier.replaceText(content, next_selection, action.text);
-            const next_editor = EditorState.push(
-                state.editor,
-                next_content,
-                'insert-characters'
-            );
-            const next_state = assign({}, state) as State;
-            next_state.editor = next_editor;
             return next_state;
         }
         default:
