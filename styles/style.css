@@ -304,3 +304,32 @@ body {
 .tweet-form__send-btn.tweet-form__send-btn_inactive {
   background-color: var(--color-weak-text-link);
 }
+
+.autocomplete {
+  position: relative;
+  z-index: 100;
+}
+.autocomplete__suggestions {
+  position: absolute;
+  top: calc(1em + 4px);
+  left: 0px;
+  background-color: white;
+  border: solid 1px #dddddd;
+  border-radius: 4px;
+  padding: 8px;
+  display: inline-flex;
+  flex-direction: column;
+  z-index: 100;
+}
+.autocomplete__emoji {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.autocomplete__emoji-code {
+  flex: none;
+  min-width: 1.3em;
+}
+.autocomplete__emoji-name {
+  flex: auto;
+}

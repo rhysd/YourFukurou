@@ -25,6 +25,8 @@
     "components/tweet/editor.tsx",
     "components/tweet/editor/screen_name_decorator.tsx",
     "components/tweet/editor/hashtag_decorator.tsx",
+    "components/tweet/editor/auto_complete_base.tsx",
+    "components/tweet/editor/emoji_complete_decorator.tsx",
     "components/zigzag_separator.tsx",
     "index.tsx",
     "ipc_channel_proxy.ts",

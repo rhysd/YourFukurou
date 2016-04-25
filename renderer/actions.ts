@@ -28,6 +28,8 @@ export enum Kind {
     ToggleEditor,
 
     UpdateStatus,
+
+    SelectAutoCompleteSuggestion,
 }
 
 export interface Action {
@@ -40,6 +42,7 @@ export interface Action {
     user?: TwitterUser;
     editor?: EditorState;
     in_reply_to_id?: string;
+    query?: string;
 }
 
 export function addTweetToTimeline(item: Tweet) {
@@ -227,5 +230,14 @@ export function updateStatus(text: string, in_reply_to_id?: string) {
             text,
             in_reply_to_id,
         }));
+    };
+}
+
+export function selectAutoCompleteSuggestion(text: string, query: string) {
+    'use strict';
+    return {
+        type: Kind.SelectAutoCompleteSuggestion,
+        text,
+        query,
     };
 }
