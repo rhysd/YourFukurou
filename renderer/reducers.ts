@@ -1,13 +1,15 @@
 import {List} from 'immutable';
 import assign = require('object-assign');
-import {EditorState, Modifier, CompositeDecorator} from 'draft-js';
+import {EditorState, Modifier, CompositeDecorator, SelectionState} from 'draft-js';
 import {Action, Kind} from './actions';
+import log from './log';
 import Item from './item/item';
 import Tweet, {TwitterUser} from './item/tweet';
 import Separator from './item/separator';
 import EditorKeybinds from './keybinds/editor';
 import createScreenNameDecorator from './components/tweet/editor/screen_name_decorator';
 import createHashtagDecorator from './components/tweet/editor/hashtag_decorator';
+import autoCompleteFactory, {AutoCompleteLabel} from './components/tweet/editor/auto_complete_decorator';
 
 const electron = global.require('electron');
 const ipc = electron.ipcRenderer;
@@ -18,6 +20,7 @@ const ipc = electron.ipcRenderer;
 const editorDecolator = new CompositeDecorator([
     createScreenNameDecorator(),
     createHashtagDecorator(),
+    autoCompleteFactory(/:(?:[a-zA-Z0-9_\-\+]+):?/g, 'EMOJI'),
 ]);
 
 function sendToMain(ch: ChannelFromRenderer, ...args: any[]) {
@@ -34,6 +37,10 @@ export interface State {
     editor_open: boolean;
     editor_keybinds: EditorKeybinds;
     editor_in_reply_to_status: Tweet;
+    editor_completion_query: string;
+    editor_completion_label: AutoCompleteLabel;
+    editor_completion_top: number;
+    editor_completion_left: number;
 }
 
 const init: State = {
@@ -44,6 +51,10 @@ const init: State = {
     editor_open: false,
     editor_keybinds: new EditorKeybinds(),
     editor_in_reply_to_status: null,
+    editor_completion_query: null,
+    editor_completion_label: null,
+    editor_completion_top: 0,
+    editor_completion_left: 0,
 };
 
 function updateStatus(items: List<Item>, status: Tweet) {
@@ -63,6 +74,15 @@ function updateStatus(items: List<Item>, status: Tweet) {
         }
         return item;
     }).toList();
+}
+
+function resetCompletionState(s: State) {
+    'use strict';
+    s.editor_completion_query = null;
+    s.editor_completion_label = null;
+    s.editor_completion_left = 0;
+    s.editor_completion_top = 0;
+    return s;
 }
 
 export default function root(state: State = init, action: Action) {
@@ -220,6 +240,44 @@ export default function root(state: State = init, action: Action) {
             next_state.editor_in_reply_to_status = null;
 
             return next_state;
+        }
+        case Kind.UpdateAutoCompletion: {
+            const next_state = assign({}, state) as State;
+            if (action.query === state.editor_completion_query) {
+                // When overlapping queries, it means that completion was done.
+                return resetCompletionState(next_state);
+            }
+            next_state.editor_completion_query = action.query;
+            next_state.editor_completion_label = action.completion_label;
+            next_state.editor_completion_left = action.left;
+            next_state.editor_completion_top = action.top;
+            return next_state;
+        }
+        case Kind.SelectAutoCompleteSuggestion: {
+            const selection = state.editor.getSelection();
+            const offset = selection.getAnchorOffset() - 1;
+            const content = state.editor.getCurrentContent();
+            const block_text = content.getBlockForKey(selection.getAnchorKey()).getText();
+            const idx = block_text.lastIndexOf(action.query, offset);
+            if (idx === -1 || (idx + action.query.length < offset)) {
+                return state;
+            }
+            const next_selection = selection.merge({
+                anchorOffset: idx,
+                focusOffset: idx + action.query.length,
+            }) as SelectionState;
+            const next_content = Modifier.replaceText(content, next_selection, action.text);
+            const next_editor = EditorState.push(
+                state.editor,
+                next_content,
+                'insert-characters'
+            );
+            const next_state = resetCompletionState(assign({}, state) as State);
+            next_state.editor = next_editor;
+            return next_state;
+        }
+        case Kind.StopAutoCompletion: {
+            return resetCompletionState(assign({}, state) as State);
         }
         default:
             break;

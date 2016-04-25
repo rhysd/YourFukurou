@@ -2,6 +2,7 @@ import {EditorState} from 'draft-js';
 import Tweet, {TwitterUser} from './item/tweet';
 import Item from './item/item';
 import Separator from './item/separator';
+import {AutoCompleteLabel} from './components/tweet/editor/auto_complete_decorator';
 
 export enum Kind {
     ShowMessage,
@@ -28,6 +29,10 @@ export enum Kind {
     ToggleEditor,
 
     UpdateStatus,
+
+    SelectAutoCompleteSuggestion,
+    UpdateAutoCompletion,
+    StopAutoCompletion,
 }
 
 export interface Action {
@@ -40,6 +45,10 @@ export interface Action {
     user?: TwitterUser;
     editor?: EditorState;
     in_reply_to_id?: string;
+    query?: string;
+    left?: number;
+    top?: number;
+    completion_label?: AutoCompleteLabel;
 }
 
 export function addTweetToTimeline(item: Tweet) {
@@ -226,6 +235,37 @@ export function updateStatus(text: string, in_reply_to_id?: string) {
             type: Kind.UpdateStatus,
             text,
             in_reply_to_id,
+        }));
+    };
+}
+
+export function selectAutoCompleteSuggestion(text: string, query: string) {
+    'use strict';
+    return {
+        type: Kind.SelectAutoCompleteSuggestion,
+        text,
+        query,
+    };
+}
+
+export function updateAutoCompletion(left: number, top: number, query: string, completion_label: AutoCompleteLabel) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.UpdateAutoCompletion,
+            left,
+            top,
+            query,
+            completion_label,
+        }));
+    };
+}
+
+export function stopAutoCompletion() {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.StopAutoCompletion,
         }));
     };
 }

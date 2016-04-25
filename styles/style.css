@@ -304,3 +304,27 @@ body {
 .tweet-form__send-btn.tweet-form__send-btn_inactive {
   background-color: var(--color-weak-text-link);
 }
+
+.autocomplete__suggestions {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 1rem;
+  min-width: 10em;
+}
+.autocomplete__emoji {
+  display: flex;
+  cursor: pointer;
+}
+.autocomplete__emoji-code {
+  flex: none;
+  min-width: 1.3em;
+  margin-right: 8px;
+}
+.autocomplete__emoji-text {
+  flex: auto;
+}

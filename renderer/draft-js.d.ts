@@ -299,6 +299,8 @@ declare module 'draft-js' {
         hasEdgeWithin(blockKey: string, start: number, end: number): boolean;
         serialize(): string;
     }
+    export interface SelectionState extends Immutable.Map<string, any> {
+    }
 
     export type BlockMap = Immutable.OrderedMap<string, ContentBlock>;
     export class ContentState {
@@ -326,7 +328,12 @@ declare module 'draft-js' {
     export interface ContentState extends Immutable.Map<string, any> {
     }
 
-    export class CompositeDecorator {
+    export interface DecoratorType {
+        getDecorations(block: ContentBlock): Immutable.List<string>;
+        getComponentForKey(key: string): Function;
+        getPropsForKey(key: string): Object;
+    }
+    export class CompositeDecorator implements DecoratorType {
         constructor(ds: DraftJS.Decorator[]);
         getDecorations(block: ContentBlock): Immutable.List<string>;
         getComponentForKey(key: string): Function;
@@ -336,14 +343,14 @@ declare module 'draft-js' {
     export interface EditorStateCreationConfig {
         allowUndo: boolean;
         currentContent: ContentState;
-        decorator: CompositeDecorator;
+        decorator: DecoratorType;
         selection: SelectionState;
     }
 
     export class EditorState {
         allowUndo: boolean;
         currentContent: ContentState;
-        decorator: CompositeDecorator;
+        decorator: DecoratorType;
         directionMap: BlockMap;
         forceSelection: boolean;
         inCompositionMode: boolean;
@@ -355,8 +362,8 @@ declare module 'draft-js' {
         treeMap: Immutable.OrderedMap<string, Immutable.List<ContentBlock>>;
         undoStack: Immutable.Stack<ContentState>;
 
-        static createEmpty(decorator?: CompositeDecorator): EditorState;
-        static createWithContent(contentState: ContentState, decorator?: CompositeDecorator): EditorState;
+        static createEmpty(decorator?: DecoratorType): EditorState;
+        static createWithContent(contentState: ContentState, decorator?: DecoratorType): EditorState;
         static create(config: EditorStateCreationConfig): EditorState;
         static push(
             editorState: EditorState,
@@ -379,7 +386,7 @@ declare module 'draft-js' {
 
         getAllowUndo(): boolean;
         getCurrentContent(): ContentState;
-        getDecorator(): CompositeDecorator;
+        getDecorator(): DecoratorType;
         getDirectionMap(): BlockMap;
         getForceSelection(): boolean;
         getInCompositionMode(): boolean;

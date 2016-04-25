@@ -12,11 +12,17 @@ import IconButton from '../icon_button';
 import EditorKeybinds from '../../keybinds/editor';
 import Tweet from '../../item/tweet';
 import log from '../../log';
+import AutoCompleteSuggestions from './editor/suggestions';
+import {AutoCompleteLabel} from './editor/auto_complete_decorator';
 
 interface TweetEditorProps extends React.Props<any> {
     editor: EditorState;
     keybinds: EditorKeybinds;
     inReplyTo: Tweet;
+    completionLabel: AutoCompleteLabel;
+    completionQuery: string;
+    completionLeft: number;
+    completionTop: number;
     dispatch?: Redux.Dispatch;
 }
 
@@ -106,6 +112,16 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
         const char_count = getTweetLength(this.props.editor.getCurrentContent().getPlainText());
         const count_state = char_count > 140 ? 'over' : 'normal';
 
+        const suggestions =
+                this.props.completionLabel === null ?
+                    undefined :
+                    <AutoCompleteSuggestions
+                        label={this.props.completionLabel}
+                        query={this.props.completionQuery}
+                        left={this.props.completionLeft}
+                        top={this.props.completionTop}
+                    />;
+
         return <div className="tweet-form animated fadeInDown" ref="body">
             <IconButton
                 className="tweet-form__cancel-btn"
@@ -135,6 +151,7 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
                     onClick={() => this.sendTweet()}
                 />
             </div>
+            {suggestions}
         </div>;
     }
 }
