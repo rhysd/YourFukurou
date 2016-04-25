@@ -169,6 +169,8 @@ declare namespace DraftJS {
         getMutability(): EntityMutability;
         getData(): Object;
     }
+    export interface EntityInstance extends Immutable.Map<string, any> {
+    }
 
     interface Entity {
         create(
@@ -228,7 +230,7 @@ declare module 'draft-js' {
             entitiyKey: string,
             character: string
         ): void;
-    }
+    };
 
     export class ContentBlock {
         key: string;
@@ -255,6 +257,8 @@ declare module 'draft-js' {
             callback: (start: number, end: number) => void
         ): void;
     }
+    export interface ContentBlock extends Immutable.Map<string, any> {
+    }
 
     export class CharacterMetadata {
         static create(config?: DraftJS.CharacterMetadataConfig): CharacterMetadata;
@@ -265,6 +269,8 @@ declare module 'draft-js' {
         getStyle(): DraftJS.InlineStyle;
         hasStyle(style: string): boolean;
         getEntity(): string;
+    }
+    export interface CharacterMetadata extends Immutable.Map<string, any> {
     }
 
     export const Entity: DraftJS.Entity;
@@ -298,12 +304,12 @@ declare module 'draft-js' {
 
     export type BlockMap = Immutable.OrderedMap<string, ContentBlock>;
     export class ContentState {
-        static createFromText(text: string, delimiter?: string): ContentState;
-        static createFromBlockArray(blocks: ContentBlock[]): ContentState;
-
         blockMap: BlockMap;
         selectionBefore: SelectionState;
         selectionAfter: SelectionState;
+
+        static createFromText(text: string, delimiter?: string): ContentState;
+        static createFromBlockArray(blocks: ContentBlock[]): ContentState;
 
         getBlockMap(): BlockMap;
         getSelectionBefore(): SelectionState;
@@ -318,6 +324,8 @@ declare module 'draft-js' {
         getLastBlock(): ContentBlock;
         getPlainText(delimiter?: string): string;
         hasText(): boolean;
+    }
+    export interface ContentState extends Immutable.Map<string, any> {
     }
 
     export class CompositeDecorator {
@@ -397,7 +405,6 @@ declare module 'draft-js' {
 
         /**
          * Returns an OrderedSet<string> that represents the "current" inline style for the editor.
-
          * This is the inline style value that would be used if a character were inserted for the current ContentState and SelectionState, and takes into account any inline style overrides that should be applied.
          */
         getCurrentInlineStyle(): DraftJS.InlineStyle;
@@ -408,6 +415,8 @@ declare module 'draft-js' {
          * At render time, this object is used to break the contents into the appropriate block, decorator, and styled range components.
          */
         getBlockTree(blockKey: string): Immutable.List<ContentBlock>;
+    }
+    export interface EditorState extends Immutable.Map<string, any> {
     }
 
     export const RichUtils: {
@@ -423,7 +432,7 @@ declare module 'draft-js' {
         toggleInlineStyle(editorState: EditorState, inlineStyle: string): EditorState;
         toggleLink(editorState: EditorState, targetSelection: SelectionState, entityKey: string): EditorState;
         tryToRemoveBlockStyle(editorState: EditorState): EditorState;
-    }
+    };
 
     export interface EditorProps extends __React.Props<Editor> {
         /**
@@ -606,7 +615,7 @@ declare module 'draft-js' {
             selectionState: SelectionState,
             entityKey: string
         ): ContentState;
-    }
+    };
 
     export function getDefaultKeyBinding(e: __React.SyntheticEvent): string;
     export function genKey(): string;
