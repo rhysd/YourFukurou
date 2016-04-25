@@ -36,6 +36,7 @@
     "lib.d.ts",
     "log.ts",
     "draft-js.d.ts",
+    "node-emoji.d.ts",
     "twitter-api.d.ts"
   ]
 }

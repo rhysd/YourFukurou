@@ -209,6 +209,14 @@ declare namespace DraftJS {
         mutability: EntityMutability;
         data: {[key: string]: any};
     }
+    export interface FakeClientRect {
+        left: number;
+        width: number;
+        right: number;
+        top: number;
+        bottom: number;
+        height: number;
+    }
 }
 
 declare module 'draft-js' {
@@ -533,8 +541,6 @@ declare module 'draft-js' {
         blur(): void;
     }
 
-    export function getDefaultKeyBinding(e: __React.SyntheticEvent): string;
-
     export const Modifier: {
         replaceText(
             contentState: ContentState,
@@ -599,6 +605,10 @@ declare module 'draft-js' {
             entityKey: string
         ): ContentState;
     }
+
+    export function getDefaultKeyBinding(e: __React.SyntheticEvent): string;
+    export function genKey(): string;
+    export function getVisibleSelectionRect(): void;
 
     export function convertFromRaw(rawState: DraftJS.RawContentState): ContentBlock[];
     export function convertToRaw(contentState: ContentState): DraftJS.RawContentState;
