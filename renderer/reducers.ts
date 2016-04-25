@@ -228,7 +228,6 @@ export default function root(state: State = init, action: Action) {
             const offset = selection.getAnchorOffset() - 1;
             const content = state.editor.getCurrentContent();
             const block_text = content.getBlockForKey(selection.getAnchorKey()).getText();
-            console.error(offset, block_text);
             const idx = block_text.lastIndexOf(action.query, offset);
             if (idx === -1 || (idx + action.query.length < offset)) {
                 return state;

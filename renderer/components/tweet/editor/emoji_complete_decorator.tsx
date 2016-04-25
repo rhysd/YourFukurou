@@ -32,7 +32,6 @@ export class EmojiComplete extends AutoComplete {
     }
 
     getSuggestions() {
-        console.error(this.props);
         const text = this.props.decoratedText;
         if (text.endsWith(':')) {
             const name = text.slice(1, text.length - 1);
