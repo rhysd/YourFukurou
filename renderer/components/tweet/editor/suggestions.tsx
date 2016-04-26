@@ -19,10 +19,15 @@ interface EmojiEntryProps extends React.Props<any> {
     dispatch?: Redux.Dispatch;
 }
 
-// TODO: Add onClick
+function onClickEmojiEntry(props: EmojiEntryProps, e: React.MouseEvent) {
+    'use strict';
+    e.preventDefault();
+    props.dispatch(selectAutoCompleteSuggestion(props.code, props.text));
+}
+
 const EmojiEntry = connect()(
     (props: EmojiEntryProps) => (
-        <div className="autocomplete__emoji" onClick={() => props.dispatch(selectAutoCompleteSuggestion(props.code, props.text))}>
+        <div className="autocomplete__emoji" onClick={onClickEmojiEntry.bind(this, props)}>
             <span className="autocomplete__emoji-code">{props.code}</span>
             <span className="autocomplete__emoji-text">{`:${props.name}:`}</span>
         </div>

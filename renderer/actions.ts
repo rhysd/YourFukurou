@@ -263,9 +263,7 @@ export function updateAutoCompletion(left: number, top: number, query: string, c
 
 export function stopAutoCompletion() {
     'use strict';
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.StopAutoCompletion,
-        }));
+    return {
+        type: Kind.StopAutoCompletion,
     };
 }

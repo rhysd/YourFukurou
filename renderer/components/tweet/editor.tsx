@@ -105,6 +105,11 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
         this.refs.editor.focus();
     }
 
+    onBlur(e: React.SyntheticEvent) {
+        e.preventDefault();
+        this.refs.editor.focus();
+    }
+
     render() {
         const has_text = this.props.editor.getCurrentContent().hasText();
         const btn_state = has_text ? 'active' : 'inactive';
@@ -137,6 +142,7 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
                     handleReturn={this.returnHandler}
                     keyBindingFn={this.keyBindingHandler}
                     onEscape={() => this.close()}
+                    onBlur={this.onBlur.bind(this)}
                     onChange={e => this.props.dispatch(changeEditorState(e))}
                     ref="editor"
                 />
