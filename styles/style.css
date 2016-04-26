@@ -312,17 +312,25 @@ body {
   background-color: white;
   border: 1px solid #d0d0d0;
   border-radius: 4px;
-  padding: 8px;
+  padding: 4px;
   font-size: 1rem;
-  min-width: 10em;
+  min-width: 10rem;
+  z-index: 1;
 }
-.autocomplete__emoji {
+.autocomplete__suggestion-item {
   display: flex;
+  align-items: center;
   cursor: pointer;
+  margin: 2px;
+  padding: 2px;
+}
+.autocomplete__suggestion-item:hover {
+  background-color: #e0e0ee;
+  border-radius: 4px;
 }
 .autocomplete__emoji-code {
   flex: none;
-  min-width: 1.3em;
+  min-width: 1.3rem;
   margin-right: 8px;
 }
 .autocomplete__emoji-text {

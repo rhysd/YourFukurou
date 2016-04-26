@@ -27,7 +27,7 @@ function onClickEmojiEntry(props: EmojiEntryProps, e: React.MouseEvent) {
 
 const EmojiEntry = connect()(
     (props: EmojiEntryProps) => (
-        <div className="autocomplete__emoji" onClick={onClickEmojiEntry.bind(this, props)}>
+        <div className="autocomplete__suggestion-item" onClick={onClickEmojiEntry.bind(this, props)}>
             <span className="autocomplete__emoji-code">{props.code}</span>
             <span className="autocomplete__emoji-text">{`:${props.name}:`}</span>
         </div>

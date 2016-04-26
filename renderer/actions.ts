@@ -248,16 +248,22 @@ export function selectAutoCompleteSuggestion(text: string, query: string) {
     };
 }
 
-export function updateAutoCompletion(left: number, top: number, query: string, completion_label: AutoCompleteLabel) {
+export function updateAutoCompletion(
+    left: number,
+    top: number,
+    query: string,
+    completion_label: AutoCompleteLabel
+) {
     'use strict';
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.UpdateAutoCompletion,
-            left,
-            top,
-            query,
-            completion_label,
-        }));
+    // Note:
+    // Dispatch asynchronously because it breaks an editor state
+    // when it is dispatched asynchronously.
+    return {
+        type: Kind.UpdateAutoCompletion,
+        left,
+        top,
+        query,
+        completion_label,
     };
 }
 
