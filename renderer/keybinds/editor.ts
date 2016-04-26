@@ -3,6 +3,11 @@ import * as React from 'react';
 import {KeyBindingUtil} from 'draft-js';
 import KeyBinds from './keybinds';
 import log from '../log';
+import Store from '../store';
+import {
+    upAutoCompletionFocus,
+    downAutoCompletionFocus,
+} from '../actions';
 
 const {
     hasCommandModifier,
@@ -10,15 +15,23 @@ const {
     isOptionKeyCommand,
 } = KeyBindingUtil;
 
-export type EditorAction = 'send-tweet';
+export type EditorAction = 'send-tweet'
+                            | 'choose-suggestion'
+                            | 'select-next-suggestion'
+                            | 'select-previous-suggestion';
 
 const DefaultMap = I.Map<string, EditorAction>({
     'ctrl+enter': 'send-tweet',
+    'enter': 'choose-suggestion',
+    'tab': 'select-next-suggestion',
 });
 
 function isEditorAction(s: string): s is EditorAction {
     'use strict';
-    return s === 'send-tweet';
+    return s === 'send-tweet' ||
+           s === 'choose-suggestion' ||
+           s === 'select-next-suggestion' ||
+           s === 'select-previous-suggestion';
 }
 
 function getCodeWorkaround(e: React.KeyboardEvent) {
@@ -60,7 +73,10 @@ function getCodeWorkaround(e: React.KeyboardEvent) {
     }
 }
 
-const ActionHandlers = I.Map<EditorAction, () => void>();
+const ActionHandlers = I.Map<EditorAction, () => void>({
+    'select-next-suggestion': () => Store.dispatch(downAutoCompletionFocus()),
+    'select-previous-suggestion': () => Store.dispatch(upAutoCompletionFocus()),
+});
 
 export default class EditorKeymaps {
     private keybinds: KeyBinds<EditorAction>;

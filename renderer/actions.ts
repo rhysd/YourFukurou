@@ -33,6 +33,8 @@ export enum Kind {
     SelectAutoCompleteSuggestion,
     UpdateAutoCompletion,
     StopAutoCompletion,
+    DownAutoCompletionFocus,
+    UpAutoCompletionFocus,
 }
 
 export interface Action {
@@ -265,5 +267,19 @@ export function stopAutoCompletion() {
     'use strict';
     return {
         type: Kind.StopAutoCompletion,
+    };
+}
+
+export function downAutoCompletionFocus() {
+    'use strict';
+    return {
+        type: Kind.DownAutoCompletionFocus,
+    };
+}
+
+export function upAutoCompletionFocus() {
+    'use strict';
+    return {
+        type: Kind.UpAutoCompletionFocus,
     };
 }
