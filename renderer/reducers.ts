@@ -260,6 +260,7 @@ export default function root(state: State = init, action: Action) {
             const block_text = content.getBlockForKey(selection.getAnchorKey()).getText();
             const idx = block_text.lastIndexOf(action.query, offset);
             if (idx === -1 || (idx + action.query.length < offset)) {
+                log.error('Invalid selection:', selection);
                 return state;
             }
             const next_selection = selection.merge({
@@ -267,10 +268,13 @@ export default function root(state: State = init, action: Action) {
                 focusOffset: idx + action.query.length,
             }) as SelectionState;
             const next_content = Modifier.replaceText(content, next_selection, action.text);
-            const next_editor = EditorState.push(
-                state.editor,
-                next_content,
-                'insert-characters'
+            const next_editor = EditorState.forceSelection(
+                EditorState.push(
+                    state.editor,
+                    next_content,
+                    'insert-characters'
+                ),
+                next_content.getSelectionAfter()
             );
             const next_state = resetCompletionState(assign({}, state) as State);
             next_state.editor = next_editor;
