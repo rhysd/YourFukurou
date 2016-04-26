@@ -9,7 +9,7 @@ const MAX_SUGGESTIONS = 5;
 
 export interface SuggestionItem {
     code?: string;
-    text: string;
+    description: string;
 }
 
 interface EmojiEntryProps extends React.Props<any> {
@@ -39,6 +39,7 @@ export interface SuggestionsProps extends React.Props<AutoCompleteSuggestions> {
     query: string;
     left: number;
     top: number;
+    suggestions: SuggestionItem[];
 }
 
 export default class AutoCompleteSuggestions extends React.Component<SuggestionsProps, {}> {
@@ -59,61 +60,79 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
         this.moveElement();
     }
 
-    renderEmojiSuggestionItems() {
-        const query = this.props.query;
-        if (query.endsWith(':')) {
-            const name = query.slice(1, query.length - 1);  // Note: Omit first and last ':'
-            if (emoji[name]) {
-                return [
-                    <EmojiEntry
-                        code={emoji[name]}
-                        name={name}
-                        text={query}
-                        key="0"
-                    />
-                ];
-            } else {
-                return [];
-            }
+    renderSuggestionItems() {
+        if (this.props.suggestions.length == 0) {
+            return undefined;
         }
-
-        let count = 0;
-        let suggestions = [] as JSX.Element[];
-        const input = query.slice(1);  // Note: Omit ':'
-        for (const name in emoji) {
-            if (name.startsWith(input)) {
-                suggestions.push(
+        const query = this.props.query;
+        switch (this.props.label) {
+            case 'EMOJI': {
+                return this.props.suggestions.map((s, i) =>
                     <EmojiEntry
-                        code={emoji[name]}
-                        name={name}
+                        code={s.code}
+                        name={s.description}
                         text={query}
-                        key={count}
+                        key={i}
                     />
                 );
-                count += 1;
             }
-            if (count > 5) {
-                return suggestions;
-            }
-        }
-        return suggestions;
-    }
-
-    renderSuggestionItems() {
-        switch (this.props.label) {
-            case 'EMOJI': return this.renderEmojiSuggestionItems();
             default:
                 log.error('Invalid suggestion label: ' + this.props.label);
-                return [];
+                return undefined;
         }
     }
 
     render() {
         return (
             <div className="autocomplete__suggestions" ref={r => { this.node = r; }}>
-                {this.renderSuggestionItems() || undefined}
+                {this.renderSuggestionItems()}
             </div>
         );
     }
 }
 
+function searchEmojiSuggestionItems(query: string) {
+    'use strict';
+    if (query.endsWith(':')) {
+        const name = query.slice(1, query.length - 1);  // Note: Omit first and last ':'
+        if (emoji[name]) {
+            return [{
+                code: emoji[name],
+                description: name,
+            }];
+        } else {
+            return [];
+        }
+    }
+
+    // TODO:
+    // If narrowing suggestions, we can reuse the previous
+    // suggestions and filter it.
+
+    let count = 0;
+    let suggestions = [] as SuggestionItem[];
+    const input = query.slice(1);  // Note: Omit ':'
+    for (const name in emoji) {
+        if (name.startsWith(input)) {
+            suggestions.push({
+                code: emoji[name],
+                description: name,
+            });
+            count += 1;
+        }
+        if (count > MAX_SUGGESTIONS) {
+            return suggestions;
+        }
+    }
+    return suggestions;
+}
+
+export function searchSuggestionItems(query: string, label: AutoCompleteLabel) {
+    'use strict';
+    switch (label) {
+        case 'EMOJI': return searchEmojiSuggestionItems(query);
+        default:
+            log.error('Unimplemented auto complete type:', label);
+            return []
+    }
+}

@@ -12,7 +12,7 @@ import IconButton from '../icon_button';
 import EditorKeybinds from '../../keybinds/editor';
 import Tweet from '../../item/tweet';
 import log from '../../log';
-import AutoCompleteSuggestions from './editor/suggestions';
+import AutoCompleteSuggestions, {SuggestionItem} from './editor/suggestions';
 import {AutoCompleteLabel} from './editor/auto_complete_decorator';
 
 interface TweetEditorProps extends React.Props<any> {
@@ -23,6 +23,7 @@ interface TweetEditorProps extends React.Props<any> {
     completionQuery: string;
     completionLeft: number;
     completionTop: number;
+    completionSuggestions: SuggestionItem[];
     dispatch?: Redux.Dispatch;
 }
 
@@ -125,6 +126,7 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
                         query={this.props.completionQuery}
                         left={this.props.completionLeft}
                         top={this.props.completionTop}
+                        suggestions={this.props.completionSuggestions}
                     />;
 
         return <div className="tweet-form animated fadeInDown" ref="body">

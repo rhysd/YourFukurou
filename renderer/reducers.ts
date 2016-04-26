@@ -10,6 +10,7 @@ import EditorKeybinds from './keybinds/editor';
 import createScreenNameDecorator from './components/tweet/editor/screen_name_decorator';
 import createHashtagDecorator from './components/tweet/editor/hashtag_decorator';
 import autoCompleteFactory, {AutoCompleteLabel} from './components/tweet/editor/auto_complete_decorator';
+import {searchSuggestionItems, SuggestionItem} from './components/tweet/editor/suggestions';
 
 const electron = global.require('electron');
 const ipc = electron.ipcRenderer;
@@ -41,6 +42,7 @@ export interface State {
     editor_completion_label: AutoCompleteLabel;
     editor_completion_top: number;
     editor_completion_left: number;
+    editor_completion_suggestions: SuggestionItem[];
 }
 
 const init: State = {
@@ -55,6 +57,7 @@ const init: State = {
     editor_completion_label: null,
     editor_completion_top: 0,
     editor_completion_left: 0,
+    editor_completion_suggestions: [],
 };
 
 function updateStatus(items: List<Item>, status: Tweet) {
@@ -82,6 +85,7 @@ function resetCompletionState(s: State) {
     s.editor_completion_label = null;
     s.editor_completion_left = 0;
     s.editor_completion_top = 0;
+    s.editor_completion_suggestions = [];
     return s;
 }
 
@@ -251,6 +255,7 @@ export default function root(state: State = init, action: Action) {
             next_state.editor_completion_label = action.completion_label;
             next_state.editor_completion_left = action.left;
             next_state.editor_completion_top = action.top;
+            next_state.editor_completion_suggestions = searchSuggestionItems(action.query, action.completion_label);
             return next_state;
         }
         case Kind.SelectAutoCompleteSuggestion: {

@@ -10,6 +10,7 @@ import Item from '../item/item';
 import Tweet, {TwitterUser} from '../item/tweet';
 import EditorKeybinds from '../keybinds/editor';
 import {AutoCompleteLabel} from './tweet/editor/auto_complete_decorator';
+import {SuggestionItem} from './tweet/editor/suggestions';
 
 interface AppProps {
     items: List<Item>;
@@ -23,6 +24,7 @@ interface AppProps {
     editorCompletionQuery: string;
     editorCompletionLeft: number;
     editorCompletionTop: number;
+    editorCompletionSuggestions: SuggestionItem[];
 }
 
 function renderEditor(props: AppProps) {
@@ -35,6 +37,7 @@ function renderEditor(props: AppProps) {
             completionQuery={props.editorCompletionQuery}
             completionLeft={props.editorCompletionLeft}
             completionTop={props.editorCompletionTop}
+            completionSuggestions={props.editorCompletionSuggestions}
         />;
     } else {
         return undefined;
@@ -63,6 +66,7 @@ function select(state: State): AppProps {
         editorCompletionQuery: state.editor_completion_query,
         editorCompletionLeft: state.editor_completion_left,
         editorCompletionTop: state.editor_completion_top,
+        editorCompletionSuggestions: state.editor_completion_suggestions,
         inReplyTo: state.editor_in_reply_to_status,
     };
 }
