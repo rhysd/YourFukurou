@@ -7,6 +7,9 @@ import {
     closeEditor,
     showMessage,
     updateStatus,
+    downAutoCompletionFocus,
+    upAutoCompletionFocus,
+    selectAutoCompleteSuggestion,
 } from '../../actions';
 import IconButton from '../icon_button';
 import EditorKeybinds from '../../keybinds/editor';
@@ -24,6 +27,7 @@ interface TweetEditorProps extends React.Props<any> {
     completionLeft: number;
     completionTop: number;
     completionSuggestions: SuggestionItem[];
+    completionFocusIdx: number;
     dispatch?: Redux.Dispatch;
 }
 
@@ -39,6 +43,8 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
     keyBindingHandler: (e: React.KeyboardEvent) => string;
     keyCommandHandler: (cmd: string) => boolean;
     returnHandler: (e: React.KeyboardEvent) => boolean;
+    blurHandler: (e: React.SyntheticEvent) => void;
+    tabHandler: (e: React.KeyboardEvent) => void;
 
     constructor(props: TweetEditorProps) {
         super(props);
@@ -61,7 +67,7 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
                 return action;
             }
 
-            log.debug('Not handled:', e);
+            log.debug('Not handled:', e.keyCode);
             return getDefaultKeyBinding(e);
         };
         this.keyCommandHandler =
@@ -69,14 +75,33 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
         this.returnHandler =
             e => {
                 const a = this.props.keybinds.resolveReturnAction(e);
+                log.debug('Handling return key:', a);
                 switch (a) {
                     case 'send-tweet': {
                         this.sendTweet();
                         return true;
                     }
+                    case 'choose-suggestion': {
+                        return this.selectAutoCompletionItem();
+                    }
                     default:
                         return false;
                 }
+            };
+        this.blurHandler = e => {
+            e.preventDefault();
+            this.refs.editor.focus();
+        };
+        this.tabHandler =
+            e => {
+                e.preventDefault();
+                const action = this.props.keybinds.resolveEvent(e);
+                if (action === null) {
+                    return false;
+                }
+                log.debug('Handling tab key:', action);
+                this.props.keybinds.handleAction(action);
+                return true;
             };
     }
 
@@ -93,6 +118,20 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
         this.refs.body.className = 'tweet-form animated fadeOutUp';
     }
 
+    selectAutoCompletionItem() {
+        if (this.props.completionFocusIdx === null) {
+            return false;
+        }
+        const s = this.props.completionSuggestions[this.props.completionFocusIdx];
+        if (!s) {
+            return false;
+        }
+        this.props.dispatch(
+            selectAutoCompleteSuggestion(s.code, this.props.completionQuery)
+        );
+        return true;
+    }
+
     sendTweet() {
         const content = this.props.editor.getCurrentContent();
         if (content.hasText()) {
@@ -103,11 +142,6 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
     }
 
     componentDidMount() {
-        this.refs.editor.focus();
-    }
-
-    onBlur(e: React.SyntheticEvent) {
-        e.preventDefault();
         this.refs.editor.focus();
     }
 
@@ -127,6 +161,7 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
                         left={this.props.completionLeft}
                         top={this.props.completionTop}
                         suggestions={this.props.completionSuggestions}
+                        focusIdx={this.props.completionFocusIdx}
                     />;
 
         return <div className="tweet-form animated fadeInDown" ref="body">
@@ -144,7 +179,8 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
                     handleReturn={this.returnHandler}
                     keyBindingFn={this.keyBindingHandler}
                     onEscape={() => this.close()}
-                    onBlur={this.onBlur.bind(this)}
+                    onTab={this.tabHandler}
+                    onBlur={this.blurHandler}
                     onChange={e => this.props.dispatch(changeEditorState(e))}
                     ref="editor"
                 />

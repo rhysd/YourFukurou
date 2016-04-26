@@ -6,7 +6,7 @@ import log from './log';
 import Item from './item/item';
 import Tweet, {TwitterUser} from './item/tweet';
 import Separator from './item/separator';
-import EditorKeybinds from './keybinds/editor';
+import EditorKeymaps from './keybinds/editor';
 import createScreenNameDecorator from './components/tweet/editor/screen_name_decorator';
 import createHashtagDecorator from './components/tweet/editor/hashtag_decorator';
 import autoCompleteFactory, {AutoCompleteLabel} from './components/tweet/editor/auto_complete_decorator';
@@ -19,8 +19,8 @@ const ipc = electron.ipcRenderer;
 // These are currently created statically.  But actually they should be created dynamically
 // with the state of reducer.
 const editorDecolator = new CompositeDecorator([
-    createScreenNameDecorator(),
-    createHashtagDecorator(),
+    createScreenNameDecorator(),  // XXX: Temporary
+    createHashtagDecorator(),     // XXX: Temporary
     autoCompleteFactory(/:(?:[a-zA-Z0-9_\-\+]+):?/g, 'EMOJI'),
 ]);
 
@@ -36,13 +36,14 @@ export interface State {
 
     editor: EditorState;
     editor_open: boolean;
-    editor_keybinds: EditorKeybinds;
+    editor_keybinds: EditorKeymaps;
     editor_in_reply_to_status: Tweet;
     editor_completion_query: string;
     editor_completion_label: AutoCompleteLabel;
     editor_completion_top: number;
     editor_completion_left: number;
     editor_completion_suggestions: SuggestionItem[];
+    editor_completion_focus_idx: number;
 }
 
 const init: State = {
@@ -51,13 +52,14 @@ const init: State = {
     current_user: null,
     editor: EditorState.createEmpty(editorDecolator),
     editor_open: false,
-    editor_keybinds: new EditorKeybinds(),
+    editor_keybinds: new EditorKeymaps(),
     editor_in_reply_to_status: null,
     editor_completion_query: null,
     editor_completion_label: null,
     editor_completion_top: 0,
     editor_completion_left: 0,
     editor_completion_suggestions: [],
+    editor_completion_focus_idx: null,
 };
 
 function updateStatus(items: List<Item>, status: Tweet) {
@@ -86,6 +88,7 @@ function resetCompletionState(s: State) {
     s.editor_completion_left = 0;
     s.editor_completion_top = 0;
     s.editor_completion_suggestions = [];
+    s.editor_completion_focus_idx = null;
     return s;
 }
 
@@ -287,6 +290,34 @@ export default function root(state: State = init, action: Action) {
         }
         case Kind.StopAutoCompletion: {
             return resetCompletionState(assign({}, state) as State);
+        }
+        case Kind.DownAutoCompletionFocus: {
+            if (state.editor_completion_label === null) {
+                // Note: Suggestion not being selected
+                return state;
+            }
+            const next_state = assign({}, state) as State;
+            const i = state.editor_completion_focus_idx;
+            if (i === null || i >= state.editor_completion_suggestions.length - 1) {
+                next_state.editor_completion_focus_idx = 0;
+            } else {
+                next_state.editor_completion_focus_idx = i + 1;
+            }
+            return next_state;
+        }
+        case Kind.UpAutoCompletionFocus: {
+            if (state.editor_completion_label === null) {
+                // Note: Suggestion not being selected
+                return state;
+            }
+            const next_state = assign({}, state) as State;
+            const i = state.editor_completion_focus_idx;
+            if (i === null || i <= 0) {
+                next_state.editor_completion_focus_idx = state.editor_completion_suggestions.length - 1;
+            } else {
+                next_state.editor_completion_focus_idx = i - 1;
+            }
+            return next_state;
         }
         default:
             break;

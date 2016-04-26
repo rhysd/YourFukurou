@@ -16,22 +16,28 @@ interface EmojiEntryProps extends React.Props<any> {
     code: string;
     text: string;
     name: string;
+    focused: boolean;
     dispatch?: Redux.Dispatch;
 }
 
-function onClickEmojiEntry(props: EmojiEntryProps, e: React.MouseEvent) {
-    'use strict';
-    e.preventDefault();
-    props.dispatch(selectAutoCompleteSuggestion(props.code, props.text));
-}
-
 const EmojiEntry = connect()(
-    (props: EmojiEntryProps) => (
-        <div className="autocomplete__suggestion-item" onClick={onClickEmojiEntry.bind(this, props)}>
-            <span className="autocomplete__emoji-code">{props.code}</span>
-            <span className="autocomplete__emoji-text">{`:${props.name}:`}</span>
-        </div>
-    )
+    (props: EmojiEntryProps) => {
+        function onClick(e: React.MouseEvent) {
+            e.preventDefault();
+            props.dispatch(selectAutoCompleteSuggestion(props.code, props.text));
+        };
+
+        const n = props.focused ?
+            'autocomplete__suggestion-item autocomplete__suggestion-item_focused' :
+            'autocomplete__suggestion-item';
+
+        return (
+            <div className={n} onClick={onClick}>
+                <span className="autocomplete__emoji-code">{props.code}</span>
+                <span className="autocomplete__emoji-text">{`:${props.name}:`}</span>
+            </div>
+        );
+    }
 );
 
 export interface SuggestionsProps extends React.Props<AutoCompleteSuggestions> {
@@ -40,6 +46,7 @@ export interface SuggestionsProps extends React.Props<AutoCompleteSuggestions> {
     left: number;
     top: number;
     suggestions: SuggestionItem[];
+    focusIdx: number;
 }
 
 export default class AutoCompleteSuggestions extends React.Component<SuggestionsProps, {}> {
@@ -65,6 +72,7 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
             return undefined;
         }
         const query = this.props.query;
+        const idx = this.props.focusIdx;
         switch (this.props.label) {
             case 'EMOJI': {
                 return this.props.suggestions.map((s, i) =>
@@ -72,6 +80,7 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
                         code={s.code}
                         name={s.description}
                         text={query}
+                        focused={idx !== null && idx === i}
                         key={i}
                     />
                 );

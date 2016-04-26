@@ -323,10 +323,13 @@ body {
   cursor: pointer;
   margin: 2px;
   padding: 2px;
+  border-radius: 4px;
 }
 .autocomplete__suggestion-item:hover {
   background-color: #e0e0ee;
-  border-radius: 4px;
+}
+.autocomplete__suggestion-item.autocomplete__suggestion-item_focused {
+  background-color: #e0e0ee;
 }
 .autocomplete__emoji-code {
   flex: none;
