@@ -152,7 +152,7 @@ export default function root(state: State = init, action: Action) {
             return next_state;
         }
         case Kind.AddSeparator: {
-            if (state.current_items.last() instanceof Separator) {
+            if (state.current_items.first() instanceof Separator) {
                 // Note:
                 // Do not add multiple separators continuously
                 return state;
