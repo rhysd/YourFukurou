@@ -3,6 +3,7 @@ import {openExternalLink} from './external-link';
 import log from '../../log';
 import Tweet from '../../item/tweet';
 import TweetActionButton from './action_button';
+import TweetComponent from './index';
 
 interface TweetPrimaryProps extends React.Props<any> {
     status: Tweet;
@@ -21,6 +22,9 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
 
     render() {
         const s = this.props.status.getMainStatus();
+        const q = s.quoted_status;
+        const second_status: JSX.Element =
+            q === null ? undefined : <TweetComponent status={q} quoted/>;
         return (
             <div
                 className="tweet__primary"
@@ -32,6 +36,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                     className="tweet__primary-text"
                     dangerouslySetInnerHTML={{__html: s.buildLinkedHTML()}}
                 />
+                {second_status}
                 <div className="tweet__primary-footer" >
                     <div
                         className="tweet-actions"

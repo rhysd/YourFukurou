@@ -4,6 +4,7 @@ import Tweet from '../../item/tweet';
 
 interface TweetSecondaryProps extends React.Props<any> {
     status: Tweet;
+    quoted?: boolean;
 }
 
 function userLink(screen_name: string, color?: string) {

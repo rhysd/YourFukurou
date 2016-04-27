@@ -11,12 +11,16 @@ import TweetIcon from './icon';
 
 interface TweetProps extends React.Props<Tweet> {
     status: TweetItem;
+    quoted?: boolean;
 }
 
 export default class Tweet extends React.Component<TweetProps, {}> {
     node: HTMLElement;
 
     componentDidMount() {
+        if (!this.node) {
+            return;
+        }
         // Note: Ensure to animate the element once
         const listener = () => {
             this.node.className = 'tweet__body';
@@ -25,7 +29,21 @@ export default class Tweet extends React.Component<TweetProps, {}> {
         this.node.addEventListener('animationend', listener);
     }
 
+    renderQuotedStatus() {
+        return <div classname="tweet__quoted-body">
+            <TweetSecondary status={this.props.status} quoted/>
+            <TweetPrimary status={this.props.status}/>
+        </div>;
+    }
+
     render() {
+        if (this.props.quoted) {
+            return <div classname="tweet__quoted-body">
+                <TweetSecondary status={this.props.status} quoted/>
+                <TweetPrimary status={this.props.status}/>
+            </div>;
+        }
+
         const tw = this.props.status.getMainStatus();
         return <div className="tweet__body animated fadeIn" ref={r => { this.node = r; }} >
             <TweetIcon user={tw.user}/>
