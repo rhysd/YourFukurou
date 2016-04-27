@@ -157,10 +157,28 @@ body {
   margin-top: 4px;
   font-size: 0.7rem;
 }
-.tweet__primary-createdby {
+.tweet__primary-created-at {
   flex: none;
   color: var(--color-weak-text-link);
   text-align: right;
+}
+.tweet__quoted {
+  display: flex;
+  flex-direction: column;
+  background-color: #eeeeee;
+  margin: 4px;
+  padding: 8px;
+  border-radius: 8px;
+}
+.tweet__quoted-screenname {
+  color: #777777;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+.tweet__quoted-text {
+  color: #555555;
 }
 
 .tweet-actions {
@@ -251,6 +269,7 @@ body {
 
 .tweet-form {
   flex: none;
+  flex-direction: column;
   width: 100%;
   box-sizing: border-box;
   background-color: var(--background-color-dark);
@@ -258,6 +277,9 @@ body {
   display: flex;
   animation-duration: 0.5s;
   -webkit-animation-duration: 0.5s;
+}
+.tweet-form__editor {
+  display: flex;
   align-items: center;
 }
 .tweet-form__input {
@@ -303,6 +325,13 @@ body {
 }
 .tweet-form__send-btn.tweet-form__send-btn_inactive {
   background-color: var(--color-weak-text-link);
+}
+.tweet-form__in-reply-to {
+  display: flex;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  background-color: white;
 }
 
 .autocomplete__suggestions {

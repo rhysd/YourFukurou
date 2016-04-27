@@ -31,10 +31,12 @@ export class TwitterUser {
 export default class Tweet implements Item {
     public user: TwitterUser;
     private retweeted_status_memo: Tweet;
+    private quoted_status_memo: Tweet;
 
     constructor(public json: TweetJson) {
         this.user = new TwitterUser(json.user);
         this.retweeted_status_memo = null;
+        this.quoted_status_memo = null;
     }
 
     get id() {
@@ -79,6 +81,16 @@ export default class Tweet implements Item {
         }
     }
 
+    get quoted_status() {
+        if (!this.json.quoted_status) {
+            return null;
+        }
+        if (this.quoted_status_memo === null) {
+            this.quoted_status_memo = new Tweet(this.json.quoted_status);
+        }
+        return this.quoted_status_memo;
+    }
+
     getMainStatus() {
         if (this.json.retweeted_status) {
             return this.retweeted_status;
@@ -96,6 +108,10 @@ export default class Tweet implements Item {
             return null;
         }
         return this.user;
+    }
+
+    hasQuote() {
+        return !!this.json.quoted_status;
     }
 
     getAllEntities() {

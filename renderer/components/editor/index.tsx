@@ -17,6 +17,9 @@ import Tweet from '../../item/tweet';
 import log from '../../log';
 import AutoCompleteSuggestions, {SuggestionItem} from './suggestions';
 import {AutoCompleteLabel} from './auto_complete_decorator';
+import TweetPrimary from '../tweet/primary';
+import TweetSecondary from '../tweet/secondary';
+import TweetIcon from '../tweet/icon';
 
 interface TweetEditorProps extends React.Props<any> {
     editor: EditorState;
@@ -145,6 +148,18 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
         this.refs.editor.focus();
     }
 
+    renderInReplyTo() {
+        if (!this.props.inReplyTo) {
+            return undefined;
+        }
+        const tw = this.props.inReplyTo.getMainStatus();
+        return <div className="tweet-form__in-reply-to">
+            <TweetIcon user={tw.user}/>
+            <TweetSecondary status={this.props.inReplyTo}/>
+            <TweetPrimary status={this.props.inReplyTo}/>
+        </div>;
+    }
+
     render() {
         const has_text = this.props.editor.getCurrentContent().hasText();
         const btn_state = has_text ? 'active' : 'inactive';
@@ -165,37 +180,40 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
                     />;
 
         return <div className="tweet-form animated fadeInDown" ref="body">
-            <IconButton
-                className="tweet-form__cancel-btn"
-                name="times"
-                tip="cancel"
-                onClick={() => this.close()}
-            />
-            <div className="tweet-form__input">
-                <Editor
-                    editorState={this.props.editor}
-                    placeholder="Tweet..."
-                    handleKeyCommand={this.keyCommandHandler}
-                    handleReturn={this.returnHandler}
-                    keyBindingFn={this.keyBindingHandler}
-                    onEscape={() => this.close()}
-                    onTab={this.tabHandler}
-                    onBlur={this.blurHandler}
-                    onChange={e => this.props.dispatch(changeEditorState(e))}
-                    ref="editor"
-                />
-                <div className={'tweet-form__counter tweet-form__counter_' + count_state}>
-                    {char_count}
-                </div>
-            </div>
-            <div className={'tweet-form__send-btn tweet-form__send-btn_' + btn_state}>
+            {this.renderInReplyTo()}
+            <div className="tweet-form__editor">
                 <IconButton
-                    name="twitter"
-                    tip="send tweet"
-                    onClick={() => this.sendTweet()}
+                    className="tweet-form__cancel-btn"
+                    name="times"
+                    tip="cancel"
+                    onClick={() => this.close()}
                 />
+                <div className="tweet-form__input">
+                    <Editor
+                        editorState={this.props.editor}
+                        placeholder="Tweet..."
+                        handleKeyCommand={this.keyCommandHandler}
+                        handleReturn={this.returnHandler}
+                        keyBindingFn={this.keyBindingHandler}
+                        onEscape={() => this.close()}
+                        onTab={this.tabHandler}
+                        onBlur={this.blurHandler}
+                        onChange={e => this.props.dispatch(changeEditorState(e))}
+                        ref="editor"
+                    />
+                    <div className={'tweet-form__counter tweet-form__counter_' + count_state}>
+                        {char_count}
+                    </div>
+                </div>
+                <div className={'tweet-form__send-btn tweet-form__send-btn_' + btn_state}>
+                    <IconButton
+                        name="twitter"
+                        tip="send tweet"
+                        onClick={() => this.sendTweet()}
+                    />
+                </div>
+                {suggestions}
             </div>
-            {suggestions}
         </div>;
     }
 }

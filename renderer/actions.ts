@@ -203,20 +203,16 @@ export function changeEditorState(editor: EditorState) {
 
 export function openEditor(in_reply_to: Tweet = null) {
     'use strict';
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.OpenEditor,
-            status: in_reply_to,
-        }));
+    return {
+        type: Kind.OpenEditor,
+        status: in_reply_to,
     };
 }
 
 export function closeEditor() {
     'use strict';
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.CloseEditor,
-        }));
+    return {
+        type: Kind.CloseEditor,
     };
 }
 

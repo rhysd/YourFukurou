@@ -21,6 +21,8 @@
     "components/tweet/index.tsx",
     "components/tweet/primary.tsx",
     "components/tweet/secondary.tsx",
+    "components/tweet/quote.tsx",
+    "components/tweet/screen_name.tsx",
     "components/tweet/external-link.tsx",
     "components/editor/index.tsx",
     "components/editor/screen_name_decorator.tsx",
