@@ -3,7 +3,7 @@ import {openExternalLink} from './external-link';
 import log from '../../log';
 import Tweet from '../../item/tweet';
 import TweetActionButton from './action_button';
-import TweetComponent from './index';
+import QuotedTweet from './quote';
 
 interface TweetPrimaryProps extends React.Props<any> {
     status: Tweet;
@@ -24,10 +24,10 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         const s = this.props.status.getMainStatus();
         const q = s.quoted_status;
         const second_status: JSX.Element =
-            q === null ? undefined : <TweetComponent status={q} quoted/>;
+            q === null ? undefined : <QuotedTweet status={q}/>;
         return (
             <div
-                className="tweet__primary"
+                className={'tweet__primary'}
                 onMouseEnter={() => { this.actions_elem.style.display = 'flex'; }}
                 onMouseLeave={() => { this.actions_elem.style.display = 'none'; }}
                 ref={r => { this.body_elem = r; }}
@@ -48,7 +48,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                         <TweetActionButton kind="like" status={s}/>
                     </div>
                     <div className="spacer"/>
-                    <div className="tweet__primary-createdby">
+                    <div className="tweet__primary-created-at">
                         {this.props.status.getCreatedAtString()}
                     </div>
                 </div>

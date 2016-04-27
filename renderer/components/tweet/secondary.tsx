@@ -1,22 +1,9 @@
 import * as React from 'react';
-import ExternalLink from './external-link';
-import Tweet from '../../item/tweet';
+import Tweet, {TwitterUser} from '../../item/tweet';
+import ScreenName from './screen_name';
 
 interface TweetSecondaryProps extends React.Props<any> {
     status: Tweet;
-    quoted?: boolean;
-}
-
-function userLink(screen_name: string, color?: string) {
-    return (
-        <ExternalLink
-            url={`https://twitter.com/${screen_name}`}
-            color={color}
-            title={'@' + screen_name}
-        >
-            {'@' + screen_name}
-        </ExternalLink>
-    );
 }
 
 function retweetedBy(tw: Tweet) {
@@ -26,7 +13,7 @@ function retweetedBy(tw: Tweet) {
 
     return (
         <div className="tweet__secondary-retweetedby">
-            <i className="fa fa-retweet"/> {userLink(tw.user.screen_name, '#777777')}
+            <i className="fa fa-retweet"/> <ScreenName user={tw.user} color="#777777"/>
         </div>
     );
 }
@@ -36,10 +23,7 @@ const TweetSecondary = (props: TweetSecondaryProps) => {
     const user = status.user;
     return <div className="tweet__secondary">
         <div className="tweet__secondary-screenname">
-            {userLink(user.screen_name)}
-            {user.protected
-                ? <i className="fa fa-lock" style={{marginLeft: '4px'}}/>
-                : undefined}
+            <ScreenName user={user}/>
         </div>
         <div className="tweet__secondary-name" title={user.name}>
             {user.name}

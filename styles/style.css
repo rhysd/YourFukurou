@@ -157,10 +157,28 @@ body {
   margin-top: 4px;
   font-size: 0.7rem;
 }
-.tweet__primary-createdby {
+.tweet__primary-created-at {
   flex: none;
   color: var(--color-weak-text-link);
   text-align: right;
+}
+.tweet__quoted {
+  display: flex;
+  flex-direction: column;
+  background-color: #eeeeee;
+  margin: 4px;
+  padding: 8px;
+  border-radius: 8px;
+}
+.tweet__quoted-screenname {
+  color: #777777;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+.tweet__quoted-text {
+  color: #555555;
 }
 
 .tweet-actions {
