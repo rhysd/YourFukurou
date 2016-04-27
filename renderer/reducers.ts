@@ -1,6 +1,6 @@
 import {List} from 'immutable';
 import assign = require('object-assign');
-import {EditorState, Modifier, CompositeDecorator, SelectionState} from 'draft-js';
+import {EditorState, Modifier, CompositeDecorator, SelectionState, ContentState} from 'draft-js';
 import {Action, Kind} from './actions';
 import log from './log';
 import Item from './item/item';
@@ -90,6 +90,39 @@ function resetCompletionState(s: State) {
     s.editor_completion_suggestions = [];
     s.editor_completion_focus_idx = null;
     return s;
+}
+
+function openEditor(state: State, status: Tweet) {
+    'use strict';
+    const next_state = assign({}, state) as State;
+    next_state.editor_open = true;
+    next_state.editor_in_reply_to_status = status;
+    if (next_state.editor_in_reply_to_status === null) {
+        return next_state;
+    }
+
+    next_state.editor = EditorState.moveSelectionToEnd(
+        EditorState.push(
+            state.editor,
+            ContentState.createFromText(`@${status.getMainStatus().user.screen_name} `),
+            'insert-characters'
+        )
+    );
+
+    return next_state;
+}
+
+function closeEditor(state: State) {
+    'use strict';
+    const next_state = assign({}, state) as State;
+    next_state.editor_open = false;
+    next_state.editor_in_reply_to_status = null;
+    next_state.editor = EditorState.push(
+        state.editor,
+        ContentState.createFromText(''),
+        'remove-range'
+    );
+    return next_state;
 }
 
 export default function root(state: State = init, action: Action) {
@@ -191,49 +224,17 @@ export default function root(state: State = init, action: Action) {
             return next_state;
         }
         case Kind.OpenEditor: {
-            const next_state = assign({}, state) as State;
-            next_state.editor_open = true;
-            next_state.editor_in_reply_to_status = action.status;
-            if (next_state.editor_in_reply_to_status === null) {
-                return;
-            }
-
-            const next_content
-                = Modifier.replaceText(
-                    state.editor.getCurrentContent(),
-                    state.editor.getSelection(),
-                    `@${action.status.getMainStatus().user.screen_name} `
-                );
-            next_state.editor = EditorState.moveSelectionToEnd(
-                EditorState.push(
-                    state.editor,
-                    next_content,
-                    'insert-characters'
-                )
-            );
-
-            return next_state;
+            return openEditor(state, action.status);
         }
         case Kind.CloseEditor: {
-            const next_state = assign({}, state) as State;
-            next_state.editor_open = false;
-            next_state.editor_in_reply_to_status = null;
-            next_state.editor = EditorState.push(
-                state.editor,
-                Modifier.replaceText(
-                    state.editor.getCurrentContent(),
-                    state.editor.getSelection(),
-                    ''
-                ),
-                'remove-range'
-            );
-            return next_state;
+            return closeEditor(state);
         }
         case Kind.ToggleEditor: {
-            const next_state = assign({}, state) as State;
-            next_state.editor_open = !state.editor_open;
-            next_state.editor_in_reply_to_status = next_state.editor_open ?  action.status : null;
-            return next_state;
+            if (state.editor_open) {
+                return closeEditor(state);
+            } else {
+                return openEditor(state, action.status);
+            }
         }
         case Kind.UpdateStatus: {
             const next_state = assign({}, state) as State;
