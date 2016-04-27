@@ -162,6 +162,10 @@ body {
   color: var(--color-weak-text-link);
   text-align: right;
 }
+.tweet__primary-conversation {
+  flex: none;
+  color: var(--color-weak-text-link);
+}
 .tweet__quoted {
   display: flex;
   flex-direction: column;

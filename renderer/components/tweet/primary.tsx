@@ -20,10 +20,19 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         });
     }
 
+    renderConversation(s: Tweet) {
+        if (!s.hasInReplyTo()) {
+            return undefined;
+        }
+        return <div className="tweet__primary-conversation">
+            <i className="fa fa-comments" style={{marginRight: '4px'}}/>
+        </div>;
+    }
+
     render() {
         const s = this.props.status.getMainStatus();
         const q = s.quoted_status;
-        const second_status: JSX.Element =
+        const quoted_status: JSX.Element =
             q === null ? undefined : <QuotedTweet status={q}/>;
         return (
             <div
@@ -36,7 +45,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                     className="tweet__primary-text"
                     dangerouslySetInnerHTML={{__html: s.buildLinkedHTML()}}
                 />
-                {second_status}
+                {quoted_status}
                 <div className="tweet__primary-footer" >
                     <div
                         className="tweet-actions"
@@ -48,6 +57,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                         <TweetActionButton kind="like" status={s}/>
                     </div>
                     <div className="spacer"/>
+                    {this.renderConversation(s)}
                     <div className="tweet__primary-created-at">
                         {this.props.status.getCreatedAtString()}
                     </div>

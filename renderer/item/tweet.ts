@@ -114,6 +114,10 @@ export default class Tweet implements Item {
         return !!this.json.quoted_status;
     }
 
+    hasInReplyTo() {
+        return !!this.json.in_reply_to_status_id_str;
+    }
+
     getAllEntities() {
         if (!this.json.entities) {
             return [];
