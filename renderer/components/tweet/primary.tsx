@@ -10,14 +10,26 @@ interface TweetPrimaryProps extends React.Props<any> {
 }
 
 export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}> {
-    body_elem: HTMLElement;
+    text_elem: HTMLElement;
     actions_elem: HTMLElement
 
     componentDidMount() {
-        Array.prototype.forEach.call(this.body_elem.querySelectorAll("a"), (a: HTMLElement) => {
+        Array.prototype.forEach.call(this.text_elem.querySelectorAll("a"), (a: HTMLElement) => {
             a.className = 'external-link';
             a.onclick = openExternalLink;
         });
+    }
+
+    renderCreatedAt() {
+        return (
+            <a
+                className="tweet__primary-created-at external-link"
+                href={this.props.status.statusPageUrl()}
+                onClick={openExternalLink}
+            >
+                {this.props.status.getCreatedAtString()}
+            </a>
+        );
     }
 
     renderConversation(s: Tweet) {
@@ -29,23 +41,28 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         </div>;
     }
 
+    renderQuotedStatus(s: Tweet): JSX.Element {
+        const q = s.quoted_status;
+        if (q === null) {
+            return undefined;
+        }
+        return <QuotedTweet status={q}/>;
+    }
+
     render() {
         const s = this.props.status.getMainStatus();
-        const q = s.quoted_status;
-        const quoted_status: JSX.Element =
-            q === null ? undefined : <QuotedTweet status={q}/>;
         return (
             <div
                 className={'tweet__primary'}
                 onMouseEnter={() => { this.actions_elem.style.display = 'flex'; }}
                 onMouseLeave={() => { this.actions_elem.style.display = 'none'; }}
-                ref={r => { this.body_elem = r; }}
             >
                 <div
                     className="tweet__primary-text"
                     dangerouslySetInnerHTML={{__html: s.buildLinkedHTML()}}
+                    ref={r => { this.text_elem = r; }}
                 />
-                {quoted_status}
+                {this.renderQuotedStatus(s)}
                 <div className="tweet__primary-footer" >
                     <div
                         className="tweet-actions"
@@ -58,9 +75,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                     </div>
                     <div className="spacer"/>
                     {this.renderConversation(s)}
-                    <div className="tweet__primary-created-at">
-                        {this.props.status.getCreatedAtString()}
-                    </div>
+                    {this.renderCreatedAt()}
                 </div>
             </div>
         );

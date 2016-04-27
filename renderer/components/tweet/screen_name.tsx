@@ -13,7 +13,7 @@ const ScreenName = (props: ScreenNameProps) => {
     return (
         <span className={props.className}>
             <ExternalLink
-                url={`https://twitter.com/${screen_name}`}
+                url={props.user.userPageUrl()}
                 color={props.color}
                 title={screen_name}
             >

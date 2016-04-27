@@ -15,7 +15,7 @@ export function openExternalLink(event: MouseEvent) {
         }
         target = target.parentNode;
     }
-    log.error('_openExternalLink: Unexpected link', event.target)
+    log.error('openExternalLink: Unexpected link', event.target)
 }
 
 interface ExternalLinkProps extends React.Props<any> {

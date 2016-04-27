@@ -26,6 +26,10 @@ export class TwitterUser {
     get name() {
         return this.json.name;
     }
+
+    userPageUrl() {
+        return `https://twitter.com/${this.json.screen_name}`;
+    }
 }
 
 export default class Tweet implements Item {
@@ -158,6 +162,10 @@ export default class Tweet implements Item {
         const d = date.getDate();
         const yyyy = date.getFullYear();
         return `${('0' + hh).slice(-2)}:${('0' + mm).slice(-2)} ${m + 1}/${d} ${yyyy}`;
+    }
+
+    statusPageUrl() {
+        return `https://twitter.com/hadakadenkyu/status/${this.getMainStatus().json.id_str}`;
     }
 
     clone() {

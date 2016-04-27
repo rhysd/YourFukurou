@@ -161,6 +161,8 @@ body {
   flex: none;
   color: var(--color-weak-text-link);
   text-align: right;
+  cursor: pointer;
+  text-decoration: none;
 }
 .tweet__primary-conversation {
   flex: none;
