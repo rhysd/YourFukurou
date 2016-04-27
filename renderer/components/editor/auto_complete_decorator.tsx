@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {ContentBlock} from 'draft-js';
-import {updateAutoCompletion, stopAutoCompletion} from '../../../actions';
+import {updateAutoCompletion, stopAutoCompletion} from '../../actions';
 
 export type AutoCompleteLabel = 'EMOJI' | 'SCREENNAME' | 'HASHTAG';
 

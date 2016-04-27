@@ -2,7 +2,7 @@ import {EditorState} from 'draft-js';
 import Tweet, {TwitterUser} from './item/tweet';
 import Item from './item/item';
 import Separator from './item/separator';
-import {AutoCompleteLabel} from './components/tweet/editor/auto_complete_decorator';
+import {AutoCompleteLabel} from './components/editor/auto_complete_decorator';
 
 export enum Kind {
     ShowMessage,

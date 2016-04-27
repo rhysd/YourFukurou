@@ -7,10 +7,10 @@ import Item from './item/item';
 import Tweet, {TwitterUser} from './item/tweet';
 import Separator from './item/separator';
 import EditorKeymaps from './keybinds/editor';
-import createScreenNameDecorator from './components/tweet/editor/screen_name_decorator';
-import createHashtagDecorator from './components/tweet/editor/hashtag_decorator';
-import autoCompleteFactory, {AutoCompleteLabel} from './components/tweet/editor/auto_complete_decorator';
-import {searchSuggestionItems, SuggestionItem} from './components/tweet/editor/suggestions';
+import createScreenNameDecorator from './components/editor/screen_name_decorator';
+import createHashtagDecorator from './components/editor/hashtag_decorator';
+import autoCompleteFactory, {AutoCompleteLabel} from './components/editor/auto_complete_decorator';
+import {searchSuggestionItems, SuggestionItem} from './components/editor/suggestions';
 
 const electron = global.require('electron');
 const ipc = electron.ipcRenderer;

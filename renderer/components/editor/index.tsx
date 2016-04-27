@@ -15,8 +15,8 @@ import IconButton from '../icon_button';
 import EditorKeybinds from '../../keybinds/editor';
 import Tweet from '../../item/tweet';
 import log from '../../log';
-import AutoCompleteSuggestions, {SuggestionItem} from './editor/suggestions';
-import {AutoCompleteLabel} from './editor/auto_complete_decorator';
+import AutoCompleteSuggestions, {SuggestionItem} from './suggestions';
+import {AutoCompleteLabel} from './auto_complete_decorator';
 
 interface TweetEditorProps extends React.Props<any> {
     editor: EditorState;

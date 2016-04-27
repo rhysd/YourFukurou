@@ -5,12 +5,12 @@ import {EditorState} from 'draft-js';
 import {State} from '../reducers';
 import SideMenu from './side_menu';
 import Timeline from './timeline';
-import TweetEditor from './tweet/editor';
+import TweetEditor from './editor/index';
 import Item from '../item/item';
 import Tweet, {TwitterUser} from '../item/tweet';
 import EditorKeybinds from '../keybinds/editor';
-import {AutoCompleteLabel} from './tweet/editor/auto_complete_decorator';
-import {SuggestionItem} from './tweet/editor/suggestions';
+import {AutoCompleteLabel} from './editor/auto_complete_decorator';
+import {SuggestionItem} from './editor/suggestions';
 
 interface AppProps {
     items: List<Item>;

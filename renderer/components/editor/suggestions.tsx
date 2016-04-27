@@ -2,8 +2,8 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {emoji} from 'node-emoji';
 import {AutoCompleteLabel} from './auto_complete_decorator';
-import {selectAutoCompleteSuggestion} from '../../../actions';
-import log from '../../../log';
+import {selectAutoCompleteSuggestion} from '../../actions';
+import log from '../../log';
 
 const MAX_SUGGESTIONS = 5;
 
