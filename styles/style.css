@@ -269,6 +269,7 @@ body {
 
 .tweet-form {
   flex: none;
+  flex-direction: column;
   width: 100%;
   box-sizing: border-box;
   background-color: var(--background-color-dark);
@@ -276,6 +277,9 @@ body {
   display: flex;
   animation-duration: 0.5s;
   -webkit-animation-duration: 0.5s;
+}
+.tweet-form__editor {
+  display: flex;
   align-items: center;
 }
 .tweet-form__input {
@@ -321,6 +325,13 @@ body {
 }
 .tweet-form__send-btn.tweet-form__send-btn_inactive {
   background-color: var(--color-weak-text-link);
+}
+.tweet-form__in-reply-to {
+  display: flex;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  background-color: white;
 }
 
 .autocomplete__suggestions {

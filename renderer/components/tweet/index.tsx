@@ -11,7 +11,6 @@ import TweetIcon from './icon';
 
 interface TweetProps extends React.Props<Tweet> {
     status: TweetItem;
-    quoted?: boolean;
 }
 
 export default class Tweet extends React.Component<TweetProps, {}> {
