@@ -28,7 +28,7 @@ const user_css_path = path.join(app.getPath('userData'), 'user.css');
 fs.lstat(user_css_path, (err: NodeJS.ErrnoException, stats: Stats) => {
     if (err) {
         // Note: user.css is not found
-        log.debug('Cannot load user.css:', err);
+        log.debug('Cannot load user.css:', err.message);
         return;
     }
     if (stats.isFile()) {

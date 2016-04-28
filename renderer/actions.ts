@@ -3,11 +3,13 @@ import Tweet, {TwitterUser} from './item/tweet';
 import Item from './item/item';
 import Separator from './item/separator';
 import {AutoCompleteLabel} from './components/editor/auto_complete_decorator';
+import TimelineKind from './timeline';
 
 export enum Kind {
     ShowMessage,
     DismissMessage,
     AddSeparator,
+    ChangeCurrentTimeline,
 
     AddTweetToTimeline,
     SetCurrentUser,
@@ -51,14 +53,15 @@ export interface Action {
     left?: number;
     top?: number;
     completion_label?: AutoCompleteLabel;
+    timeline?: TimelineKind;
 }
 
-export function addTweetToTimeline(item: Tweet) {
+export function addTweetToTimeline(status: Tweet) {
     'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.AddTweetToTimeline,
-            item,
+            status,
         }));
     };
 }
@@ -277,5 +280,13 @@ export function upAutoCompletionFocus() {
     'use strict';
     return {
         type: Kind.UpAutoCompletionFocus,
+    };
+}
+
+export function changeCurrentTimeline(timeline: TimelineKind) {
+    'use strict';
+    return {
+        type: Kind.ChangeCurrentTimeline,
+        timeline,
     };
 }
