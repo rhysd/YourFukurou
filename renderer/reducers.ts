@@ -38,6 +38,7 @@ export interface State {
     editor_open: boolean;
     editor_keybinds: EditorKeymaps;
     editor_in_reply_to_status: Tweet;
+
     editor_completion_query: string;
     editor_completion_label: AutoCompleteLabel;
     editor_completion_top: number;
