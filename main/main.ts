@@ -10,6 +10,7 @@ import setApplicationMenu from './menu';
 const load_cache = load_cached_tokens();
 const consumer_key = process.env.YOURFUKUROU_CONSUMER_KEY || 'H4fJ2rgNuH2UiOXuPBjHpl9zL';
 const consumer_secret = process.env.YOURFUKUROU_CONSUMER_KEY_SECRET || 'azYRjJn6emdsOIUhepy0Wygmaq9PltEnpsx4P4BfU1HMp5Unmm';
+const should_use_dummy_data = process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS;
 
 app.once('window-all-closed', () => app.quit());
 
@@ -60,19 +61,7 @@ function open_window(access: AccessToken) {
             });
             twitter.sender = new IpcSender(win.webContents);
 
-            powerMonitor.on('suspend', () => {
-                log.debug("PC's going to suspend, stop streaming");
-                twitter.stopStreaming();
-            });
-            powerMonitor.on('resume', () => {
-                log.debug("PC's resuming, will reconnect after 3secs: " + twitter.isStopped());
-                if (twitter.isStopped()) {
-                    twitter.sendConnectionFailure();
-                    twitter.connectToStream().catch(e => log.error('Unexpected error on streaming after reconnection', e));
-                }
-            });
-
-            if (process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS) {
+            if (should_use_dummy_data) {
                 twitter
                     .sendDummyAccount()
                     .then(() => twitter.sendDummyStream())
@@ -118,6 +107,21 @@ function open_window(access: AccessToken) {
                 })
                 .then(() => twitter.connectToStream())
                 .catch((e: any) => log.error('Unexpected error on streaming', e));
+
+            powerMonitor.on('suspend', () => {
+                log.debug("PC's going to suspend, stop streaming");
+                if (!should_use_dummy_data) {
+                    twitter.stopStreaming();
+                }
+            });
+            powerMonitor.on('resume', () => {
+                log.debug("PC's resuming, will reconnect after 3secs: " + twitter.isStopped());
+                if (twitter.isStopped() && !should_use_dummy_data) {
+                    twitter.sendConnectionFailure();
+                    twitter.connectToStream().catch(e => log.error('Unexpected error on streaming after reconnection', e));
+                }
+            });
+
         });
     } else {
         log.error('Failed to get access tokens');

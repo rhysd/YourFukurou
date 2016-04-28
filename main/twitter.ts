@@ -161,7 +161,7 @@ export default class Twitter {
                     return;
                 }
                 log.debug('statuses/mentions_timeline: Got tweets:', tweets.length);
-                resolve(tweets.reverse());
+                resolve(tweets);
             });
         });
     }
