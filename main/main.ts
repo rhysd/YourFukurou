@@ -83,7 +83,7 @@ function open_window(access: AccessToken) {
             twitter
                 .sendAuthenticatedAccount()
                 .catch(err => {
-                    if (!err || err instanceof Error || err[0].code !== 32) {
+                    if (!err || (err instanceof Error) || err[0].code !== 32) {
                         log.error('Unexpected error on verifying account:', err);
                         return;
                     }
@@ -106,9 +106,18 @@ function open_window(access: AccessToken) {
                             log.error('Give up: Second authentication try failed.  If you use environment variables for tokens, please check them:', e);
                         });
                 })
-                .then(() => twitter.sendHomeTimeline())
+                .then(() => Promise.all([
+                    twitter.fetchHomeTimeline(),
+                    twitter.fetchMentionTimeline(),
+                ]))
+                .then(([tweets, mentions]) => {
+                    for (const tw of tweets) {
+                        twitter.sender.send('yf:tweet', tw);
+                    }
+                    twitter.sender.send('yf:mentions', mentions);
+                })
                 .then(() => twitter.connectToStream())
-                .catch(e => log.error('Unexpected error on streaming', e));
+                .catch((e: any) => log.error('Unexpected error on streaming', e));
         });
     } else {
         log.error('Failed to get access tokens');

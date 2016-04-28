@@ -153,6 +153,16 @@ function replaceStatusInTimeline(state: State, status: Tweet) {
     return state;
 }
 
+function containsStatusInTimeline(is: List<Item>, t: Tweet) {
+    return is.find(i => {
+        if (i instanceof Tweet) {
+            return i.id === t.id;
+        } else {
+            return false;
+        }
+    })
+}
+
 export default function root(state: State = init, action: Action) {
     'use strict';
     switch (action.type) {
@@ -358,6 +368,17 @@ export default function root(state: State = init, action: Action) {
             } else {
                 next_state.editor_completion_focus_idx = i - 1;
             }
+            return next_state;
+        }
+        case Kind.AddMentions: {
+            const next_state = assign({}, state) as State;
+            const added = List<Item>(
+                action.mentions.filter(
+                    m => !containsStatusInTimeline(state.mention_timeline, m)
+                )
+            );
+            next_state.mention_timeline = added.concat(state.mention_timeline).toList();
+            next_state.current_items = getCurrentTimeline(next_state);
             return next_state;
         }
         default:

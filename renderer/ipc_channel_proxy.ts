@@ -1,6 +1,7 @@
 const {ipcRenderer: ipc} = global.require('electron');
 import {
     addTweetToTimeline,
+    addMentions,
     addSeparator,
     retweetSucceeded,
     unretweetSucceeded,
@@ -86,6 +87,10 @@ export default class IpcChannelProxy {
         this.subscribe('yf:update-status-success', (_: Electron.IpcRendererEvent, json: TweetJson) => {
             log.debug('Received channel yf:unlike-success', json.id_str);
             Store.dispatch(showMessage('Tweeted!', 'info'));
+        });
+        this.subscribe('yf:mentions', (_: Electron.IpcRendererEvent, json: TweetJson[]) => {
+            log.debug('Received channel yf:mentions', json);
+            Store.dispatch(addMentions(json.map(j => new Tweet(j))));
         });
         log.debug('Started to receive messages');
         return this;

@@ -14,6 +14,7 @@ export enum Kind {
     AddTweetToTimeline,
     SetCurrentUser,
     DeleteStatus,
+    AddMentions,
 
     SendRetweet,
     UndoRetweet,
@@ -54,6 +55,7 @@ export interface Action {
     top?: number;
     completion_label?: AutoCompleteLabel;
     timeline?: TimelineKind;
+    mentions?: Tweet[];
 }
 
 export function addTweetToTimeline(status: Tweet) {
@@ -62,6 +64,16 @@ export function addTweetToTimeline(status: Tweet) {
         setImmediate(() => dispatch({
             type: Kind.AddTweetToTimeline,
             status,
+        }));
+    };
+}
+
+export function addMentions(mentions: Tweet[]) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.AddMentions,
+            mentions,
         }));
     };
 }

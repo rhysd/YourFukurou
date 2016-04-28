@@ -127,22 +127,48 @@ export default class Twitter {
         });
     }
 
-    sendHomeTimeline(params: Object = {}) {
-        return new Promise<void>((resolve, reject) => {
+    fetchHomeTimeline(params: Object = {include_entities: true}) {
+        return new Promise<Object[]>((resolve, reject) => {
             this.client.get('statuses/home_timeline', params, (err, tweets, res) => {
                 if (err) {
-                    log.debug('Home timeline Failed: ', tweets, res);
+                    log.debug('Home timeline failed: ', tweets, res);
                     this.sendApiFailure(err);
                     reject(err);
                     return;
                 }
                 log.debug('statuses/home_timeline: Got tweets:', tweets.length);
-                for (const tw of tweets.reverse()) {
-                    this.sender.send('yf:tweet', tw);
-                }
-                resolve();
+                resolve(tweets.reverse());
             });
         });
+    }
+
+    sendHomeTimeline(params: Object = {include_entities: true}) {
+        return this.fetchHomeTimeline(params)
+            .then(tweets => {
+                for (const tw of tweets) {
+                    this.sender.send('yf:tweet', tw);
+                }
+            });
+    }
+
+    fetchMentionTimeline(params: Object = {include_entities: true}) {
+        return new Promise<Object[]>((resolve, reject) => {
+            this.client.get('statuses/mentions_timeline', params, (err, tweets) => {
+                if (err) {
+                    log.debug('Mentions timeline failed:', tweets);
+                    this.sendApiFailure(err);
+                    reject(err);
+                    return;
+                }
+                log.debug('statuses/mentions_timeline: Got tweets:', tweets.length);
+                resolve(tweets.reverse());
+            });
+        });
+    }
+
+    sendMentionTimeline(params: Object = {include_entities: true}) {
+        return this.fetchMentionTimeline(params)
+            .then(tweets => this.sender.send('yf:mentions', tweets));
     }
 
     subscribeStream(stream: NodeTwitter.TwitterStream, params: Object = {}) {
