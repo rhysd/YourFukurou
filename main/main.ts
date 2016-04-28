@@ -74,7 +74,8 @@ function open_window(access: AccessToken) {
 
             if (process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS) {
                 twitter
-                    .sendDummyStream()
+                    .sendDummyAccount()
+                    .then(() => twitter.sendDummyStream())
                     .catch(e => log.error('Unexpected error on dummy stream:', e));
                 return;
             }

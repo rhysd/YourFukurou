@@ -209,6 +209,23 @@ export default class Twitter {
         });
     }
 
+    sendDummyAccount() {
+        const dummy_json_path = join(app.getPath('userData'), 'account.json');
+        return new Promise<void>((resolve, reject) => {
+            readFile(dummy_json_path, 'utf8', (err, data) => {
+                if (err) {
+                    log.error('File not found:', dummy_json_path);
+                    reject();
+                    return;
+                }
+                const account = JSON.parse(data) as Object;
+                this.sender.send('yf:account', account);
+                log.debug('Dummy account:', account);
+                resolve();
+            });
+        });
+    }
+
     sendDummyStream() {
         log.debug('Starting to send dummy stream');
         const dummy_json_path = join(app.getPath('userData'), 'tweets.json');
