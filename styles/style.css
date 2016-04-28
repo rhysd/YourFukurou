@@ -324,13 +324,23 @@ body {
   border-radius: 4px;
   margin-left: 8px;
   padding: 4px 8px;
-  cursor: pointer;
+  border: solid 1px;
+  box-sizing: border-box;
 }
 .tweet-form__send-btn.tweet-form__send-btn_active {
   background-color: var(--color-twitter);
+  border-color: #8dd1ff;
+  cursor: pointer;
+}
+.tweet-form__send-btn.tweet-form__send-btn_active:hover {
+  opacity: 0.8;
 }
 .tweet-form__send-btn.tweet-form__send-btn_inactive {
   background-color: var(--color-weak-text-link);
+  border-color: #aaaaaa;
+}
+.tweet-form__send-btn.tweet-form__send-btn_inactive:hover {
+  opacity: 0.8;
 }
 .tweet-form__in-reply-to {
   display: flex;
