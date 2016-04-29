@@ -59,7 +59,6 @@ function getCurrentTimeline(state: TimelineState) {
 
 export interface TimelineState {
     current_items: List<Item>;
-    current_message: MessageInfo;
     current_user: TwitterUser;
     current_timeline: TimelineKind;
     home_timeline: List<Item>;
@@ -68,7 +67,6 @@ export interface TimelineState {
 
 const InitTimelineState: TimelineState = {
     current_items: List<Item>(),
-    current_message: null,
     current_user: null,
     current_timeline: 'home',
     home_timeline: List<Item>(),
@@ -152,19 +150,6 @@ export default function timeline(state: TimelineState = InitTimelineState, actio
         case Kind.UnlikeSucceeded: {
             const next_state = assign({}, state) as TimelineState;
             return replaceStatusInTimeline(next_state, action.status);
-        }
-        case Kind.ShowMessage: {
-            const next_state = assign({}, state) as TimelineState;
-            next_state.current_message = {
-                text: action.text,
-                kind: action.msg_kind,
-            };
-            return next_state;
-        }
-        case Kind.DismissMessage: {
-            const next_state = assign({}, state) as TimelineState;
-            next_state.current_message = null;
-            return next_state;
         }
         case Kind.SetCurrentUser: {
             const next_state = assign({}, state) as TimelineState;

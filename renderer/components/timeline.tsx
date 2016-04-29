@@ -9,9 +9,10 @@ import TweetItem from '../item/tweet';
 import Separator from '../item/separator';
 import log from '../log';
 import State from '../reducers/state';
+import {MessageState} from '../reducers/message';
 
 interface TimelineProps extends React.Props<any> {
-    message: MessageInfo;
+    message: MessageState;
     items: List<Item>;
     dispatch?: Redux.Dispatch;
 }
@@ -46,7 +47,7 @@ const Timeline = (props: TimelineProps) => {
 
 function select(state: State): TimelineProps {
     return {
-        message: state.timeline.current_message,
+        message: state.message,
         items: state.timeline.current_items,
     };
 }

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import IconButton from './icon_button';
 import {dismissMessage} from '../actions';
+import {MessageKind} from '../reducers/message';
 
 interface MessageProps extends React.Props<any> {
     text: string;
