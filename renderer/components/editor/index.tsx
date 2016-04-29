@@ -15,7 +15,7 @@ import IconButton from '../icon_button';
 import EditorKeybinds from '../../keybinds/editor';
 import Tweet from '../../item/tweet';
 import log from '../../log';
-import State from '../../reducers/state';
+import State from '../../states/root';
 import EditorCompletionState from '../../states/editor_completion';
 import AutoCompleteSuggestions, {SuggestionItem} from './suggestions';
 import {AutoCompleteLabel} from './auto_complete_decorator';

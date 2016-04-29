@@ -8,7 +8,7 @@ import Item from '../item/item';
 import TweetItem from '../item/tweet';
 import Separator from '../item/separator';
 import log from '../log';
-import State from '../reducers/state';
+import State from '../states/root';
 import {MessageState} from '../reducers/message';
 
 interface TimelineProps extends React.Props<any> {

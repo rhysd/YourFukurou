@@ -8,32 +8,32 @@ function sendToMain(ch: ChannelFromRenderer, ...args: any[]) {
     ipc.send(ch, ...args);
 }
 
-export default function statelessActions(state: {} = null, action: Action) {
+export default function remoteActions(state: {} = null, action: Action) {
     'use strict';
     switch (action.type) {
-        case Kind.SendRetweet: {
+        case Kind.SendRetweet:
             // Note:
             // The retweeted status will be sent on stream
             sendToMain('yf:request-retweet', action.tweet_id);
             break;
-        }
-        case Kind.UndoRetweet: {
+        case Kind.UndoRetweet:
             sendToMain('yf:undo-retweet', action.tweet_id);
             break;
-        }
-        case Kind.CreateLike: {
+        case Kind.CreateLike:
             // Note:
             // The likeed status will be sent on stream
             sendToMain('yf:request-like', action.tweet_id);
             break;
-        }
-        case Kind.DestroyLike: {
+        case Kind.DestroyLike:
             sendToMain('yf:destroy-like', action.tweet_id);
             break;
-        }
+        case Kind.UpdateStatus:
+            // Note:
+            // Add more status information (e.g. picture to upload)
+            sendToMain('yf:update-status', action.text, action.in_reply_to_id);
+            break;
         default:
             break;
     }
     return state;
 }
-
