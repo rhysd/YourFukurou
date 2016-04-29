@@ -7,12 +7,6 @@ declare module NodeJS {
     }
 }
 
-type MessageKind = 'info' | 'error';
-interface MessageInfo {
-    text: string;
-    kind: MessageKind;
-}
-
 interface String {
     includes: (sub: string) => boolean;
     startsWith: (sub: string, pos?: number) => boolean;

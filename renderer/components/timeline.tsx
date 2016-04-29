@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import {List} from 'immutable';
 import Tweet from './tweet/index';
 import Message from './message';
@@ -7,13 +8,17 @@ import Item from '../item/item';
 import TweetItem from '../item/tweet';
 import Separator from '../item/separator';
 import log from '../log';
+import State from '../reducers/state';
+import {MessageState} from '../reducers/message';
 
 interface TimelineProps extends React.Props<any> {
-    message: MessageInfo;
+    message: MessageState;
     items: List<Item>;
+    dispatch?: Redux.Dispatch;
 }
 
 function renderItem(i: Item, id: number) {
+    'use strict';
     const key = 'item-' + id;
     if (i instanceof TweetItem) {
         return <Tweet status={i} key={key}/>;
@@ -25,20 +30,25 @@ function renderItem(i: Item, id: number) {
     }
 }
 
-function renderMessage(msg: MessageInfo) {
-    if (msg === null) {
-        return undefined;
-    }
-    return <Message text={msg.text} kind={msg.kind}/>;
-}
-
 const Timeline = (props: TimelineProps) => {
     const size = props.items.size;
+    const msg = props.message;
     // TODO:
     // Determine the position to insert with ordered by id
     return <div className="timeline">
-        {renderMessage(props.message)}
-        {props.items.map((i, idx) => renderItem(i, size - idx)).toArray()}
+        {msg === null ?
+            undefined :
+            <Message text={msg.text} kind={msg.kind} dispatch={props.dispatch}/>}
+        {props.items
+            .map((i, idx) => renderItem(i, size - idx))
+            .toArray()}
     </div>
 };
-export default Timeline;
+
+function select(state: State): TimelineProps {
+    return {
+        message: state.message,
+        items: state.timeline.current_items,
+    };
+}
+export default connect(select)(Timeline);

@@ -4,6 +4,7 @@ import Item from './item/item';
 import Separator from './item/separator';
 import {AutoCompleteLabel} from './components/editor/auto_complete_decorator';
 import TimelineKind from './timeline';
+import {MessageKind} from './reducers/message';
 
 export enum Kind {
     ShowMessage,

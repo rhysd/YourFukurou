@@ -15,6 +15,8 @@ import IconButton from '../icon_button';
 import EditorKeybinds from '../../keybinds/editor';
 import Tweet from '../../item/tweet';
 import log from '../../log';
+import State from '../../reducers/state';
+import {EditorCompletionState} from '../../reducers/editor_completion';
 import AutoCompleteSuggestions, {SuggestionItem} from './suggestions';
 import {AutoCompleteLabel} from './auto_complete_decorator';
 import TweetPrimary from '../tweet/primary';
@@ -25,12 +27,7 @@ interface TweetEditorProps extends React.Props<any> {
     editor: EditorState;
     keybinds: EditorKeybinds;
     inReplyTo: Tweet;
-    completionLabel: AutoCompleteLabel;
-    completionQuery: string;
-    completionLeft: number;
-    completionTop: number;
-    completionSuggestions: SuggestionItem[];
-    completionFocusIdx: number;
+    completion: EditorCompletionState,
     dispatch?: Redux.Dispatch;
 }
 
@@ -122,15 +119,16 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
     }
 
     selectAutoCompletionItem() {
-        if (this.props.completionFocusIdx === null) {
+        const completion = this.props.completion;
+        if (completion.focus_idx === null) {
             return false;
         }
-        const s = this.props.completionSuggestions[this.props.completionFocusIdx];
+        const s = completion.suggestions[completion.focus_idx];
         if (!s) {
             return false;
         }
         this.props.dispatch(
-            selectAutoCompleteSuggestion(s.code, this.props.completionQuery)
+            selectAutoCompleteSuggestion(s.code, completion.query)
         );
         return true;
     }
@@ -161,6 +159,7 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
     }
 
     render() {
+        const completion = this.props.completion;
         const has_text = this.props.editor.getCurrentContent().hasText();
         const btn_state = has_text ? 'active' : 'inactive';
 
@@ -168,16 +167,9 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
         const count_state = char_count > 140 ? 'over' : 'normal';
 
         const suggestions =
-                this.props.completionLabel === null ?
+                completion.label === null ?
                     undefined :
-                    <AutoCompleteSuggestions
-                        label={this.props.completionLabel}
-                        query={this.props.completionQuery}
-                        left={this.props.completionLeft}
-                        top={this.props.completionTop}
-                        suggestions={this.props.completionSuggestions}
-                        focusIdx={this.props.completionFocusIdx}
-                    />;
+                    <AutoCompleteSuggestions {...completion}/>;
 
         return <div className="tweet-form animated fadeInDown" ref="body">
             {this.renderInReplyTo()}
@@ -218,5 +210,14 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
     }
 }
 
-export default connect()(TweetEditor);
+function select(state: State): TweetEditorProps {
+    return {
+        editor: state.editor.core,
+        keybinds: state.editor.keymaps,
+        inReplyTo: state.editor.in_reply_to_status,
+        completion: state.editorCompletion,
+    };
+}
+
+export default connect(select)(TweetEditor);
 

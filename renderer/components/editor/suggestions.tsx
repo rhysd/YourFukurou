@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {emoji} from 'node-emoji';
 import {AutoCompleteLabel} from './auto_complete_decorator';
 import {selectAutoCompleteSuggestion} from '../../actions';
+import {EditorCompletionState} from '../../reducers/editor_completion';
 import log from '../../log';
 
 const MAX_SUGGESTIONS = 5;
@@ -40,14 +41,7 @@ const EmojiEntry = connect()(
     }
 );
 
-export interface SuggestionsProps extends React.Props<AutoCompleteSuggestions> {
-    label: AutoCompleteLabel;
-    query: string;
-    left: number;
-    top: number;
-    suggestions: SuggestionItem[];
-    focusIdx: number;
-}
+export type SuggestionsProps = EditorCompletionState & React.Props<AutoCompleteSuggestions>;
 
 export default class AutoCompleteSuggestions extends React.Component<SuggestionsProps, {}> {
     node: HTMLElement;
@@ -55,8 +49,8 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
     moveElement() {
         // XXX:
         // Minus 75px for the width of side menu.
-        this.node.style.left = (this.props.left - 75) + 'px';
-        this.node.style.top = this.props.top + 'px';
+        this.node.style.left = (this.props.pos_left - 75) + 'px';
+        this.node.style.top = this.props.pos_top + 'px';
     }
 
     componentDidUpdate() {
@@ -72,7 +66,7 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
             return undefined;
         }
         const query = this.props.query;
-        const idx = this.props.focusIdx;
+        const idx = this.props.focus_idx;
         switch (this.props.label) {
             case 'EMOJI': {
                 return this.props.suggestions.map((s, i) =>

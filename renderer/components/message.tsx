@@ -1,16 +1,16 @@
 import * as React from 'react';
-import {connect} from 'react-redux';
 import IconButton from './icon_button';
 import {dismissMessage} from '../actions';
+import {MessageKind} from '../reducers/message';
 
 interface MessageProps extends React.Props<any> {
     text: string;
     kind: MessageKind;
+    dispatch: Redux.Dispatch;
     duration?: number;
-    dispatch?: Redux.Dispatch;
 };
 
-class Message extends React.Component<MessageProps, {}> {
+export default class Message extends React.Component<MessageProps, {}> {
     node: HTMLElement;
 
     setupDismiss() {
@@ -50,4 +50,3 @@ class Message extends React.Component<MessageProps, {}> {
         );
     }
 }
-export default connect()(Message);
