@@ -23,6 +23,7 @@ const Hashtag = (props: HashtagProps) => (
 );
 
 export default function createHashtagDecorator() {
+    'use strict';
     return {
         strategy: hashtagStrategy,
         component: Hashtag,

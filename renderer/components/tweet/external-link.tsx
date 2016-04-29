@@ -4,6 +4,7 @@ import log from '../../log';
 const openExternal = global.require('electron').shell.openExternal;
 
 export function openExternalLink(event: MouseEvent) {
+    'use strict';
     event.preventDefault();
     event.stopPropagation();
     let target = event.target as Node;
@@ -15,7 +16,7 @@ export function openExternalLink(event: MouseEvent) {
         }
         target = target.parentNode;
     }
-    log.error('openExternalLink: Unexpected link', event.target)
+    log.error('openExternalLink: Unexpected link', event.target);
 }
 
 interface ExternalLinkProps extends React.Props<any> {
@@ -26,7 +27,7 @@ interface ExternalLinkProps extends React.Props<any> {
 
 const ExternalLink = (props: ExternalLinkProps) => (
     <a
-        className='external-link'
+        className="external-link"
         href={props.url}
         style={{color: props.color}}
         title={props.title}

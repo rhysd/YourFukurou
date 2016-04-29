@@ -6,7 +6,7 @@ import {updateAutoCompletion, stopAutoCompletion} from '../../actions';
 export type AutoCompleteLabel = 'EMOJI' | 'SCREENNAME' | 'HASHTAG';
 
 function createAutoCompleteStrategy(re: RegExp) {
-    'use strict'
+    'use strict';
     return function autoCOmpleteStrategy(contentBlock: ContentBlock, callback: (s: number, e: number) => void) {
         const text = contentBlock.getText();
         while (true) {

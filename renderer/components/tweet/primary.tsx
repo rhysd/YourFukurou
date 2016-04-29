@@ -11,10 +11,10 @@ interface TweetPrimaryProps extends React.Props<any> {
 
 export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}> {
     text_elem: HTMLElement;
-    actions_elem: HTMLElement
+    actions_elem: HTMLElement;
 
     componentDidMount() {
-        Array.prototype.forEach.call(this.text_elem.querySelectorAll("a"), (a: HTMLElement) => {
+        Array.prototype.forEach.call(this.text_elem.querySelectorAll('a'), (a: HTMLElement) => {
             a.className = 'external-link';
             a.onclick = openExternalLink;
         });

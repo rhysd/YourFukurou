@@ -42,10 +42,11 @@ const Timeline = (props: TimelineProps) => {
         {props.items
             .map((i, idx) => renderItem(i, size - idx))
             .toArray()}
-    </div>
+    </div>;
 };
 
 function select(state: State): TimelineProps {
+    'use strict';
     return {
         message: state.message,
         items: state.timeline.getCurrentTimeline(),

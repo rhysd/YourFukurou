@@ -12,7 +12,7 @@ export default class QuotedTweet extends React.Component<QuotedTweetProps, {}> {
     text_elem: HTMLElement;
 
     componentDidMount() {
-        Array.prototype.forEach.call(this.text_elem.querySelectorAll("a"), (a: HTMLElement) => {
+        Array.prototype.forEach.call(this.text_elem.querySelectorAll('a'), (a: HTMLElement) => {
             a.className = 'external-link';
             a.style.color = '#eeeeee';
             a.onclick = openExternalLink;
@@ -36,7 +36,7 @@ export default class QuotedTweet extends React.Component<QuotedTweetProps, {}> {
                 dangerouslySetInnerHTML={{__html: s.buildLinkedHTML()}}
                 ref={r => { this.text_elem = r; }}
             />
-        </div>
+        </div>;
     }
 }
 

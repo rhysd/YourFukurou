@@ -33,7 +33,7 @@ const SideMenu = (props: SideMenuProps) => (
         />
         <IconButton
             className={props.timeline === 'home' ?
-                       'side-menu__button side-menu__button_active':
+                       'side-menu__button side-menu__button_active' :
                        'side-menu__button'}
             name="comment-o"
             tip="Home"
@@ -41,7 +41,7 @@ const SideMenu = (props: SideMenuProps) => (
         />
         <IconButton
             className={props.timeline === 'mention' ?
-                       'side-menu__button side-menu__button_active':
+                       'side-menu__button side-menu__button_active' :
                        'side-menu__button'}
             name="comments"
             tip="Notifications"
@@ -72,6 +72,7 @@ const SideMenu = (props: SideMenuProps) => (
 );
 
 function select(state: State): SideMenuProps {
+    'use strict';
     return {
         user: state.timeline.user,
         timeline: state.timeline.kind,

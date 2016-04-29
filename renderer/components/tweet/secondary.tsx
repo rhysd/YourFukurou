@@ -7,6 +7,7 @@ interface TweetSecondaryProps extends React.Props<any> {
 }
 
 function retweetedBy(tw: Tweet) {
+    'use strict';
     if (!tw.isRetweet()) {
         return undefined;
     }

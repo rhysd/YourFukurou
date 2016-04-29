@@ -27,7 +27,7 @@ interface TweetEditorProps extends React.Props<any> {
     editor: EditorState;
     keybinds: EditorKeybinds;
     inReplyTo: Tweet;
-    completion: EditorCompletionState,
+    completion: EditorCompletionState;
     dispatch?: Redux.Dispatch;
 }
 
@@ -109,7 +109,7 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
         body: HTMLElement;
         editor: HTMLElement;
         [s: string]: React.Component<any, any> | Element;
-    }
+    };
 
     close() {
         this.refs.body.addEventListener('animationend', () => {
@@ -211,6 +211,7 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
 }
 
 function select(state: State): TweetEditorProps {
+    'use strict';
     return {
         editor: state.editor.core,
         keybinds: state.editor.keymaps,

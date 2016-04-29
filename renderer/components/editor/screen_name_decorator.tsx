@@ -23,6 +23,7 @@ const ScreenName = (props: ScreenNameProps) => (
 );
 
 export default function createScreenNameDecorator() {
+    'use strict';
     return {
         strategy: screenNameStrategy,
         component: ScreenName,

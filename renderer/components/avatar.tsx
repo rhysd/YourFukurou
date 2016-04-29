@@ -9,6 +9,7 @@ interface AvatarProps extends React.Props<any> {
 }
 
 function getStyle(props: AvatarProps) {
+    'use strict';
     const length = props.size ? `${props.size}px` : 'auto';
     const border = props.border ? `1px solid ${props.border}` : undefined;
     return {

@@ -60,7 +60,7 @@
     "no-trailing-whitespace": true,
     "no-unreachable": true,
     "no-unused-expression": true,
-    "no-unused-variable": true,
+    "no-unused-variable": "react",
     "no-use-before-declare": true,
     "no-var-keyword": true,
     "no-var-requires": false,
@@ -75,7 +75,8 @@
     "quotemark": [
       true,
       "single",
-      "avoid-escape"
+      "avoid-escape",
+      "jsx-double"
     ],
     "radix": true,
     "semicolon": true,

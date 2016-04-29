@@ -26,7 +26,7 @@ const EmojiEntry = connect()(
         function onClick(e: React.MouseEvent) {
             e.preventDefault();
             props.dispatch(selectAutoCompleteSuggestion(props.code, props.text));
-        };
+        }
 
         const n = props.focused ?
             'autocomplete__suggestion-item autocomplete__suggestion-item_focused' :
@@ -62,7 +62,7 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
     }
 
     renderSuggestionItems() {
-        if (this.props.suggestions.length == 0) {
+        if (this.props.suggestions.length === 0) {
             return undefined;
         }
         const query = this.props.query;
@@ -136,6 +136,6 @@ export function searchSuggestionItems(query: string, label: AutoCompleteLabel) {
         case 'EMOJI': return searchEmojiSuggestionItems(query);
         default:
             log.error('Unimplemented auto complete type:', label);
-            return []
+            return [];
     }
 }
