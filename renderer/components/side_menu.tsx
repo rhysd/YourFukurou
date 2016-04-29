@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {State} from '../reducers';
+import State from '../reducers/state';
 import IconButton from './icon_button';
 import Avatar from './avatar';
 import {showMessage, toggleEditor, changeCurrentTimeline} from '../actions';

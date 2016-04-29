@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {emoji} from 'node-emoji';
 import {AutoCompleteLabel} from './auto_complete_decorator';
 import {selectAutoCompleteSuggestion} from '../../actions';
-import {EditorCompletionState} from '../../reducers';
+import {EditorCompletionState} from '../../reducers/editor_completion';
 import log from '../../log';
 
 const MAX_SUGGESTIONS = 5;

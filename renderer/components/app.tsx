@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {State} from '../reducers';
+import State from '../reducers/state';
 import SideMenu from './side_menu';
 import Timeline from './timeline';
 import TweetEditor from './editor/index';
