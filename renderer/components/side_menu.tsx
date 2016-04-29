@@ -2,15 +2,18 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import IconButton from './icon_button';
 import Avatar from './avatar';
-import {showMessage, toggleEditor} from '../actions';
+import {showMessage, toggleEditor, changeCurrentTimeline} from '../actions';
 import {TwitterUser} from '../item/tweet';
+import TimelineKind from '../timeline';
 
 interface SideMenuProps extends React.Props<any> {
     user: TwitterUser;
+    timeline: TimelineKind;
     dispatch?: Redux.Dispatch;
 }
 
 function notImplementedYet(props: SideMenuProps) {
+    'use strict';
     props.dispatch(showMessage('Sorry, this feature is not implemented yet.', 'error'));
 }
 
@@ -28,15 +31,20 @@ const SideMenu = (props: SideMenuProps) => (
             onClick={() => props.dispatch(toggleEditor())}
         />
         <IconButton
-            className="side-menu__button side-menu__button_active"
+            className={props.timeline === 'home' ?
+                       'side-menu__button side-menu__button_active':
+                       'side-menu__button'}
             name="comment-o"
             tip="Home"
+            onClick={() => props.dispatch(changeCurrentTimeline('home'))}
         />
         <IconButton
-            className="side-menu__button"
+            className={props.timeline === 'mention' ?
+                       'side-menu__button side-menu__button_active':
+                       'side-menu__button'}
             name="comments"
             tip="Notifications"
-            onClick={() => notImplementedYet(props)}
+            onClick={() => props.dispatch(changeCurrentTimeline('mention'))}
         />
         <IconButton
             className="side-menu__button"

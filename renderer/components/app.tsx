@@ -11,11 +11,13 @@ import Tweet, {TwitterUser} from '../item/tweet';
 import EditorKeybinds from '../keybinds/editor';
 import {AutoCompleteLabel} from './editor/auto_complete_decorator';
 import {SuggestionItem} from './editor/suggestions';
+import TimelineKind from '../timeline';
 
 interface AppProps {
     items: List<Item>;
     message: MessageInfo;
     user: TwitterUser;
+    timeline: TimelineKind;
     editor: EditorState;
     editorOpen: boolean;
     editorKeybinds: EditorKeybinds;
@@ -48,7 +50,7 @@ function renderEditor(props: AppProps) {
 
 const App = (props: AppProps) => (
     <div className="app-root">
-        <SideMenu user={props.user}/>
+        <SideMenu user={props.user} timeline={props.timeline}/>
         <div className="app-root__main">
             {renderEditor(props)}
             <Timeline items={props.items} message={props.message}/>
@@ -62,6 +64,7 @@ function select(state: State): AppProps {
         items: state.current_items,
         message: state.current_message,
         user: state.current_user,
+        timeline: state.current_timeline,
         editor: state.editor,
         editorOpen: state.editor_open,
         editorKeybinds: state.editor_keybinds,

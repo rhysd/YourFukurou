@@ -1,5 +1,6 @@
 type ChannelFromMain
     = 'yf:tweet'
+    | 'yf:mentions'
     | 'yf:retweet-success'
     | 'yf:unretweet-success'
     | 'yf:like-success'

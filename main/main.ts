@@ -10,6 +10,7 @@ import setApplicationMenu from './menu';
 const load_cache = load_cached_tokens();
 const consumer_key = process.env.YOURFUKUROU_CONSUMER_KEY || 'H4fJ2rgNuH2UiOXuPBjHpl9zL';
 const consumer_secret = process.env.YOURFUKUROU_CONSUMER_KEY_SECRET || 'azYRjJn6emdsOIUhepy0Wygmaq9PltEnpsx4P4BfU1HMp5Unmm';
+const should_use_dummy_data = process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS;
 
 app.once('window-all-closed', () => app.quit());
 
@@ -60,21 +61,10 @@ function open_window(access: AccessToken) {
             });
             twitter.sender = new IpcSender(win.webContents);
 
-            powerMonitor.on('suspend', () => {
-                log.debug("PC's going to suspend, stop streaming");
-                twitter.stopStreaming();
-            });
-            powerMonitor.on('resume', () => {
-                log.debug("PC's resuming, will reconnect after 3secs: " + twitter.isStopped());
-                if (twitter.isStopped()) {
-                    twitter.sendConnectionFailure();
-                    twitter.connectToStream().catch(e => log.error('Unexpected error on streaming after reconnection', e));
-                }
-            });
-
-            if (process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS) {
+            if (should_use_dummy_data) {
                 twitter
-                    .sendDummyStream()
+                    .sendDummyAccount()
+                    .then(() => twitter.sendDummyStream())
                     .catch(e => log.error('Unexpected error on dummy stream:', e));
                 return;
             }
@@ -82,7 +72,7 @@ function open_window(access: AccessToken) {
             twitter
                 .sendAuthenticatedAccount()
                 .catch(err => {
-                    if (!err || err instanceof Error || err[0].code !== 32) {
+                    if (!err || (err instanceof Error) || err[0].code !== 32) {
                         log.error('Unexpected error on verifying account:', err);
                         return;
                     }
@@ -105,9 +95,33 @@ function open_window(access: AccessToken) {
                             log.error('Give up: Second authentication try failed.  If you use environment variables for tokens, please check them:', e);
                         });
                 })
-                .then(() => twitter.sendHomeTimeline())
+                .then(() => Promise.all([
+                    twitter.fetchHomeTimeline(),
+                    twitter.fetchMentionTimeline(),
+                ]))
+                .then(([tweets, mentions]) => {
+                    for (const tw of tweets) {
+                        twitter.sender.send('yf:tweet', tw);
+                    }
+                    twitter.sender.send('yf:mentions', mentions);
+                })
                 .then(() => twitter.connectToStream())
-                .catch(e => log.error('Unexpected error on streaming', e));
+                .catch((e: any) => log.error('Unexpected error on streaming', e));
+
+            powerMonitor.on('suspend', () => {
+                log.debug("PC's going to suspend, stop streaming");
+                if (!should_use_dummy_data) {
+                    twitter.stopStreaming();
+                }
+            });
+            powerMonitor.on('resume', () => {
+                log.debug("PC's resuming, will reconnect after 3secs: " + twitter.isStopped());
+                if (twitter.isStopped() && !should_use_dummy_data) {
+                    twitter.sendConnectionFailure();
+                    twitter.connectToStream().catch(e => log.error('Unexpected error on streaming after reconnection', e));
+                }
+            });
+
         });
     } else {
         log.error('Failed to get access tokens');

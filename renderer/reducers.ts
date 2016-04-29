@@ -11,6 +11,7 @@ import createScreenNameDecorator from './components/editor/screen_name_decorator
 import createHashtagDecorator from './components/editor/hashtag_decorator';
 import autoCompleteFactory, {AutoCompleteLabel} from './components/editor/auto_complete_decorator';
 import {searchSuggestionItems, SuggestionItem} from './components/editor/suggestions';
+import TimelineKind from './timeline';
 
 const electron = global.require('electron');
 const ipc = electron.ipcRenderer;
@@ -33,6 +34,9 @@ export interface State {
     current_items: List<Item>;
     current_message: MessageInfo;
     current_user: TwitterUser;
+    current_timeline: TimelineKind;
+    home_timeline: List<Item>;
+    mention_timeline: List<Item>;
 
     editor: EditorState;
     editor_open: boolean;
@@ -51,6 +55,9 @@ const init: State = {
     current_items: List<Item>(),
     current_message: null,
     current_user: null,
+    current_timeline: 'home',
+    home_timeline: List<Item>(),
+    mention_timeline: List<Item>(),
     editor: EditorState.createEmpty(editorDecolator),
     editor_open: false,
     editor_keybinds: new EditorKeymaps(),
@@ -126,6 +133,36 @@ function closeEditor(state: State) {
     return next_state;
 }
 
+function getCurrentTimeline(state: State) {
+    'use strict';
+    switch (state.current_timeline) {
+        case 'home': return state.home_timeline;
+        case 'mention': return state.mention_timeline;
+        default:
+            log.error('Invalid timeline for:', state.current_timeline);
+            return null;
+    }
+}
+
+// This should be done in TimelineManager
+function replaceStatusInTimeline(state: State, status: Tweet) {
+    'use strict';
+    state.home_timeline = updateStatus(state.home_timeline, status);
+    state.mention_timeline = updateStatus(state.mention_timeline, status);
+    state.current_items = getCurrentTimeline(state);
+    return state;
+}
+
+function containsStatusInTimeline(is: List<Item>, t: Tweet) {
+    return is.find(i => {
+        if (i instanceof Tweet) {
+            return i.id === t.id;
+        } else {
+            return false;
+        }
+    })
+}
+
 export default function root(state: State = init, action: Action) {
     'use strict';
     switch (action.type) {
@@ -136,7 +173,11 @@ export default function root(state: State = init, action: Action) {
         }
         case Kind.AddTweetToTimeline: {
             const next_state = assign({}, state) as State;
-            next_state.current_items = state.current_items.unshift(action.item);
+            next_state.home_timeline = state.home_timeline.unshift(action.status);
+            if (action.status.mentionsTo(state.current_user)) {
+                next_state.mention_timeline = state.mention_timeline.unshift(action.status);
+            }
+            next_state.current_items = getCurrentTimeline(next_state);
             return next_state;
         }
         case Kind.ShowMessage: {
@@ -153,13 +194,25 @@ export default function root(state: State = init, action: Action) {
             return next_state;
         }
         case Kind.AddSeparator: {
-            if (state.current_items.first() instanceof Separator) {
-                // Note:
-                // Do not add multiple separators continuously
+            const next_state = assign({}, state) as State;
+            if (!(state.current_items.first() instanceof Separator)) {
+                next_state.current_items = state.current_items.unshift(action.item);
+            }
+            if (!(state.home_timeline.first() instanceof Separator)) {
+                next_state.home_timeline = state.home_timeline.unshift(action.item);
+            }
+            if (!(state.mention_timeline.first() instanceof Separator)) {
+                next_state.mention_timeline = state.mention_timeline.unshift(action.item);
+            }
+            return next_state;
+        }
+        case Kind.ChangeCurrentTimeline: {
+            if (action.timeline === state.current_timeline) {
                 return state;
             }
             const next_state = assign({}, state) as State;
-            next_state.current_items = state.current_items.unshift(action.item);
+            next_state.current_timeline = action.timeline;
+            next_state.current_items = getCurrentTimeline(next_state);
             return next_state;
         }
         case Kind.SendRetweet: {
@@ -174,13 +227,11 @@ export default function root(state: State = init, action: Action) {
         }
         case Kind.RetweetSucceeded: {
             const next_state = assign({}, state) as State;
-            next_state.current_items = updateStatus(state.current_items, action.status.getMainStatus());
-            return next_state;
+            return replaceStatusInTimeline(next_state, action.status.getMainStatus());
         }
         case Kind.UnretweetSucceeded: {
             const next_state = assign({}, state) as State;
-            next_state.current_items = updateStatus(state.current_items, action.status);
-            return next_state;
+            return replaceStatusInTimeline(next_state, action.status);
         }
         case Kind.CreateLike: {
             // Note:
@@ -194,13 +245,11 @@ export default function root(state: State = init, action: Action) {
         }
         case Kind.LikeSucceeded: {
             const next_state = assign({}, state) as State;
-            next_state.current_items = updateStatus(state.current_items, action.status);
-            return next_state;
+            return replaceStatusInTimeline(next_state, action.status);
         }
         case Kind.UnlikeSucceeded: {
             const next_state = assign({}, state) as State;
-            next_state.current_items = updateStatus(state.current_items, action.status);
-            return next_state;
+            return replaceStatusInTimeline(next_state, action.status);
         }
         case Kind.SetCurrentUser: {
             const next_state = assign({}, state) as State;
@@ -321,8 +370,20 @@ export default function root(state: State = init, action: Action) {
             }
             return next_state;
         }
+        case Kind.AddMentions: {
+            const next_state = assign({}, state) as State;
+            const added = List<Item>(
+                action.mentions.filter(
+                    m => !containsStatusInTimeline(state.mention_timeline, m)
+                )
+            );
+            next_state.mention_timeline = added.concat(state.mention_timeline).toList();
+            next_state.current_items = getCurrentTimeline(next_state);
+            return next_state;
+        }
         default:
             break;
     }
+    log.debug('Unhandled action', action.type);
     return state;
 }

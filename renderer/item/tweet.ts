@@ -27,6 +27,10 @@ export class TwitterUser {
         return this.json.name;
     }
 
+    get id() {
+        return this.json.id;
+    }
+
     userPageUrl() {
         return `https://twitter.com/${this.json.screen_name}`;
     }
@@ -120,6 +124,23 @@ export default class Tweet implements Item {
 
     hasInReplyTo() {
         return !!this.json.in_reply_to_status_id_str;
+    }
+
+    mentionsTo(user: TwitterUser) {
+        const author_id = user.id;
+        if (this.json.in_reply_to_user_id === author_id) {
+            return true;
+        }
+
+        if (this.json.entities && this.json.entities.user_mentions) {
+            for (const m of this.json.entities.user_mentions) {
+                if (m.id === author_id) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     getAllEntities() {
