@@ -127,14 +127,22 @@ export default class Tweet implements Item {
     }
 
     mentionsTo(user: TwitterUser) {
-        const author_id = user.id;
-        if (this.json.in_reply_to_user_id === author_id) {
+        const my_id = user.id;
+        if (this.json.in_reply_to_user_id === my_id) {
+            return true;
+        }
+
+        if (this.json.retweeted_status && this.json.retweeted_status.user.id === my_id) {
+            return true;
+        }
+
+        if (this.json.quoted_status && this.json.quoted_status.user.id === my_id) {
             return true;
         }
 
         if (this.json.entities && this.json.entities.user_mentions) {
             for (const m of this.json.entities.user_mentions) {
-                if (m.id === author_id) {
+                if (m.id === my_id) {
                     return true;
                 }
             }
