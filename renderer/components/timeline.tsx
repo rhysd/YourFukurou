@@ -48,7 +48,7 @@ const Timeline = (props: TimelineProps) => {
 function select(state: State): TimelineProps {
     return {
         message: state.message,
-        items: state.timeline.current_items,
+        items: state.timeline.getCurrentTimeline(),
     };
 }
 export default connect(select)(Timeline);

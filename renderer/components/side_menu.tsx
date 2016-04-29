@@ -5,7 +5,7 @@ import IconButton from './icon_button';
 import Avatar from './avatar';
 import {showMessage, toggleEditor, changeCurrentTimeline} from '../actions';
 import {TwitterUser} from '../item/tweet';
-import TimelineKind from '../timeline';
+import {TimelineKind} from '../states/timeline';
 
 interface SideMenuProps extends React.Props<any> {
     user: TwitterUser;
@@ -73,8 +73,8 @@ const SideMenu = (props: SideMenuProps) => (
 
 function select(state: State): SideMenuProps {
     return {
-        user: state.timeline.current_user,
-        timeline: state.timeline.current_timeline,
+        user: state.timeline.user,
+        timeline: state.timeline.kind,
     };
 }
 export default connect(select)(SideMenu);
