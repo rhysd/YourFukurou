@@ -16,7 +16,7 @@ import EditorKeybinds from '../../keybinds/editor';
 import Tweet from '../../item/tweet';
 import log from '../../log';
 import State from '../../reducers/state';
-import {EditorCompletionState} from '../../reducers/editor_completion';
+import EditorCompletionState from '../../states/editor_completion';
 import AutoCompleteSuggestions, {SuggestionItem} from './suggestions';
 import {AutoCompleteLabel} from './auto_complete_decorator';
 import TweetPrimary from '../tweet/primary';

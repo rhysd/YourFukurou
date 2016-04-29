@@ -37,6 +37,8 @@
     "reducers/stateless_actions.ts",
     "reducers/timeline.ts",
     "states/timeline.ts",
+    "states/tweet_editor.ts",
+    "states/editor_completion.ts",
     "index.tsx",
     "ipc_channel_proxy.ts",
     "item/item.ts",
