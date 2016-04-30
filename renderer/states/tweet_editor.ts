@@ -76,17 +76,21 @@ export default class TweetEditorState {
         );
     }
 
+    setTextToEditor(text: string) {
+        return EditorState.moveSelectionToEnd(
+            EditorState.push(
+                this.core,
+                ContentState.createFromText(text),
+                'insert-characters'
+            )
+        );
+    }
+
     openEditor(status: Tweet) {
         const next_core =
-            this.in_reply_to_status === null ?
+            status === null ?
                 this.core :
-                EditorState.moveSelectionToEnd(
-                    EditorState.push(
-                        this.core,
-                        ContentState.createFromText(`@${status.getMainStatus().user.screen_name} `),
-                        'insert-characters'
-                    )
-                );
+                this.setTextToEditor(`@${status.getMainStatus().user.screen_name} `);
 
         return new TweetEditorState(
             next_core,
