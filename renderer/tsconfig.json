@@ -48,6 +48,7 @@
     "keybinds/editor.ts",
     "lib.d.ts",
     "log.ts",
+    "tweet_parser.ts",
     "draft-js.d.ts",
     "node-emoji.d.ts",
     "twitter-api.d.ts"

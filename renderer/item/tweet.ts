@@ -1,5 +1,6 @@
 import {autoLinkEntities, EntityWithIndices} from 'twitter-text';
 import Item from './item';
+import TweetTextParser, {TweetTextToken} from '../tweet_parser';
 
 const re_normal_size = /normal(?=\.\w+$)/i;
 
@@ -40,11 +41,13 @@ export default class Tweet implements Item {
     public user: TwitterUser;
     private retweeted_status_memo: Tweet;
     private quoted_status_memo: Tweet;
+    private parsed_tokens_memo: TweetTextToken[];
 
     constructor(public json: TweetJson) {
         this.user = new TwitterUser(json.user);
         this.retweeted_status_memo = null;
         this.quoted_status_memo = null;
+        this.parsed_tokens_memo = null;
     }
 
     get id() {
@@ -97,6 +100,14 @@ export default class Tweet implements Item {
             this.quoted_status_memo = new Tweet(this.json.quoted_status);
         }
         return this.quoted_status_memo;
+    }
+
+    get parsed_tokens() {
+        if (this.parsed_tokens_memo === null) {
+            const parser = new TweetTextParser(this.json);
+            this.parsed_tokens_memo = parser.parse();
+        }
+        return this.parsed_tokens_memo;
     }
 
     getMainStatus() {
