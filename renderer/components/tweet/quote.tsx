@@ -14,7 +14,7 @@ export default class QuotedTweet extends React.Component<QuotedTweetProps, {}> {
     componentDidMount() {
         Array.prototype.forEach.call(this.text_elem.querySelectorAll('a'), (a: HTMLElement) => {
             a.className = 'external-link';
-            a.style.color = '#eeeeee';
+            a.style.color = '#808080';
             a.onclick = openExternalLink;
         });
     }
