@@ -9,7 +9,7 @@ import {
     likeSucceeded,
     unlikeSucceeded,
     setCurrentUser,
-    deleteStatus,
+    deleteStatusInTimeline,
 } from './actions';
 import Store from './store';
 import log from './log';
@@ -82,7 +82,7 @@ export default class IpcChannelProxy {
         });
         this.subscribe('yf:delete-status', (_: Electron.IpcRendererEvent, json: DeleteJson) => {
             log.debug('Received channel yf:delete-status', json.status.id_str);
-            Store.dispatch(deleteStatus(json.status.id_str));
+            Store.dispatch(deleteStatusInTimeline(json.status.id_str));
         });
         this.subscribe('yf:update-status-success', (_: Electron.IpcRendererEvent, json: TweetJson) => {
             log.debug('Received channel yf:unlike-success', json.id_str);
