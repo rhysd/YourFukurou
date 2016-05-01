@@ -32,6 +32,9 @@ export default function remoteActions(state: {} = null, action: Action) {
             // Add more status information (e.g. picture to upload)
             sendToMain('yf:update-status', action.text, action.in_reply_to_id);
             break;
+        case Kind.DestroyStatus:
+            sendToMain('yf:destroy-status', action.tweet_id);
+            break;
         default:
             break;
     }

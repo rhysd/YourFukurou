@@ -32,6 +32,7 @@ export default class Twitter {
         this.subscribe('yf:request-like', (_: Electron.IpcMainEvent, tweet_id: string) => this.like(tweet_id));
         this.subscribe('yf:destroy-like', (_: Electron.IpcMainEvent, tweet_id: string) => this.unlike(tweet_id));
         this.subscribe('yf:update-status', (_: Electron.IpcMainEvent, text: string, in_reply_to?: string) => this.updateStatus(text, in_reply_to));
+        this.subscribe('yf:destroy-status', (_: Electron.IpcMainEvent, tweet_id: string) => this.destroyStatus(tweet_id));
     }
 
     updateStatus(text: string, in_reply_to?: string) {
@@ -98,6 +99,13 @@ export default class Twitter {
         this.post('statuses/unretweet/' + tweet_id, {}, ret => {
             this.sender.send('yf:unretweet-success', ret);
             log.debug('Unretweet success:', ret.id);
+        });
+    }
+
+    destroyStatus(tweet_id: string) {
+        this.post('statuses/destroy/' + tweet_id, {}, ret => {
+            this.sender.send('yf:delete-status', ret);
+            log.debug('Destroy status success:', ret.id);
         });
     }
 

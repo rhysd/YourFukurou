@@ -9,9 +9,10 @@ import {
     createLike,
     destroyLike,
     openEditor,
+    destroyStatus,
 } from '../../actions';
 
-type TweetActionKind = 'reply' | 'like' | 'retweet';
+type TweetActionKind = 'reply' | 'like' | 'retweet' | 'delete';
 
 interface TweetActionButtonProps extends React.Props<any> {
     status: Tweet;
@@ -52,12 +53,18 @@ function onReplyClicked(props: TweetActionButtonProps) {
     props.dispatch(openEditor(props.status));
 }
 
+function onDeleteClicked(props: TweetActionButtonProps) {
+    'use strict';
+    props.dispatch(destroyStatus(props.status.id));
+}
+
 function onClick(props: TweetActionButtonProps) {
     'use strict';
     switch (props.kind) {
         case 'reply': onReplyClicked(props); break;
         case 'retweet': onRetweetClicked(props); break;
         case 'like': onLikeClicked(props); break;
+        case 'delete': onDeleteClicked(props); break;
         default: break;
     }
 }
@@ -68,6 +75,7 @@ function getIcon(k: TweetActionKind) {
         case 'reply': return 'reply';
         case 'retweet': return 'retweet';
         case 'like': return 'heart';
+        case 'delete': return 'trash';
         default: return '';
     }
 }

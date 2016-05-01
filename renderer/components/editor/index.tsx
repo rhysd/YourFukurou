@@ -13,7 +13,7 @@ import {
 } from '../../actions';
 import IconButton from '../icon_button';
 import EditorKeybinds from '../../keybinds/editor';
-import Tweet from '../../item/tweet';
+import Tweet, {TwitterUser} from '../../item/tweet';
 import log from '../../log';
 import State from '../../states/root';
 import EditorCompletionState from '../../states/editor_completion';
@@ -28,6 +28,7 @@ interface TweetEditorProps extends React.Props<any> {
     keybinds: EditorKeybinds;
     inReplyTo: Tweet;
     completion: EditorCompletionState;
+    user: TwitterUser;
     dispatch?: Redux.Dispatch;
 }
 
@@ -154,7 +155,7 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
         return <div className="tweet-form__in-reply-to">
             <TweetIcon user={tw.user}/>
             <TweetSecondary status={this.props.inReplyTo}/>
-            <TweetPrimary status={this.props.inReplyTo}/>
+            <TweetPrimary status={this.props.inReplyTo} user={this.props.user}/>
         </div>;
     }
 
@@ -217,6 +218,7 @@ function select(state: State): TweetEditorProps {
         keybinds: state.editor.keymaps,
         inReplyTo: state.editor.in_reply_to_status,
         completion: state.editorCompletion,
+        user: state.timeline.user,
     };
 }
 

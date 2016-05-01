@@ -1,12 +1,13 @@
 import * as React from 'react';
 import {openExternalLink} from './external-link';
 import log from '../../log';
-import Tweet from '../../item/tweet';
+import Tweet, {TwitterUser} from '../../item/tweet';
 import TweetActionButton from './action_button';
 import TweetText from './text';
 import QuotedTweet from './quote';
 
 interface TweetPrimaryProps extends React.Props<any> {
+    user: TwitterUser;
     status: Tweet;
 }
 
@@ -59,6 +60,9 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                         ref={r => {this.actions_elem = r; }}
                     >
                         <TweetActionButton kind="reply" status={s}/>
+                        {s.user.id === this.props.user.id ?
+                            <TweetActionButton kind="delete" status={s}/> :
+                            <TweetActionButton kind="retweet" status={s}/>}
                         <TweetActionButton kind="retweet" status={s}/>
                         <TweetActionButton kind="like" status={s}/>
                     </div>

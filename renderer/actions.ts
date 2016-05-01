@@ -21,6 +21,7 @@ export enum Kind {
     UndoRetweet,
     RetweetSucceeded,
     UnretweetSucceeded,
+    DestroyStatus,
 
     CreateLike,
     DestroyLike,
@@ -124,6 +125,16 @@ export function undoRetweet(tweet_id: string) {
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.UndoRetweet,
+            tweet_id,
+        }));
+    };
+}
+
+export function destroyStatus(tweet_id: string) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.DestroyStatus,
             tweet_id,
         }));
     };

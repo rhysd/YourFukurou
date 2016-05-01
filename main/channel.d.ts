@@ -18,4 +18,5 @@ type ChannelFromRenderer
     | 'yf:request-like'
     | 'yf:destroy-like'
     | 'yf:update-status'
+    | 'yf:destroy-status'
 ;

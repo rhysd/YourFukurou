@@ -1,5 +1,5 @@
 import * as React from 'react';
-import TweetItem from '../../item/tweet';
+import TweetItem, {TwitterUser} from '../../item/tweet';
 import TweetPrimary from './primary';
 import TweetSecondary from './secondary';
 import TweetIcon from './icon';
@@ -11,6 +11,7 @@ import TweetIcon from './icon';
 
 interface TweetProps extends React.Props<Tweet> {
     status: TweetItem;
+    user: TwitterUser;
 }
 
 export default class Tweet extends React.Component<TweetProps, {}> {
@@ -30,7 +31,7 @@ export default class Tweet extends React.Component<TweetProps, {}> {
         return <div className="tweet__body animated fadeIn" ref={r => { this.node = r; }} >
             <TweetIcon user={tw.user}/>
             <TweetSecondary status={this.props.status}/>
-            <TweetPrimary status={this.props.status}/>
+            <TweetPrimary status={this.props.status} user={this.props.user}/>
         </div>;
     }
 }
