@@ -50,7 +50,7 @@ function htmlUnescape(text: string) {
     return text.replace(RE_UNESCAPE, htmlUnescapeReplacer);
 }
 
-const RE_ENTITY = /(?:@\w+|https:\/\/t\.co\/\w+|#)/;
+const RE_ENTITY = /(?:@\w+|https?:\/\/t\.co\/\w+|#)/;
 
 export default class TweetTextParser {
     private pos: number;
