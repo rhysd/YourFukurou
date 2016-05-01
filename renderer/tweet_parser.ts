@@ -31,6 +31,25 @@ export function isUrl(t: TweetTextToken): t is TweetTextUrl {
     return t.hasOwnProperty('url');
 }
 
+const UNESCAPE_TABLE = {
+    '&amp;': '&',
+    '&gt;': '>',
+    '&lt;': '<',
+    '&quot;': '"',
+    '&#x27;': "'",
+} as {[s: string]: string};
+function htmlUnescapeReplacer(s: string) {
+    'use strict';
+    return UNESCAPE_TABLE[s];
+}
+
+const RE_UNESCAPE = /(?:&amp;|&gt;|&lt;|&quot;|&#x27;)/g;
+
+function htmlUnescape(text: string) {
+    'use strict';
+    return text.replace(RE_UNESCAPE, htmlUnescapeReplacer);
+}
+
 const RE_ENTITY = /(?:@\w+|https:\/\/t\.co\/\w+|#)/;
 
 export default class TweetTextParser {
@@ -44,7 +63,7 @@ export default class TweetTextParser {
 
     constructor(private json: TweetJson) {
         this.pos = 0;
-        this.text = json.text;
+        this.text = htmlUnescape(json.text);
         this.len = this.text.length;
         if (!json.entities) {
             this.hashtags = [];

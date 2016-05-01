@@ -63,7 +63,6 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                         {s.user.id === this.props.user.id ?
                             <TweetActionButton kind="delete" status={s}/> :
                             <TweetActionButton kind="retweet" status={s}/>}
-                        <TweetActionButton kind="retweet" status={s}/>
                         <TweetActionButton kind="like" status={s}/>
                     </div>
                     <div className="spacer"/>
