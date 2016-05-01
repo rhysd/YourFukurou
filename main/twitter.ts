@@ -104,7 +104,9 @@ export default class Twitter {
 
     destroyStatus(tweet_id: string) {
         this.post('statuses/destroy/' + tweet_id, {}, ret => {
-            this.sender.send('yf:delete-status', ret);
+            // Note:
+            // No need to send response to renderer process because
+            // 'delete_status' event was already sent from streaming API.
             log.debug('Destroy status success:', ret.id);
         });
     }
