@@ -16,6 +16,21 @@ export interface TweetTextUrl {
 
 export type TweetTextToken = string | TweetTextHashtag | TweetTextMention | TweetTextUrl;
 
+export function isHashtag(t: TweetTextToken): t is TweetTextHashtag {
+    'use strict';
+    return t.hasOwnProperty('text');
+}
+
+export function isMention(t: TweetTextToken): t is TweetTextMention {
+    'use strict';
+    return t.hasOwnProperty('screen_name');
+}
+
+export function isUrl(t: TweetTextToken): t is TweetTextUrl {
+    'use strict';
+    return t.hasOwnProperty('url');
+}
+
 const RE_ENTITY = /(?:@\w+|https:\/\/t\.co\/\w+|#)/;
 
 export default class TweetTextParser {

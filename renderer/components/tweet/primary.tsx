@@ -3,6 +3,7 @@ import {openExternalLink} from './external-link';
 import log from '../../log';
 import Tweet from '../../item/tweet';
 import TweetActionButton from './action_button';
+import TweetText from './text';
 import QuotedTweet from './quote';
 
 interface TweetPrimaryProps extends React.Props<any> {
@@ -10,15 +11,7 @@ interface TweetPrimaryProps extends React.Props<any> {
 }
 
 export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}> {
-    text_elem: HTMLElement;
     actions_elem: HTMLElement;
-
-    componentDidMount() {
-        Array.prototype.forEach.call(this.text_elem.querySelectorAll('a'), (a: HTMLElement) => {
-            a.className = 'external-link';
-            a.onclick = openExternalLink;
-        });
-    }
 
     renderCreatedAt() {
         return (
@@ -57,11 +50,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                 onMouseEnter={() => { this.actions_elem.style.display = 'flex'; }}
                 onMouseLeave={() => { this.actions_elem.style.display = 'none'; }}
             >
-                <div
-                    className="tweet__primary-text"
-                    dangerouslySetInnerHTML={{__html: s.buildLinkedHTML()}}
-                    ref={r => { this.text_elem = r; }}
-                />
+                <TweetText status={s}/>
                 {this.renderQuotedStatus(s)}
                 <div className="tweet__primary-footer" >
                     <div

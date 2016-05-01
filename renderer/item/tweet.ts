@@ -1,4 +1,3 @@
-import {autoLinkEntities, EntityWithIndices} from 'twitter-text';
 import Item from './item';
 import TweetTextParser, {TweetTextToken} from '../tweet_parser';
 
@@ -160,34 +159,6 @@ export default class Tweet implements Item {
         }
 
         return false;
-    }
-
-    getAllEntities() {
-        if (!this.json.entities) {
-            return [];
-        }
-        let es = this.json.entities;
-        let ret = [] as EntityWithIndices[];
-        const push = Array.prototype.push;
-        if (es.urls) {
-            push.apply(ret, es.urls);
-        }
-        if (es.hashtags) {
-            push.apply(ret, es.hashtags);
-        }
-        if (es.user_mentions) {
-            for (const m of es.user_mentions) {
-                (m as any).screenName = m.screen_name;
-            }
-            push.apply(ret, es.user_mentions);
-        }
-        return ret;
-    }
-
-    buildLinkedHTML() {
-        return autoLinkEntities(this.json.text, this.getAllEntities(), {
-            urlEntities: this.json.entities.urls,
-        });
     }
 
     getCreatedAtString() {
