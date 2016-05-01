@@ -20,11 +20,6 @@ interface TweetActionButtonProps extends React.Props<any> {
     dispatch?: Redux.Dispatch;
 }
 
-function notImplementedYet(props: TweetActionButtonProps) {
-    'use strict';
-    props.dispatch(showMessage('Sorry, this feature is not implemented yet.', 'error'));
-}
-
 function onLikeClicked(props: TweetActionButtonProps) {
     'use strict';
     if (props.status.favorited) {

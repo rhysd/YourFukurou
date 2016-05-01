@@ -16,6 +16,11 @@ export default function message(state: MessageState = null, action: Action) {
             };
         case Kind.DismissMessage:
             return null;
+        case Kind.NotImplementedYet:
+            return {
+                text: 'Sorry, this feature is not implemented yet.',
+                kind: 'error',
+            };
         default:
             return state;
     }

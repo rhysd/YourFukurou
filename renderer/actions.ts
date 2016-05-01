@@ -7,10 +7,12 @@ import {TimelineKind} from './states/timeline';
 import {MessageKind} from './reducers/message';
 
 export enum Kind {
-    ShowMessage,
-    DismissMessage,
     AddSeparator,
     ChangeCurrentTimeline,
+
+    ShowMessage,
+    DismissMessage,
+    NotImplementedYet,
 
     AddTweetToTimeline,
     SetCurrentUser,
@@ -96,6 +98,15 @@ export function dismissMessage() {
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.DismissMessage,
+        }));
+    };
+}
+
+export function notImplementedYet() {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.NotImplementedYet,
         }));
     };
 }

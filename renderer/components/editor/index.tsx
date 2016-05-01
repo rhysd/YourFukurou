@@ -32,11 +32,6 @@ interface TweetEditorProps extends React.Props<any> {
     dispatch?: Redux.Dispatch;
 }
 
-function notImplementedYet(props: TweetEditorProps) {
-    'use strict';
-    props.dispatch(showMessage('Sorry, this feature is not implemented yet.', 'error'));
-}
-
 // TODO:
 // We need to use CSSTransitionGroup to add open/close animation
 //   https://facebook.github.io/react/docs/animation.html
