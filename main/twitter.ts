@@ -129,7 +129,7 @@ export default class Twitter {
                         reject(err);
                         return;
                     }
-                    this.sender.send('yf:account', account);
+                    this.sender.send('yf:my-account', account);
                     log.debug('Account:', account.id_str, account.screen_name);
                     resolve();
                 }
@@ -255,7 +255,7 @@ export default class Twitter {
                     return;
                 }
                 const account = JSON.parse(data) as Object;
-                this.sender.send('yf:account', account);
+                this.sender.send('yf:my-account', account);
                 log.debug('Dummy account:', account);
                 resolve();
             });

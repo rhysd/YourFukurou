@@ -8,6 +8,8 @@ import {Provider} from 'react-redux';
 import Store from './store';
 import IpcChannelProxy from './ipc_channel_proxy';
 import App from './components/app';
+import {setCurrentUser} from './actions';
+import DB from './database/db';
 import log from './log';
 
 const fs = global.require('fs');
@@ -20,6 +22,16 @@ render(
     </Provider>,
     document.getElementById('yourfukurou')
 );
+
+/*
+/* App initialization
+ */
+
+DB.my_accounts
+    .getFirstAccountId()
+    .then(id => DB.accounts.getUserById(id))
+    .then(u => Store.dispatch(setCurrentUser(u)))
+    .catch(() => log.debug('No cache for account was found, skipped.'));
 
 const proxy = new IpcChannelProxy().start();
 window.onunload = () => proxy.terminate();

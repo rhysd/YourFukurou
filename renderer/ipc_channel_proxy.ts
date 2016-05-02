@@ -14,6 +14,7 @@ import {
 import Store from './store';
 import log from './log';
 import Tweet, {TwitterUser} from './item/tweet';
+import DB from './database/db';
 
 interface Listeners {
     [c: string]: Electron.IpcRendererEventListener;
@@ -35,6 +36,7 @@ export default class IpcChannelProxy {
         this.subscribe('yf:tweet', (_: Electron.IpcRendererEvent, json: TweetJson) => {
             log.debug('Received channel yf:tweet', json);
             Store.dispatch(addTweetToTimeline(new Tweet(json)));
+            DB.accounts.storeAccountsInTweet(json);
         });
         this.subscribe('yf:connection-failure', (_: Electron.IpcRendererEvent) => {
             log.debug('Received channel yf:connection-failure');
@@ -76,9 +78,11 @@ export default class IpcChannelProxy {
             log.debug('Received channel yf:unlike-success', json.id_str);
             Store.dispatch(unlikeSucceeded(new Tweet(json)));
         });
-        this.subscribe('yf:account', (_: Electron.IpcRendererEvent, json: UserJson) => {
-            log.debug('Received channel yf:account', json.id_str);
+        this.subscribe('yf:my-account', (_: Electron.IpcRendererEvent, json: UserJson) => {
+            log.debug('Received channel yf:my-account', json.id_str);
             Store.dispatch(setCurrentUser(new TwitterUser(json)));
+            DB.accounts.storeAccount(json);
+            DB.my_accounts.storeMyAccount(json.id);
         });
         this.subscribe('yf:delete-status', (_: Electron.IpcRendererEvent, json: DeleteJson) => {
             log.debug('Received channel yf:delete-status', json.status.id_str);
@@ -91,6 +95,9 @@ export default class IpcChannelProxy {
         this.subscribe('yf:mentions', (_: Electron.IpcRendererEvent, json: TweetJson[]) => {
             log.debug('Received channel yf:mentions', json);
             Store.dispatch(addMentions(json.map(j => new Tweet(j))));
+            for (const j of json) {
+                DB.accounts.storeAccountsInTweet(j);
+            }
         });
         log.debug('Started to receive messages');
         return this;

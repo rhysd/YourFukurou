@@ -29,6 +29,8 @@
     "components/editor/hashtag_decorator.tsx",
     "components/editor/suggestions.tsx",
     "components/zigzag_separator.tsx",
+    "database/db.ts",
+    "database/accounts.ts",
     "reducers/root.ts",
     "reducers/editor.ts",
     "reducers/editor_completion.ts",
