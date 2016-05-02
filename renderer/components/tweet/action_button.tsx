@@ -17,6 +17,7 @@ type TweetActionKind = 'reply' | 'like' | 'retweet' | 'delete';
 interface TweetActionButtonProps extends React.Props<any> {
     status: Tweet;
     kind: TweetActionKind;
+    isMyTweet?: boolean;
     dispatch?: Redux.Dispatch;
 }
 
@@ -31,6 +32,10 @@ function onLikeClicked(props: TweetActionButtonProps) {
 
 function onRetweetClicked(props: TweetActionButtonProps) {
     'use strict';
+    if (props.isMyTweet) {
+        props.dispatch(showMessage("You cannot retweet your tweet", 'error'));
+        return;
+    }
     if (props.status.user.protected) {
         props.dispatch(showMessage("Cannot retweet protected user's tweet", 'error'));
         return;
@@ -81,6 +86,8 @@ function getColor(props: TweetActionButtonProps) {
         case 'retweet': {
             if (props.status.retweeted) {
                 return '#19cf86';
+            } else if (props.isMyTweet) {
+                return '#cccccc';
             } else {
                 return undefined;
             }

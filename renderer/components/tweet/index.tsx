@@ -28,10 +28,11 @@ export default class Tweet extends React.Component<TweetProps, {}> {
 
     render() {
         const tw = this.props.status.getMainStatus();
+        const isMyTweet = this.props.user.id === tw.user.id;
         return <div className="tweet__body animated fadeIn" ref={r => { this.node = r; }} >
             <TweetIcon user={tw.user}/>
             <TweetSecondary status={this.props.status}/>
-            <TweetPrimary status={this.props.status} user={this.props.user}/>
+            <TweetPrimary status={this.props.status} isMyTweet={isMyTweet}/>
         </div>;
     }
 }

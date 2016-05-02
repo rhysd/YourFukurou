@@ -19,7 +19,7 @@ import State from '../../states/root';
 import EditorCompletionState from '../../states/editor_completion';
 import AutoCompleteSuggestions, {SuggestionItem} from './suggestions';
 import {AutoCompleteLabel} from './auto_complete_decorator';
-import TweetPrimary from '../tweet/primary';
+import TweetText from '../tweet/text';
 import TweetSecondary from '../tweet/secondary';
 import TweetIcon from '../tweet/icon';
 
@@ -150,7 +150,7 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
         return <div className="tweet-form__in-reply-to">
             <TweetIcon user={tw.user}/>
             <TweetSecondary status={this.props.inReplyTo}/>
-            <TweetPrimary status={this.props.inReplyTo} user={this.props.user}/>
+            <TweetText status={this.props.inReplyTo}/>
         </div>;
     }
 

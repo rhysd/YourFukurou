@@ -7,7 +7,7 @@ import TweetText from './text';
 import QuotedTweet from './quote';
 
 interface TweetPrimaryProps extends React.Props<any> {
-    user: TwitterUser;
+    isMyTweet: boolean;
     status: Tweet;
 }
 
@@ -60,10 +60,11 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                         ref={r => {this.actions_elem = r; }}
                     >
                         <TweetActionButton kind="reply" status={s}/>
-                        {s.user.id === this.props.user.id ?
-                            <TweetActionButton kind="delete" status={s}/> :
-                            <TweetActionButton kind="retweet" status={s}/>}
+                        <TweetActionButton kind="retweet" status={s} isMyTweet={this.props.isMyTweet}/>
                         <TweetActionButton kind="like" status={s}/>
+                        {this.props.isMyTweet ?
+                            <TweetActionButton kind="delete" status={s}/> :
+                            undefined}
                     </div>
                     <div className="spacer"/>
                     {this.renderConversation(s)}
