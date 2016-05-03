@@ -37,6 +37,7 @@ export default class IpcChannelProxy {
             log.debug('Received channel yf:tweet', json);
             Store.dispatch(addTweetToTimeline(new Tweet(json)));
             DB.accounts.storeAccountsInTweet(json);
+            DB.hashtags.storeHashtagsInTweet(json);
         });
         this.subscribe('yf:connection-failure', (_: Electron.IpcRendererEvent) => {
             log.debug('Received channel yf:connection-failure');
@@ -95,9 +96,8 @@ export default class IpcChannelProxy {
         this.subscribe('yf:mentions', (_: Electron.IpcRendererEvent, json: TweetJson[]) => {
             log.debug('Received channel yf:mentions', json);
             Store.dispatch(addMentions(json.map(j => new Tweet(j))));
-            for (const j of json) {
-                DB.accounts.storeAccountsInTweet(j);
-            }
+            DB.accounts.storeAccountsInTweets(json);
+            DB.hashtags.storeHashtagsInTweets(json);
         });
         log.debug('Started to receive messages');
         return this;

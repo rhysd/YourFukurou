@@ -25,16 +25,21 @@ export default class Accounts {
     constructor(private table: AccountsTable) {
     }
 
-    storeAccount(json: UserJson) {
-        return this.table.put({
+    userToEntry(json: UserJson): AccountsScheme {
+        return {
             id: json.id,
             screenname: json.screen_name,
             timestamp: Date.now(),
             json: json,
-        }).catch((e: Error) => {
-            log.error('Error on storing account:', e);
-            throw e;
-        });
+        };
+    }
+
+    storeAccount(json: UserJson) {
+        return this.table.put(this.userToEntry(json))
+            .catch((e: Error) => {
+                log.error('Error on storing account:', e);
+                throw e;
+            });
     }
 
     storeAccountsInTweet(json: TweetJson) {
@@ -43,6 +48,15 @@ export default class Accounts {
         // We can also store the accounts in retweeted_status and quoted_status.
         // But these accounts is not suitable to be cached because owner has a weaker relation
         // to them.
+    }
+
+    storeAccountsInTweets(jsons: TweetJson[]) {
+        return this.table.bulkPut(
+            jsons.map(j => this.userToEntry(j.user))
+        ).catch((e: Error) => {
+            log.error('Error on storing accounts in tweets', e);
+            throw e;
+        });
     }
 
     getUserById(id: number) {

@@ -29,13 +29,13 @@ export default class Statuses {
         }
     }
 
-    constructor(private table: StatusesTable) {
+    constructor(public table: StatusesTable) {
     }
 
-    storeTweet(tw: Tweet) {
+    getEntryFrom(tw: Tweet): StatusesScheme {
         const rt = tw.retweeted_status;
         const qt = tw.quoted_status;
-        this.table.put({
+        return {
             id: tw.id,
             screen_name: tw.user.screen_name,
             user_id: tw.user.id,
@@ -47,7 +47,15 @@ export default class Statuses {
             quoted_status_id: rt === null ? null : qt.id,
             quoted_user_id: rt === null ? null : qt.user.id,
             json: tw.json,
-        });
+        };
+    }
+
+    storeTweet(tw: Tweet) {
+        this.table.put(this.getEntryFrom(tw));
+    }
+
+    storeTweets(tws: Tweet[]) {
+        this.table.bulkPut(tws.map(tw => this.getEntryFrom(tw)));
     }
 
     dump() {

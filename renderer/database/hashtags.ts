@@ -36,9 +36,47 @@ export default class Hashtags {
         if (!json.entities || !json.entities.hashtags) {
             return;
         }
-        for (const h of json.entities.hashtags) {
-            this.storeHashtag(h.text);
+
+        const hashtags = json.entities.hashtags
+            .map(h => ({
+                text: h.text,
+                timestamp: Date.now(),
+            }));
+
+        return this.table.bulkPut(hashtags)
+            .catch((e: Error) => {
+                log.error('Error on storing hashtag in tweet:', e, hashtags, json);
+                throw e;
+            });
+    }
+
+    storeHashtagsInTweets(jsons: TweetJson[]) {
+        const entries = [] as HashtagsScheme[];
+        const push = Array.prototype.push;
+
+        for (const j of jsons) {
+            if (!j.entities || !j.entities.hashtags) {
+                continue;
+            }
+
+            const hashtags = j.entities.hashtags
+                .map(h => ({
+                    text: h.text,
+                    timestamp: Date.now(),
+                }));
+
+            push.apply(entries, hashtags);
         }
+
+        if (entries.length === 0) {
+            return Dexie.Promise.resolve<void>();
+        }
+
+        return this.table.bulkPut(entries)
+            .catch((e: Error) => {
+                log.error('Error on storing hashtags in tweets:', e, entries);
+                throw e;
+            });
     }
 
     getAllHashtags() {
