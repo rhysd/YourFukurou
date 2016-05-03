@@ -327,7 +327,10 @@ body {
 .tweet-form__counter.tweet-form__counter_over {
   color: var(--color-error);
 }
-.tweet-form__screen-name, .tweet-form__hashtag {
+.tweet-form__hashtag {
+  color: var(--text-link-color);
+}
+.tweet-form__decorated-SCREENNAME {
   color: var(--text-link-color);
 }
 .tweet-form__cancel-btn {
@@ -402,4 +405,10 @@ body {
 }
 .autocomplete__emoji-text {
   flex: auto;
+}
+.autocomplete__screenname-icon {
+  margin-right: 8px;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.4rem;
 }

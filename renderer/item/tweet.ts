@@ -15,6 +15,10 @@ export class TwitterUser {
         }
     }
 
+    get mini_icon_url() {
+        return this.json.profile_image_url_https;
+    }
+
     get screen_name() {
         return this.json.screen_name;
     }

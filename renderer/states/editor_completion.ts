@@ -12,7 +12,7 @@ export default class EditorCompletionState {
     ) {
     }
 
-    searchSuggestions(suggestions: SuggestionItem[], query: string, top: number, left: number) {
+    searchSuggestions(suggestions: SuggestionItem[], query: string, top: number, left: number, label: AutoCompleteLabel) {
         if (suggestions.length === 0) {
             // Note:
             // Close completion on no suggestion
@@ -27,7 +27,7 @@ export default class EditorCompletionState {
         }
         return new EditorCompletionState(
             query,
-            this.label,
+            label,
             top,
             left,
             suggestions,

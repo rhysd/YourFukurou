@@ -6,6 +6,7 @@ import {AutoCompleteLabel} from './components/editor/auto_complete_decorator';
 import {TimelineKind} from './states/timeline';
 import {MessageKind} from './reducers/message';
 import {searchSuggestionItems, SuggestionItem} from './components/editor/suggestions';
+import log from './log';
 
 export enum Kind {
     AddSeparator,
@@ -60,6 +61,7 @@ export interface Action {
     top?: number;
     timeline?: TimelineKind;
     mentions?: Tweet[];
+    completion_label?: AutoCompleteLabel;
     suggestions?: SuggestionItem[];
 }
 
@@ -278,6 +280,7 @@ export function updateStatus(text: string, in_reply_to_id?: string) {
 
 export function selectAutoCompleteSuggestion(text: string, query: string) {
     'use strict';
+    console.log('FOO!', text, query);
     return {
         type: Kind.SelectAutoCompleteSuggestion,
         text,
@@ -295,7 +298,9 @@ export function updateAutoCompletion(left: number, top: number, query: string, l
                 top,
                 query,
                 suggestions,
-            }));
+                completion_label: label,
+            }))
+            .catch(e => log.error('updateAutoCompletion():', e));
     };
 }
 

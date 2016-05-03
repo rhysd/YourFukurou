@@ -9,7 +9,8 @@ export default function editorCompletion(state: EditorCompletionState = new Edit
                 action.suggestions,
                 action.query,
                 action.top,
-                action.left
+                action.left,
+                action.completion_label
             );
         case Kind.DownAutoCompletionFocus:      return state.downFocus();
         case Kind.UpAutoCompletionFocus:        return state.upFocus();

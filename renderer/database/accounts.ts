@@ -68,6 +68,35 @@ export default class Accounts {
             });
     }
 
+    getUserByScreenName(name: string) {
+        return this.table.where('screenname').equals(name)
+            .limit(1)
+            .toArray()
+            .then(users => {
+                if (users.length === 0) {
+                    return null;
+                }
+                return new TwitterUser(users[0].json);
+            })
+            .catch((e: Error): TwitterUser => {
+                log.error('Error on getting an account by screen name:', e);
+                throw e;
+            });
+    }
+
+    getUsersByScreenNameStartsWith(str: string, limit?: number) {
+        const query = limit ?
+            this.table.where('screenname').startsWith(str).limit(limit) :
+            this.table.where('screenname').startsWith(str);
+
+        return query.toArray()
+            .then(users => users.map(u => new TwitterUser(u.json)))
+            .catch((e: Error): TwitterUser[] => {
+                log.error(`Error on getting accounts which start with ${str}:`, e);
+                throw e;
+            });
+    }
+
     // TODO:
     // Consider the order
     getAllUsers() {

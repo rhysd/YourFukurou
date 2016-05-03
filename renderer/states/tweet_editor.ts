@@ -2,7 +2,6 @@ import {EditorState, Modifier, CompositeDecorator, SelectionState, ContentState}
 import Tweet from '../item/tweet';
 import EditorKeymaps from '../keybinds/editor';
 import autoCompleteFactory from '../components/editor/auto_complete_decorator';
-import createScreenNameDecorator from '../components/editor/screen_name_decorator';
 import createHashtagDecorator from '../components/editor/hashtag_decorator';
 import log from '../log';
 
@@ -10,10 +9,9 @@ import log from '../log';
 // These are currently created statically.  But actually they should be created dynamically
 // with the state of reducer.
 const editorDecolator = new CompositeDecorator([
-    createScreenNameDecorator(),  // XXX: Temporary
     createHashtagDecorator(),     // XXX: Temporary
     autoCompleteFactory(/:[a-zA-Z0-9_\-\+]+:?/g, 'EMOJI'),
-    autoCompleteFactory(/@\w+\s?/g, 'SCREENNAME'),
+    autoCompleteFactory(/@\w*\s?/g, 'SCREENNAME'),
 ]);
 
 export default class TweetEditorState {
