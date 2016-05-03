@@ -6,8 +6,8 @@ export default function editorCompletion(state: EditorCompletionState = new Edit
     switch (action.type) {
         case Kind.UpdateAutoCompletion:
             return state.searchSuggestions(
+                action.suggestions,
                 action.query,
-                action.completion_label,
                 action.top,
                 action.left
             );

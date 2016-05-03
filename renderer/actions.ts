@@ -5,6 +5,7 @@ import Separator from './item/separator';
 import {AutoCompleteLabel} from './components/editor/auto_complete_decorator';
 import {TimelineKind} from './states/timeline';
 import {MessageKind} from './reducers/message';
+import {searchSuggestionItems, SuggestionItem} from './components/editor/suggestions';
 
 export enum Kind {
     AddSeparator,
@@ -57,9 +58,9 @@ export interface Action {
     query?: string;
     left?: number;
     top?: number;
-    completion_label?: AutoCompleteLabel;
     timeline?: TimelineKind;
     mentions?: Tweet[];
+    suggestions?: SuggestionItem[];
 }
 
 export function addTweetToTimeline(status: Tweet) {
@@ -284,16 +285,17 @@ export function selectAutoCompleteSuggestion(text: string, query: string) {
     };
 }
 
-export function updateAutoCompletion(left: number, top: number, query: string, completion_label: AutoCompleteLabel) {
+export function updateAutoCompletion(left: number, top: number, query: string, label: AutoCompleteLabel) {
     'use strict';
     return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.UpdateAutoCompletion,
-            left,
-            top,
-            query,
-            completion_label,
-        }));
+        searchSuggestionItems(query, label)
+            .then(suggestions => dispatch({
+                type: Kind.UpdateAutoCompletion,
+                left,
+                top,
+                query,
+                suggestions,
+            }));
     };
 }
 

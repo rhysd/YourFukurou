@@ -12,7 +12,8 @@ import log from '../log';
 const editorDecolator = new CompositeDecorator([
     createScreenNameDecorator(),  // XXX: Temporary
     createHashtagDecorator(),     // XXX: Temporary
-    autoCompleteFactory(/:(?:[a-zA-Z0-9_\-\+]+):?/g, 'EMOJI'),
+    autoCompleteFactory(/:[a-zA-Z0-9_\-\+]+:?/g, 'EMOJI'),
+    autoCompleteFactory(/@\w+\s?/g, 'SCREENNAME'),
 ]);
 
 export default class TweetEditorState {

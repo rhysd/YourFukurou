@@ -12,17 +12,25 @@ export default class EditorCompletionState {
     ) {
     }
 
-    searchSuggestions(query: string, label: AutoCompleteLabel, top: number, left: number) {
-        if (query === this.query) {
-            // When overlapping queries, it means that completion was done.
-            return new EditorCompletionState();
+    searchSuggestions(suggestions: SuggestionItem[], query: string, top: number, left: number) {
+        if (suggestions.length === 0) {
+            // Note:
+            // Close completion on no suggestion
+            return new EditorCompletionState(
+                query,
+                null,
+                top,
+                left,
+                suggestions,
+                null
+            );
         }
         return new EditorCompletionState(
             query,
-            label,
+            this.label,
             top,
             left,
-            searchSuggestionItems(query, label),
+            suggestions,
             this.focus_idx
         );
     }

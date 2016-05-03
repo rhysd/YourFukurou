@@ -99,12 +99,12 @@ function searchEmojiSuggestionItems(query: string) {
     if (query.endsWith(':')) {
         const name = query.slice(1, query.length - 1);  // Note: Omit first and last ':'
         if (emoji[name]) {
-            return [{
+            return Promise.resolve([{
                 code: emoji[name],
                 description: name,
-            }];
+            }]);
         } else {
-            return [];
+            return Promise.resolve([]);
         }
     }
 
@@ -124,18 +124,21 @@ function searchEmojiSuggestionItems(query: string) {
             count += 1;
         }
         if (count > MAX_SUGGESTIONS) {
-            return suggestions;
+            return Promise.resolve(suggestions);
         }
     }
-    return suggestions;
+    return Promise.resolve(suggestions);
 }
 
+// TODO:
+// Check previous query. If previous one and this one are the same,
+// simply returns previous suggestions.
 export function searchSuggestionItems(query: string, label: AutoCompleteLabel) {
     'use strict';
     switch (label) {
         case 'EMOJI': return searchEmojiSuggestionItems(query);
         default:
             log.error('Unimplemented auto complete type:', label);
-            return [];
+            return Promise.resolve([]);
     }
 }
