@@ -1,6 +1,8 @@
 <img src="images/icon.png" width="70"/>Hackable [YoruFukurou](https://sites.google.com/site/yorufukurou/home-en) Alternative
 =====================================================================================
 
+This is a Twitter client to aim to replace YoruFukurou with high pluggablity.
+
 Goals :bird::
 
 - Perspicuity
@@ -15,6 +17,7 @@ Goals :bird::
 - Layout customization using CSS
   - Automatically loads `user.css` in data directory
 - Cross platform (OS X, Windows, Linux)
+- **Not a clone, but an alternative**
 
 ## For Development
 
