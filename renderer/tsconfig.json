@@ -51,6 +51,7 @@
     "lib.d.ts",
     "log.ts",
     "tweet_parser.ts",
+    "html5-notification.d.ts",
     "draft-js.d.ts",
     "node-emoji.d.ts",
     "twitter-api.d.ts"
