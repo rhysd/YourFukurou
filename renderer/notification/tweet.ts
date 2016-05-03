@@ -1,11 +1,11 @@
 import Tweet from '../item/tweet';
 import log from '../log';
-import {updateStatus} from '../actions';
+import {openEditor} from '../actions';
 import Store from '../store';
 
-function editReply(text: string, in_reply_to_status_id: string) {
+function editReply(in_reply_to: Tweet) {
     'use strict';
-    Store.dispatch(updateStatus(text, in_reply_to_status_id));
+    Store.dispatch(openEditor(in_reply_to));
 }
 
 function createNotification(tw: Tweet, title: string) {
@@ -15,7 +15,7 @@ function createNotification(tw: Tweet, title: string) {
         body: tw.text,
     });
 
-    n.addEventListener('click', () => editReply(tw.user.screen_name + ' ', tw.id));
+    n.addEventListener('click', () => editReply(tw));
     n.addEventListener('error', err => log.error('Error on notification:', err));
 
     return n;
