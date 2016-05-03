@@ -56,7 +56,7 @@ const ScreenNameEntry = connect()(
     (props: ScreenNameEntryProps) => {
         function onClick(e: React.MouseEvent) {
             e.preventDefault();
-            props.dispatch(selectAutoCompleteSuggestion(props.name + ' ', props.query))
+            props.dispatch(selectAutoCompleteSuggestion(props.name + ' ', props.query));
         }
 
         const n = props.focused ?
@@ -87,7 +87,7 @@ const HashtagEntry = connect()(
     (props: HashtagEntryProps) => {
         function onClick(e: React.MouseEvent) {
             e.preventDefault();
-            props.dispatch(selectAutoCompleteSuggestion(props.text + ' ', props.query))
+            props.dispatch(selectAutoCompleteSuggestion(props.text + ' ', props.query));
         }
 
         const n = props.focused ?
@@ -154,7 +154,7 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
             }
 
             case 'HASHTAG': {
-                return this.props.suggestions.map((s, i) => 
+                return this.props.suggestions.map((s, i) =>
                     <HashtagEntry
                         query={query}
                         text={s.description}

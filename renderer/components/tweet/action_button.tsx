@@ -33,7 +33,7 @@ function onLikeClicked(props: TweetActionButtonProps) {
 function onRetweetClicked(props: TweetActionButtonProps) {
     'use strict';
     if (props.isMyTweet) {
-        props.dispatch(showMessage("You cannot retweet your tweet", 'error'));
+        props.dispatch(showMessage('You cannot retweet your tweet', 'error'));
         return;
     }
     if (props.status.user.protected) {
