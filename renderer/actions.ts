@@ -280,7 +280,6 @@ export function updateStatus(text: string, in_reply_to_id?: string) {
 
 export function selectAutoCompleteSuggestion(text: string, query: string) {
     'use strict';
-    console.log('FOO!', text, query);
     return {
         type: Kind.SelectAutoCompleteSuggestion,
         text,

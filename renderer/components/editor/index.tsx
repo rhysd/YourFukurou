@@ -114,6 +114,29 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
         this.refs.body.className = 'tweet-form animated fadeOutUp';
     }
 
+    getSelectAction(suggestion: SuggestionItem, completion: EditorCompletionState) {
+        switch (completion.label) {
+            case 'EMOJI':
+                return selectAutoCompleteSuggestion(
+                    suggestion.code,
+                    completion.query
+                );
+            case 'SCREENNAME':
+                return selectAutoCompleteSuggestion(
+                    suggestion.description + ' ',
+                    completion.query
+                );
+            case 'HASHTAG':
+                return selectAutoCompleteSuggestion(
+                    suggestion.description + ' ',
+                    completion.query
+                );
+            default:
+                log.error('Invalid completion label:', completion.label);
+                return null;
+        }
+    }
+
     selectAutoCompletionItem() {
         const completion = this.props.completion;
         if (completion.focus_idx === null) {
@@ -123,9 +146,7 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
         if (!s) {
             return false;
         }
-        this.props.dispatch(
-            selectAutoCompleteSuggestion(s.code, completion.query)
-        );
+        this.props.dispatch(this.getSelectAction(s, completion));
         return true;
     }
 
