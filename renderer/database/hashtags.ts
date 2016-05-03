@@ -87,6 +87,20 @@ export default class Hashtags {
             });
     }
 
+    getHashtagsByScreenNameStartsWith(str: string, limit?: number) {
+        const query = limit ?
+            this.table.where('text').startsWith(str).limit(limit) :
+            this.table.where('text').startsWith(str);
+
+        return query.toArray()
+            .then(hs => hs.map(h => h.text))
+            .catch((e: Error): string[] => {
+                log.error(`Error on getting accounts which start with ${str}:`, e);
+                throw e;
+            });
+    }
+
+
     dump() {
         return this.table.toArray()
             .then(arr => log.debug('HASHTAGS:', arr));

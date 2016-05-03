@@ -327,10 +327,8 @@ body {
 .tweet-form__counter.tweet-form__counter_over {
   color: var(--color-error);
 }
-.tweet-form__hashtag {
-  color: var(--text-link-color);
-}
-.tweet-form__decorated-SCREENNAME {
+.tweet-form__decorated-SCREENNAME,
+.tweet-form__decorated-HASHTAG {
   color: var(--text-link-color);
 }
 .tweet-form__cancel-btn {

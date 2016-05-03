@@ -76,6 +76,32 @@ const ScreenNameEntry = connect()(
     }
 );
 
+interface HashtagEntryProps extends React.Props<any> {
+    query: string;
+    text: string;
+    focused: boolean;
+    dispatch?: Redux.Dispatch;
+}
+
+const HashtagEntry = connect()(
+    (props: HashtagEntryProps) => {
+        function onClick(e: React.MouseEvent) {
+            e.preventDefault();
+            props.dispatch(selectAutoCompleteSuggestion(props.text + ' ', props.query))
+        }
+
+        const n = props.focused ?
+            'autocomplete__suggestion-item autocomplete__suggestion-item_focused' :
+            'autocomplete__suggestion-item';
+
+        return (
+            <div className={n} onClick={onClick}>
+                <span>{props.text}</span>
+            </div>
+        );
+    }
+);
+
 export type SuggestionsProps = EditorCompletionState & React.Props<AutoCompleteSuggestions>;
 
 export default class AutoCompleteSuggestions extends React.Component<SuggestionsProps, {}> {
@@ -114,6 +140,7 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
                     />
                 );
             }
+
             case 'SCREENNAME': {
                 return this.props.suggestions.map((s, i) =>
                     <ScreenNameEntry
@@ -125,6 +152,18 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
                     />
                 );
             }
+
+            case 'HASHTAG': {
+                return this.props.suggestions.map((s, i) => 
+                    <HashtagEntry
+                        query={query}
+                        text={s.description}
+                        focused={idx !== null && idx === i}
+                        key={i}
+                    />
+                );
+            }
+
             default:
                 log.error('Invalid suggestion label: ' + this.props.label);
                 return undefined;
@@ -177,10 +216,10 @@ function searchEmojiSuggestionItems(query: string) {
 }
 
 
-const RE_SCREENNAME_END = /\s$/;
+const RE_QUERY_END = /\s$/;
 function searchScreenNameSuggestionItems(query: string) {
     'use strict';
-    if (RE_SCREENNAME_END.test(query)) {
+    if (RE_QUERY_END.test(query)) {
         return Promise.resolve([]);
     }
 
@@ -198,6 +237,25 @@ function searchScreenNameSuggestionItems(query: string) {
         .catch(() => [] as SuggestionItem[]);
 }
 
+function searchHashtagSuggestionItems(query: string) {
+    'use strict';
+    if (RE_QUERY_END.test(query)) {
+        return Promise.resolve([]);
+    }
+
+    // TODO:
+    // If narrowing suggestions, do not access database and filter
+    // previous suggestions.
+
+    const input = query.slice(1);  // Note: Omit '#'
+    return DB.hashtags
+        .getHashtagsByScreenNameStartsWith(input, MAX_SUGGESTIONS)
+        .then((hs: string[]) => hs.map(h => ({
+            description: '#' + h,
+        })))
+        .catch(() => [] as SuggestionItem[]);
+}
+
 // TODO:
 // Check previous query. If previous one and this one are the same,
 // simply returns previous suggestions.
@@ -206,6 +264,7 @@ export function searchSuggestionItems(query: string, label: AutoCompleteLabel) {
     switch (label) {
         case 'EMOJI': return searchEmojiSuggestionItems(query);
         case 'SCREENNAME': return searchScreenNameSuggestionItems(query);
+        case 'HASHTAG': return searchHashtagSuggestionItems(query);
         default:
             log.error('Unimplemented auto complete type:', label);
             return Promise.resolve([]);

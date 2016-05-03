@@ -25,7 +25,6 @@
     "components/tweet/screen_name.tsx",
     "components/tweet/external-link.tsx",
     "components/editor/index.tsx",
-    "components/editor/hashtag_decorator.tsx",
     "components/editor/suggestions.tsx",
     "components/zigzag_separator.tsx",
     "database/db.ts",
