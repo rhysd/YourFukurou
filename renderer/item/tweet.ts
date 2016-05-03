@@ -41,12 +41,14 @@ export default class Tweet implements Item {
     private retweeted_status_memo: Tweet;
     private quoted_status_memo: Tweet;
     private parsed_tokens_memo: TweetTextToken[];
+    private created_at_memo: Date;
 
     constructor(public json: TweetJson) {
         this.user = new TwitterUser(json.user);
         this.retweeted_status_memo = null;
         this.quoted_status_memo = null;
         this.parsed_tokens_memo = null;
+        this.created_at_memo = null;
     }
 
     get id() {
@@ -54,7 +56,13 @@ export default class Tweet implements Item {
     }
 
     get created_at() {
-        return new Date(this.json.created_at);
+        if (this.created_at_memo === null) {
+            const created_at = this.json.created_at;
+            if (created_at !== undefined) {
+                this.created_at_memo = new Date(created_at);
+            }
+        }
+        return this.created_at_memo;
     }
 
     get retweeted() {
@@ -107,6 +115,14 @@ export default class Tweet implements Item {
             this.parsed_tokens_memo = parser.parse();
         }
         return this.parsed_tokens_memo;
+    }
+
+    get in_reply_to_status_id() {
+        return this.json.in_reply_to_status_id_str;
+    }
+
+    get in_reply_to_user_id() {
+        return this.json.in_reply_to_user_id;
     }
 
     getMainStatus() {
@@ -162,11 +178,7 @@ export default class Tweet implements Item {
     }
 
     getCreatedAtString() {
-        const created_at = this.json.created_at;
-        if (created_at === undefined) {
-            return '';
-        }
-        const date = new Date(created_at);
+        const date = this.created_at;
         const hh = date.getHours();
         const mm = date.getMinutes();
         const m = date.getMonth();

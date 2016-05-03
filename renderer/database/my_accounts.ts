@@ -5,7 +5,7 @@ export interface MyAccountsScheme {
     id: number;
 }
 
-type TableType = Dexie.Table<MyAccountsScheme, number>;
+export type MyAccountsTable = Dexie.Table<MyAccountsScheme, number>;
 
 export default class MyAccounts {
     static getScheme(version: number) {
@@ -18,7 +18,7 @@ export default class MyAccounts {
         }
     }
 
-    constructor(private table: TableType) {
+    constructor(private table: MyAccountsTable) {
     }
 
     storeMyAccount(user_id: number) {
@@ -30,12 +30,17 @@ export default class MyAccounts {
         });
     }
 
-    getFirstAccountId(): Dexie.Promise<number> {
+    getFirstAccountId() {
         return this.table.toCollection().first()
             .then(a => a.id)
             .catch((e: Error): number => {
                 log.error('Error on getting my first account:', e);
                 throw e;
             });
+    }
+
+    dump() {
+        return this.table.toArray()
+            .then(arr => log.debug('MY ACCOUNTS:', arr));
     }
 }

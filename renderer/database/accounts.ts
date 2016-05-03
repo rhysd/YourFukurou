@@ -1,17 +1,15 @@
 import Dexie from 'dexie';
 import log from '../log';
-import Store from '../store';
-import {setCurrentUser} from '../actions';
 import {TwitterUser} from '../item/tweet';
 
-export interface AccountsScheme {
+interface AccountsScheme {
     id: number;
     screenname: string;
     timestamp: number;
     json: UserJson;
 }
 
-type TableType = Dexie.Table<AccountsScheme, number>;
+export type AccountsTable = Dexie.Table<AccountsScheme, number>;
 
 export default class Accounts {
     static getScheme(version: number) {
@@ -24,7 +22,7 @@ export default class Accounts {
         }
     }
 
-    constructor(private table: TableType) {
+    constructor(private table: AccountsTable) {
     }
 
     storeAccount(json: UserJson) {
@@ -54,5 +52,20 @@ export default class Accounts {
                 log.error('Error on getting an account by id:', e);
                 throw e;
             });
+    }
+
+    // TODO:
+    // Consider the order
+    getAllUsers() {
+        return this.table.toArray()
+            .catch((e: Error): TwitterUser[] => {
+                log.error('Error on getting all accounts:', e);
+                throw e;
+            });
+    }
+
+    dump() {
+        return this.table.toArray()
+            .then(arr => log.debug('ACCOUNTS:', arr));
     }
 }

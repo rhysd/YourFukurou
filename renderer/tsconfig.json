@@ -31,6 +31,8 @@
     "components/zigzag_separator.tsx",
     "database/db.ts",
     "database/accounts.ts",
+    "database/hashtags.ts",
+    "database/statuses.ts",
     "reducers/root.ts",
     "reducers/editor.ts",
     "reducers/editor_completion.ts",

@@ -51,3 +51,5 @@ fs.lstat(user_css_path, (err: NodeJS.ErrnoException, stats: Stats) => {
         log.debug('<link> for loading user.css was inserted');
     }
 });
+
+global.DB = DB;
