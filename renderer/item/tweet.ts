@@ -129,6 +129,10 @@ export default class Tweet implements Item {
         return this.json.in_reply_to_user_id;
     }
 
+    get text() {
+        return this.json.text;
+    }
+
     getMainStatus() {
         if (this.json.retweeted_status) {
             return this.retweeted_status;
@@ -139,6 +143,10 @@ export default class Tweet implements Item {
 
     isRetweet() {
         return !!this.json.retweeted_status;
+    }
+
+    isQuotedTweet() {
+        return !!this.json.quoted_status;
     }
 
     getRetweetedUser() {

@@ -50,5 +50,5 @@ declare class Notification {
     addEventListener(event: 'error', cb: (e: Error) => void): void;
     addEventListener(event: 'show', cb: (e: Event) => void): void;
     addEventListener(event: 'close', cb: (e: Event) => void): void;
-    close();
+    close(): void;
 }
