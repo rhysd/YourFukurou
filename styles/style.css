@@ -167,6 +167,7 @@ body {
 }
 .tweet__text {
   flex: auto;
+  white-space: pre-wrap;
 }
 .tweet__text-hashtag,
 .tweet__text-mention,
@@ -197,6 +198,7 @@ body {
 }
 .tweet__quoted-text {
   color: #555555;
+  white-space: pre-wrap;
 }
 .tweet__quoted-text-hashtag,
 .tweet__quoted-text-mention,
