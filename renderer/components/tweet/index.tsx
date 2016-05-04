@@ -9,31 +9,20 @@ import TweetIcon from './icon';
 // TODO:
 // Enable to focus/unfocus tweet panel like as YoruFukurou
 
-interface TweetProps extends React.Props<Tweet> {
+interface TweetProps extends React.Props<any> {
     status: TweetItem;
     user: TwitterUser;
 }
 
-export default class Tweet extends React.Component<TweetProps, {}> {
-    node: HTMLElement;
-
-    componentDidMount() {
-        // Note: Ensure to animate the element once
-        const listener = () => {
-            this.node.className = 'tweet__body';
-            this.node.removeEventListener('animationend', listener);
-        };
-        this.node.addEventListener('animationend', listener);
-    }
-
-    render() {
-        const tw = this.props.status.getMainStatus();
-        const isMyTweet = this.props.user.id === tw.user.id;
-        return <div className="tweet__body animated fadeIn" ref={r => { this.node = r; }} >
+const Tweet = (props: TweetProps) => {
+    const tw = props.status.getMainStatus();
+    const isMyTweet = props.user.id === tw.user.id;
+    return (
+        <div className="tweet__body">
             <TweetIcon user={tw.user}/>
-            <TweetSecondary status={this.props.status}/>
-            <TweetPrimary status={this.props.status} isMyTweet={isMyTweet}/>
-        </div>;
-    }
-}
-
+            <TweetSecondary status={props.status}/>
+            <TweetPrimary status={props.status} isMyTweet={isMyTweet}/>
+        </div>
+    );
+};
+export default Tweet;
