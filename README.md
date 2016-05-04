@@ -19,6 +19,90 @@ Goals :bird::
 - Cross platform (OS X, Windows, Linux)
 - **Not a clone, but an alternative**
 
+## Application Directory
+
+- OS X: `~/Library/Application\ Support/Shiba`
+- Linux: `~/.config/Shiba`
+- Windows: `%APPDATA%\Shiba`.
+
+## User CSS
+
+You can specify your favorite styling by putting `user.css` in the application directory.
+
+To look up class names, you can use Chrome DevTools.  You can open DevTools from menu or setting `NODE_ENV` environment variable to 'development'.
+
+## Configuration JSON
+
+You can put `config.json` in the application directory.  You can configure this app with it.
+
+| Key            | Default | Description                                                                                                                        |
+|----------------|---------|------------------------------------------------------------------------------------------------------------------------------------|
+| `notification` | `true`  | Enable/Disable notification.You can also specify object to enable/disable each kind of notification; `reply`, `retweet`, `quoted`. |
+| `plugin`       | `[]`    | Paths to plugin.  You can specify an absolute path or a relative path to the application directory.                                |
+
+Example:
+
+```json
+{
+  "notification": {
+    "reply": true,
+    "retweet": false,
+    "quoted": true
+  },
+  "plugin": {
+    "my-plugin.js"
+  }
+}
+```
+
+## Plugin
+
+Plugin is a Node.js module.  User specifies the path to it with `config.json` configuration file.  The module will be loaded using `require()` in application.
+
+Plugin must export one object defined as below:
+
+```typescript
+export interface Plugin {
+    // Note:
+    // Filter function takes an item and returns boolean value:
+    //   `true` if the item should *remain*
+    //   `false` if the item should NOT *remain*
+    filter?: {
+        home_timeline?: (tw: Tweet, timeline: TimelineState) => boolean;
+        mention_timeline?: (tw: Tweet, timeline: TimelineState) => boolean;
+        notification?: (tw: Tweet) => boolean;
+    };
+}
+```
+
+`Tweet` is defined [here](./renderer/item/tweet.ts) and `TimelineState` is defined [here](states/timeline.ts).  You can gain raw json value of the tweet with `tweet.json` property.
+
+Below is a single file example.
+
+```javascript
+const RE_FUCK = /\bfuck\b/i;
+
+function filterHomeTimeline(tweet, timeline) {
+    if (tweet.user.screen_name === 'Linda_pp') {
+        // When screen name is '@Linda_pp', do not show it in home timeline
+        return false;
+    }
+
+    if (RE_FUCK.test(tweet.text)) {
+        // When tweet text includes 'fuck', do not show it in home timeline
+        return false;
+    }
+
+    return true;
+}
+
+module.exports = {
+    filter: {
+        home_timeline: filterHomeTimeline
+    }
+}
+```
+
 ## For Development
 
 ```sh
