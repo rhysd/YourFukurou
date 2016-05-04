@@ -21,9 +21,9 @@ Goals :bird::
 
 ## Application Directory
 
-- OS X: `~/Library/Application\ Support/Shiba`
-- Linux: `~/.config/Shiba`
-- Windows: `%APPDATA%\Shiba`.
+- OS X: `~/Library/Application\ Support/YourFukurou/`
+- Linux: `~/.config/YourFukurou/`
+- Windows: `%APPDATA%\YourFukurou\`.
 
 ## User CSS
 
@@ -40,7 +40,7 @@ You can put `config.json` in the application directory.  You can configure this 
 | `notification` | `true`  | Enable/Disable notification.You can also specify object to enable/disable each kind of notification; `reply`, `retweet`, `quoted`. |
 | `plugin`       | `[]`    | Paths to plugin.  You can specify an absolute path or a relative path to the application directory.                                |
 
-Example:
+Example of `config.json`:
 
 ```json
 {
@@ -49,9 +49,9 @@ Example:
     "retweet": false,
     "quoted": true
   },
-  "plugin": {
+  "plugin": [
     "my-plugin.js"
-  }
+  ]
 }
 ```
 
@@ -62,7 +62,7 @@ Plugin is a Node.js module.  User specifies the path to it with `config.json` co
 Plugin must export one object defined as below:
 
 ```typescript
-export interface Plugin {
+interface Plugin {
     // Note:
     // Filter function takes an item and returns boolean value:
     //   `true` if the item should *remain*
@@ -96,11 +96,12 @@ function filterHomeTimeline(tweet, timeline) {
     return true;
 }
 
+// Export as npm module
 module.exports = {
     filter: {
         home_timeline: filterHomeTimeline
     }
-}
+};
 ```
 
 ## For Development
