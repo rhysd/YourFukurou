@@ -2,6 +2,7 @@ import Tweet from '../item/tweet';
 import log from '../log';
 import {openEditor} from '../actions';
 import Store from '../store';
+import PM from '../plugin_manager';
 
 function loadNotificationConfig(): NotificationConfig {
     'use strict';
@@ -61,9 +62,10 @@ export function notifyQuoted(qt: Tweet) {
 
 export default function notifyTweet(tw: Tweet) {
     const owner = Store.getState().timeline.user;
-    if (owner === null) {
+    if (owner === null || PM.shouldRejectNotification(tw)) {
         return;
     }
+
     if (Config.reply && tw.in_reply_to_user_id === owner.id) {
         notifyReply(tw);
     } else if (Config.retweet && tw.isRetweet() && tw.retweeted_status.user.id === owner.id) {

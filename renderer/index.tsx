@@ -10,6 +10,7 @@ import IpcChannelProxy from './ipc_channel_proxy';
 import App from './components/app';
 import {setCurrentUser} from './actions';
 import DB from './database/db';
+import PM from './plugin_manager';
 import log from './log';
 
 const fs = global.require('fs');
@@ -52,4 +53,7 @@ fs.lstat(user_css_path, (err: NodeJS.ErrnoException, stats: Stats) => {
     }
 });
 
+PM.loadPlugins();
+
 global.DB = DB;
+global.PM = PM;

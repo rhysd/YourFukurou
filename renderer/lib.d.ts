@@ -8,6 +8,7 @@ declare module NodeJS {
     interface Global {
         require: NodeRequireFunction;
         DB: any;  // For debug purpose
+        PM: any;  // For debug purpose
     }
 }
 

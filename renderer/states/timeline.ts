@@ -3,6 +3,7 @@ import Item from '../item/item';
 import Tweet, {TwitterUser} from '../item/tweet';
 import Separator from '../item/separator';
 import log from '../log';
+import PM from '../plugin_manager';
 
 export type TimelineKind = 'home' | 'mention';
 
@@ -61,11 +62,18 @@ export default class TimelineState {
     }
 
     addNewTweet(status: Tweet) {
+        if (PM.shouldRejectTweet(status, this)) {
+            // Note:
+            // When some hook rejected the tweet
+            return this;
+        }
+
         const next_home = this.home.unshift(status);
         const next_mention =
             this.user && status.mentionsTo(this.user) ?
                 this.mention.unshift(status) :
                 this.mention;
+
         return new TimelineState(this.kind, next_home, next_mention, this.user);
     }
 
