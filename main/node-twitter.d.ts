@@ -29,8 +29,8 @@ declare module NodeTwitter {
     export class TwitterClient {
         constructor(auth: AuthInfo);
         get(path: string): TwitterClient;
-        get(path: string, callback: (err: ApiError[], tweets: Object[], response: any) => void): TwitterClient;
-        get(path: string, opt: Object, callback: (err: ApiError[], tweets: Object[], response: any) => void): TwitterClient;
+        get(path: string, callback: (err: ApiError[], res: any, response: any) => void): TwitterClient;
+        get(path: string, opt: Object, callback: (err: ApiError[], res: any, response: any) => void): TwitterClient;
         post(url: string, callback: (err: ApiError[], data: any, response: any) => void): TwitterClient;
         post(url: string, content: Object, callback: (err: ApiError[], data: any, response: any) => void): TwitterClient;
         post(url: string, content: Object, content_type: string, callback: (err: ApiError[], data: any, response: any) => void): TwitterClient;

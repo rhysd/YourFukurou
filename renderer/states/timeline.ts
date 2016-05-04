@@ -55,10 +55,17 @@ export default class TimelineState {
         public home: List<Item> = List<Item>(),
         public mention: List<Item> = List<Item>(),
         public user: TwitterUser = null,
-        public notified: {home: boolean; mention: boolean} = {home: false, mention: false}
+        public notified: {home: boolean; mention: boolean} = {home: false, mention: false},
+        public rejected_ids: List<number> = List<number>()
     ) {}
 
     addNewTweet(status: Tweet) {
+        if (this.rejected_ids.contains(status.getMainStatus().user.id)) {
+            // Note:
+            // Muted/Blocked user will be never shown in any timeline.
+            return this;
+        }
+
         let next_home = this.home;
         let next_mention = this.mention;
 
@@ -83,7 +90,14 @@ export default class TimelineState {
             home:    should_add_to_home    && this.kind !== 'home'    || this.notified.home,
             mention: should_add_to_mention && this.kind !== 'mention' || this.notified.mention,
         };
-        return new TimelineState(this.kind, next_home, next_mention, this.user, next_notified);
+        return new TimelineState(
+            this.kind,
+            next_home,
+            next_mention,
+            this.user,
+            next_notified,
+            this.rejected_ids
+        );
     }
 
     addSeparator(sep: Separator) {
@@ -95,7 +109,14 @@ export default class TimelineState {
             this.mention.first() instanceof Separator ?
                 this.mention :
                 this.mention.unshift(sep);
-        return new TimelineState(this.kind, next_home, next_mention, this.user, this.notified);
+        return new TimelineState(
+            this.kind,
+            next_home,
+            next_mention,
+            this.user,
+            this.notified,
+            this.rejected_ids
+        );
     }
 
     switchTimeline(next_kind: TimelineKind) {
@@ -106,7 +127,14 @@ export default class TimelineState {
             home: next_kind === 'home' ? false : this.notified.home,
             mention: next_kind === 'mention' ? false : this.notified.mention,
         };
-        return new TimelineState(next_kind, this.home, this.mention, this.user, next_notified);
+        return new TimelineState(
+            next_kind,
+            this.home,
+            this.mention,
+            this.user,
+            next_notified,
+            this.rejected_ids
+        );
     }
 
     deleteStatusWithId(id: string) {
@@ -122,7 +150,14 @@ export default class TimelineState {
         };
         const next_home = this.home.filter(predicate).toList();
         const next_mention = this.mention.filter(predicate).toList();
-        return new TimelineState(this.kind, next_home, next_mention, this.user, this.notified);
+        return new TimelineState(
+            this.kind,
+            next_home,
+            next_mention,
+            this.user,
+            this.notified,
+            this.rejected_ids
+        );
     }
 
     addMentions(mentions: Tweet[]) {
@@ -142,7 +177,8 @@ export default class TimelineState {
             this.home,
             added.concat(this.mention).toList(),
             this.user,
-            next_notified
+            next_notified,
+            this.rejected_ids
         );
     }
 
@@ -152,11 +188,25 @@ export default class TimelineState {
         // If there is no item to replace, simply return 'this'.
         const next_home = updateStatusIn(this.home, status);
         const next_mention = updateStatusIn(this.mention, status);
-        return new TimelineState(this.kind, next_home, next_mention, this.user, this.notified);
+        return new TimelineState(
+            this.kind,
+            next_home,
+            next_mention,
+            this.user,
+            this.notified,
+            this.rejected_ids
+        );
     }
 
     setUser(new_user: TwitterUser) {
-        return new TimelineState(this.kind, this.home, this.mention, new_user, this.notified);
+        return new TimelineState(
+            this.kind,
+            this.home,
+            this.mention,
+            new_user,
+            this.notified,
+            this.rejected_ids
+        );
     }
 
     getCurrentTimeline() {
@@ -167,5 +217,33 @@ export default class TimelineState {
                 log.error('Invalid timeline:', this.kind);
                 return null;
         }
+    }
+
+    addRejectedIds(ids: number[]) {
+        const will_added = ids.filter(id => !this.rejected_ids.contains(id));
+        if (will_added.length === 0) {
+            return this;
+        }
+
+        const predicate = (i: Item) => {
+            if (i instanceof Tweet) {
+                const id = i.getMainStatus().user.id;
+                return will_added.indexOf(id) === -1;
+            }
+            return true;
+        };
+
+        const next_home = this.home.filter(predicate).toList();
+        const next_mention = this.home.filter(predicate).toList();
+        const next_rejected_ids = this.rejected_ids.merge(will_added);
+
+        return new TimelineState(
+            this.kind,
+            next_home,
+            next_mention,
+            this.user,
+            this.notified,
+            next_rejected_ids
+        );
     }
 }

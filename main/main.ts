@@ -8,6 +8,10 @@ import Twitter from './twitter';
 import setApplicationMenu from './menu';
 import loadConfig from './config';
 
+const consumer_key = process.env.YOURFUKUROU_CONSUMER_KEY || 'H4fJ2rgNuH2UiOXuPBjHpl9zL';
+const consumer_secret = process.env.YOURFUKUROU_CONSUMER_KEY_SECRET || 'azYRjJn6emdsOIUhepy0Wygmaq9PltEnpsx4P4BfU1HMp5Unmm';
+const should_use_dummy_data = process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS;
+
 const prepare_app = loadConfig()
         .then(c => {
             global.config_path = c[0];
@@ -19,10 +23,6 @@ const prepare_app = loadConfig()
         })
         .then(load_cached_tokens)
         .catch(_ => authenticate(consumer_key, consumer_secret));
-
-const consumer_key = process.env.YOURFUKUROU_CONSUMER_KEY || 'H4fJ2rgNuH2UiOXuPBjHpl9zL';
-const consumer_secret = process.env.YOURFUKUROU_CONSUMER_KEY_SECRET || 'azYRjJn6emdsOIUhepy0Wygmaq9PltEnpsx4P4BfU1HMp5Unmm';
-const should_use_dummy_data = process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS;
 
 app.once('window-all-closed', () => app.quit());
 
@@ -110,8 +110,10 @@ function open_window(access: AccessToken) {
                 .then(() => Promise.all([
                     twitter.fetchHomeTimeline(),
                     twitter.fetchMentionTimeline(),
+                    twitter.fetchMuteIds(),
                 ]))
-                .then(([tweets, mentions]) => {
+                .then(([tweets, mentions, ids]) => {
+                    twitter.sender.send('yf:rejected-ids', ids);
                     for (const tw of tweets) {
                         twitter.sender.send('yf:tweet', tw);
                     }

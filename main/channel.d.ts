@@ -10,6 +10,7 @@ type ChannelFromMain
     | 'yf:delete-status'
     | 'yf:api-failure'
     | 'yf:connection-failure'
+    | 'yf:rejected-ids'
     | 'yf:friends';
 
 type ChannelFromRenderer

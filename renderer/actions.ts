@@ -20,6 +20,7 @@ export enum Kind {
     SetCurrentUser,
     DeleteStatusInTimeline,
     AddMentions,
+    AddRejectedUserIds,
 
     SendRetweet,
     UndoRetweet,
@@ -63,6 +64,7 @@ export interface Action {
     mentions?: Tweet[];
     completion_label?: AutoCompleteLabel;
     suggestions?: SuggestionItem[];
+    ids?: number[];
 }
 
 export function addTweetToTimeline(status: Tweet) {
@@ -82,6 +84,14 @@ export function addMentions(mentions: Tweet[]) {
             type: Kind.AddMentions,
             mentions,
         }));
+    };
+}
+
+export function addRejectedUserIds(ids: number[]) {
+    'use strict';
+    return {
+        type: Kind.AddRejectedUserIds,
+        ids,
     };
 }
 
@@ -331,3 +341,4 @@ export function changeCurrentTimeline(timeline: TimelineKind) {
         timeline,
     };
 }
+

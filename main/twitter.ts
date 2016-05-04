@@ -181,7 +181,27 @@ export default class Twitter {
             .then(tweets => this.sender.send('yf:mentions', tweets));
     }
 
-    subscribeStream(stream: NodeTwitter.TwitterStream, params: Object = {}) {
+    fetchMuteIds(params: Object = {}) {
+        return new Promise<number[]>((resolve, reject) => {
+            this.client.get('mutes/users/ids', params, (err, res) => {
+                if (err) {
+                    log.debug('Mute ids failed:', res);
+                    this.sendApiFailure(err);
+                    reject(err);
+                    return;
+                }
+                log.debug('mutes/users/ids: Got muted ids:', res.ids.length);
+                resolve(res.ids);
+            });
+        });
+    }
+
+    sendMuteIds(params: Object = {}) {
+        return this.fetchMuteIds(params)
+            .then(ids => this.sender.send('yf:rejected-ids', ids));
+    }
+
+    subscribeStream(stream: NodeTwitter.TwitterStream) {
         stream.on('data', json => {
             if (json === undefined) {
                 return;
@@ -222,6 +242,7 @@ export default class Twitter {
         if (this.stream !== null) {
             this.stopStreaming();
         }
+
         return new Promise<void>(resolve => {
             this.client.stream('user', params, stream => {
                 log.debug('Stream connected');

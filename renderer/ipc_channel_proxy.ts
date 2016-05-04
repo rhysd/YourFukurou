@@ -2,6 +2,7 @@ const {ipcRenderer: ipc} = global.require('electron');
 import {
     addTweetToTimeline,
     addMentions,
+    addRejectedUserIds,
     addSeparator,
     retweetSucceeded,
     unretweetSucceeded,
@@ -115,6 +116,11 @@ export default class IpcChannelProxy {
             // Do not notify mentions because this IPC message is sent from main
             // process at app starting.  If we were to notify mentions here, so many
             // notifications are sent to a user.
+        });
+
+        this.subscribe('yf:rejected-ids', (_: Electron.IpcRendererEvent, ids: number[]) => {
+            Store.dispatch(addRejectedUserIds(ids));
+            DB.rejected_ids.storeIds(ids);
         });
 
         log.debug('Started to receive messages');
