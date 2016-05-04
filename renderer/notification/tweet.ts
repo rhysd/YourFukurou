@@ -3,6 +3,29 @@ import log from '../log';
 import {openEditor} from '../actions';
 import Store from '../store';
 
+function loadNotificationConfig(): NotificationConfig {
+    'use strict';
+
+    const config = (
+        global.require('electron').remote.getGlobal('config') as Config
+    ).notification;
+
+    if (typeof config === 'boolean') {
+        return {
+            reply: config,
+            retweet: config,
+            quoted: config,
+        };
+    } else {
+        return {
+            reply: config.reply,
+            retweet: config.retweet,
+            quoted: config.quoted,
+        };
+    }
+}
+const Config = loadNotificationConfig();
+
 function editReply(in_reply_to: Tweet) {
     'use strict';
     Store.dispatch(openEditor(in_reply_to));
@@ -38,11 +61,14 @@ export function notifyQuoted(qt: Tweet) {
 
 export default function notifyTweet(tw: Tweet) {
     const owner = Store.getState().timeline.user;
-    if (tw.in_reply_to_user_id === owner.id) {
+    if (owner === null) {
+        return;
+    }
+    if (Config.reply && tw.in_reply_to_user_id === owner.id) {
         notifyReply(tw);
-    } else if (tw.isRetweet() && tw.retweeted_status.user.id === owner.id) {
+    } else if (Config.retweet && tw.isRetweet() && tw.retweeted_status.user.id === owner.id) {
         notifyRetweet(tw);
-    } else if (tw.isQuotedTweet() && tw.quoted_status.user.id === owner.id) {
+    } else if (Config.quoted && tw.isQuotedTweet() && tw.quoted_status.user.id === owner.id) {
         notifyQuoted(tw);
     }
 }

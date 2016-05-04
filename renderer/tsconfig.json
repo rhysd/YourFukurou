@@ -10,7 +10,6 @@
     "jsx": "react"
   },
   "files": [
-    "../main/channel.d.ts",
     "components/app.tsx",
     "components/avatar.tsx",
     "components/icon_button.tsx",

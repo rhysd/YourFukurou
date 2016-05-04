@@ -6,8 +6,17 @@ import log from './log';
 import IpcSender from './ipc_sender';
 import Twitter from './twitter';
 import setApplicationMenu from './menu';
+import loadConfig from './config';
 
-const load_cache = load_cached_tokens();
+const prepare_app = loadConfig()
+        .then(c => { global.config = c; })
+        .catch(e => {
+            log.error('Fatal error on loading configuration:', e);
+            app.quit();
+        })
+        .then(load_cached_tokens)
+        .catch(_ => authenticate(consumer_key, consumer_secret));
+
 const consumer_key = process.env.YOURFUKUROU_CONSUMER_KEY || 'H4fJ2rgNuH2UiOXuPBjHpl9zL';
 const consumer_secret = process.env.YOURFUKUROU_CONSUMER_KEY_SECRET || 'azYRjJn6emdsOIUhepy0Wygmaq9PltEnpsx4P4BfU1HMp5Unmm';
 const should_use_dummy_data = process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS;
@@ -143,8 +152,7 @@ function open_window(access: AccessToken) {
 
 app.once(
     'ready',
-    () => load_cache
-        .catch(_ => authenticate(consumer_key, consumer_secret))
+    () => prepare_app
         .then(open_window)
         .catch(e => log.error('Unexpected error on "ready" callback:', e))
 );

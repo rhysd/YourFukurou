@@ -30,3 +30,9 @@ declare module 'electron-window-state' {
     function windowStateKeeper(opts: ElectronWindowState.WindowStateKeeperOptions): ElectronWindowState.WindowState;
     export = windowStateKeeper;
 }
+
+declare module NodeJS {
+    interface Global {
+        config?: Config;
+    }
+}
