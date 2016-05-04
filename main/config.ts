@@ -9,24 +9,28 @@ export const DefaultConfig = {
     plugin: [],
 } as Config;
 
-export const ConfigPath = path.join(app.getPath('userData'), 'config.json');
-
 export default function loadConfig() {
-    return new Promise<Config>((resolve, reject) => {
-        fs.readFile(ConfigPath, 'utf8', (err, content) => {
+    return new Promise<[string, Config]>((resolve, reject) => {
+        const config_path = path.join(app.getPath('userData'), 'config.json');
+
+        fs.readFile(config_path, 'utf8', (err, content) => {
             if (err) {
-                log.debug(`Error on reading config file: ${err.message}.  Create default config file to ${ConfigPath}`);
+                log.debug(`Error on reading config file: ${err.message}.  Create default config file to ${config_path}`);
                 try {
-                    fs.writeFileSync(ConfigPath, JSON.stringify(DefaultConfig, null, 2));
+                    fs.writeFileSync(config_path, JSON.stringify(DefaultConfig, null, 2));
                 } catch (e) {
                     reject(e);
                 }
-                return resolve(DefaultConfig);
+                return resolve([
+                    config_path,
+                    DefaultConfig,
+                ]);
             }
 
-            resolve(
-                assign({}, DefaultConfig, JSON.parse(content)) as Config
-            );
+            resolve([
+                config_path,
+                assign({}, DefaultConfig, JSON.parse(content)) as Config,
+            ]);
         });
     });
 }

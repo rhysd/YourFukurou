@@ -34,5 +34,6 @@ declare module 'electron-window-state' {
 declare module NodeJS {
     interface Global {
         config?: Config;
+        config_path?: string;
     }
 }

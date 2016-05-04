@@ -9,7 +9,10 @@ import setApplicationMenu from './menu';
 import loadConfig from './config';
 
 const prepare_app = loadConfig()
-        .then(c => { global.config = c; })
+        .then(c => {
+            global.config_path = c[0];
+            global.config = c[1];
+        })
         .catch(e => {
             log.error('Fatal error on loading configuration:', e);
             app.quit();

@@ -11,11 +11,22 @@ import {
 } from '../actions';
 import {TwitterUser} from '../item/tweet';
 import {TimelineKind} from '../states/timeline';
+import log from '../log';
 
 interface SideMenuProps extends React.Props<any> {
     user: TwitterUser;
     timeline: TimelineKind;
     dispatch?: Redux.Dispatch;
+}
+
+function openConfigWithEditor() {
+    'use strict';
+    global.require('electron');
+    const electron = global.require('electron');
+    const config_path = electron.remote.getGlobal('config_path');
+    const open = electron.shell.openItem;
+    open(config_path);
+    log.debug('Open file:', config_path);
 }
 
 const SideMenu = (props: SideMenuProps) => (
@@ -65,7 +76,7 @@ const SideMenu = (props: SideMenuProps) => (
                 className="side-menu__settings"
                 name="gear"
                 tip="Settings"
-                onClick={() => props.dispatch(notImplementedYet())}
+                onClick={openConfigWithEditor}
             />
         </div>
     </div>
