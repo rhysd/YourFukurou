@@ -62,17 +62,24 @@ export default class TimelineState {
     }
 
     addNewTweet(status: Tweet) {
-        if (PM.shouldRejectTweet(status, this)) {
-            // Note:
-            // When some hook rejected the tweet
-            return this;
+        let totally_rejected = true;
+        let next_home = this.home;
+        let next_mention = this.mention;
+
+        if (!PM.shouldRejectTweetInHomeTimeline(status, this)) {
+            next_home = this.home.unshift(status);
+            totally_rejected = false;
         }
 
-        const next_home = this.home.unshift(status);
-        const next_mention =
-            this.user && status.mentionsTo(this.user) ?
-                this.mention.unshift(status) :
-                this.mention;
+        if (this.user && status.mentionsTo(this.user) &&
+            !PM.shouldRejectTweetInMentionTimeline(status, this)) {
+            next_mention = this.mention.unshift(status);
+            totally_rejected = false;
+        }
+
+        if (totally_rejected) {
+            return this;
+        }
 
         return new TimelineState(this.kind, next_home, next_mention, this.user);
     }

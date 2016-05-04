@@ -9,7 +9,8 @@ export interface Plugin {
     //   `true` if the item should *remain*
     //   `false` if the item should NOT *remain*
     filter?: {
-        timeline?: (tw: Tweet, timeline: TimelineState) => boolean;
+        home_timeline?: (tw: Tweet, timeline: TimelineState) => boolean;
+        mention_timeline?: (tw: Tweet, timeline: TimelineState) => boolean;
         notification?: (tw: Tweet) => boolean;
     };
 
@@ -29,7 +30,7 @@ class PluginManager {
     validatePlugin(p: Plugin) {
         let valid = true;
         for (const prop in p) {
-            if (prop !== 'filter' ||
+            if (prop !== 'filter' &&
                 prop !== '_path') {
                 log.error(`Plugin ${p._path}: Invalid property '${prop}'`);
                 valid = false;
@@ -63,12 +64,25 @@ class PluginManager {
         this.loaded = true;
     }
 
-    shouldRejectTweet(tw: Tweet, timeline: TimelineState) {
+    shouldRejectTweetInHomeTimeline(tw: Tweet, timeline: TimelineState) {
         for (const p of this.plugins) {
-            if (p.filter && p.filter.timeline) {
-                const rejected = !p.filter.timeline(tw, timeline);
+            if (p.filter && p.filter.home_timeline) {
+                const rejected = !p.filter.home_timeline(tw, timeline);
                 if (rejected) {
-                    log.debug(`Tweet was rejected by plugin '${p._path}' : @${tw.user.screen_name}: ${tw.text}`)
+                    log.debug(`Plugin '${p._path}' rejects a tweet in home timeline: @${tw.user.screen_name}: ${tw.text}`)
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    shouldRejectTweetInMentionTimeline(tw: Tweet, timeline: TimelineState) {
+        for (const p of this.plugins) {
+            if (p.filter && p.filter.mention_timeline) {
+                const rejected = !p.filter.mention_timeline(tw, timeline);
+                if (rejected) {
+                    log.debug(`Plugin '${p._path}' rejects a tweet in mention timeline: @${tw.user.screen_name}: ${tw.text}`)
                     return true;
                 }
             }
