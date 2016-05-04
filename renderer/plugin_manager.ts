@@ -26,14 +26,25 @@ class PluginManager {
         this.loaded = false;
     }
 
-    // TODO:
-    // validatePlugin()
+    validatePlugin(p: Plugin) {
+        let valid = true;
+        for (const prop in p) {
+            if (prop !== 'filter' ||
+                prop !== '_path') {
+                log.error(`Plugin ${p._path}: Invalid property '${prop}'`);
+                valid = false;
+            }
+        }
+        return valid;
+    }
 
     loadPluginFromPath(p: string) {
         const plugin: Plugin = global.require(p);
         plugin._path = p;
-        this.plugins.push(plugin);
-        log.debug('Plugin was added:', p);
+        if (this.validatePlugin(plugin)) {
+            this.plugins.push(plugin);
+            log.debug('Plugin was added:', p);
+        }
     }
 
     loadPlugins() {
