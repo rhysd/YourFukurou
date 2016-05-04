@@ -54,34 +54,36 @@ export default class TimelineState {
         public kind: TimelineKind = 'home',
         public home: List<Item> = List<Item>(),
         public mention: List<Item> = List<Item>(),
-        public user: TwitterUser = null
+        public user: TwitterUser = null,
+        public notified: {home: boolean; mention: boolean} = {home: false, mention: false}
     ) {}
 
-    clone() {
-        return new TimelineState(this.kind, this.home, this.mention, this.user);
-    }
-
     addNewTweet(status: Tweet) {
-        let totally_rejected = true;
         let next_home = this.home;
         let next_mention = this.mention;
 
-        if (!PM.shouldRejectTweetInHomeTimeline(status, this)) {
+        const should_add_to_home = !PM.shouldRejectTweetInHomeTimeline(status, this);
+        if (should_add_to_home) {
             next_home = this.home.unshift(status);
-            totally_rejected = false;
         }
 
-        if (this.user && status.mentionsTo(this.user) &&
-            !PM.shouldRejectTweetInMentionTimeline(status, this)) {
+        const should_add_to_mention
+            = this.user && status.mentionsTo(this.user) &&
+                !PM.shouldRejectTweetInMentionTimeline(status, this);
+        if (should_add_to_mention) {
             next_mention = this.mention.unshift(status);
-            totally_rejected = false;
         }
 
-        if (totally_rejected) {
+        if (!should_add_to_home && !should_add_to_mention) {
+            // Note: Nothing was changed.
             return this;
         }
 
-        return new TimelineState(this.kind, next_home, next_mention, this.user);
+        const next_notified = {
+            home:    should_add_to_home    && this.kind !== 'home'    || this.notified.home,
+            mention: should_add_to_mention && this.kind !== 'mention' || this.notified.mention,
+        };
+        return new TimelineState(this.kind, next_home, next_mention, this.user, next_notified);
     }
 
     addSeparator(sep: Separator) {
@@ -93,14 +95,18 @@ export default class TimelineState {
             this.mention.first() instanceof Separator ?
                 this.mention :
                 this.mention.unshift(sep);
-        return new TimelineState(this.kind, next_home, next_mention, this.user);
+        return new TimelineState(this.kind, next_home, next_mention, this.user, this.notified);
     }
 
-    switchTimeline(kind: TimelineKind) {
-        if (kind === this.kind) {
+    switchTimeline(next_kind: TimelineKind) {
+        if (next_kind === this.kind) {
             return this;
         }
-        return new TimelineState(kind, this.home, this.mention, this.user);
+        const next_notified = {
+            home: next_kind === 'home' ? false : this.notified.home,
+            mention: next_kind === 'mention' ? false : this.notified.mention,
+        };
+        return new TimelineState(next_kind, this.home, this.mention, this.user, next_notified);
     }
 
     deleteStatusWithId(id: string) {
@@ -116,7 +122,7 @@ export default class TimelineState {
         };
         const next_home = this.home.filter(predicate).toList();
         const next_mention = this.mention.filter(predicate).toList();
-        return new TimelineState(this.kind, next_home, next_mention, this.user);
+        return new TimelineState(this.kind, next_home, next_mention, this.user, this.notified);
     }
 
     addMentions(mentions: Tweet[]) {
@@ -125,11 +131,18 @@ export default class TimelineState {
                 m => !containsStatusInTimeline(this.mention, m)
             )
         );
+
+        const next_notified = {
+            home: this.notified.home,
+            mention: this.kind !== 'mention',
+        };
+
         return new TimelineState(
             this.kind,
             this.home,
             added.concat(this.mention).toList(),
-            this.user
+            this.user,
+            next_notified
         );
     }
 
@@ -139,11 +152,11 @@ export default class TimelineState {
         // If there is no item to replace, simply return 'this'.
         const next_home = updateStatusIn(this.home, status);
         const next_mention = updateStatusIn(this.mention, status);
-        return new TimelineState(this.kind, next_home, next_mention, this.user);
+        return new TimelineState(this.kind, next_home, next_mention, this.user, this.notified);
     }
 
     setUser(new_user: TwitterUser) {
-        return new TimelineState(this.kind, this.home, this.mention, new_user);
+        return new TimelineState(this.kind, this.home, this.mention, new_user, this.notified);
     }
 
     getCurrentTimeline() {
