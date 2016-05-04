@@ -10,6 +10,9 @@ declare module NodeTwitter {
         text?: string;
         friends?: number[];
         delete?: Object;
+        event?: string;
+        source?: any;
+        target?: any;
         // TODO: Add more
     }
 

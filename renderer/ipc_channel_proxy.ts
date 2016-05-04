@@ -3,6 +3,7 @@ import {
     addTweetToTimeline,
     addMentions,
     addRejectedUserIds,
+    removeRejectedUserIds,
     addSeparator,
     retweetSucceeded,
     unretweetSucceeded,
@@ -121,6 +122,11 @@ export default class IpcChannelProxy {
         this.subscribe('yf:rejected-ids', (_: Electron.IpcRendererEvent, ids: number[]) => {
             Store.dispatch(addRejectedUserIds(ids));
             DB.rejected_ids.storeIds(ids);
+        });
+
+        this.subscribe('yf:unrejected-ids', (_: Electron.IpcRendererEvent, ids: number[]) => {
+            Store.dispatch(removeRejectedUserIds(ids));
+            DB.rejected_ids.deleteIds(ids);
         });
 
         log.debug('Started to receive messages');

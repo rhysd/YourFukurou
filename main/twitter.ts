@@ -222,6 +222,19 @@ export default class Twitter {
                 return;
             }
 
+            if (json.event) {
+                switch (json.event) {
+                    case 'mute':
+                        this.sender.send('yf:rejected-ids', [json.target.id]);
+                        break;
+                    case 'unmute':
+                        this.sender.send('yf:unrejected-ids', [json.target.id]);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             log.info('Ignored message on stream:', json);
         });
 

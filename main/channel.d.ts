@@ -11,6 +11,7 @@ type ChannelFromMain
     | 'yf:api-failure'
     | 'yf:connection-failure'
     | 'yf:rejected-ids'
+    | 'yf:unrejected-ids'
     | 'yf:friends';
 
 type ChannelFromRenderer

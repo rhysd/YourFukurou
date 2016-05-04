@@ -246,4 +246,19 @@ export default class TimelineState {
             next_rejected_ids
         );
     }
+
+    removeRejectedIds(ids: number[]) {
+        const next_rejected_ids = this.rejected_ids.filter(id => ids.indexOf(id) === -1).toList();
+
+        // Note:
+        // There is no way to restore muted/blocked tweets in timeline
+        return new TimelineState(
+            this.kind,
+            this.home,
+            this.mention,
+            this.user,
+            this.notified,
+            next_rejected_ids
+        );
+    }
 }
