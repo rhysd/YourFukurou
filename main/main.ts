@@ -108,12 +108,19 @@ function open_window(access: AccessToken) {
                         });
                 })
                 .then(() => Promise.all([
+                    twitter.fetchMuteIds(),
+                    twitter.fetchBlockIds(),
                     twitter.fetchHomeTimeline(),
                     twitter.fetchMentionTimeline(),
-                    twitter.fetchMuteIds(),
                 ]))
-                .then(([tweets, mentions, ids]) => {
-                    twitter.sender.send('yf:rejected-ids', ids);
+                .then(([mute_ids, block_ids, tweets, mentions]) => {
+                    // Note: Merge mute list with block list
+                    for (const m of mute_ids) {
+                        if (block_ids.indexOf(m) !== -1) {
+                            block_ids.push(m);
+                        }
+                    }
+                    twitter.sender.send('yf:rejected-ids', block_ids);
                     for (const tw of tweets) {
                         twitter.sender.send('yf:tweet', tw);
                     }

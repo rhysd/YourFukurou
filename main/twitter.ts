@@ -201,6 +201,26 @@ export default class Twitter {
             .then(ids => this.sender.send('yf:rejected-ids', ids));
     }
 
+    fetchBlockIds(params: Object = {}) {
+        return new Promise<number[]>((resolve, reject) => {
+            this.client.get('blocks/ids', params, (err, res) => {
+                if (err) {
+                    log.debug('Block ids failed:', err);
+                    this.sendApiFailure(err);
+                    reject(err);
+                    return;
+                }
+                log.debug('blocks/ids: Got muted ids:', res.ids.length);
+                resolve(res.ids);
+            });
+        });
+    }
+
+    sendBlockIds(params: Object = {}) {
+        return this.fetchBlockIds(params)
+            .then(ids => this.sender.send('yf:rejected-ids', ids));
+    }
+
     subscribeStream(stream: NodeTwitter.TwitterStream) {
         stream.on('data', json => {
             if (json === undefined) {
