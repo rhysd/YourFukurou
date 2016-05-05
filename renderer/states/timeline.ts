@@ -59,10 +59,23 @@ export default class TimelineState {
         public rejected_ids: List<number> = List<number>()
     ) {}
 
+    shouldReject(status: Tweet) {
+        if (this.rejected_ids.contains(status.user.id)) {
+            return true;
+        }
+
+        if (status.isRetweet() && this.rejected_ids.contains(status.retweeted_status.user.id)) {
+            return true;
+        }
+
+        return false;
+    }
+
     addNewTweet(status: Tweet) {
-        if (this.rejected_ids.contains(status.getMainStatus().user.id)) {
+        if (this.shouldReject(status)) {
             // Note:
             // Muted/Blocked user will be never shown in any timeline.
+            log.debug('Status was rejected because of muted/blocked user:', status);
             return this;
         }
 
@@ -90,6 +103,7 @@ export default class TimelineState {
             home:    should_add_to_home    && this.kind !== 'home'    || this.notified.home,
             mention: should_add_to_mention && this.kind !== 'mention' || this.notified.mention,
         };
+
         return new TimelineState(
             this.kind,
             next_home,
