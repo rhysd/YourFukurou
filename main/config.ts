@@ -7,9 +7,14 @@ import log from './log';
 export const DefaultConfig = {
     notification: true,
     plugin: [],
+    mute: {
+        home: true,
+        mention: false,
+    },
 } as Config;
 
 export default function loadConfig() {
+    'use strict';
     return new Promise<[string, Config]>((resolve, reject) => {
         const config_path = path.join(app.getPath('userData'), 'config.json');
 

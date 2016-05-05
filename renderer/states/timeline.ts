@@ -4,17 +4,9 @@ import Tweet, {TwitterUser} from '../item/tweet';
 import Separator from '../item/separator';
 import log from '../log';
 import PM from '../plugin_manager';
+import AppConfig from '../config';
 
 export type TimelineKind = 'home' | 'mention';
-
-// TODO:
-// Add TimelineManager
-// It manages
-//   - Each timeline (using immutable data)
-//   - Current timeline
-//   - Timeline logic
-//     - Add new tweets to home timeline
-//     - Filter mention tweets for mention timeline
 
 function containsStatusInTimeline(is: List<Item>, t: Tweet) {
     'use strict';
@@ -46,7 +38,6 @@ function updateStatusIn(items: List<Item>, status: Tweet) {
     }).toList();
 }
 
-
 // Note:
 // This must be an immutable class because it is a part of state in a reducer
 export default class TimelineState {
@@ -72,24 +63,27 @@ export default class TimelineState {
     }
 
     addNewTweet(status: Tweet) {
-        if (this.shouldReject(status)) {
-            // Note:
-            // Muted/Blocked user will be never shown in any timeline.
-            log.debug('Status was rejected because of muted/blocked user:', status);
-            return this;
+        const muted_or_blocked = this.shouldReject(status);
+        if (muted_or_blocked) {
+            log.debug('Status was marked as rejected because of muted/blocked user:', status.user.screen_name, status.json);
         }
 
         let next_home = this.home;
         let next_mention = this.mention;
 
-        const should_add_to_home = !PM.shouldRejectTweetInHomeTimeline(status, this);
+        const should_add_to_home
+            = !PM.shouldRejectTweetInHomeTimeline(status, this) &&
+                (!AppConfig.mute.home || !muted_or_blocked);
+
         if (should_add_to_home) {
             next_home = this.home.unshift(status);
         }
 
         const should_add_to_mention
             = this.user && status.mentionsTo(this.user) &&
-                !PM.shouldRejectTweetInMentionTimeline(status, this);
+                !PM.shouldRejectTweetInMentionTimeline(status, this) &&
+                (!AppConfig.mute.mention || !muted_or_blocked);
+
         if (should_add_to_mention) {
             next_mention = this.mention.unshift(status);
         }

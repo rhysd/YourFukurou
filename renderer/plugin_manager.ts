@@ -1,6 +1,7 @@
 import TimelineState from './states/timeline';
 import Tweet from './item/tweet';
 import * as path from 'path';
+import AppConfig from './config';
 import log from './log';
 
 export interface Plugin {
@@ -49,14 +50,12 @@ class PluginManager {
     }
 
     loadPlugins() {
-        const remote = global.require('electron').remote;
-        const plugin_paths = (
-            remote.getGlobal('config') as Config
-        ).plugin;
+        const app = global.require('electron').remote.app;
+        const plugin_paths = AppConfig.remote_config.plugin;
 
         for (let p of plugin_paths) {
             if (!path.isAbsolute(p)) {
-                p = path.join(remote.app.getPath('userData'), p)
+                p = path.join(app.getPath('userData'), p);
             }
             this.loadPluginFromPath(p);
         }
@@ -69,7 +68,7 @@ class PluginManager {
             if (p.filter && p.filter.home_timeline) {
                 const rejected = !p.filter.home_timeline(tw, timeline);
                 if (rejected) {
-                    log.debug(`Plugin '${p._path}' rejects a tweet in home timeline: @${tw.user.screen_name}: ${tw.text}`)
+                    log.debug(`Plugin '${p._path}' rejects a tweet in home timeline: @${tw.user.screen_name}: ${tw.text}`);
                     return true;
                 }
             }
@@ -82,7 +81,7 @@ class PluginManager {
             if (p.filter && p.filter.mention_timeline) {
                 const rejected = !p.filter.mention_timeline(tw, timeline);
                 if (rejected) {
-                    log.debug(`Plugin '${p._path}' rejects a tweet in mention timeline: @${tw.user.screen_name}: ${tw.text}`)
+                    log.debug(`Plugin '${p._path}' rejects a tweet in mention timeline: @${tw.user.screen_name}: ${tw.text}`);
                     return true;
                 }
             }
