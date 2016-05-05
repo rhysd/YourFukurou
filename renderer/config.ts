@@ -37,9 +37,9 @@ export class CachedConfig {
                 };
             } else {
                 this.notification_memo = {
-                    reply: n.reply,
-                    retweet: n.retweet,
-                    quoted: n.quoted,
+                    reply: !!n.reply,
+                    retweet: !!n.retweet,
+                    quoted: !!n.quoted,
                 };
             }
         }
@@ -56,8 +56,8 @@ export class CachedConfig {
                 };
             } else {
                 this.mute_memo = {
-                    home: m.home,
-                    mention: m.mention,
+                    home: !!m.home,
+                    mention: !!m.mention,
                 };
             }
         }

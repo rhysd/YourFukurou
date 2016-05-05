@@ -31,16 +31,31 @@ You can specify your favorite styling by putting `user.css` in the application d
 
 To look up class names, you can use Chrome DevTools.  You can open DevTools from menu or setting `NODE_ENV` environment variable to 'development'.
 
-## Configuration JSON
+## JSON Configuration File
 
-You can put `config.json` in the application directory.  You can configure this app with it.
+You can put `config.json` in the application directory.  You can configure this app with it.  Properties of the json are below:
 
-| Key            | Default | Description                                                                                                                        |
-|----------------|---------|------------------------------------------------------------------------------------------------------------------------------------|
-| `notification` | `true`  | Enable/Disable notification.You can also specify object to enable/disable each kind of notification; `reply`, `retweet`, `quoted`. |
-| `plugin`       | `[]`    | Paths to plugin.  You can specify an absolute path or a relative path to the application directory.                                |
+### `notification`
 
-Example of `config.json`:
+Enable/Disable notification from app.
+
+When you specify boolean value, all notifications are enabled/disabled.  (Disabled if `false`).
+
+When you want to enable/disable each kind of notification, you can specify an object value.  It can contain `reply`, `retweet` and `quoted` properties.  Corresponding values of the properties must be boolean type.
+
+The default value is `true`.
+
+### `mute`
+
+Show/Dismiss muted/blocked tweets in each timelines.
+
+When you specify boolean value, muted/blocked tweets are shown/dismissed in all timelines.  When `true` is specified, they will be displayed.
+
+When you want to constrol muted/blocked tweets in each timeline, you can specify an object value as well as `notification` property.  It can contain `home` and `mention` properties.  Corresponding values of properties must be boolean type.  For example, `"home": true` will dismiss muted/blocked tweets on home timeline.
+
+The default value is `{"home": true, "mention": false}`.
+
+### Example of `config.json`:
 
 ```json
 {
@@ -48,6 +63,10 @@ Example of `config.json`:
     "reply": true,
     "retweet": false,
     "quoted": true
+  },
+  "mute": {
+    "home": true,
+    "mention": true
   },
   "plugin": [
     "my-plugin.js"
