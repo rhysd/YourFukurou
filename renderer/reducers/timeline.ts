@@ -15,7 +15,7 @@ export default function timeline(state: TimelineState = new TimelineState(), act
         case Kind.UnlikeSucceeded:        return state.updateStatus(action.status);
         case Kind.SetCurrentUser:         return state.setUser(action.user);
         case Kind.AddRejectedUserIds:     return state.addRejectedIds(action.ids);
-        case Kind.RemoveRejectedUserIds:     return state.removeRejectedIds(action.ids);
+        case Kind.RemoveRejectedUserIds:  return state.removeRejectedIds(action.ids);
         default:                          return state;
     }
 }

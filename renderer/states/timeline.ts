@@ -148,9 +148,12 @@ export default class TimelineState {
     deleteStatusWithId(id: string) {
         const predicate = (item: Item) => {
             if (item instanceof Tweet) {
-                const s = item.getMainStatus();
-                if (s.id === id) {
-                    log.debug('Deleted status:', s);
+                if (item.id === id) {
+                    log.debug('Deleted status:', item);
+                    return false;
+                }
+                if (item.isRetweet() && item.retweeted_status.id === id) {
+                    log.debug('Deleted retweet:', item.retweeted_status);
                     return false;
                 }
             }
