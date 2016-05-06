@@ -1,4 +1,4 @@
-import * as TwitterClient from 'twitter';
+import * as Twit from 'twit';
 import {app, ipcMain as ipc} from 'electron';
 import {join} from 'path';
 import {readFile} from 'fs';
@@ -10,8 +10,8 @@ import {IncomingMessage} from 'http';
 // This class should be invoked from renderer for each Twitter account
 export default class Twitter {
     public sender: IpcSender;
-    private client: NodeTwitter.TwitterClient;
-    private stream: NodeTwitter.TwitterStream;
+    private client: Twit;
+    private stream: Twit.Stream;
 
     constructor() {
         this.stream = null;
@@ -21,12 +21,13 @@ export default class Twitter {
         ipc.on(c, cb);
     }
 
-    sendApiFailure(err: NodeTwitter.ApiError[] | Error) {
-        this.sender.send('yf:api-failure', err instanceof Array ? err[0].message : err.message);
+    sendApiFailure(err: Error, res: IncomingMessage) {
+        log.error('API failure: ', err, res);
+        this.sender.send('yf:api-failure', err.message);
     }
 
-    prepareClient(tokens: NodeTwitter.AuthInfo) {
-        this.client = new TwitterClient(tokens);
+    prepareClient(tokens: Twit.ConfigKeys) {
+        this.client = new Twit(tokens);
         this.subscribe('yf:request-retweet', (_: Electron.IpcMainEvent, tweet_id: string) => this.retweet(tweet_id));
         this.subscribe('yf:undo-retweet', (_: Electron.IpcMainEvent, tweet_id: string) => this.unretweet(tweet_id));
         this.subscribe('yf:request-like', (_: Electron.IpcMainEvent, tweet_id: string) => this.like(tweet_id));
@@ -44,10 +45,9 @@ export default class Twitter {
         if (in_reply_to) {
             params.in_reply_to_status_id = in_reply_to;
         }
-        this.client.post('statuses/update', params, (err: NodeTwitter.ApiError[], tweet: any, res: any) => {
+        this.client.post('statuses/update', params, (err, tweet, res) => {
             if (err) {
-                log.debug('Status update failed:', text, in_reply_to, err, res);
-                this.sendApiFailure(err);
+                this.sendApiFailure(err, res);
                 return;
             }
             this.sender.send('yf:update-status-success', tweet);
@@ -58,8 +58,7 @@ export default class Twitter {
     post(path: string, params: Object, cb: (ret: any) => void) {
         this.client.post(path, params, (err, ret, res) => {
             if (err) {
-                log.debug(path + ' failed:', JSON.stringify(params), err);
-                this.sendApiFailure(err);
+                this.sendApiFailure(err, res);
                 return;
             }
             cb(ret);
@@ -119,18 +118,16 @@ export default class Twitter {
             this.client.get(
                 'account/verify_credentials',
                 params,
-                (err: NodeTwitter.ApiError[], account: any, res: any) => {
+                (err, account, res) => {
                     if (err) {
                         log.debug('verify_credentials failed:', err, account, res);
-                        if (err[0] !== undefined) {
-                            err[0].message += ' Login again.';
-                        }
-                        this.sendApiFailure(err);
+                        err.message += ' Login again.';
+                        this.sendApiFailure(err, res);
                         reject(err);
                         return;
                     }
                     this.sender.send('yf:my-account', account);
-                    log.debug('Account:', account.id_str, account.screen_name);
+                    log.debug('Verified account:', account.id_str, account.screen_name);
                     resolve();
                 }
             );
@@ -142,7 +139,7 @@ export default class Twitter {
             this.client.get('statuses/home_timeline', params, (err, tweets, res) => {
                 if (err) {
                     log.debug('Home timeline failed: ', tweets, res);
-                    this.sendApiFailure(err);
+                    this.sendApiFailure(err, res);
                     reject(err);
                     return;
                 }
@@ -163,10 +160,9 @@ export default class Twitter {
 
     fetchMentionTimeline(params: Object = {include_entities: true}) {
         return new Promise<Object[]>((resolve, reject) => {
-            this.client.get('statuses/mentions_timeline', params, (err, tweets) => {
+            this.client.get('statuses/mentions_timeline', params, (err, tweets, res) => {
                 if (err) {
-                    log.debug('Mentions timeline failed:', tweets);
-                    this.sendApiFailure(err);
+                    this.sendApiFailure(err, res);
                     reject(err);
                     return;
                 }
@@ -183,15 +179,14 @@ export default class Twitter {
 
     fetchMuteIds(params: Object = {}) {
         return new Promise<number[]>((resolve, reject) => {
-            this.client.get('mutes/users/ids', params, (err, res) => {
+            this.client.get('mutes/users/ids', params, (err, data, res) => {
                 if (err) {
-                    log.debug('Mute ids failed:', res);
-                    this.sendApiFailure(err);
+                    this.sendApiFailure(err, res);
                     reject(err);
                     return;
                 }
-                log.debug('mutes/users/ids: Got muted ids:', res.ids.length);
-                resolve(res.ids);
+                log.debug('mutes/users/ids: Got muted ids:', data.ids.length);
+                resolve(data.ids);
             });
         });
     }
@@ -203,15 +198,14 @@ export default class Twitter {
 
     fetchBlockIds(params: Object = {}) {
         return new Promise<number[]>((resolve, reject) => {
-            this.client.get('blocks/ids', params, (err, res) => {
+            this.client.get('blocks/ids', params, (err, data, res) => {
                 if (err) {
-                    log.debug('Block ids failed:', err);
-                    this.sendApiFailure(err);
+                    this.sendApiFailure(err, res);
                     reject(err);
                     return;
                 }
-                log.debug('blocks/ids: Got muted ids:', res.ids.length);
-                resolve(res.ids);
+                log.debug('blocks/ids: Got muted ids:', data.ids.length);
+                resolve(data.ids);
             });
         });
     }
@@ -221,67 +215,59 @@ export default class Twitter {
             .then(ids => this.sender.send('yf:rejected-ids', ids));
     }
 
-    subscribeStream(stream: NodeTwitter.TwitterStream) {
-        stream.on('data', json => {
-            if (json === undefined) {
-                return;
-            }
-
-            if (json.text) {
-                this.sender.send('yf:tweet', json);
-                return;
-            }
-
-            if (json.delete) {
-                this.sender.send('yf:delete-status', json.delete);
-                return;
-            }
-
-            if (json.friends) {
-                this.sender.send('yf:friends', json.friends);
-                return;
-            }
-
-            if (json.event) {
-                switch (json.event) {
-                    case 'mute':
-                        this.sender.send('yf:rejected-ids', [json.target.id]);
-                        break;
-                    case 'unmute':
-                        this.sender.send('yf:unrejected-ids', [json.target.id]);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            log.info('Ignored message on stream:', json);
-        });
-
-        stream.on('error', (err: Error) => {
-            log.error('Error occurred on stream, will reconnect after 3secs: ', err);
-            this.reconnectToStream().catch(e => log.error('Error on reconnecting because of stream error', e));
-        });
-
-        stream.on('end', (response: IncomingMessage) => {
-            log.error('Unexpected end message on stream, will reconnect after 3secs: ', response.statusCode);
-            // TODO:
-            // Handle the tweets while stream was not connected
-            this.reconnectToStream().catch(e => log.error('Error on reconnecting because of unexpected stream end', e));
-        });
-    }
-
     connectToStream(params: Object = {}) {
         if (this.stream !== null) {
             this.stopStreaming();
         }
+        this.stream = this.client.stream('user', params);
 
-        return new Promise<void>(resolve => {
-            this.client.stream('user', params, stream => {
-                log.debug('Stream connected');
-                this.stream = stream;
-                this.subscribeStream(stream);
-            });
+        this.stream.on('friends', friend_ids => {
+            log.debug('FRIENDS: length: ', friend_ids.length);
+            this.sender.send('yf:friends', friend_ids);
+        });
+
+        this.stream.on('tweet', tw => {
+            log.debug(`TWEET: @${tw.user.screen_name}: ${tw.text}`);
+            this.sender.send('yf:tweet', tw);
+        });
+
+        this.stream.on('delete', e => {
+            log.debug('DELETE: status: ' + e.delete.status);
+            this.sender.send('yf:delete-status', e.delete);
+        });
+
+        this.stream.on('reconnect', () => {
+            log.debug('RECONNECT: Stream was disconnected unexpectedly.  Try to reconnect.');
+        });
+
+        this.stream.on('user_event', e => {
+            log.debug(`${e.event.toUpperCase()}: `, e.target_object);
+        });
+
+        this.stream.on('unknown_user_event', (msg: any) => {
+            switch (msg.event) {
+                case 'mute':
+                    this.sender.send('yf:rejected-ids', [msg.target.id]);
+                    break;
+                case 'unmute':
+                    this.sender.send('yf:unrejected-ids', [msg.target.id]);
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        // Note: Should watch more events
+        //
+        // this.stream.on('favorite')
+        // this.stream.on('blocked')
+        // this.stream.on('follow')
+        // this.stream.on('user_update')
+        // ...
+
+        this.stream.on('error', err => {
+            log.error('Error occurred on stream, will reconnect after 3secs: ', err);
+            this.sendApiFailure(err, err.twitterReply);
         });
     }
 
@@ -357,7 +343,7 @@ export default class Twitter {
         this.stream.removeAllListeners('data');
         this.stream.removeAllListeners('error');
         this.stream.removeAllListeners('end');
-        this.stream.destroy();
+        this.stream.stop();
         log.debug('Stream disconnected');
         this.stream = null;
     }

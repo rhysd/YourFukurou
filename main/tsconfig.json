@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "moduleResolution": "node",
     "removeComments": true,
     "preserveConstEnums": true,
     "outDir": "../build",
@@ -18,8 +19,8 @@
     "loglevel-message-prefix.d.ts",
     "main.ts",
     "menu.ts",
+    "twit.d.ts",
     "node-oauth.d.ts",
-    "node-twitter.d.ts",
     "twitter.ts"
   ]
 }
