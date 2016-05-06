@@ -1,3 +1,5 @@
+import {Twitter} from 'twit';
+
 export interface TweetTextHashtag {
     text: string;
 }
@@ -61,7 +63,7 @@ export default class TweetTextParser {
     private mentions: TweetTextMention[];
     private result: TweetTextToken[];
 
-    constructor(private json: TweetJson) {
+    constructor(private json: Twitter.Status) {
         this.pos = 0;
         this.text = htmlUnescape(json.text);
         this.len = this.text.length;

@@ -68,7 +68,7 @@ function open_window(access: AccessToken) {
             twitter.prepareClient({
                 consumer_key,
                 consumer_secret,
-                access_token_key: access.token,
+                access_token: access.token,
                 access_token_secret: access.token_secret,
             });
             twitter.sender = new IpcSender(win.webContents);
@@ -98,7 +98,7 @@ function open_window(access: AccessToken) {
                             twitter.prepareClient({
                                 consumer_key,
                                 consumer_secret,
-                                access_token_key: a.token,
+                                access_token: a.token,
                                 access_token_secret: a.token_secret,
                             });
                         })
@@ -139,7 +139,7 @@ function open_window(access: AccessToken) {
                 log.debug("PC's resuming, will reconnect after 3secs: " + twitter.isStopped());
                 if (twitter.isStopped() && !should_use_dummy_data) {
                     twitter.sendConnectionFailure();
-                    twitter.connectToStream().catch(e => log.error('Unexpected error on streaming after reconnection', e));
+                    twitter.connectToStream();
                 }
             });
 

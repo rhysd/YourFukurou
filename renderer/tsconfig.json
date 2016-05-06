@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "moduleResolution": "node",
     "removeComments": true,
     "preserveConstEnums": true,
     "outDir": "./js",
@@ -54,6 +55,6 @@
     "html5-notification.d.ts",
     "draft-js.d.ts",
     "node-emoji.d.ts",
-    "twitter-api.d.ts"
+    "../main/twit.d.ts"
   ]
 }

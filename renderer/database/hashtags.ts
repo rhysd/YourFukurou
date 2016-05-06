@@ -1,4 +1,5 @@
 import Dexie from 'dexie';
+import {Twitter} from 'twit';
 import log from '../log';
 
 export interface HashtagsScheme {
@@ -32,7 +33,7 @@ export default class Hashtags {
         });
     }
 
-    storeHashtagsInTweet(json: TweetJson) {
+    storeHashtagsInTweet(json: Twitter.Status) {
         if (!json.entities || !json.entities.hashtags) {
             return;
         }
@@ -50,7 +51,7 @@ export default class Hashtags {
             });
     }
 
-    storeHashtagsInTweets(jsons: TweetJson[]) {
+    storeHashtagsInTweets(jsons: Twitter.Status[]) {
         const entries = [] as HashtagsScheme[];
         const push = Array.prototype.push;
 
