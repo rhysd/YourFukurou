@@ -158,7 +158,7 @@ function open_window(access: AccessToken) {
 
     if (process.env.NODE_ENV === 'development') {
         win.webContents.on('devtools-opened', () => setImmediate(() => win.focus()));
-        win.webContents.openDevTools({detach: true});
+        win.webContents.openDevTools({mode: 'detach'});
     }
 }
 

@@ -80,7 +80,7 @@ export function createMenuTemplate(main: Electron.BrowserWindow) {
                     label: 'Open Developer Tools',
                     accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
                     click: (_: any, w: Electron.BrowserWindow) => {
-                        if (w) { w.webContents.openDevTools({detach: true}); }
+                        if (w) { w.webContents.openDevTools({mode: 'detach'}); }
                     },
                 },
             ],
