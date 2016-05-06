@@ -232,7 +232,7 @@ export default class Twitter {
         });
 
         this.stream.on('delete', e => {
-            log.debug('DELETE: status: ' + e.delete.status);
+            log.debug('DELETE: status: ', e.delete.status);
             this.sender.send('yf:delete-status', e.delete.status);
         });
 
@@ -241,10 +241,10 @@ export default class Twitter {
         });
 
         this.stream.on('user_event', e => {
-            log.debug(`${e.event.toUpperCase()}: `, e.target_object);
+            log.debug(`${e.event.toUpperCase()}: From: @${e.source.screen_name}, To: @${e.target.screen_name}: `, e.target_object);
         });
 
-        this.stream.on('unknown_user_event', (msg: any) => {
+        this.stream.on('unknown_user_event', msg => {
             switch (msg.event) {
                 case 'mute':
                     this.sender.send('yf:rejected-ids', [msg.target.id]);
@@ -252,21 +252,40 @@ export default class Twitter {
                 case 'unmute':
                     this.sender.send('yf:unrejected-ids', [msg.target.id]);
                     break;
+                case 'access_revoked':
+                    // TODO:
+                    break;
                 default:
                     break;
             }
         });
 
+        this.stream.on('limit', () => {
+            this.sender.send('yf:api-failure', 'API limit have reached');
+        });
+
+        this.stream.on('disconnect', event => {
+            log.debug('DISCONNECT:', event.disconnect);
+            this.sender.send('yf:api-failure', 'Stream was disconnected: ' + event.disconnect.reason);
+        });
+
+        this.stream.on('direct_message', dm => {
+            log.debug('DIRECT_MESSAGE:', dm);
+        });
+
         // Note: Should watch more events
         //
         // this.stream.on('favorite')
+        // this.stream.on('unfavorite')
         // this.stream.on('blocked')
+        // this.stream.on('unblocked')
         // this.stream.on('follow')
+        // this.stream.on('unfollow')
         // this.stream.on('user_update')
         // ...
 
         this.stream.on('error', err => {
-            log.error('Error occurred on stream, will reconnect after 3secs: ', err);
+            log.error('Error occurred on stream, will reconnect: ', err);
             this.sendApiFailure(err, err.twitterReply);
         });
     }

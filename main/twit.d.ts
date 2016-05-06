@@ -180,6 +180,21 @@ declare module 'twit' {
                 withheld_in_countries?: string[];
                 withheld_scope?: string;
             }
+
+            interface DirectMessage {
+                entities: Entities;
+                sender_screen_name: string;
+                id_str: string;
+                id: number;
+                recipient_id: number;
+                sender_id: number;
+                text: string;
+                created_at: string;
+                sender: User;
+                recipient: User;
+                recipient_screen_name: string;
+            }
+
             export interface Metadata {
                 max_id?: number;
                 since_id?: number;
@@ -205,6 +220,25 @@ declare module 'twit' {
                 delete: {
                     status: StreamingDeleteStatus;
                     timestamp: string;
+                };
+            }
+            export interface StreamingLimitEvent {
+                limit: {
+                    track: number;
+                };
+            }
+            export interface StreamingDisconnectEvent {
+                disconnect: {
+                    code: number;
+                    stream_name: string;
+                    reason: string;
+                };
+            }
+            export interface StreamingWarningEvent {
+                warning: {
+                    code: string;
+                    message: string;
+                    percent_full: number;
                 };
             }
             export interface StreamEvent {
@@ -274,13 +308,13 @@ declare module 'twit' {
             on(event: 'message', cb: (msg: any) => void): this;
             on(event: 'tweet', cb: (tw: Twitter.Status) => void): this;
             on(event: 'delete', cb: (e: Twitter.StreamingDeleteEvent) => void): this;
-            on(event: 'limit', cb: (msg: any) => void): this;
+            on(event: 'limit', cb: (l: Twitter.StreamingLimitEvent) => void): this;
             on(event: 'scrub_geo', cb: (msg: any) => void): this;
-            on(event: 'disconnect', cb: (msg: any) => void): this;
+            on(event: 'disconnect', cb: (d: Twitter.StreamingDisconnectEvent) => void): this;
             on(event: 'connect', cb: (request: any) => void): this;
             on(event: 'connected', cb: (response: IncomingMessage) => void): this;
             on(event: 'reconnect', cb: (request: any, response: IncomingMessage, connectInterval: number) => void): this;
-            on(event: 'warning', cb: (warning: any) => void): this;
+            on(event: 'warning', cb: (warning: Twitter.StreamingWarningEvent) => void): this;
             on(event: 'status_withheld', cb: (msg: any) => void): this;
             on(event: 'user_withheld', cb: (msg: any) => void): this;
             on(event: 'friends', cb: (friend_ids: number[] | string[]) => void): this;
