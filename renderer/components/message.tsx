@@ -32,12 +32,23 @@ export default class Message extends React.Component<MessageProps, {}> {
         }
     }
 
+    getIcon() {
+        switch (this.props.kind) {
+            case 'info': return 'check';
+            case 'error': return 'exclamation-circle';
+            default: return '';
+        }
+    }
+
     render() {
         return (
             <div
                 className={`message__body message__body_${this.props.kind} animated fadeInDown`}
                 ref={r => { this.node = r; }}
             >
+                <div className="message__icon">
+                    <i className={`fa fa-${this.getIcon()}`}/>
+                </div>
                 <div className="message__text">
                     {this.props.text}
                 </div>
