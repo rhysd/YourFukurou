@@ -1,4 +1,5 @@
 import Dexie from 'dexie';
+import {Twitter} from 'twit';
 import log from '../log';
 import Tweet from '../item/tweet';
 
@@ -13,7 +14,7 @@ interface StatusesScheme {
     retweeted_user_id: number;
     quoted_status_id: string;
     quoted_user_id: number;
-    json: TweetJson;
+    json: Twitter.Status;
 }
 
 export type StatusesTable = Dexie.Table<StatusesScheme, string>;

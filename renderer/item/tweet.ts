@@ -1,10 +1,11 @@
 import Item from './item';
 import TweetTextParser, {TweetTextToken} from '../tweet_parser';
+import {Twitter} from 'twit';
 
 const re_normal_size = /normal(?=\.\w+$)/i;
 
 export class TwitterUser {
-    constructor(public json: UserJson) {}
+    constructor(public json: Twitter.User) {}
 
     get icon_url() {
         const url = this.json.profile_image_url_https;
@@ -47,7 +48,7 @@ export default class Tweet implements Item {
     private parsed_tokens_memo: TweetTextToken[];
     private created_at_memo: Date;
 
-    constructor(public json: TweetJson) {
+    constructor(public json: Twitter.Status) {
         this.user = new TwitterUser(json.user);
         this.retweeted_status_memo = null;
         this.quoted_status_memo = null;

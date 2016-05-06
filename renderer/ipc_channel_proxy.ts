@@ -18,6 +18,7 @@ import log from './log';
 import Tweet, {TwitterUser} from './item/tweet';
 import DB from './database/db';
 import notifyTweet from './notification/tweet';
+import {Twitter} from 'twit';
 
 interface Listeners {
     [c: string]: Electron.IpcRendererEventListener;
@@ -36,7 +37,7 @@ export default class IpcChannelProxy {
     }
 
     start() {
-        this.subscribe('yf:tweet', (_: Electron.IpcRendererEvent, json: TweetJson) => {
+        this.subscribe('yf:tweet', (_: Electron.IpcRendererEvent, json: Twitter.Status) => {
             log.debug('Received channel yf:tweet', json);
             const tw = new Tweet(json);
             Store.dispatch(addTweetToTimeline(tw));
@@ -55,7 +56,7 @@ export default class IpcChannelProxy {
             Store.dispatch(showMessage('API error: ' + msg, 'error'));
         });
 
-        this.subscribe('yf:retweet-success', (_: Electron.IpcRendererEvent, json: TweetJson) => {
+        this.subscribe('yf:retweet-success', (_: Electron.IpcRendererEvent, json: Twitter.Status) => {
             log.debug('Received channel yf:retweet-success', json.id_str);
             if (!json.retweeted_status) {
                 log.error('yf:retweet-success: Received status is not an retweet status: ', json);
@@ -69,7 +70,7 @@ export default class IpcChannelProxy {
             Store.dispatch(retweetSucceeded(new Tweet(json)));
         });
 
-        this.subscribe('yf:unretweet-success', (_: Electron.IpcRendererEvent, json: TweetJson) => {
+        this.subscribe('yf:unretweet-success', (_: Electron.IpcRendererEvent, json: Twitter.Status) => {
             // Note:
             // The JSON is an original retweeted tweet
             log.debug('Received channel yf:unretweet-success', json.id_str);
@@ -81,34 +82,34 @@ export default class IpcChannelProxy {
             Store.dispatch(unretweetSucceeded(new Tweet(json)));
         });
 
-        this.subscribe('yf:like-success', (_: Electron.IpcRendererEvent, json: TweetJson) => {
+        this.subscribe('yf:like-success', (_: Electron.IpcRendererEvent, json: Twitter.Status) => {
             log.debug('Received channel yf:like-success', json.id_str);
             Store.dispatch(likeSucceeded(new Tweet(json)));
         });
 
-        this.subscribe('yf:unlike-success', (_: Electron.IpcRendererEvent, json: TweetJson) => {
+        this.subscribe('yf:unlike-success', (_: Electron.IpcRendererEvent, json: Twitter.Status) => {
             log.debug('Received channel yf:unlike-success', json.id_str);
             Store.dispatch(unlikeSucceeded(new Tweet(json)));
         });
 
-        this.subscribe('yf:my-account', (_: Electron.IpcRendererEvent, json: UserJson) => {
+        this.subscribe('yf:my-account', (_: Electron.IpcRendererEvent, json: Twitter.User) => {
             log.debug('Received channel yf:my-account', json.id_str);
             Store.dispatch(setCurrentUser(new TwitterUser(json)));
             DB.accounts.storeAccount(json);
             DB.my_accounts.storeMyAccount(json.id);
         });
 
-        this.subscribe('yf:delete-status', (_: Electron.IpcRendererEvent, json: DeleteJson) => {
-            log.debug('Received channel yf:delete-status', json.status.id_str);
-            Store.dispatch(deleteStatusInTimeline(json.status.id_str));
+        this.subscribe('yf:delete-status', (_: Electron.IpcRendererEvent, status: Twitter.StreamingDeleteStatus) => {
+            log.debug('Received channel yf:delete-status', status.id_str);
+            Store.dispatch(deleteStatusInTimeline(status.id_str));
         });
 
-        this.subscribe('yf:update-status-success', (_: Electron.IpcRendererEvent, json: TweetJson) => {
+        this.subscribe('yf:update-status-success', (_: Electron.IpcRendererEvent, json: Twitter.Status) => {
             log.debug('Received channel yf:unlike-success', json.id_str);
             Store.dispatch(showMessage('Tweeted!', 'info'));
         });
 
-        this.subscribe('yf:mentions', (_: Electron.IpcRendererEvent, json: TweetJson[]) => {
+        this.subscribe('yf:mentions', (_: Electron.IpcRendererEvent, json: Twitter.Status[]) => {
             log.debug('Received channel yf:mentions', json);
             Store.dispatch(addMentions(json.map(j => new Tweet(j))));
             DB.accounts.storeAccountsInTweets(json);

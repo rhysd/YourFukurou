@@ -195,14 +195,15 @@ declare module 'twit' {
                 code: number;
                 message: string;
             }
+            export interface StreamingDeleteStatus {
+                id: number;
+                id_str: string;
+                user_id: number;
+                user_id_str: string;
+            }
             export interface StreamingDeleteEvent {
                 delete: {
-                    status: {
-                        id: number;
-                        id_str: string;
-                        user_id: number;
-                        user_id_str: string;
-                    };
+                    status: StreamingDeleteStatus;
                     timestamp: string;
                 };
             }

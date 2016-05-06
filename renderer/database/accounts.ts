@@ -1,12 +1,13 @@
 import Dexie from 'dexie';
 import log from '../log';
 import {TwitterUser} from '../item/tweet';
+import {Twitter} from 'twit';
 
 interface AccountsScheme {
     id: number;
     screenname: string;
     timestamp: number;
-    json: UserJson;
+    json: Twitter.User;
 }
 
 export type AccountsTable = Dexie.Table<AccountsScheme, number>;
@@ -25,7 +26,7 @@ export default class Accounts {
     constructor(private table: AccountsTable) {
     }
 
-    userToEntry(json: UserJson): AccountsScheme {
+    userToEntry(json: Twitter.User): AccountsScheme {
         return {
             id: json.id,
             screenname: json.screen_name,
@@ -34,7 +35,7 @@ export default class Accounts {
         };
     }
 
-    storeAccount(json: UserJson) {
+    storeAccount(json: Twitter.User) {
         return this.table.put(this.userToEntry(json))
             .catch((e: Error) => {
                 log.error('Error on storing account:', e);
@@ -42,7 +43,7 @@ export default class Accounts {
             });
     }
 
-    storeAccountsInTweet(json: TweetJson) {
+    storeAccountsInTweet(json: Twitter.Status) {
         this.storeAccount(json.user);
         // Note:
         // We can also store the accounts in retweeted_status and quoted_status.
@@ -50,7 +51,7 @@ export default class Accounts {
         // to them.
     }
 
-    storeAccountsInTweets(jsons: TweetJson[]) {
+    storeAccountsInTweets(jsons: Twitter.Status[]) {
         return this.table.bulkPut(
             jsons.map(j => this.userToEntry(j.user))
         ).catch((e: Error) => {

@@ -233,7 +233,7 @@ export default class Twitter {
 
         this.stream.on('delete', e => {
             log.debug('DELETE: status: ' + e.delete.status);
-            this.sender.send('yf:delete-status', e.delete);
+            this.sender.send('yf:delete-status', e.delete.status);
         });
 
         this.stream.on('reconnect', () => {
