@@ -61,11 +61,11 @@ export default class IpcChannelProxy {
                 log.error('yf:retweet-success: Received status is not an retweet status: ', json);
                 return;
             }
-            // Note:
-            // 'retweeted' field from API always returns 'false'
-            // so we need to handle it in our side.
-            json.retweeted_status.retweeted = true;
-            json.retweeted_status.retweet_count += 1;
+            if (!json.retweeted_status.retweeted) {
+                log.error('yf:retweet-success: Retweeted tweet is NOT marked as "retweeted"', json);
+                json.retweeted_status.retweeted = true;
+                json.retweeted_status.retweet_count += 1;
+            }
             Store.dispatch(retweetSucceeded(new Tweet(json)));
         });
 
@@ -73,11 +73,11 @@ export default class IpcChannelProxy {
             // Note:
             // The JSON is an original retweeted tweet
             log.debug('Received channel yf:unretweet-success', json.id_str);
-            // Note:
-            // 'retweeted' field from API always returns 'false'
-            // so we need to handle it in our side.
-            json.retweeted = false;
-            json.retweet_count -= 1;
+            if (json.retweeted) {
+                log.error('yf:unretweet-success: Unretweeted tweet is marked as "retweeted"', json);
+                json.retweeted = false;
+                json.retweet_count -= 1;
+            }
             Store.dispatch(unretweetSucceeded(new Tweet(json)));
         });
 
