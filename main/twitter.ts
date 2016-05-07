@@ -310,7 +310,7 @@ export default class Twitter {
             readFile(dummy_json_path, 'utf8', (err, data) => {
                 if (err) {
                     log.error('File not found:', dummy_json_path);
-                    reject();
+                    resolve();
                     return;
                 }
                 const account = JSON.parse(data) as Object;

@@ -135,13 +135,13 @@ export default class Tweet implements Item {
     }
 
     get media() {
-        if (!this.json.entities) {
+        if (!this.json.extended_entities) {
             return [];
         }
-        if (!this.json.entities.media) {
+        if (!this.json.extended_entities.media) {
             return [];
         }
-        return this.json.entities.media;
+        return this.json.extended_entities.media;
     }
 
     getMainStatus() {

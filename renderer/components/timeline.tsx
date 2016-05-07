@@ -41,8 +41,6 @@ function renderItem(i: Item, id: number, props: TimelineProps) {
 function renderLightbox(props: TimelineProps) {
     'use strict';
 
-    console.log('FOO', props);
-
     if (props.media === null) {
         return undefined;
     }
