@@ -1,4 +1,5 @@
 import {EditorState} from 'draft-js';
+import {Twitter} from 'twit';
 import Tweet, {TwitterUser} from './item/tweet';
 import Item from './item/item';
 import Separator from './item/separator';
@@ -46,6 +47,10 @@ export enum Kind {
     StopAutoCompletion,
     DownAutoCompletionFocus,
     UpAutoCompletionFocus,
+
+    OpenTweetMedia,
+    CloseTweetMedia,
+    MoveToNthTweetMedia,
 }
 
 export interface Action {
@@ -66,6 +71,8 @@ export interface Action {
     completion_label?: AutoCompleteLabel;
     suggestions?: SuggestionItem[];
     ids?: number[];
+    index?: number;
+    media_entities?: Twitter.MediaEntity[];
 }
 
 export function addTweetToTimeline(status: Tweet) {
@@ -351,3 +358,26 @@ export function changeCurrentTimeline(timeline: TimelineKind) {
     };
 }
 
+export function openTweetMedia(media_entities: Twitter.MediaEntity[], index?: number) {
+    'use strict';
+    return {
+        type: Kind.OpenTweetMedia,
+        media_entities,
+        index,
+    };
+}
+
+export function closeTweetMedia() {
+    'use strict';
+    return {
+        type: Kind.CloseTweetMedia,
+    };
+}
+
+export function moveToNthTweetMedia(index: number) {
+    'use strict';
+    return {
+        type: Kind.MoveToNthTweetMedia,
+        index,
+    };
+}
