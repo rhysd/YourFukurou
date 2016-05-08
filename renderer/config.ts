@@ -65,6 +65,24 @@ export class CachedConfig {
         }
         return this.mute_memo;
     }
+
+    notificationSilent() {
+        const s = this.remote_config.notification_sound;
+        if (typeof s === 'boolean') {
+            return !s;
+        } else {
+            return false;
+        }
+    }
+
+    notificationSound() {
+        const s = this.remote_config.notification_sound;
+        if (typeof s === 'string') {
+            return s;
+        } else {
+            return undefined;
+        }
+    }
 }
 
 export default new CachedConfig();

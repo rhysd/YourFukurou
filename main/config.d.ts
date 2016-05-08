@@ -12,6 +12,7 @@ interface MuteConfig {
 
 interface Config {
     notification: boolean | NotificationConfig;
+    notification_sound: boolean | string;
     plugin: string[];
     mute: boolean | MuteConfig;
 }

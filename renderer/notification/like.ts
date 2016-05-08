@@ -13,6 +13,8 @@ export default function notifyLiked(tw: Tweet, by: TwitterUser) {
     const n = new Notification(`Liked by @{$by.screen_name}`, {
         icon: by.icon_url,
         body: tw.text,
+        silent: AppConfig.notificationSilent(),
+        sound: AppConfig.notificationSound(),
     });
 
     n.addEventListener('error', err => log.error('Error on notification:', err, n));

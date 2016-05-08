@@ -45,6 +45,16 @@ When you want to enable/disable each kind of notification, you can specify an ob
 
 The default value is `true`.
 
+### `notification_sound`
+
+This option can be `boolean` or `string`.
+
+When `boolean` value is specified, it represents to enable/disable sound on notification.  If `true`, it means 'enabled'. Default notification sound is used.
+
+When `string` value is specified, it represents the sound of notification.  Kind of sound is the same value as [HTML5 Notification API](https://developer.mozilla.org/en-US/docs/Web/API/Notification/sound).
+
+The default value is `false`. Notification sound is enabled and system default notification sound is used.
+
 ### `mute`
 
 Show/Dismiss muted/blocked tweets in each timelines.

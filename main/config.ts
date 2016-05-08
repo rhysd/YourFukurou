@@ -6,6 +6,7 @@ import log from './log';
 
 export const DefaultConfig = {
     notification: true,
+    notification_sound: true,
     plugin: [],
     mute: {
         home: true,
