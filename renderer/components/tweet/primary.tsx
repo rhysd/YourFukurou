@@ -7,6 +7,7 @@ import TweetActionButton from './action_button';
 import TweetText from './text';
 import QuotedTweet from './quote';
 import TweetMedia from './media';
+import OtherActionsButton from './other_actions_button';
 
 interface TweetPrimaryProps extends React.Props<any> {
     isMyTweet: boolean;
@@ -75,6 +76,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                         {this.props.isMyTweet ?
                             <TweetActionButton kind="delete" status={s}/> :
                             undefined}
+                        <OtherActionsButton status={s}/>
                     </div>
                     <div className="spacer"/>
                     {this.renderConversation(s)}

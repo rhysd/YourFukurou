@@ -131,7 +131,7 @@ const TweetActionButton = (props: TweetActionButtonProps) => {
     return <div className="tweet-actions__with-count" style={{color}}>
         <IconButton
             name={icon}
-            tip={icon}
+            tip={props.kind}
             className={'tweet-actions__' + props.kind}
             onClick={() => onClick(props)}
         />
