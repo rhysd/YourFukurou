@@ -1,9 +1,11 @@
 import {List} from 'immutable';
+import {Twitter} from 'twit';
 import Item from '../item/item';
 import Tweet, {TwitterUser} from '../item/tweet';
 import Separator from '../item/separator';
 import log from '../log';
 import PM from '../plugin_manager';
+import DB from '../database/db';
 import AppConfig from '../config';
 
 export type TimelineKind = 'home' | 'mention';
@@ -210,6 +212,31 @@ export default class TimelineState {
     }
 
     setUser(new_user: TwitterUser) {
+        DB.accounts.storeAccount(new_user.json);
+        DB.my_accounts.storeMyAccount(new_user.json.id);
+        return new TimelineState(
+            this.kind,
+            this.home,
+            this.mention,
+            new_user,
+            this.notified,
+            this.rejected_ids
+        );
+    }
+
+    updateUser(update_json: Twitter.User) {
+        const j = this.user.json;
+        for (const prop in update_json) {
+            const v = (update_json as any)[prop];
+            if (v !== null) {
+                (j as any)[prop] = v;
+            }
+        }
+
+        DB.accounts.storeAccount(j);
+        DB.my_accounts.storeMyAccount(j.id);
+
+        const new_user = new TwitterUser(j);
         return new TimelineState(
             this.kind,
             this.home,

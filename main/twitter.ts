@@ -273,6 +273,10 @@ export default class Twitter {
             log.debug('DIRECT_MESSAGE:', dm);
         });
 
+        this.stream.on('user_update', msg => {
+            this.sender.send('yf:my-account-update', msg.target);
+        });
+
         // Note: Should watch more events
         //
         // this.stream.on('favorite')
@@ -281,7 +285,6 @@ export default class Twitter {
         // this.stream.on('unblocked')
         // this.stream.on('follow')
         // this.stream.on('unfollow')
-        // this.stream.on('user_update')
         // ...
 
         this.stream.on('error', err => {

@@ -19,6 +19,7 @@ export enum Kind {
 
     AddTweetToTimeline,
     SetCurrentUser,
+    UpdateCurrentUser,
     DeleteStatusInTimeline,
     AddMentions,
     AddRejectedUserIds,
@@ -61,6 +62,7 @@ export interface Action {
     tweet_id?: string;
     status?: Tweet;
     user?: TwitterUser;
+    user_json?: Twitter.User;
     editor?: EditorState;
     in_reply_to_id?: string;
     query?: string;
@@ -246,6 +248,16 @@ export function setCurrentUser(user: TwitterUser) {
         setImmediate(() => dispatch({
             type: Kind.SetCurrentUser,
             user,
+        }));
+    };
+}
+
+export function updateCurrentUser(user_json: Twitter.User) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.UpdateCurrentUser,
+            user_json,
         }));
     };
 }

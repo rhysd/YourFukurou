@@ -11,6 +11,7 @@ import {
     likeSucceeded,
     unlikeSucceeded,
     setCurrentUser,
+    updateCurrentUser,
     deleteStatusInTimeline,
 } from './actions';
 import Store from './store';
@@ -95,8 +96,11 @@ export default class IpcChannelProxy {
         this.subscribe('yf:my-account', (_: Electron.IpcRendererEvent, json: Twitter.User) => {
             log.debug('Received channel yf:my-account', json.id_str);
             Store.dispatch(setCurrentUser(new TwitterUser(json)));
-            DB.accounts.storeAccount(json);
-            DB.my_accounts.storeMyAccount(json.id);
+        });
+
+        this.subscribe('yf:my-account-update', (_: Electron.IpcRendererEvent, json: Twitter.User) => {
+            log.debug('Received channel yf:my-account-update', json);
+            Store.dispatch(updateCurrentUser(json));
         });
 
         this.subscribe('yf:delete-status', (_: Electron.IpcRendererEvent, status: Twitter.StreamingDeleteStatus) => {

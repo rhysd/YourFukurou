@@ -7,6 +7,7 @@ type ChannelFromMain
     | 'yf:unlike-success'
     | 'yf:update-status-success'
     | 'yf:my-account'
+    | 'yf:my-account-update'
     | 'yf:delete-status'
     | 'yf:api-failure'
     | 'yf:connection-failure'
