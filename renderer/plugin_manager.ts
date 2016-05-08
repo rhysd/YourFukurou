@@ -1,5 +1,5 @@
 import TimelineState from './states/timeline';
-import Tweet from './item/tweet';
+import Tweet, {TwitterUser} from './item/tweet';
 import * as path from 'path';
 import AppConfig from './config';
 import log from './log';
@@ -12,7 +12,8 @@ export interface Plugin {
     filter?: {
         home_timeline?: (tw: Tweet, timeline: TimelineState) => boolean;
         mention_timeline?: (tw: Tweet, timeline: TimelineState) => boolean;
-        notification?: (tw: Tweet) => boolean;
+        tweet_notification?: (tw: Tweet) => boolean;
+        like_notification?: (tw: Tweet, by_user: TwitterUser) => boolean;
     };
 
     // Note:
@@ -89,10 +90,22 @@ class PluginManager {
         return false;
     }
 
-    shouldRejectNotification(tw: Tweet) {
+    shouldRejectTweetNotification(tw: Tweet) {
         for (const p of this.plugins) {
-            if (p.filter && p.filter.notification) {
-                const rejected = !p.filter.notification(tw);
+            if (p.filter && p.filter.tweet_notification) {
+                const rejected = !p.filter.tweet_notification(tw);
+                if (rejected) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    shouldRejectLikeNotification(tw: Tweet, by: TwitterUser) {
+        for (const p of this.plugins) {
+            if (p.filter && p.filter.like_notification) {
+                const rejected = !p.filter.like_notification(tw, by);
                 if (rejected) {
                     return true;
                 }

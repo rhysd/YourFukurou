@@ -1,11 +1,12 @@
 import Tweet, {TwitterUser} from '../item/tweet';
 import log from '../log';
+import PM from '../plugin_manager';
 import AppConfig from '../config';
 
 export default function notifyLiked(tw: Tweet, by: TwitterUser) {
     'use strict';
 
-    if (!AppConfig.notification.like) {
+    if (!AppConfig.notification.like || PM.shouldRejectLikeNotification(tw, by)) {
         return null;
     }
 

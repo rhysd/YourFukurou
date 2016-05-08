@@ -41,7 +41,7 @@ Enable/Disable notification from app.
 
 When you specify boolean value, all notifications are enabled/disabled.  (Disabled if `false`).
 
-When you want to enable/disable each kind of notification, you can specify an object value.  It can contain `reply`, `retweet` and `quoted` properties.  Corresponding values of the properties must be boolean type.
+When you want to enable/disable each kind of notification, you can specify an object value.  It can contain `reply`, `retweet`, `like` and `quoted` properties.  Corresponding values of the properties must be boolean type.
 
 The default value is `true`.
 
@@ -62,6 +62,7 @@ The default value is `{"home": true, "mention": false}`.
   "notification": {
     "reply": true,
     "retweet": false,
+    "like": false,
     "quoted": true
   },
   "mute": {
@@ -89,7 +90,8 @@ interface Plugin {
     filter?: {
         home_timeline?: (tw: Tweet, timeline: TimelineState) => boolean;
         mention_timeline?: (tw: Tweet, timeline: TimelineState) => boolean;
-        notification?: (tw: Tweet) => boolean;
+        tweet_notification?: (tw: Tweet) => boolean;
+        like_notification?: (tw: Tweet, by_user: TwitterUser) => boolean;
     };
 }
 ```

@@ -41,11 +41,15 @@ export function notifyQuoted(qt: Tweet) {
 export default function notifyTweet(tw: Tweet, owner: TwitterUser) {
     'use strict';
 
+    if (PM.shouldRejectTweetNotification(tw)) {
+        return null;
+    }
+
     if (AppConfig.notification.reply && tw.in_reply_to_user_id === owner.id) {
-        notifyReply(tw);
+        return notifyReply(tw);
     } else if (AppConfig.notification.retweet && tw.isRetweet() && tw.retweeted_status.user.id === owner.id) {
-        notifyRetweet(tw);
+        return notifyRetweet(tw);
     } else if (AppConfig.notification.quoted && tw.isQuotedTweet() && tw.quoted_status.user.id === owner.id) {
-        notifyQuoted(tw);
+        return notifyQuoted(tw);
     }
 }
