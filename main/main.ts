@@ -8,6 +8,30 @@ import Twitter from './twitter';
 import setApplicationMenu from './menu';
 import loadConfig from './config';
 
+let win = null as Electron.BrowserWindow;
+
+const already_running = app.makeSingleInstance((cmdline, working_dir) => {
+    if (!win) {
+        return true; // XXX
+    }
+
+    if (win.isMinimized()) {
+        win.restore();
+    }
+
+    win.focus();
+
+    return true; // XXX
+});
+
+if (already_running) {
+    app.quit();
+}
+
+function handleSingleInstance() {
+    'use strict';
+}
+
 const consumer_key = process.env.YOURFUKUROU_CONSUMER_KEY || 'H4fJ2rgNuH2UiOXuPBjHpl9zL';
 const consumer_secret = process.env.YOURFUKUROU_CONSUMER_KEY_SECRET || 'azYRjJn6emdsOIUhepy0Wygmaq9PltEnpsx4P4BfU1HMp5Unmm';
 const should_use_dummy_data = process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS;
@@ -42,7 +66,7 @@ function open_window(access: AccessToken) {
 
     const index_html = 'file://' + join(__dirname, '..', 'index.html');
     const icon_path = join(__dirname, '..', 'images', 'icon.png');
-    let win = new BrowserWindow({
+    win = new BrowserWindow({
         x: win_state.x,
         y: win_state.y,
         width: win_state.width,
