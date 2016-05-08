@@ -1,12 +1,22 @@
 import * as React from 'react';
+import {Twitter} from 'twit';
 import TweetItem from '../../item/tweet';
 import ScreenName from './screen_name';
 import TweetIcon from './icon';
 import TweetText from './text';
+import TweetMedia from './media';
 import {openExternalLink} from './external-link';
 
 interface QuotedTweetProps extends React.Props<any> {
     status: TweetItem;
+}
+
+function renderMedia(media: Twitter.MediaEntity[]) {
+    'use strict';
+    if (media.length === 0) {
+        return undefined;
+    }
+    return <TweetMedia entities={media}/>;
 }
 
 const QuotedTweet = (props: QuotedTweetProps) => {
@@ -22,6 +32,7 @@ const QuotedTweet = (props: QuotedTweetProps) => {
         />
         </div>
         <TweetText className="tweet__quoted-text" status={s}/>
+        {renderMedia(s.media)}
     </div>;
 };
 

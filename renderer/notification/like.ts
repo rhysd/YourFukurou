@@ -10,7 +10,7 @@ export default function notifyLiked(tw: Tweet, by: TwitterUser) {
         return null;
     }
 
-    const n = new Notification(`Liked by @{by.screen_name}`, {
+    const n = new Notification(`Liked by @{$by.screen_name}`, {
         icon: by.icon_url,
         body: tw.text,
     });
