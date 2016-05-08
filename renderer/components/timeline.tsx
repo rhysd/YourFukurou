@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {List} from 'immutable';
-import Lightbox = require('react-images');
+import Lightbox, {LightboxImage} from 'react-images';
 import Tweet from './tweet/index';
 import Message from './message';
 import ZigZagSeparator from './zigzag_separator';
@@ -41,8 +41,14 @@ function renderItem(i: Item, id: number, props: TimelineProps) {
 function renderLightbox(props: TimelineProps) {
     'use strict';
 
-    if (props.media === null) {
-        return undefined;
+    if (props.media === null || props.media.entities.length === 0) {
+        return <Lightbox
+            images={[]}
+            isOpen={false}
+            onClickNext={undefined}
+            onClickPrev={undefined}
+            onClose={undefined}
+        />
     }
 
     // TODO:
@@ -50,7 +56,7 @@ function renderLightbox(props: TimelineProps) {
 
     // TODO:
     // Make 'srcset' property from 'sizes' property in an entity.
-    const images: ReactImages.LightboxImage[] = props.media.entities.map(e => ({
+    const images: LightboxImage[] = props.media.entities.map(e => ({
         src: e.media_url,
     }));
 
@@ -62,10 +68,11 @@ function renderLightbox(props: TimelineProps) {
         <Lightbox
             currentImage={props.media.index}
             images={images}
-            isOpen={images.length > 0}
+            isOpen={true}
             onClickNext={() => props.dispatch(moveToNthTweetMedia(next_idx))}
             onClickPrev={() => props.dispatch(moveToNthTweetMedia(prev_idx))}
             onClose={() => props.dispatch(closeTweetMedia())}
+            width={window.innerWidth - 120}
         />
     );
 }
