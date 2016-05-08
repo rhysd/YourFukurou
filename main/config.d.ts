@@ -2,6 +2,7 @@ interface NotificationConfig {
     reply: boolean;
     retweet: boolean;
     quoted: boolean;
+    like: boolean;
 }
 
 interface MuteConfig {

@@ -277,6 +277,15 @@ export default class Twitter {
             this.sender.send('yf:my-account-update', msg.target);
         });
 
+        this.stream.on('favorite', msg => {
+            // Note: msg.target is not used renderer process.  So I don't send it here.
+            this.sender.send('yf:liked-status', msg.target_object, msg.source);
+        });
+
+        // Note:
+        // I don't handle 'unfavorite' because it's already handled by responses of
+        // 'favorites/create' and 'favorites/destroy'.
+
         // Note: Should watch more events
         //
         // this.stream.on('favorite')

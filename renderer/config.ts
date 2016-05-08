@@ -34,12 +34,14 @@ export class CachedConfig {
                     reply: n,
                     retweet: n,
                     quoted: n,
+                    like: n,
                 };
             } else {
                 this.notification_memo = {
                     reply: !!n.reply,
                     retweet: !!n.retweet,
                     quoted: !!n.quoted,
+                    like: !!n.like,
                 };
             }
         }

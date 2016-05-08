@@ -4,6 +4,8 @@ import Item from '../item/item';
 import Tweet, {TwitterUser} from '../item/tweet';
 import Separator from '../item/separator';
 import log from '../log';
+import notifyTweet from '../notification/tweet';
+import notifyLiked from '../notification/like';
 import PM from '../plugin_manager';
 import DB from '../database/db';
 import AppConfig from '../config';
@@ -94,6 +96,8 @@ export default class TimelineState {
             // Note: Nothing was changed.
             return this;
         }
+
+        notifyTweet(status, this.user);
 
         const next_notified = {
             home:    should_add_to_home    && this.kind !== 'home'    || this.notified.home,
@@ -298,5 +302,23 @@ export default class TimelineState {
             this.notified,
             next_rejected_ids
         );
+    }
+
+    updateLikedStatus(status: Tweet, from: TwitterUser) {
+        if (from.id === this.user.id) {
+            // Note:
+            // 'favorite' user event on stream is sent both when owner creates and when owner's
+            // tweet is favorited.  We're only interested in favorites created by others because
+            // favorites created by owner is already handled by LikeSucceeded action.
+            return this;
+        }
+
+        if (this.shouldReject(status)) {
+            return this;
+        }
+
+        notifyLiked(status, from);
+
+        return this.updateStatus(status);
     }
 }

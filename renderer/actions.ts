@@ -35,6 +35,7 @@ export enum Kind {
     DestroyLike,
     LikeSucceeded,
     UnlikeSucceeded,
+    StatusLiked,
 
     ChangeEditorState,
     OpenEditor,
@@ -237,6 +238,17 @@ export function unlikeSucceeded(status: Tweet) {
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.UnlikeSucceeded,
+            status,
+        }));
+    };
+}
+
+export function statusLiked(status: Tweet, from: TwitterUser) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.StatusLiked,
+            user: from,
             status,
         }));
     };

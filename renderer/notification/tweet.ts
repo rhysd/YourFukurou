@@ -1,4 +1,4 @@
-import Tweet from '../item/tweet';
+import Tweet, {TwitterUser} from '../item/tweet';
 import log from '../log';
 import {openEditor} from '../actions';
 import Store from '../store';
@@ -18,7 +18,7 @@ function createNotification(tw: Tweet, title: string) {
     });
 
     n.addEventListener('click', () => editReply(tw));
-    n.addEventListener('error', err => log.error('Error on notification:', err));
+    n.addEventListener('error', err => log.error('Error on notification:', err, n));
 
     return n;
 }
@@ -38,12 +38,8 @@ export function notifyQuoted(qt: Tweet) {
     return createNotification(qt, `Quoted by @${qt.user.screen_name}`);
 }
 
-export default function notifyTweet(tw: Tweet) {
+export default function notifyTweet(tw: Tweet, owner: TwitterUser) {
     'use strict';
-    const owner = Store.getState().timeline.user;
-    if (owner === null || PM.shouldRejectNotification(tw)) {
-        return;
-    }
 
     if (AppConfig.notification.reply && tw.in_reply_to_user_id === owner.id) {
         notifyReply(tw);

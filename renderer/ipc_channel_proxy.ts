@@ -10,6 +10,7 @@ import {
     showMessage,
     likeSucceeded,
     unlikeSucceeded,
+    statusLiked,
     setCurrentUser,
     updateCurrentUser,
     deleteStatusInTimeline,
@@ -18,7 +19,6 @@ import Store from './store';
 import log from './log';
 import Tweet, {TwitterUser} from './item/tweet';
 import DB from './database/db';
-import notifyTweet from './notification/tweet';
 import {Twitter} from 'twit';
 
 interface Listeners {
@@ -42,7 +42,6 @@ export default class IpcChannelProxy {
             log.debug('Received channel yf:tweet', json);
             const tw = new Tweet(json);
             Store.dispatch(addTweetToTimeline(tw));
-            notifyTweet(tw);
             DB.accounts.storeAccountsInTweet(json);
             DB.hashtags.storeHashtagsInTweet(json);
         });
@@ -106,6 +105,11 @@ export default class IpcChannelProxy {
         this.subscribe('yf:delete-status', (_: Electron.IpcRendererEvent, status: Twitter.StreamingDeleteStatus) => {
             log.debug('Received channel yf:delete-status', status.id_str);
             Store.dispatch(deleteStatusInTimeline(status.id_str));
+        });
+
+        this.subscribe('yf:liked-status', (_: Electron.IpcRendererEvent, status: Twitter.Status, from_user: Twitter.User) => {
+            log.debug('Received channel yf:liked-status', status, from_user);
+            Store.dispatch(statusLiked(new Tweet(status), new TwitterUser(from_user)));
         });
 
         this.subscribe('yf:update-status-success', (_: Electron.IpcRendererEvent, json: Twitter.Status) => {

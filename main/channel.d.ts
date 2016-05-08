@@ -9,11 +9,12 @@ type ChannelFromMain
     | 'yf:my-account'
     | 'yf:my-account-update'
     | 'yf:delete-status'
-    | 'yf:api-failure'
+    | 'yf:liked-status'
     | 'yf:connection-failure'
     | 'yf:rejected-ids'
     | 'yf:unrejected-ids'
-    | 'yf:friends';
+    | 'yf:friends'
+    | 'yf:api-failure';
 
 type ChannelFromRenderer
     = 'yf:request-retweet'
