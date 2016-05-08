@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {List} from 'immutable';
+import Lightbox, {LightboxImage} from 'react-images';
 import Tweet from './tweet/index';
 import Message from './message';
 import ZigZagSeparator from './zigzag_separator';
@@ -10,11 +11,17 @@ import Separator from '../item/separator';
 import log from '../log';
 import State from '../states/root';
 import {MessageState} from '../reducers/message';
+import {TweetMediaState} from '../reducers/tweet_media';
+import {
+    closeTweetMedia,
+    moveToNthTweetMedia,
+} from '../actions';
 
 interface TimelineProps extends React.Props<any> {
     message: MessageState;
     items: List<Item>;
     user: TwitterUser;
+    media: TweetMediaState;
     dispatch?: Redux.Dispatch;
 }
 
@@ -31,6 +38,45 @@ function renderItem(i: Item, id: number, props: TimelineProps) {
     }
 }
 
+function renderLightbox(props: TimelineProps) {
+    'use strict';
+
+    if (props.media === null || props.media.entities.length === 0) {
+        return <Lightbox
+            images={[]}
+            isOpen={false}
+            onClickNext={undefined}
+            onClickPrev={undefined}
+            onClose={undefined}
+        />
+    }
+
+    // TODO:
+    // Currently only type: photo is supported.
+
+    // TODO:
+    // Make 'srcset' property from 'sizes' property in an entity.
+    const images: LightboxImage[] = props.media.entities.map(e => ({
+        src: e.media_url,
+    }));
+
+    const idx = props.media.index;
+    const next_idx = (idx + 1) % images.length;
+    const prev_idx = idx === 0 ? (images.length - 1) : (idx - 1);
+
+    return (
+        <Lightbox
+            currentImage={props.media.index}
+            images={images}
+            isOpen={true}
+            onClickNext={() => props.dispatch(moveToNthTweetMedia(next_idx))}
+            onClickPrev={() => props.dispatch(moveToNthTweetMedia(prev_idx))}
+            onClose={() => props.dispatch(closeTweetMedia())}
+            width={window.innerWidth - 120}
+        />
+    );
+}
+
 const Timeline = (props: TimelineProps) => {
     const size = props.items.size;
     const msg = props.message;
@@ -43,6 +89,7 @@ const Timeline = (props: TimelineProps) => {
         {props.items
             .map((i, idx) => renderItem(i, size - idx, props))
             .toArray()}
+        {renderLightbox(props)}
     </div>;
 };
 
@@ -52,6 +99,7 @@ function select(state: State): TimelineProps {
         message: state.message,
         items: state.timeline.getCurrentTimeline(),
         user: state.timeline.user,
+        media: state.tweetMedia,
     };
 }
 export default connect(select)(Timeline);

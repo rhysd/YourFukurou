@@ -152,6 +152,7 @@ declare module 'twit' {
                     id_str: number;
                 };
                 entities: Entities;
+                extended_entities: Entities;
                 favorite_count?: number;
                 favorited?: boolean;
                 filter_level: 'none' | 'low' | 'medium';

@@ -221,6 +221,22 @@ body {
   color: #808080;
   text-decoration: none;
 }
+.tweet__media {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+}
+.tweet__media-wrapper {
+  margin: 4px;
+}
+.tweet__media-picture {
+  border-radius: 8px;
+  box-sizing: border-box;
+  border: 1px solid #dddddd;
+  object-fit: cover;
+  max-width: 100%;
+  cursor: pointer;
+}
 
 .tweet-actions {
   display: flex;

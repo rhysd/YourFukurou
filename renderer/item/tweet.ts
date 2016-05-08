@@ -134,6 +134,16 @@ export default class Tweet implements Item {
         return this.json.text;
     }
 
+    get media() {
+        if (!this.json.extended_entities) {
+            return [];
+        }
+        if (!this.json.extended_entities.media) {
+            return [];
+        }
+        return this.json.extended_entities.media;
+    }
+
     getMainStatus() {
         if (this.json.retweeted_status) {
             return this.retweeted_status;

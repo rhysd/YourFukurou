@@ -55,6 +55,7 @@
     "html5-notification.d.ts",
     "draft-js.d.ts",
     "node-emoji.d.ts",
+    "react-images.d.ts",
     "../main/twit.d.ts"
   ]
 }

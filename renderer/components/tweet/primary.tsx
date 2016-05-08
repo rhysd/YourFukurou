@@ -1,10 +1,12 @@
 import * as React from 'react';
+import {Twitter} from 'twit';
 import {openExternalLink} from './external-link';
 import log from '../../log';
 import Tweet, {TwitterUser} from '../../item/tweet';
 import TweetActionButton from './action_button';
 import TweetText from './text';
 import QuotedTweet from './quote';
+import TweetMedia from './media';
 
 interface TweetPrimaryProps extends React.Props<any> {
     isMyTweet: boolean;
@@ -43,6 +45,13 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         return <QuotedTweet status={q}/>;
     }
 
+    renderMedia(media: Twitter.MediaEntity[]) {
+        if (media.length === 0) {
+            return undefined;
+        }
+        return <TweetMedia entities={media}/>;
+    }
+
     render() {
         const s = this.props.status.getMainStatus();
         return (
@@ -53,6 +62,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
             >
                 <TweetText status={s}/>
                 {this.renderQuotedStatus(s)}
+                {this.renderMedia(s.media)}
                 <div className="tweet__primary-footer" >
                     <div
                         className="tweet-actions"
