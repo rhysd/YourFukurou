@@ -1,4 +1,4 @@
-declare module 'react-images' {
+declare module ReactImages {
     export import React = __React;
     export interface LightboxImage {
         src?: string;
@@ -16,5 +16,9 @@ declare module 'react-images' {
         showCloseButton?: boolean;
         width?: number;
     }
-    export default class Lightbox extends React.Component<LightboxProps, {}>{}
+    export class Lightbox extends React.Component<LightboxProps, {}> {}
+}
+
+declare module 'react-images' {
+    export = ReactImages.Lightbox;
 }

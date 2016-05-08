@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {List} from 'immutable';
-import Lightbox, {LightboxImage} from 'react-images';
+import Lightbox = require('react-images');
 import Tweet from './tweet/index';
 import Message from './message';
 import ZigZagSeparator from './zigzag_separator';
@@ -50,7 +50,7 @@ function renderLightbox(props: TimelineProps) {
 
     // TODO:
     // Make 'srcset' property from 'sizes' property in an entity.
-    const images: LightboxImage[] = props.media.entities.map(e => ({
+    const images: ReactImages.LightboxImage[] = props.media.entities.map(e => ({
         src: e.media_url,
     }));
 

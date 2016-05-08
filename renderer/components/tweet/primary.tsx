@@ -46,7 +46,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
     }
 
     renderMedia(media: Twitter.MediaEntity[]) {
-        if (!media) {
+        if (media.length === 0) {
             return undefined;
         }
         return <TweetMedia entities={media}/>;
