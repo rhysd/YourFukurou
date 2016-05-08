@@ -25,6 +25,10 @@ interface TimelineProps extends React.Props<any> {
     dispatch?: Redux.Dispatch;
 }
 
+function nullHandler() {
+    // Note: Do nothing.
+}
+
 function renderItem(i: Item, id: number, props: TimelineProps) {
     'use strict';
     const key = 'item-' + id;
@@ -45,9 +49,9 @@ function renderLightbox(props: TimelineProps) {
         return <Lightbox
             images={[]}
             isOpen={false}
-            onClickNext={undefined}
-            onClickPrev={undefined}
-            onClose={undefined}
+            onClickNext={nullHandler}
+            onClickPrev={nullHandler}
+            onClose={nullHandler}
         />
     }
 
@@ -68,11 +72,12 @@ function renderLightbox(props: TimelineProps) {
         <Lightbox
             currentImage={props.media.index}
             images={images}
-            isOpen={true}
+            isOpen
+            backdropClosesModal
+            width={window.innerWidth - 120}
             onClickNext={() => props.dispatch(moveToNthTweetMedia(next_idx))}
             onClickPrev={() => props.dispatch(moveToNthTweetMedia(prev_idx))}
             onClose={() => props.dispatch(closeTweetMedia())}
-            width={window.innerWidth - 120}
         />
     );
 }
