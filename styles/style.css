@@ -181,6 +181,8 @@ body {
 }
 .tweet__text {
   flex: auto;
+  word-wrap: break-word;
+  word-break: break-all;
   white-space: pre-wrap;
 }
 .tweet__text-hashtag,
@@ -212,6 +214,8 @@ body {
 }
 .tweet__quoted-text {
   color: #555555;
+  word-wrap: break-word;
+  word-break: break-all;
   white-space: pre-wrap;
 }
 .tweet__quoted-text-hashtag,
