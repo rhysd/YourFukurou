@@ -59,7 +59,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
             <div
                 className={'tweet__primary'}
                 onMouseEnter={() => { this.actions_elem.style.display = 'flex'; }}
-                onMouseLeave={() => { this.actions_elem.style.display = 'none'; }}
+                onMouseLeave={() => { this.actions_elem.style.display = 'flex'; }}
             >
                 <TweetText status={s}/>
                 {this.renderQuotedStatus(s)}
@@ -67,7 +67,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                 <div className="tweet__primary-footer" >
                     <div
                         className="tweet-actions"
-                        style={{display: 'none'}}
+                        style={{display: 'flex'}}
                         ref={r => {this.actions_elem = r; }}
                     >
                         <TweetActionButton kind="reply" status={s}/>

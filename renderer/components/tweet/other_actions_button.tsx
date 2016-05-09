@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import Tweet from '../../item/tweet';
 import IconButton from '../icon_button';
 import {notImplementedYet} from '../../actions';
+import Popup from '../popup';
 
 interface OtherActionsButtonProps extends React.Props<any> {
     status: Tweet;
@@ -38,7 +39,7 @@ class OtherActionsButton extends React.Component<OtherActionsButtonProps, {}> {
 
     render() {
         return (
-            <div className="tweet-actions__others">
+            <Popup arrow>
                 <IconButton
                     name="ellipsis-h"
                     tip="others"
@@ -62,7 +63,7 @@ class OtherActionsButton extends React.Component<OtherActionsButtonProps, {}> {
                         Copy tweet URL
                     </div>
                 </div>
-            </div>
+            </Popup>
         );
     }
 }
