@@ -140,10 +140,11 @@ function open_window(access: AccessToken) {
                 .then(([mute_ids, block_ids, tweets, mentions]) => {
                     // Note: Merge mute list with block list
                     for (const m of mute_ids) {
-                        if (block_ids.indexOf(m) !== -1) {
+                        if (block_ids.indexOf(m) === -1) {
                             block_ids.push(m);
                         }
                     }
+                    log.debug('Total rejected ids: ', block_ids.length);
                     twitter.sender.send('yf:rejected-ids', block_ids);
                     for (const tw of tweets) {
                         twitter.sender.send('yf:tweet', tw);

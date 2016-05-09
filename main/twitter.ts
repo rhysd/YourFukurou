@@ -221,9 +221,9 @@ export default class Twitter {
         }
         this.stream = this.client.stream('user', params);
 
-        this.stream.on('friends', friend_ids => {
-            log.debug('FRIENDS: length: ', friend_ids.length);
-            this.sender.send('yf:friends', friend_ids);
+        this.stream.on('friends', msg => {
+            log.debug('FRIENDS: length: ', msg.friends.length);
+            this.sender.send('yf:friends', msg.friends);
         });
 
         this.stream.on('tweet', tw => {

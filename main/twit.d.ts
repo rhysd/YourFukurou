@@ -223,6 +223,9 @@ declare module 'twit' {
                     timestamp: string;
                 };
             }
+            export interface StreamingFriendsEvent {
+                friends: number[] | string[];
+            }
             export interface StreamingLimitEvent {
                 limit: {
                     track: number;
@@ -318,7 +321,7 @@ declare module 'twit' {
             on(event: 'warning', cb: (warning: Twitter.StreamingWarningEvent) => void): this;
             on(event: 'status_withheld', cb: (msg: any) => void): this;
             on(event: 'user_withheld', cb: (msg: any) => void): this;
-            on(event: 'friends', cb: (friend_ids: number[] | string[]) => void): this;
+            on(event: 'friends', cb: (friend_ids: Twitter.StreamingFriendsEvent) => void): this;
             on(event: 'direct_message', cb: (msg: any) => void): this;
             on(event: 'user_event', cb: (e: Twitter.StreamEvent) => void): this;
             on(event: 'blocked', cb: (e: Twitter.StreamEvent) => void): this;
