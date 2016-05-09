@@ -262,6 +262,7 @@ body {
   display: flex;
   flex-direction: column;
   position: absolute;
+  margin-top: 4px;
   background-color: white;
   border: 1px solid #dddddd;
 }
