@@ -89,6 +89,7 @@ export default class TimelineState {
 
         const should_add_to_mention
             = this.user && status.mentionsTo(this.user) &&
+                (status.user.id !== this.user.id) &&
                 !PM.shouldRejectTweetInMentionTimeline(status, this) &&
                 (!AppConfig.mute.mention || !muted_or_blocked);
 
