@@ -14,7 +14,6 @@
     "components/app.tsx",
     "components/avatar.tsx",
     "components/icon_button.tsx",
-    "components/popup.tsx",
     "components/message.tsx",
     "components/side_menu.tsx",
     "components/tweet/action_button.tsx",
@@ -57,7 +56,6 @@
     "draft-js.d.ts",
     "node-emoji.d.ts",
     "react-images.d.ts",
-    "popper.d.ts",
     "../main/twit.d.ts"
   ]
 }
