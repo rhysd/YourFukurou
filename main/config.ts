@@ -1,7 +1,6 @@
 import * as path from 'path';
 import {app} from 'electron';
 import * as fs from 'fs';
-import assign = require('object-assign');
 import log from './log';
 
 export const DefaultConfig = {
@@ -35,7 +34,7 @@ export default function loadConfig() {
 
             resolve([
                 config_path,
-                assign({}, DefaultConfig, JSON.parse(content)) as Config,
+                Object.assign({}, DefaultConfig, JSON.parse(content)) as Config,
             ]);
         });
     });

@@ -8,7 +8,6 @@
     "github-electron": "registry:dt/github-electron#0.37.8+20160505171444",
     "loglevel": "registry:dt/loglevel#1.4.0+20160412141402",
     "node": "registry:dt/node#4.0.0+20160505172921",
-    "object-assign": "registry:dt/object-assign#4.0.1+20160316155526",
     "react": "registry:dt/react#0.14.0+20160423065914",
     "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
     "react-redux": "registry:dt/react-redux#4.4.0+20160501125835",
