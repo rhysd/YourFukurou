@@ -63,6 +63,10 @@ export default class TimelineState {
             return true;
         }
 
+        if (status.isQuotedTweet() && this.rejected_ids.contains(status.quoted_status.user.id)) {
+            return true;
+        }
+
         return false;
     }
 
