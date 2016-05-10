@@ -26,13 +26,20 @@ function openAllUrlsInTweet(props: OtherActionsButtonProps) {
 function statusUrlToClipboard(props: OtherActionsButtonProps) {
     'use strict';
     const url = props.status.getMainStatus().statusPageUrl();
-    remote.clipboard.write({ text: url })
+    remote.clipboard.write({ text: url });
     props.dispatch(showMessage('Copied status URL to clipboard.', 'info'));
 }
 
 function deleteThisTweet(props: OtherActionsButtonProps) {
     'use strict';
     props.dispatch(destroyStatus(props.status.id));
+}
+
+function copyJson(props: OtherActionsButtonProps) {
+    'use strict';
+    const json = JSON.stringify(props.status.json, null, 2);
+    remote.clipboard.write({ text: json });
+    props.dispatch(showMessage('Copied status JSON to clipboard.', 'info'));
 }
 
 function renderDeleteThisTweet(props: OtherActionsButtonProps) {
@@ -66,6 +73,12 @@ const OtherActionsButton = (props: OtherActionsButtonProps) => {
                 onClick={() => statusUrlToClipboard(props)}
             >
                 Copy tweet URL
+            </div>
+            <div
+                className="tweet-actions__others-menu-item"
+                onClick={() => copyJson(props)}
+            >
+                Copy tweet JSON
             </div>
         </div>;
 
