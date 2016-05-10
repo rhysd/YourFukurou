@@ -113,7 +113,7 @@ export default class IpcChannelProxy {
         });
 
         this.subscribe('yf:update-status-success', (_: Electron.IpcRendererEvent, json: Twitter.Status) => {
-            log.debug('Received channel yf:unlike-success', json.id_str);
+            log.debug('Received channel yf:update-status-success', json.id_str);
             Store.dispatch(showMessage('Tweeted!', 'info'));
         });
 

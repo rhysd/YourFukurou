@@ -1,4 +1,4 @@
-declare module 'rc-tooltip' {
+declare namespace Tooltip {
     import React = __React;
 
     export type Trigger = 'hover' | 'click' | 'focus';
@@ -6,7 +6,7 @@ declare module 'rc-tooltip' {
         'left' | 'right' | 'top' | 'bottom' |
         'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
 
-    export interface TooltipProps extends React.Props<Tooptip> {
+    export interface Props extends React.Props<any> {
         overlayClassName?: string;
         trigger?: Trigger[];
         mouseEnterDelay?: number;
@@ -25,6 +25,8 @@ declare module 'rc-tooltip' {
         getTooltipContainer?: () => Element;
         destroyTooltipOnHide?: boolean;
     }
+}
 
-    export default class Tooptip extends React.Component<TooltipProps, {}> {}
+declare module 'rc-tooltip' {
+    export = class Tooptip extends __React.Component<Tooltip.Props, {}> {}
 }

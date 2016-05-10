@@ -1,70 +1,85 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
+import Tooltip = require('rc-tooltip');
 import Tweet from '../../item/tweet';
 import IconButton from '../icon_button';
-import {notImplementedYet} from '../../actions';
+import {
+    showMessage,
+    destroyStatus,
+} from '../../actions';
+
+const remote = global.require('electron').remote;
 
 interface OtherActionsButtonProps extends React.Props<any> {
     status: Tweet;
+    isMyTweet?: boolean;
     dispatch?: Redux.Dispatch;
 }
 
-class OtherActionsButton extends React.Component<OtherActionsButtonProps, {}> {
-    menu_node: HTMLElement;
+function openAllUrlsInTweet(props: OtherActionsButtonProps) {
+    'use strict';
+    for (const u of props.status.urls) {
+        remote.shell.openExternal(u);
+    }
+}
 
-    notImplementedYet() {
-        this.props.dispatch(notImplementedYet());
-        this.dismissMenu();
+function statusUrlToClipboard(props: OtherActionsButtonProps) {
+    'use strict';
+    const url = props.status.getMainStatus().statusPageUrl();
+    remote.clipboard.write({ text: url })
+    props.dispatch(showMessage('Copied status URL to clipboard.', 'info'));
+}
+
+function deleteThisTweet(props: OtherActionsButtonProps) {
+    'use strict';
+    props.dispatch(destroyStatus(props.status.id));
+}
+
+function renderDeleteThisTweet(props: OtherActionsButtonProps) {
+    'use strict';
+    if (!props.isMyTweet) {
+        return undefined;
     }
 
-    toggleMenu() {
-        if (!this.menu_node) {
-            return;
-        }
+    return (
+        <div
+            className="tweet-actions__others-menu-item"
+            onClick={() => deleteThisTweet(props)}
+        >
+            Delete this tweet
+        </div>
+    )
+}
 
-        if (this.menu_node.style.display === 'none') {
-            this.menu_node.style.display = 'flex';
-        } else {
-            this.menu_node.style.display = 'none';
-        }
-    }
-
-    dismissMenu() {
-        if (!this.menu_node) {
-            return;
-        }
-        this.menu_node.style.display = 'none';
-    }
-
-    render() {
-        return (
-            <div className="tweet-actions__others">
-                <IconButton
-                    name="ellipsis-h"
-                    tip="others"
-                    onClick={() => this.toggleMenu()}
-                />
-                <div
-                    className="tweet-actions__others-menu"
-                    style={{display: 'none'}}
-                    ref={r => { this.menu_node = r; }}
-                >
-                    <div
-                        className="tweet-actions__others-menu-item"
-                        onClick={() => this.notImplementedYet()}
-                    >
-                        Open URLs in tweet
-                    </div>
-                    <div
-                        className="tweet-actions__others-menu-item"
-                        onClick={() => this.notImplementedYet()}
-                    >
-                        Copy tweet URL
-                    </div>
-                </div>
+const OtherActionsButton = (props: OtherActionsButtonProps) => {
+    const overlay =
+        <div className="tweet-actions__others-menu">
+            {renderDeleteThisTweet(props)}
+            <div
+                className="tweet-actions__others-menu-item"
+                onClick={() => openAllUrlsInTweet(props)}
+            >
+                Open URLs in tweet
             </div>
-        );
-    }
+            <div
+                className="tweet-actions__others-menu-item"
+                onClick={() => statusUrlToClipboard(props)}
+            >
+                Copy tweet URL
+            </div>
+        </div>;
+
+    return (
+        <Tooltip
+            placement="bottom"
+            overlay={overlay}
+            destroyTooltipOnHide
+        >
+            <div className="tweet-actions__others">
+                <i className="fa fa-ellipsis-h"/>
+            </div>
+        </Tooltip>
+    );
 }
 
 export default connect()(OtherActionsButton);
