@@ -90,9 +90,11 @@ export default class TweetTextParser {
         };
     }
 
-    getMentionFrom(mention: string) {
+    getMentionFrom(mention_: string) {
+        const mention = mention_.toLowerCase();
         for (const m of this.mentions) {
-            if (m.screen_name === mention) {
+            // Note: Case insensitive comparison
+            if (m.screen_name.toLowerCase() === mention) {
                 return m;
             }
         }
