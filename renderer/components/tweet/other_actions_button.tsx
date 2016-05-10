@@ -1,8 +1,11 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
+import Tooltip = require('rc-tooltip');
 import Tweet from '../../item/tweet';
 import IconButton from '../icon_button';
-import {notImplementedYet} from '../../actions';
+import {showMessage} from '../../actions';
+
+const remote = global.require('electron').remote;
 
 interface OtherActionsButtonProps extends React.Props<any> {
     status: Tweet;
@@ -10,59 +13,45 @@ interface OtherActionsButtonProps extends React.Props<any> {
 }
 
 class OtherActionsButton extends React.Component<OtherActionsButtonProps, {}> {
-    menu_node: HTMLElement;
-
-    notImplementedYet() {
-        this.props.dispatch(notImplementedYet());
-        this.dismissMenu();
-    }
-
-    toggleMenu() {
-        if (!this.menu_node) {
-            return;
-        }
-
-        if (this.menu_node.style.display === 'none') {
-            this.menu_node.style.display = 'flex';
-        } else {
-            this.menu_node.style.display = 'none';
+    openAllUrlsInTweet() {
+        for (const u of this.props.status.urls) {
+            remote.shell.openExternal(u);
         }
     }
 
-    dismissMenu() {
-        if (!this.menu_node) {
-            return;
-        }
-        this.menu_node.style.display = 'none';
+    statusUrlToClipboard() {
+        const url = this.props.status.getMainStatus().statusPageUrl();
+        remote.clipboard.write({ text: url })
+        this.props.dispatch(showMessage('Copied status URL to clipboard.', 'info'));
     }
 
     render() {
-        return (
-            <div className="tweet-actions__others">
-                <IconButton
-                    name="ellipsis-h"
-                    tip="others"
-                    onClick={() => this.toggleMenu()}
-                />
+        const overlay =
+            <div className="tweet-actions__others-menu">
                 <div
-                    className="tweet-actions__others-menu"
-                    style={{display: 'none'}}
-                    ref={r => { this.menu_node = r; }}
+                    className="tweet-actions__others-menu-item"
+                    onClick={() => this.openAllUrlsInTweet()}
                 >
-                    <div
-                        className="tweet-actions__others-menu-item"
-                        onClick={() => this.notImplementedYet()}
-                    >
-                        Open URLs in tweet
-                    </div>
-                    <div
-                        className="tweet-actions__others-menu-item"
-                        onClick={() => this.notImplementedYet()}
-                    >
-                        Copy tweet URL
-                    </div>
+                    Open URLs in tweet
                 </div>
-            </div>
+                <div
+                    className="tweet-actions__others-menu-item"
+                    onClick={() => this.statusUrlToClipboard()}
+                >
+                    Copy tweet URL
+                </div>
+            </div>;
+
+        return (
+            <Tooltip
+                placement="bottom"
+                overlay={overlay}
+                destroyTooltipOnHide
+            >
+                <div className="tweet-actions__others">
+                    <i className="fa fa-ellipsis-h"/>
+                </div>
+            </Tooltip>
         );
     }
 }

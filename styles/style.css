@@ -258,18 +258,18 @@ body {
 .tweet-actions__count {
   margin-left: 4px;
 }
+.tweet-actions__others {
+  cursor: default;
+}
 .tweet-actions__others-menu {
   display: flex;
   flex-direction: column;
-  position: absolute;
-  margin-top: 4px;
   background-color: white;
-  border: 1px solid #dddddd;
 }
 .tweet-actions__others-menu-item {
   color: black;
   font-size: 0.8rem;
-  padding: 4px;
+  cursor: default;
 }
 .tweet-actions__others-menu-item:hover {
   background-color: #e0e0ee;

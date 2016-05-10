@@ -134,6 +134,13 @@ export default class Tweet implements Item {
         return this.json.text;
     }
 
+    get urls() {
+        if (!this.json.entities || !this.json.entities.urls) {
+            return [];
+        }
+        return this.json.entities.urls.map(u => u.expanded_url);
+    }
+
     get media() {
         if (!this.json.extended_entities) {
             return [];
