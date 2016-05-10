@@ -67,10 +67,14 @@ class PluginManager {
     shouldRejectTweetInHomeTimeline(tw: Tweet, timeline: TimelineState) {
         for (const p of this.plugins) {
             if (p.filter && p.filter.home_timeline) {
-                const rejected = !p.filter.home_timeline(tw, timeline);
-                if (rejected) {
-                    log.debug(`Plugin '${p._path}' rejects a tweet in home timeline: @${tw.user.screen_name}: ${tw.text}`);
-                    return true;
+                try {
+                    const rejected = !p.filter.home_timeline(tw, timeline);
+                    if (rejected) {
+                        log.debug(`Plugin '${p._path}' rejects a tweet in home timeline: @${tw.user.screen_name}: ${tw.text}`);
+                        return true;
+                    }
+                } catch (e) {
+                    log.debug(`Plugin '${p._path}' threw an exception at filtering home timeline:`, e, tw);
                 }
             }
         }
@@ -80,10 +84,14 @@ class PluginManager {
     shouldRejectTweetInMentionTimeline(tw: Tweet, timeline: TimelineState) {
         for (const p of this.plugins) {
             if (p.filter && p.filter.mention_timeline) {
-                const rejected = !p.filter.mention_timeline(tw, timeline);
-                if (rejected) {
-                    log.debug(`Plugin '${p._path}' rejects a tweet in mention timeline: @${tw.user.screen_name}: ${tw.text}`);
-                    return true;
+                try {
+                    const rejected = !p.filter.mention_timeline(tw, timeline);
+                    if (rejected) {
+                        log.debug(`Plugin '${p._path}' rejects a tweet in mention timeline: @${tw.user.screen_name}: ${tw.text}`);
+                        return true;
+                    }
+                } catch (e) {
+                    log.debug(`Plugin '${p._path}' threw an exception at filtering mention timeline:`, e, tw);
                 }
             }
         }
@@ -93,9 +101,13 @@ class PluginManager {
     shouldRejectTweetNotification(tw: Tweet) {
         for (const p of this.plugins) {
             if (p.filter && p.filter.tweet_notification) {
-                const rejected = !p.filter.tweet_notification(tw);
-                if (rejected) {
-                    return true;
+                try {
+                    const rejected = !p.filter.tweet_notification(tw);
+                    if (rejected) {
+                        return true;
+                    }
+                } catch (e) {
+                    log.debug(`Plugin '${p._path}' threw an exception at filtering notification:`, e, tw);
                 }
             }
         }
@@ -105,9 +117,13 @@ class PluginManager {
     shouldRejectLikeNotification(tw: Tweet, by: TwitterUser) {
         for (const p of this.plugins) {
             if (p.filter && p.filter.like_notification) {
-                const rejected = !p.filter.like_notification(tw, by);
-                if (rejected) {
-                    return true;
+                try {
+                    const rejected = !p.filter.like_notification(tw, by);
+                    if (rejected) {
+                        return true;
+                    }
+                } catch (e) {
+                    log.debug(`Plugin '${p._path}' threw an exception at filtering notification:`, e, tw);
                 }
             }
         }
