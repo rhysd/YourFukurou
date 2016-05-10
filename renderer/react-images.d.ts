@@ -1,5 +1,5 @@
 declare module 'react-images' {
-    export import React = __React;
+    import React = __React;
     export interface LightboxImage {
         src?: string;
         srcset?: string[];
