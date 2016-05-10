@@ -18,7 +18,7 @@ declare module 'twit' {
 
             // See https://dev.twitter.com/overview/api/entities
             export interface HashtagEntity {
-                indices: number[];
+                indices: [number, number];
                 text: string;
             }
             export interface Size {
@@ -27,57 +27,72 @@ declare module 'twit' {
                 resize: 'crop' | 'fit';
             }
             export interface Sizes {
-                thumb: Size;
                 large: Size;
                 medium: Size;
                 small: Size;
+                thumb: Size;
+            }
+            export interface VideoVariant {
+                bitrate?: number;
+                content_type: string;
+                url: string;
+            }
+            export interface VideoInfo {
+                aspect_ratio: [number, number];
+                duration_millis?: number;
+                variants: VideoVariant[];
             }
             export interface MediaEntity {
-                id: number;
-                id_str: string;
-                indices: number[];
-                url: string;
                 display_url: string;
                 expanded_url: string;
+                id: number;
+                id_str: string;
+                indices: [number, number];
                 media_url: string;
                 media_url_https: string;
                 sizes: Sizes;
-                source_status_id: number;
-                source_status_id_str: string;
+                source_status_id?: number;
+                source_status_id_str?: string;
                 type: string;
+                url: string;
+                video_info?: VideoInfo;
             }
             export interface UrlEntity {
-                url: string;
                 display_url: string;
                 expanded_url: string;
-                indices: number[];
+                indices: [number, number];
+                url: string;
             }
             export interface UserMentionEntity {
                 id: number;
                 id_str: string;
-                indices: number[];
+                indices: [number, number];
                 name: string;
                 screen_name: string;
             }
+            export interface SymbolEntity {
+                indices: [number, number];
+                text: string;
+            }
             export interface Entities {
-                hashtags: HashtagEntity[];
-                media: MediaEntity[];
-                urls: UrlEntity[];
-                user_mentions: UserMentionEntity[];
+                hashtags?: HashtagEntity[];
+                media?: MediaEntity[];
+                symbols?: SymbolEntity[];
+                urls?: UrlEntity[];
+                user_mentions?: UserMentionEntity[];
             }
 
             // See https://dev.twitter.com/overview/api/users
             export interface User {
                 contributors_enabled: boolean;
                 created_at: string;
-                default_profile: string;
-                default_profile_image: string;
+                default_profile: boolean;
+                default_profile_image: boolean;
                 description: string;
-                entities: Entities;
                 favourites_count: number;
                 follow_request_sent?: boolean;
-                following?: boolean;
                 followers_count: number;
+                following?: boolean;
                 friends_count: number;
                 geo_enabled?: boolean;
                 id: number;
@@ -102,37 +117,37 @@ declare module 'twit' {
                 profile_use_background_image: boolean;
                 protected: boolean;
                 screen_name: string;
-                show_all_inline_media: boolean;
+                show_all_inline_media?: boolean;
                 status?: Status;
                 statuses_count: number;
                 time_zone?: string;
                 url: string;
                 utc_offset?: number;
                 verified: boolean;
-                withheld_in_countries: string;
-                withheld_scope: string;
+                withheld_in_countries?: string;
+                withheld_scope?: string;
             }
 
             // See https://dev.twitter.com/overview/api/places
             export interface PlaceAttribute {
-                street_address: string;
-                locality: string;
-                region: string;
+                'app:id': string;
                 iso3: string;
-                postal_code: string;
+                locality: string;
                 phone: string;
+                postal_code: string;
+                region: string;
+                street_address: string;
                 twitter: string;
                 url: string;
-                'app:id': string;
             }
             export interface Place {
-                geometry: GeoJSON.Point;
                 attributes: PlaceAttribute;
                 bounding_box: GeoJSON.Polygon;
                 contained_within: Place[];
                 country: string;
                 country_code: string;
                 full_name: string;
+                geometry: GeoJSON.Point;
                 id: string;
                 name: string;
                 place_type: string;
@@ -146,11 +161,11 @@ declare module 'twit' {
                 annotations?: Object;
                 contributors?: Contributors[];
                 coordinates?: GeoJSON.Point;
-                created_at: string;
                 current_user_retweet?: {
                     id: number;
                     id_str: number;
                 };
+                created_at: string;
                 entities: Entities;
                 extended_entities: Entities;
                 favorite_count?: number;
@@ -162,17 +177,17 @@ declare module 'twit' {
                 in_reply_to_status_id_str?: string;
                 in_reply_to_user_id?: number;
                 in_reply_to_user_id_str?: string;
+                is_quote_status: boolean;
                 lang?: string;
                 place?: Place;
                 possibly_sensitive?: boolean;
+                quoted_status?: Status;
                 quoted_status_id?: number;
                 quoted_status_id_str?: string;
-                quoted_status?: Status;
-                is_quote_status: boolean;
-                scopes?: Object;
                 retweet_count: number;
                 retweeted: boolean;
                 retweeted_status?: Status;
+                scopes?: Object;
                 source?: string;
                 text: string;
                 truncated: boolean;
@@ -183,29 +198,29 @@ declare module 'twit' {
             }
 
             interface DirectMessage {
-                entities: Entities;
-                sender_screen_name: string;
-                id_str: string;
-                id: number;
-                recipient_id: number;
-                sender_id: number;
-                text: string;
                 created_at: string;
-                sender: User;
+                entities: Entities;
+                id: number;
+                id_str: string;
                 recipient: User;
+                recipient_id: number;
                 recipient_screen_name: string;
+                sender: User;
+                sender_id: number;
+                sender_screen_name: string;
+                text: string;
             }
 
             export interface Metadata {
-                max_id?: number;
-                since_id?: number;
-                refresh_url?: string;
-                next_results?: string;
-                count?: number;
                 completed_in?: number;
-                since_id_str?: string;
-                query?: string;
+                count?: number;
+                max_id?: number;
                 max_id_str?: string;
+                next_results?: string;
+                query?: string;
+                refresh_url?: string;
+                since_id?: number;
+                since_id_str?: string;
             }
             export interface Error {
                 code: number;
@@ -234,8 +249,8 @@ declare module 'twit' {
             export interface StreamingDisconnectEvent {
                 disconnect: {
                     code: number;
-                    stream_name: string;
                     reason: string;
+                    stream_name: string;
                 };
             }
             export interface StreamingWarningEvent {
@@ -246,11 +261,11 @@ declare module 'twit' {
                 };
             }
             export interface StreamEvent {
+                created_at: string;
                 event: string;
                 source?: User;
                 target?: User;
                 target_object?: any;
-                created_at: string;
             }
         }
 
@@ -299,50 +314,50 @@ declare module 'twit' {
             trusted_cert_fingerprints?: string[];
         }
         export interface ApiError extends Error {
-            statusCode: number;
-            code: number;
-            twitterReply: IncomingMessage;
             allErrors: Twitter.Error[];
+            code: number;
+            statusCode: number;
+            twitterReply: IncomingMessage;
         }
         export type Callback = (err: ApiError, result: any, response: IncomingMessage) => void;
 
         export class Stream extends EventEmitter {
             start(): void;
             stop(): void;
-            on(event: 'message', cb: (msg: any) => void): this;
-            on(event: 'tweet', cb: (tw: Twitter.Status) => void): this;
-            on(event: 'delete', cb: (e: Twitter.StreamingDeleteEvent) => void): this;
-            on(event: 'limit', cb: (l: Twitter.StreamingLimitEvent) => void): this;
-            on(event: 'scrub_geo', cb: (msg: any) => void): this;
-            on(event: 'disconnect', cb: (d: Twitter.StreamingDisconnectEvent) => void): this;
+            on(event: 'blocked', cb: (e: Twitter.StreamEvent) => void): this;
             on(event: 'connect', cb: (request: any) => void): this;
             on(event: 'connected', cb: (response: IncomingMessage) => void): this;
-            on(event: 'reconnect', cb: (request: any, response: IncomingMessage, connectInterval: number) => void): this;
-            on(event: 'warning', cb: (warning: Twitter.StreamingWarningEvent) => void): this;
-            on(event: 'status_withheld', cb: (msg: any) => void): this;
-            on(event: 'user_withheld', cb: (msg: any) => void): this;
-            on(event: 'friends', cb: (friend_ids: Twitter.StreamingFriendsEvent) => void): this;
+            on(event: 'delete', cb: (e: Twitter.StreamingDeleteEvent) => void): this;
             on(event: 'direct_message', cb: (msg: any) => void): this;
-            on(event: 'user_event', cb: (e: Twitter.StreamEvent) => void): this;
-            on(event: 'blocked', cb: (e: Twitter.StreamEvent) => void): this;
-            on(event: 'unblocked', cb: (e: Twitter.StreamEvent) => void): this;
+            on(event: 'disconnect', cb: (d: Twitter.StreamingDisconnectEvent) => void): this;
+            on(event: 'error', cb: (e: Twit.ApiError) => void): this;
             on(event: 'favorite', cb: (e: Twitter.StreamEvent) => void): this;
-            on(event: 'unfavorite', cb: (e: Twitter.StreamEvent) => void): this;
+            on(event: 'favorited_retweet', cb: (e: Twitter.StreamEvent) => void): this;
             on(event: 'follow', cb: (e: Twitter.StreamEvent) => void): this;
-            on(event: 'unfollow', cb: (e: Twitter.StreamEvent) => void): this;
-            on(event: 'user_update', cb: (e: Twitter.StreamEvent) => void): this;
+            on(event: 'friends', cb: (friend_ids: Twitter.StreamingFriendsEvent) => void): this;
+            on(event: 'limit', cb: (l: Twitter.StreamingLimitEvent) => void): this;
             on(event: 'list_created', cb: (e: Twitter.StreamEvent) => void): this;
             on(event: 'list_destroyed', cb: (e: Twitter.StreamEvent) => void): this;
-            on(event: 'list_updated', cb: (e: Twitter.StreamEvent) => void): this;
             on(event: 'list_member_added', cb: (e: Twitter.StreamEvent) => void): this;
             on(event: 'list_member_removed', cb: (e: Twitter.StreamEvent) => void): this;
+            on(event: 'list_updated', cb: (e: Twitter.StreamEvent) => void): this;
             on(event: 'list_user_subscribed', cb: (e: Twitter.StreamEvent) => void): this;
             on(event: 'list_user_unsubscribed', cb: (e: Twitter.StreamEvent) => void): this;
+            on(event: 'message', cb: (msg: any) => void): this;
             on(event: 'quoted_tweet', cb: (e: Twitter.StreamEvent) => void): this;
+            on(event: 'reconnect', cb: (request: any, response: IncomingMessage, connectInterval: number) => void): this;
             on(event: 'retweeted_retweet', cb: (e: Twitter.StreamEvent) => void): this;
-            on(event: 'favorited_retweet', cb: (e: Twitter.StreamEvent) => void): this;
+            on(event: 'scrub_geo', cb: (msg: any) => void): this;
+            on(event: 'status_withheld', cb: (msg: any) => void): this;
+            on(event: 'tweet', cb: (tw: Twitter.Status) => void): this;
+            on(event: 'unblocked', cb: (e: Twitter.StreamEvent) => void): this;
+            on(event: 'unfavorite', cb: (e: Twitter.StreamEvent) => void): this;
+            on(event: 'unfollow', cb: (e: Twitter.StreamEvent) => void): this;
             on(event: 'unknown_user_event', cb: (e: Twitter.StreamEvent) => void): this;
-            on(event: 'error', cb: (e: Twit.ApiError) => void): this;
+            on(event: 'user_event', cb: (e: Twitter.StreamEvent) => void): this;
+            on(event: 'user_update', cb: (e: Twitter.StreamEvent) => void): this;
+            on(event: 'user_withheld', cb: (msg: any) => void): this;
+            on(event: 'warning', cb: (warning: Twitter.StreamingWarningEvent) => void): this;
             on(event: string, cb: Function): this;
         }
     }
