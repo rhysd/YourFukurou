@@ -175,6 +175,9 @@ body {
   cursor: pointer;
   text-decoration: none;
 }
+.tweet__primary-created-at:hover {
+  text-decoration: underline;
+}
 .tweet__primary-conversation {
   flex: none;
   color: var(--color-weak-text-link);
@@ -204,6 +207,10 @@ body {
   margin: 4px 0 4px 4px;
   padding: 8px;
   border-radius: 8px;
+}
+.tweet__quoted-icon {
+  margin-right: 4px;
+  cursor: pointer;
 }
 .tweet__quoted-screenname {
   color: #777777;

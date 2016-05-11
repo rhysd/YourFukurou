@@ -1,5 +1,5 @@
 import * as React from 'react';
-const remote = global.require('electron').remote;
+const shell = global.require('electron').shell;
 
 interface AvatarProps extends React.Props<any> {
     screenName: string;
@@ -22,7 +22,7 @@ function getStyle(props: AvatarProps) {
 const Avatar = (props: AvatarProps) => (
     <div
         className="avatar"
-        onClick={() => remote.shell.openExternal(`https://twitter.com/${props.screenName}`)}
+        onClick={() => shell.openExternal(`https://twitter.com/${props.screenName}`)}
     >
         <img
             className="avatar__inner"

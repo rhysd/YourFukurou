@@ -8,7 +8,7 @@ import {
     destroyStatus,
 } from '../../actions';
 
-const remote = global.require('electron').remote;
+const electron = global.require('electron');
 
 interface OtherActionsButtonProps extends React.Props<any> {
     status: Tweet;
@@ -19,14 +19,14 @@ interface OtherActionsButtonProps extends React.Props<any> {
 function openAllUrlsInTweet(props: OtherActionsButtonProps) {
     'use strict';
     for (const u of props.status.urls.map(u => u.expanded_url)) {
-        remote.shell.openExternal(u);
+        electron.shell.openExternal(u);
     }
 }
 
 function statusUrlToClipboard(props: OtherActionsButtonProps) {
     'use strict';
     const url = props.status.getMainStatus().statusPageUrl();
-    remote.clipboard.write({ text: url });
+    electron.clipboard.write({ text: url });
     props.dispatch(showMessage('Copied status URL to clipboard.', 'info'));
 }
 
@@ -38,7 +38,7 @@ function deleteThisTweet(props: OtherActionsButtonProps) {
 function copyJson(props: OtherActionsButtonProps) {
     'use strict';
     const json = JSON.stringify(props.status.json, null, 2);
-    remote.clipboard.write({ text: json });
+    electron.clipboard.write({ text: json });
     props.dispatch(showMessage('Copied status JSON to clipboard.', 'info'));
 }
 

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {Twitter} from 'twit';
-import {openExternalLink} from './external-link';
 import log from '../../log';
 import Tweet, {TwitterUser} from '../../item/tweet';
 import TweetActionButton from './action_button';
@@ -20,9 +19,9 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
     renderCreatedAt() {
         return (
             <a
-                className="tweet__primary-created-at external-link"
-                href={this.props.status.statusPageUrl()}
-                onClick={openExternalLink}
+                className="tweet__primary-created-at"
+                href="#"
+                onClick={() => this.props.status.openStatusPageInBrowser()}
             >
                 {this.props.status.getCreatedAtString()}
             </a>

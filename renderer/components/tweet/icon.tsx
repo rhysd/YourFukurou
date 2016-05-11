@@ -2,8 +2,6 @@ import * as React from 'react';
 import Avatar from '../avatar';
 import {TwitterUser} from '../../item/tweet';
 
-const re_normal_size = /normal(?=\.\w+$)/i;
-
 interface TweetIconProps extends React.Props<any> {
     user: TwitterUser;
 }

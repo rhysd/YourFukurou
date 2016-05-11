@@ -2,6 +2,8 @@ import Item from './item';
 import TweetTextParser, {TweetTextToken} from '../tweet_parser';
 import {Twitter} from 'twit';
 
+const shell = global.require('electron').shell;
+
 const re_normal_size = /normal(?=\.\w+$)/i;
 
 export class TwitterUser {
@@ -226,6 +228,10 @@ export default class Tweet implements Item {
 
     statusPageUrl() {
         return `https://twitter.com/hadakadenkyu/status/${this.getMainStatus().json.id_str}`;
+    }
+
+    openStatusPageInBrowser() {
+        shell.openExternal(this.statusPageUrl());
     }
 
     clone() {
