@@ -20,7 +20,7 @@ const Tweet = (props: TweetProps) => {
         <div className="tweet__body">
             <TweetIcon user={tw.user}/>
             <TweetSecondary status={props.status}/>
-            <TweetPrimary status={props.status} user={tw.user}/>
+            <TweetPrimary status={props.status} user={props.user}/>
         </div>
     );
 };
