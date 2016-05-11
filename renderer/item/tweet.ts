@@ -10,7 +10,7 @@ export class TwitterUser {
     constructor(public json: Twitter.User) {}
 
     get icon_url() {
-        const url = this.json.profile_image_url_https;
+        const url = this.json.profile_image_url;
         if ((window.devicePixelRatio || 1) < 1.5) {
             return url;
         } else {
@@ -18,8 +18,12 @@ export class TwitterUser {
         }
     }
 
+    get big_icon_url() {
+        return this.json.profile_image_url.replace(re_normal_size, 'bigger');
+    }
+
     get mini_icon_url() {
-        return this.json.profile_image_url_https;
+        return this.json.profile_image_url;
     }
 
     get screen_name() {
@@ -36,6 +40,18 @@ export class TwitterUser {
 
     get id() {
         return this.json.id;
+    }
+
+    get bannar_url() {
+        return this.json.profile_banner_url;
+    }
+
+    get bg_color() {
+        return this.json.profile_background_color;
+    }
+
+    get description() {
+        return this.json.description;
     }
 
     userPageUrl() {

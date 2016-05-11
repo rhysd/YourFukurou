@@ -107,7 +107,7 @@ declare module 'twit' {
                 profile_background_image_url: string;
                 profile_background_image_url_https: string;
                 profile_background_tile: boolean;
-                profile_banner_url: string;
+                profile_banner_url?: string;
                 profile_image_url: string;
                 profile_image_url_https: string;
                 profile_link_color: string;

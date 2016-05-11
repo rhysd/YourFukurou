@@ -123,6 +123,7 @@ body {
 .tweet__icon {
   flex: none;
   width: 56px;
+  height: 56px;
 }
 .tweet__secondary {
   flex: none;
@@ -272,6 +273,7 @@ body {
   display: flex;
   flex-direction: column;
   background-color: white;
+  padding: 4px;
 }
 .tweet-actions__others-menu-item {
   color: black;
@@ -474,4 +476,52 @@ body {
   width: 2rem;
   height: 2rem;
   border-radius: 0.4rem;
+}
+
+.user-popup {
+  display: flex;
+  flex-direction: column;
+  width: calc(100vw - 120px);
+}
+.user-popup__background {
+  width: 100%;
+  max-height: 100px;
+  overflow: hidden;
+}
+.user-popup__background img {
+  object-fit: cover;
+  width: 100%;
+  max-height: 100px;
+}
+.user-popup__primary {
+  display: flex;
+  padding: 0 8px;
+}
+.user-popup__main-icon {
+  margin-top: -32px;
+}
+.user-popup__description {
+  padding: 8px;
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+.user-popup__name {
+  margin-left: 4px;
+  display: flex;
+  flex-direction: column;
+}
+.user-popup__user-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rc-tooltip {
+  opacity: 1;
+}
+.rc-tooltip-inner {
+  padding: 0;
+  border 0;
 }
