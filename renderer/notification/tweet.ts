@@ -1,13 +1,16 @@
 import Tweet, {TwitterUser} from '../item/tweet';
 import log from '../log';
-import {openEditor} from '../actions';
+import {openEditorForReply} from '../actions';
 import Store from '../store';
 import PM from '../plugin_manager';
 import AppConfig from '../config';
 
 function editReply(in_reply_to: Tweet) {
     'use strict';
-    Store.dispatch(openEditor(in_reply_to));
+    Store.dispatch(openEditorForReply(
+        in_reply_to,
+        Store.getState().timeline.user
+    ));
 }
 
 function createNotification(tw: Tweet, title: string) {

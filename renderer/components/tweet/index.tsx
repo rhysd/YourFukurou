@@ -16,12 +16,11 @@ interface TweetProps extends React.Props<any> {
 
 const Tweet = (props: TweetProps) => {
     const tw = props.status.getMainStatus();
-    const isMyTweet = props.user.id === tw.user.id;
     return (
         <div className="tweet__body">
             <TweetIcon user={tw.user}/>
             <TweetSecondary status={props.status}/>
-            <TweetPrimary status={props.status} isMyTweet={isMyTweet}/>
+            <TweetPrimary status={props.status} user={tw.user}/>
         </div>
     );
 };

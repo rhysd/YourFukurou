@@ -1,5 +1,5 @@
 import {EditorState, Modifier, CompositeDecorator, SelectionState, ContentState} from 'draft-js';
-import Tweet from '../item/tweet';
+import Tweet, {TwitterUser} from '../item/tweet';
 import EditorKeymaps from '../keybinds/editor';
 import autoCompleteFactory from '../components/editor/auto_complete_decorator';
 import log from '../log';
@@ -84,17 +84,49 @@ export default class TweetEditorState {
         );
     }
 
-    openEditor(status: Tweet) {
-        const next_core =
-            status === null ?
-                this.core :
-                this.setTextToEditor(`@${status.getMainStatus().user.screen_name} `);
+    setReplyText(in_reply_to: Tweet, owner: TwitterUser) {
+        // Note:
+        // When in-reply-to user is me, no need to show @reply
+        // screen name explicitly.
+        const reply_to_me = in_reply_to.user.id === owner.id;
+        let text = reply_to_me ? '' : `@${in_reply_to.user.screen_name} `;
 
+        // Note:
+        // Add all mentioned users to default text of reply tweet.
+        // TODO:
+        // Should all users except for in-reply-to user be selected by default
+        // to make it easy to remove them from editing text?
+        if (in_reply_to.mentions.length > 0) {
+            text +=
+                in_reply_to.mentions
+                    .filter(m => m.id !== owner.id)
+                    .map(m => `@${m.screen_name} `).join('');
+        }
+
+        if (text === '') {
+            return this.core;
+        } else {
+            return this.setTextToEditor(text);
+        }
+    }
+
+    openEditorWithInReplyTo(status: Tweet, owner: TwitterUser) {
+        const in_reply_to = status.getMainStatus();
+        const next_core = this.setReplyText(in_reply_to, owner);
         return new TweetEditorState(
             next_core,
             true,
             this.keymaps,
-            status
+            in_reply_to
+        );
+    }
+
+    openEditor() {
+        return new TweetEditorState(
+            this.core,
+            true,
+            this.keymaps,
+            null
         );
     }
 
@@ -111,9 +143,7 @@ export default class TweetEditorState {
         );
     }
 
-    toggleEditor(status: Tweet) {
-        return this.is_open ?
-            this.closeEditor() :
-            this.openEditor(status);
+    toggleEditor() {
+        return this.is_open ?  this.closeEditor() : this.openEditor();
     }
 }

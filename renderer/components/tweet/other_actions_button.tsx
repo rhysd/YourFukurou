@@ -18,7 +18,7 @@ interface OtherActionsButtonProps extends React.Props<any> {
 
 function openAllUrlsInTweet(props: OtherActionsButtonProps) {
     'use strict';
-    for (const u of props.status.urls) {
+    for (const u of props.status.urls.map(u => u.expanded_url)) {
         remote.shell.openExternal(u);
     }
 }

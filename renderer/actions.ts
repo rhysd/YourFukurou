@@ -39,6 +39,7 @@ export enum Kind {
 
     ChangeEditorState,
     OpenEditor,
+    OpenEditorForReply,
     CloseEditor,
     ToggleEditor,
 
@@ -292,13 +293,22 @@ export function changeEditorState(editor: EditorState) {
     };
 }
 
-export function openEditor(in_reply_to: Tweet = null) {
+export function openEditor() {
     'use strict';
     return {
         type: Kind.OpenEditor,
-        status: in_reply_to,
     };
 }
+
+export function openEditorForReply(in_reply_to: Tweet, owner: TwitterUser) {
+    'use strict';
+    return {
+        type: Kind.OpenEditorForReply,
+        status: in_reply_to,
+        user: owner,
+    };
+}
+
 
 export function closeEditor() {
     'use strict';
@@ -307,12 +317,11 @@ export function closeEditor() {
     };
 }
 
-export function toggleEditor(in_reply_to: Tweet = null) {
+export function toggleEditor() {
     'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.ToggleEditor,
-            status: in_reply_to,
         }));
     };
 }

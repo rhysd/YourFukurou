@@ -138,7 +138,7 @@ export default class Tweet implements Item {
         if (!this.json.entities || !this.json.entities.urls) {
             return [];
         }
-        return this.json.entities.urls.map(u => u.expanded_url);
+        return this.json.entities.urls;
     }
 
     get media() {
@@ -149,6 +149,13 @@ export default class Tweet implements Item {
             return [];
         }
         return this.json.extended_entities.media;
+    }
+
+    get mentions() {
+        if (!this.json.entities || !this.json.entities.user_mentions) {
+            return [];
+        }
+        return this.json.entities.user_mentions;
     }
 
     getMainStatus() {

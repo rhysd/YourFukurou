@@ -10,7 +10,7 @@ import TweetMedia from './media';
 import OtherActionsButton from './other_actions_button';
 
 interface TweetPrimaryProps extends React.Props<any> {
-    isMyTweet: boolean;
+    user: TwitterUser;
     status: Tweet;
 }
 
@@ -55,6 +55,11 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
 
     render() {
         const s = this.props.status.getMainStatus();
+        const action_props = {
+            status: s,
+            user: this.props.user,
+        };
+
         return (
             <div
                 className={'tweet__primary'}
@@ -70,10 +75,10 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                         style={{display: 'none'}}
                         ref={r => {this.actions_elem = r; }}
                     >
-                        <TweetActionButton kind="reply" status={s}/>
-                        <TweetActionButton kind="retweet" status={s} isMyTweet={this.props.isMyTweet}/>
-                        <TweetActionButton kind="like" status={s}/>
-                        <OtherActionsButton status={s} isMyTweet={this.props.isMyTweet}/>
+                        <TweetActionButton kind="reply" {...action_props}/>
+                        <TweetActionButton kind="retweet" {...action_props}/>
+                        <TweetActionButton kind="like" {...action_props}/>
+                        <OtherActionsButton {...action_props}/>
                     </div>
                     <div className="spacer"/>
                     {this.renderConversation(s)}
