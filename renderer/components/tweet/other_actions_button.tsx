@@ -85,6 +85,7 @@ const OtherActionsButton = (props: OtherActionsButtonProps) => {
     return (
         <Tooltip
             placement="bottom"
+            trigger={['click']}
             overlay={overlay}
             destroyTooltipOnHide
         >

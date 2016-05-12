@@ -267,7 +267,7 @@ body {
   margin-left: 4px;
 }
 .tweet-actions__others {
-  cursor: default;
+  cursor: pointer;
 }
 .tweet-actions__others-menu {
   display: flex;
