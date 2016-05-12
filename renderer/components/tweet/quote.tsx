@@ -18,20 +18,27 @@ function renderMedia(media: Twitter.MediaEntity[]) {
     return <TweetMedia entities={media}/>;
 }
 
+function renderHeader(s: Tweet) {
+    'use strict';
+    return (
+        <div className="tweet__quoted-screenname">
+            <span
+                className="tweet__quoted-icon"
+                onClick={() => s.openStatusPageInBrowser()}
+            >
+                <i className="fa fa-quote-left"/>
+            </span> from <ScreenName
+                user={s.user}
+                color="#777777"
+            />
+        </div>
+    );
+}
+
 const QuotedTweet = (props: QuotedTweetProps) => {
     const s = props.status.getMainStatus();
     return <div className="tweet__quoted">
-        <div className="tweet__quoted-screenname">
-        <span
-            className="tweet__quoted-icon"
-            onClick={() => s.openStatusPageInBrowser()}
-        >
-            <i className="fa fa-quote-left"/>
-        </span> from <ScreenName
-            user={s.user}
-            color="#777777"
-        />
-        </div>
+        {renderHeader(s)}
         <TweetText className="tweet__quoted-text" status={s}/>
         {renderMedia(s.media)}
     </div>;
