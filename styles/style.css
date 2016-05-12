@@ -481,10 +481,11 @@ body {
 .user-popup {
   display: flex;
   flex-direction: column;
-  width: calc(100vw - 120px);
+  width: 300px;
 }
 .user-popup__background {
   width: 100%;
+  min-height: 50px;
   max-height: 100px;
   overflow: hidden;
 }
@@ -507,15 +508,35 @@ body {
   white-space: pre-wrap;
 }
 .user-popup__name {
+  margin-top: 4px;
   margin-left: 4px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 .user-popup__user-name {
-  font-size: 1.2rem;
   font-weight: bold;
   text-overflow: ellipsis;
   white-space: nowrap;
+  overflow: hidden;
+}
+.user-popup__counts {
+  display: flex;
+}
+.user-popup__count {
+  flex: auto;
+  margin: 0 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.user-popup__count-name {
+  color: var(--color-weak-text-link);
+}
+.user-popup__count-value {
+  display: block;
+  font-weight: bold;
+  font-size: 1rem;
 }
 
 .rc-tooltip {

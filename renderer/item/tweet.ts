@@ -6,6 +6,19 @@ const shell = global.require('electron').shell;
 
 const re_normal_size = /normal(?=\.\w+$)/i;
 
+function makeCount(count: number) {
+    'use strict';
+    if (count >= 1000000) {
+        return (Math.floor(count / 100000) / 10) + 'M';
+    } else if (count >= 1000) {
+        return (Math.floor(count / 100) / 10) + 'K';
+    } else if (count === 0) {
+        return '';
+    } else {
+        return count.toString();
+    }
+}
+
 export class TwitterUser {
     constructor(public json: Twitter.User) {}
 
@@ -42,7 +55,7 @@ export class TwitterUser {
         return this.json.id;
     }
 
-    get bannar_url() {
+    get banner_url() {
         return this.json.profile_banner_url;
     }
 
@@ -53,6 +66,39 @@ export class TwitterUser {
     get description() {
         return this.json.description;
     }
+
+    get statuses_count() {
+        return makeCount(this.json.statuses_count);
+    }
+
+    get followings_count() {
+        return makeCount(this.json.friends_count);
+    }
+
+    get followers_count() {
+        return makeCount(this.json.followers_count);
+    }
+
+    get likes_count() {
+        return makeCount(this.json.favourites_count);
+    }
+
+    get link_color() {
+        return this.json.profile_link_color;
+    }
+
+    followingPageUrl() {
+        return `https://twitter.com/${this.json.screen_name}/following`;
+    }
+
+    followerPageUrl() {
+        return `https://twitter.com/${this.json.screen_name}/followers`;
+    }
+
+    likePageUrl() {
+        return `https://twitter.com/${this.json.screen_name}/likes`;
+    }
+
 
     userPageUrl() {
         return `https://twitter.com/${this.json.screen_name}`;

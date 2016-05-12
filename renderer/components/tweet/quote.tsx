@@ -18,7 +18,7 @@ function renderMedia(media: Twitter.MediaEntity[]) {
     return <TweetMedia entities={media}/>;
 }
 
-function renderHeader(s: Tweet) {
+function renderHeader(s: TweetItem) {
     'use strict';
     return (
         <div className="tweet__quoted-screenname">
