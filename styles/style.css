@@ -538,6 +538,14 @@ body {
   font-weight: bold;
   font-size: 1rem;
 }
+.user-popup__website,
+.user-popup__location {
+  display: flex;
+  align-items: center;
+}
+.user-popup__footer {
+  padding: 0 8px 8px;
+}
 
 .rc-tooltip {
   opacity: 1;

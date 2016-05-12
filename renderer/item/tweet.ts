@@ -24,7 +24,7 @@ export class TwitterUser {
 
     get icon_url() {
         const url = this.json.profile_image_url;
-        if ((window.devicePixelRatio || 1) < 1.5) {
+        if (window.devicePixelRatio < 1.5) {
             return url;
         } else {
             return url.replace(re_normal_size, 'bigger');
@@ -59,6 +59,14 @@ export class TwitterUser {
         return this.json.profile_banner_url;
     }
 
+    get mini_banner_url() {
+        if (!this.json.profile_banner_url) {
+            return null;
+        }
+        const label = window.devicePixelRatio < 1.5 ?  '/mobile' : '/mobile_retina';
+        return this.json.profile_banner_url + label;
+    }
+
     get bg_color() {
         return this.json.profile_background_color;
     }
@@ -85,6 +93,14 @@ export class TwitterUser {
 
     get link_color() {
         return this.json.profile_link_color;
+    }
+
+    get user_site_url() {
+        return this.json.url;
+    }
+
+    get location() {
+        return this.json.location;
     }
 
     followingPageUrl() {

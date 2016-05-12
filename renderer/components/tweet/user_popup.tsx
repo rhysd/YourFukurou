@@ -13,13 +13,13 @@ function renderBannar(user: TwitterUser) {
     const bg_color_style = {
         backgroundColor: '#'+user.bg_color
     };
-    if (user.banner_url) {
+    const banner_url = user.mini_banner_url;
+    if (banner_url) {
         return <div className="user-popup__background">
-                <img src={user.banner_url} style={bg_color_style}/>
+                <img src={banner_url} style={bg_color_style}/>
             </div>;
     } else {
-        return <div className="user-popup__background" style={bg_color_style}>
-            </div>;
+        return <div className="user-popup__background" style={bg_color_style}/>;
     }
 }
 
@@ -41,6 +41,29 @@ const renderPrimary = (user: TwitterUser) => (
         </div>
     </div>
 );
+
+function renderWebsiteUrl(user: TwitterUser) {
+    'use strict';
+    const url = user.user_site_url;
+    if (!url) {
+        return undefined;
+    }
+    return <div className="user-popup__website">
+        <i className="fa fa-link" style={{marginRight: '4px'}}/>
+        <ExternalLink url={url} color="black">{url}</ExternalLink>
+    </div>;
+}
+
+function renderLocation(user: TwitterUser) {
+    'use strict';
+    const loc = user.location;
+    if (!loc) {
+        return undefined;
+    }
+    return <div className="user-popup__location">
+        <i className="fa fa-location-arrow" style={{marginRight: '4px'}}/>{loc}
+    </div>;
+}
 
 const renderCounts = (user: TwitterUser) => (
     <div className="user-popup__counts">
@@ -79,6 +102,21 @@ const renderCounts = (user: TwitterUser) => (
     </div>
 );
 
+function renderFooter(user: TwitterUser) {
+    'use strict';
+    const website_url = renderWebsiteUrl(user);
+    const location = renderLocation(user);
+    if (!website_url && !location) {
+        return undefined;
+    }
+    return (
+        <div className="user-popup__footer">
+            {website_url}
+            {location}
+        </div>
+    );
+}
+
 const TwitterUserPopup = (props: TwitterUserPopup) => {
     const u = props.user;
     return (
@@ -89,6 +127,7 @@ const TwitterUserPopup = (props: TwitterUserPopup) => {
             <div className="user-popup__description">
                 {u.description}
             </div>
+            {renderFooter(u)}
         </div>
     );
 };
