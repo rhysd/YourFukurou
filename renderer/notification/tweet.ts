@@ -48,6 +48,13 @@ export default function notifyTweet(tw: Tweet, owner: TwitterUser) {
         return null;
     }
 
+    if (tw.user.id === owner.id) {
+        // Note:
+        // When it's created by me, do not notify it because I'm already
+        // knowing that.
+        return null;
+    }
+
     if (AppConfig.notification.reply && tw.in_reply_to_user_id === owner.id) {
         return notifyReply(tw);
     } else if (AppConfig.notification.retweet && tw.isRetweet() && tw.retweeted_status.user.id === owner.id) {
