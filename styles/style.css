@@ -88,6 +88,8 @@ body {
   min-height: 10px;
   border-radius: 5px;
   background-color: var(--color-twitter);
+  animation-duration: 0.5s;
+  -webkit-animation-duration: 0.5s;
 }
 
 .avatar {

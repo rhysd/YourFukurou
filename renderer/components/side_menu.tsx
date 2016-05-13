@@ -21,19 +21,28 @@ interface SideMenuButtonProps extends React.Props<any> {
     onClick: (event?: MouseEvent) => void;
 }
 
-const SideMenuButton = (props: SideMenuButtonProps) => (
-    <div className="side-menu__button-wrapper">
-        <IconButton
-            className={props.active ?
-                        'side-menu__button side-menu__button_active' :
-                        'side-menu__button'}
-            name={props.name}
-            tip={props.tip}
-            onClick={props.onClick}
-        />
-        <div className="side-menu__button-indicator" style={{opacity: props.notified ? undefined : 0}}/>
-    </div>
-);
+const SideMenuButton = (props: SideMenuButtonProps) => {
+    const indicator_props =
+        props.notified ? {
+                className: 'side-menu__button-indicator animated slideInRight'
+            } : {
+                className: 'side-menu__button-indicator',
+                style: {opacity: 0},
+            };
+    return (
+        <div className="side-menu__button-wrapper">
+            <IconButton
+                className={props.active ?
+                            'side-menu__button side-menu__button_active' :
+                            'side-menu__button'}
+                name={props.name}
+                tip={props.tip}
+                onClick={props.onClick}
+            />
+            <div {...indicator_props}/>
+        </div>
+    );
+};
 
 interface SideMenuProps extends React.Props<any> {
     user: TwitterUser;
