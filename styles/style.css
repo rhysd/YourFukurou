@@ -505,7 +505,7 @@ body {
   margin-top: -32px;
 }
 .user-popup__description {
-  padding: 8px;
+  padding: 16px;
   word-wrap: break-word;
   word-break: break-all;
   white-space: pre-wrap;
@@ -551,7 +551,7 @@ body {
   color: black;
 }
 .user-popup__footer {
-  padding: 0 8px 8px;
+  padding: 0 16px 8px;
 }
 
 .rc-tooltip {

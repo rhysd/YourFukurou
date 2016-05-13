@@ -42,29 +42,6 @@ const renderPrimary = (user: TwitterUser) => (
     </div>
 );
 
-function renderWebsiteUrl(user: TwitterUser) {
-    'use strict';
-    const url = user.user_site_url;
-    if (!url) {
-        return undefined;
-    }
-    return <div className="user-popup__website">
-        <i className="fa fa-link" style={{marginRight: '4px'}}/>
-        <ExternalLink className="user-popup__website-url" url={url}>{url}</ExternalLink>
-    </div>;
-}
-
-function renderLocation(user: TwitterUser) {
-    'use strict';
-    const loc = user.location;
-    if (!loc) {
-        return undefined;
-    }
-    return <div className="user-popup__location">
-        <i className="fa fa-location-arrow" style={{marginRight: '4px'}}/>{loc}
-    </div>;
-}
-
 const renderCounts = (user: TwitterUser) => (
     <div className="user-popup__counts">
         <div className="user-popup__count">
@@ -97,6 +74,29 @@ const renderCounts = (user: TwitterUser) => (
         </div>
     </div>
 );
+
+function renderWebsiteUrl(user: TwitterUser) {
+    'use strict';
+    const url = user.user_site_url;
+    if (!url) {
+        return undefined;
+    }
+    return <div className="user-popup__website">
+        <i className="fa fa-link" style={{marginRight: '4px'}}/>
+        <ExternalLink className="user-popup__website-url" url={url.expanded_url}>{url.display_url}</ExternalLink>
+    </div>;
+}
+
+function renderLocation(user: TwitterUser) {
+    'use strict';
+    const loc = user.location;
+    if (!loc) {
+        return undefined;
+    }
+    return <div className="user-popup__location">
+        <i className="fa fa-location-arrow" style={{marginRight: '4px'}}/>{loc}
+    </div>;
+}
 
 function renderFooter(user: TwitterUser) {
     'use strict';

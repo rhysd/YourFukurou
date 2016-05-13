@@ -96,7 +96,20 @@ export class TwitterUser {
     }
 
     get user_site_url() {
-        return this.json.url;
+        if (this.json.entities && this.json.entities.url &&
+            this.json.entities.url.urls.length > 0) {
+            return this.json.entities.url.urls[0];
+        } else if (this.json.url) {
+            // Note: fallback
+            return {
+                display_url: this.json.url,
+                expanded_url: this.json.url,
+                indices: null,
+                url: this.json.url,
+            };
+        } else {
+            return null;
+        }
     }
 
     get location() {

@@ -81,6 +81,10 @@ declare module 'twit' {
                 urls?: UrlEntity[];
                 user_mentions?: UserMentionEntity[];
             }
+            export interface UserEntities {
+                description?: Entities;
+                url?: Entities;
+            }
 
             // See https://dev.twitter.com/overview/api/users
             export interface User {
@@ -89,6 +93,7 @@ declare module 'twit' {
                 default_profile: boolean;
                 default_profile_image: boolean;
                 description: string;
+                entities: UserEntities;
                 favourites_count: number;
                 follow_request_sent?: boolean;
                 followers_count: number;
