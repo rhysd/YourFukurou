@@ -168,7 +168,7 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
         }
         const tw = this.props.inReplyTo.getMainStatus();
         return <div className="tweet-form__in-reply-to">
-            <TweetIcon user={tw.user}/>
+            <TweetIcon user={tw.user} dispatch={this.props.dispatch}/>
             <TweetSecondary status={this.props.inReplyTo}/>
             <TweetText status={this.props.inReplyTo}/>
         </div>;

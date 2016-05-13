@@ -51,9 +51,9 @@ export enum Kind {
     DownAutoCompletionFocus,
     UpAutoCompletionFocus,
 
-    OpenTweetMedia,
+    OpenPicturePreview,
     CloseTweetMedia,
-    MoveToNthTweetMedia,
+    MoveToNthPicturePreview,
 }
 
 export interface Action {
@@ -76,7 +76,7 @@ export interface Action {
     suggestions?: SuggestionItem[];
     ids?: number[];
     index?: number;
-    media_entities?: Twitter.MediaEntity[];
+    media_urls?: string[];
 }
 
 export function addTweetToTimeline(status: Tweet) {
@@ -391,11 +391,11 @@ export function changeCurrentTimeline(timeline: TimelineKind) {
     };
 }
 
-export function openTweetMedia(media_entities: Twitter.MediaEntity[], index?: number) {
+export function openPicturePreview(media_urls: string[], index?: number) {
     'use strict';
     return {
-        type: Kind.OpenTweetMedia,
-        media_entities,
+        type: Kind.OpenPicturePreview,
+        media_urls,
         index,
     };
 }
@@ -407,10 +407,10 @@ export function closeTweetMedia() {
     };
 }
 
-export function moveToNthTweetMedia(index: number) {
+export function moveToNthPicturePreview(index: number) {
     'use strict';
     return {
-        type: Kind.MoveToNthTweetMedia,
+        type: Kind.MoveToNthPicturePreview,
         index,
     };
 }

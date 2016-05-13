@@ -12,13 +12,14 @@ import TweetIcon from './icon';
 interface TweetProps extends React.Props<any> {
     status: TweetItem;
     user: TwitterUser;
+    dispatch: Redux.Dispatch;
 }
 
 const Tweet = (props: TweetProps) => {
     const tw = props.status.getMainStatus();
     return (
         <div className="tweet__body">
-            <TweetIcon user={tw.user}/>
+            <TweetIcon user={tw.user} dispatch={props.dispatch}/>
             <TweetSecondary status={props.status}/>
             <TweetPrimary status={props.status} user={props.user}/>
         </div>

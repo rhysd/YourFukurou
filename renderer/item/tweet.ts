@@ -55,16 +55,12 @@ export class TwitterUser {
         return this.json.id;
     }
 
-    get banner_url() {
-        return this.json.profile_banner_url;
+    get big_banner_url() {
+        return this.getBannerUrl('web');
     }
 
     get mini_banner_url() {
-        if (!this.json.profile_banner_url) {
-            return null;
-        }
-        const label = window.devicePixelRatio < 1.5 ?  '/mobile' : '/mobile_retina';
-        return this.json.profile_banner_url + label;
+        return this.getBannerUrl('mobile');
     }
 
     get bg_color() {
@@ -128,9 +124,16 @@ export class TwitterUser {
         return `https://twitter.com/${this.json.screen_name}/likes`;
     }
 
-
     userPageUrl() {
         return `https://twitter.com/${this.json.screen_name}`;
+    }
+
+    private getBannerUrl(label: string) {
+        if (!this.json.profile_banner_url) {
+            return null;
+        }
+        const size = window.devicePixelRatio < 1.5 ?  `/${label}` : `/${label}_retina`;
+        return this.json.profile_banner_url + size;
     }
 }
 

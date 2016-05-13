@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Twitter} from 'twit';
-import {openTweetMedia} from '../../actions';
+import {openPicturePreview} from '../../actions';
 
 interface TweetMediaProps extends React.Props<any> {
     entities: Twitter.MediaEntity[];
@@ -22,10 +22,12 @@ function renderThumb(entity: Twitter.MediaEntity, nth: number, props: TweetMedia
         height: (entity.sizes.thumb.h / 2) + 'px',
     };
 
+    const media_urls = props.entities.map(e => e.media_url);
+
     return (
         <div
             className="tweet__media-wrapper"
-            onClick={() => props.dispatch(openTweetMedia(props.entities, nth))}
+            onClick={() => props.dispatch(openPicturePreview(media_urls, nth))}
             key={nth}
         >
             <img

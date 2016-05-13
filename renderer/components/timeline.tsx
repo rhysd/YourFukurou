@@ -14,7 +14,7 @@ import {MessageState} from '../reducers/message';
 import {TweetMediaState} from '../reducers/tweet_media';
 import {
     closeTweetMedia,
-    moveToNthTweetMedia,
+    moveToNthPicturePreview,
 } from '../actions';
 
 interface TimelineProps extends React.Props<any> {
@@ -34,7 +34,12 @@ function renderItem(i: Item, id: number, props: TimelineProps) {
     'use strict';
     const key = 'item-' + id;
     if (i instanceof TweetItem) {
-        return <Tweet status={i} user={props.user} key={key}/>;
+        return <Tweet
+            status={i}
+            user={props.user}
+            dispatch={props.dispatch}
+            key={key}
+        />;
     } else if (i instanceof Separator) {
         return <ZigZagSeparator key={key}/>;
     } else {
@@ -46,7 +51,7 @@ function renderItem(i: Item, id: number, props: TimelineProps) {
 function renderLightbox(props: TimelineProps) {
     'use strict';
 
-    if (props.media === null || props.media.entities.length === 0) {
+    if (props.media === null || props.media.picture_urls.length === 0) {
         return <Lightbox
             images={[]}
             isOpen={false}
@@ -60,10 +65,9 @@ function renderLightbox(props: TimelineProps) {
     // Currently only type: photo is supported.
 
     // TODO:
-    // Make 'srcset' property from 'sizes' property in an entity.
-    const images: LightboxImage[] = props.media.entities.map(e => ({
-        src: e.media_url,
-    }));
+    // Consider to make 'srcset' property from 'sizes' property in an entity.
+    const images: LightboxImage[] =
+        props.media.picture_urls.map(e => ({ src: e }));
 
     const idx = props.media.index;
     const next_idx = (idx + 1) % images.length;
@@ -76,8 +80,8 @@ function renderLightbox(props: TimelineProps) {
             isOpen
             backdropClosesModal
             width={window.innerWidth - 120}
-            onClickNext={() => props.dispatch(moveToNthTweetMedia(next_idx))}
-            onClickPrev={() => props.dispatch(moveToNthTweetMedia(prev_idx))}
+            onClickNext={() => props.dispatch(moveToNthPicturePreview(next_idx))}
+            onClickPrev={() => props.dispatch(moveToNthPicturePreview(prev_idx))}
             onClose={() => props.dispatch(closeTweetMedia())}
         />
     );

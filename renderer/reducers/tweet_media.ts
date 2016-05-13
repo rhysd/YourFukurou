@@ -3,23 +3,23 @@ import {Action, Kind} from '../actions';
 
 export interface TweetMediaState {
     index: number;
-    entities: Twitter.MediaEntity[];
+    picture_urls: string[];
 }
 
 export default function tweetMedia(state: TweetMediaState = null, action: Action) {
     'use strict';
     switch (action.type) {
-        case Kind.OpenTweetMedia:
+        case Kind.OpenPicturePreview:
             return {
                 index: action.index || 0,
-                entities: action.media_entities,
+                picture_urls: action.media_urls,
             };
         case Kind.CloseTweetMedia:
             return null;
-        case Kind.MoveToNthTweetMedia:
+        case Kind.MoveToNthPicturePreview:
             return {
                 index: action.index,
-                entities: state.entities,
+                picture_urls: state.picture_urls,
             };
         default:
             return state;

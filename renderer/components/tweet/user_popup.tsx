@@ -1,23 +1,31 @@
 import * as React from 'react';
 import Avatar from '../avatar';
 import ScreenName from './screen_name';
-import {TwitterUser} from '../../item/tweet';
 import ExternalLink from '../external_link';
+import {TwitterUser} from '../../item/tweet';
+import {openPicturePreview} from '../../actions';
 
 interface TwitterUserPopup extends React.Props<any> {
     user: TwitterUser;
+    dispatch: Redux.Dispatch;
 }
 
-function renderBannar(user: TwitterUser) {
+function renderBannar(user: TwitterUser, dispatch: Redux.Dispatch) {
     'use strict';
     const bg_color_style = {
         backgroundColor: '#' + user.bg_color,
     };
-    const banner_url = user.mini_banner_url;
-    if (banner_url) {
-        return <div className="user-popup__background">
-                <img src={banner_url} style={bg_color_style}/>
-            </div>;
+    const url = user.mini_banner_url;
+    if (url) {
+        return (
+            <div
+                className="user-popup__background"
+                style={{cursor: 'pointer'}}
+                onClick={() => dispatch(openPicturePreview([user.big_banner_url]))}
+            >
+                <img src={url} style={bg_color_style}/>
+            </div>
+        );
     } else {
         return <div className="user-popup__background" style={bg_color_style}/>;
     }
@@ -117,7 +125,7 @@ const TwitterUserPopup = (props: TwitterUserPopup) => {
     const u = props.user;
     return (
         <div className="user-popup">
-            {renderBannar(u)}
+            {renderBannar(u, props.dispatch)}
             {renderPrimary(u)}
             {renderCounts(u)}
             <div className="user-popup__description">

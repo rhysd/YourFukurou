@@ -6,6 +6,7 @@ import TwitterUserPopup from './user_popup';
 
 interface TweetIconProps extends React.Props<any> {
     user: TwitterUser;
+    dispatch: Redux.Dispatch;
 }
 
 // TODO:
@@ -13,7 +14,7 @@ interface TweetIconProps extends React.Props<any> {
 const TweetIcon = (props: TweetIconProps) => (
     <Tooltip
         placement="bottomRight"
-        overlay={<TwitterUserPopup user={props.user}/>}
+        overlay={<TwitterUserPopup user={props.user} dispatch={props.dispatch}/>}
     >
         <div className="tweet__icon">
             <Avatar
