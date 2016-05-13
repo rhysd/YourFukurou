@@ -1,16 +1,17 @@
 :root {
-  --background-color-dark: #333333;
+  --bg-color-dark: #333333;
   --color-dark-active: #eeeeee;
   --color-dark-inactive: #888888;
   --text-link-color: #2185d0;
   --color-weak-text-link: #888888;
-  --background-color-error: #ffc7c7;
+  --bg-color-error: #ffc7c7;
   --color-error: #ff4f44;
-  --background-color-info: #e4fdda;
+  --bg-color-info: #e4fdda;
   --color-info: #209010;
   --sidemenu-width: 80px;
   --color-twitter: #1da1f2;
   --color-twitter-weak: #8dd1ff;
+  --bg-color-ui-focused: #f5f8fa;
 }
 
 html {
@@ -54,7 +55,7 @@ body {
   height: calc(100% - 32px);
   width: var(--sidemenu-width);
   color: #eeeeee;
-  background-color: var(--background-color-dark);
+  background-color: var(--bg-color-dark);
   flex: none;
   align-items: center;
   overflow: hidden;
@@ -119,6 +120,9 @@ body {
   display: flex;
   padding: 8px;
   border-bottom: 1px solid #d0d0d0;
+}
+.tweet__body:hover {
+  background-color: var(--bg-color-ui-focused);
 }
 .tweet__icon {
   flex: none;
@@ -298,11 +302,11 @@ body {
 }
 .message__body.message__body_error {
   color: var(--color-error);
-  background-color: var(--background-color-error);
+  background-color: var(--bg-color-error);
 }
 .message__body.message__body_info {
   color: var(--color-info);
-  background-color: var(--background-color-info);
+  background-color: var(--bg-color-info);
 }
 .message__icon {
   flex: none;
@@ -361,7 +365,7 @@ body {
   flex-direction: column;
   width: 100%;
   box-sizing: border-box;
-  background-color: var(--background-color-dark);
+  background-color: var(--bg-color-dark);
   padding: 8px;
   display: flex;
   animation-duration: 0.5s;
