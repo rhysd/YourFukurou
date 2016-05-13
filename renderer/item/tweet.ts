@@ -6,7 +6,7 @@ const shell = global.require('electron').shell;
 
 const re_normal_size = /normal(?=\.\w+$)/i;
 
-function makeCount(count: number) {
+function truncateCount(count: number) {
     'use strict';
     if (count >= 1000000) {
         return (Math.floor(count / 100000) / 10) + 'M';
@@ -76,19 +76,19 @@ export class TwitterUser {
     }
 
     get statuses_count() {
-        return makeCount(this.json.statuses_count);
-    }
-
-    get followings_count() {
-        return makeCount(this.json.friends_count);
-    }
-
-    get followers_count() {
-        return makeCount(this.json.followers_count);
+        return truncateCount(this.json.statuses_count);
     }
 
     get likes_count() {
-        return makeCount(this.json.favourites_count);
+        return truncateCount(this.json.favourites_count);
+    }
+
+    get followings_count() {
+        return this.json.friends_count;
+    }
+
+    get followers_count() {
+        return this.json.followers_count;
     }
 
     get link_color() {
