@@ -28,5 +28,5 @@ declare namespace Tooltip {
 }
 
 declare module 'rc-tooltip' {
-    export = class Tooptip extends __React.Component<Tooltip.Props, {}> {}
+    export = class Tooptip extends __React.Component<Tooltip.Props, {}> {};
 }

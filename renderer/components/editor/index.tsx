@@ -41,6 +41,11 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
     returnHandler: (e: React.KeyboardEvent) => boolean;
     blurHandler: (e: React.SyntheticEvent) => void;
     tabHandler: (e: React.KeyboardEvent) => void;
+    refs: {
+        body: HTMLElement;
+        editor: HTMLElement;
+        [s: string]: React.Component<any, any> | Element;
+    };
 
     constructor(props: TweetEditorProps) {
         super(props);
@@ -100,12 +105,6 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
                 return true;
             };
     }
-
-    refs: {
-        body: HTMLElement;
-        editor: HTMLElement;
-        [s: string]: React.Component<any, any> | Element;
-    };
 
     close() {
         this.refs.body.addEventListener('animationend', () => {

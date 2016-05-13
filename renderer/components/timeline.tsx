@@ -26,6 +26,7 @@ interface TimelineProps extends React.Props<any> {
 }
 
 function nullHandler() {
+    'use strict';
     // Note: Do nothing.
 }
 
@@ -52,7 +53,7 @@ function renderLightbox(props: TimelineProps) {
             onClickNext={nullHandler}
             onClickPrev={nullHandler}
             onClose={nullHandler}
-        />
+        />;
     }
 
     // TODO:

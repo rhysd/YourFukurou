@@ -11,7 +11,7 @@ interface TwitterUserPopup extends React.Props<any> {
 function renderBannar(user: TwitterUser) {
     'use strict';
     const bg_color_style = {
-        backgroundColor: '#'+user.bg_color
+        backgroundColor: '#' + user.bg_color,
     };
     const banner_url = user.mini_banner_url;
     if (banner_url) {

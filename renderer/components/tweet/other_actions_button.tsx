@@ -55,7 +55,7 @@ function renderDeleteThisTweet(props: OtherActionsButtonProps) {
         >
             Delete this tweet
         </div>
-    )
+    );
 }
 
 const OtherActionsButton = (props: OtherActionsButtonProps) => {
@@ -94,6 +94,6 @@ const OtherActionsButton = (props: OtherActionsButtonProps) => {
             </div>
         </Tooltip>
     );
-}
+};
 
 export default connect()(OtherActionsButton);
