@@ -17,3 +17,11 @@ interface String {
     startsWith: (sub: string, pos?: number) => boolean;
     endsWith: (sub: string, pos?: number) => boolean;
 }
+
+declare module 'why-did-you-update' {
+    interface Options {
+        include?: RegExp;
+        exclude?: RegExp;
+    }
+    export function whyDidYouUpdate(react: typeof __React, options?: Options): void;
+}

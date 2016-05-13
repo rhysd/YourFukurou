@@ -15,10 +15,15 @@ import {
 import DB from './database/db';
 import PM from './plugin_manager';
 import log from './log';
+import {whyDidYouUpdate} from 'why-did-you-update';
 
 const fs = global.require('fs');
 const electron = global.require('electron');
 const app = electron.remote.app;
+
+if (process.env.YOURFUKUROU_WHY_DID_YOU_UPDATE) {
+    whyDidYouUpdate(React);
+}
 
 render(
     <Provider store={Store}>
