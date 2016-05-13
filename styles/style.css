@@ -157,6 +157,9 @@ body {
   color: var(--color-weak-text-link);
   font-size: 0.8rem;
 }
+.tweet__secondary-retweetedby-screenname {
+  color: var(--color-weak-text-link);
+}
 .tweet__primary {
   flex: auto;
   width: auto;
@@ -192,14 +195,7 @@ body {
 .tweet__text-hashtag,
 .tweet__text-mention,
 .tweet__text-url {
-  cursor: pointer;
   color: var(--text-link-color);
-  text-decoration: none;
-}
-.tweet__text-hashtag:hover,
-.tweet__text-mention:hover,
-.tweet__text-url:hover {
-  text-decoration: underline;
 }
 .tweet__quoted {
   display: flex;
@@ -213,12 +209,15 @@ body {
   margin-right: 4px;
   cursor: pointer;
 }
-.tweet__quoted-screenname {
+.tweet__quoted-header {
   color: #777777;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   margin-bottom: 4px;
+}
+.tweet__quoted-screenname {
+  color: #777777;
 }
 .tweet__quoted-text {
   color: #555555;
@@ -229,9 +228,7 @@ body {
 .tweet__quoted-text-hashtag,
 .tweet__quoted-text-mention,
 .tweet__quoted-text-url {
-  cursor: pointer;
   color: #808080;
-  text-decoration: none;
 }
 .tweet__media {
   display: flex;
@@ -537,11 +534,15 @@ body {
   display: block;
   font-weight: bold;
   font-size: 1rem;
+  color: black;
 }
 .user-popup__website,
 .user-popup__location {
   display: flex;
   align-items: center;
+}
+.user-popup__website-url {
+  color: black;
 }
 .user-popup__footer {
   padding: 0 8px 8px;

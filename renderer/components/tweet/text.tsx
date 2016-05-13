@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Tweet from '../../item/tweet';
-import ExternalLink from './external-link';
+import ExternalLink from '../external_link';
 import {TweetTextToken, isHashtag, isMention, isUrl} from '../../tweet_parser';
 import log from '../../log';
 

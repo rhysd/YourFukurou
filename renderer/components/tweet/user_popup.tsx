@@ -2,7 +2,7 @@ import * as React from 'react';
 import Avatar from '../avatar';
 import ScreenName from './screen_name';
 import {TwitterUser} from '../../item/tweet';
-import ExternalLink from './external-link';
+import ExternalLink from '../external_link';
 
 interface TwitterUserPopup extends React.Props<any> {
     user: TwitterUser;
@@ -50,7 +50,7 @@ function renderWebsiteUrl(user: TwitterUser) {
     }
     return <div className="user-popup__website">
         <i className="fa fa-link" style={{marginRight: '4px'}}/>
-        <ExternalLink url={url} color="black">{url}</ExternalLink>
+        <ExternalLink className="user-popup__website-url" url={url}>{url}</ExternalLink>
     </div>;
 }
 
@@ -72,7 +72,6 @@ const renderCounts = (user: TwitterUser) => (
             <ExternalLink
                 className="user-popup__count-value"
                 url={user.userPageUrl()}
-                color="black"
             >{user.statuses_count}</ExternalLink>
         </div>
         <div className="user-popup__count">
@@ -80,7 +79,6 @@ const renderCounts = (user: TwitterUser) => (
             <ExternalLink
                 className="user-popup__count-value"
                 url={user.followingPageUrl()}
-                color="black"
             >{user.followings_count}</ExternalLink>
         </div>
         <div className="user-popup__count">
@@ -88,7 +86,6 @@ const renderCounts = (user: TwitterUser) => (
             <ExternalLink
                 className="user-popup__count-value"
                 url={user.followerPageUrl()}
-                color="black"
             >{user.followers_count}</ExternalLink>
         </div>
         <div className="user-popup__count">
@@ -96,7 +93,6 @@ const renderCounts = (user: TwitterUser) => (
             <ExternalLink
                 className="user-popup__count-value"
                 url={user.likePageUrl()}
-                color="black"
             >{user.likes_count}</ExternalLink>
         </div>
     </div>

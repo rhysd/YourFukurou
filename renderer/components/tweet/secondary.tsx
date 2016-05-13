@@ -14,7 +14,10 @@ function retweetedBy(tw: Tweet) {
 
     return (
         <div className="tweet__secondary-retweetedby">
-            <i className="fa fa-retweet"/> <ScreenName user={tw.user} color="#777777"/>
+            <i className="fa fa-retweet"/> <ScreenName
+                className="tweet__secondary-retweetedby-screenname"
+                user={tw.user}
+            />
         </div>
     );
 }

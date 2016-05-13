@@ -21,15 +21,15 @@ function renderMedia(media: Twitter.MediaEntity[]) {
 function renderHeader(s: TweetItem) {
     'use strict';
     return (
-        <div className="tweet__quoted-screenname">
+        <div className="tweet__quoted-header">
             <span
                 className="tweet__quoted-icon"
                 onClick={() => s.openStatusPageInBrowser()}
             >
                 <i className="fa fa-quote-left"/>
             </span> from <ScreenName
+                className="tweet__quoted-screenname"
                 user={s.user}
-                color="#777777"
             />
         </div>
     );

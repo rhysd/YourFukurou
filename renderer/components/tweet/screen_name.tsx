@@ -1,20 +1,19 @@
 import * as React from 'react';
-import ExternalLink from './external-link';
+import ExternalLink from '../external_link';
 import {TwitterUser} from '../../item/tweet';
 
 interface ScreenNameProps extends React.Props<any> {
     user: TwitterUser;
-    color?: string;
     className?: string;
 }
 
 const ScreenName = (props: ScreenNameProps) => {
     const screen_name = '@' + props.user.screen_name;
     return (
-        <span className={props.className}>
+        <span className="tweet__screen-name">
             <ExternalLink
+                className={props.className}
                 url={props.user.userPageUrl()}
-                color={props.color}
                 title={screen_name}
             >
                 {screen_name}
