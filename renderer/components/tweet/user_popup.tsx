@@ -37,7 +37,7 @@ const renderPrimary = (user: TwitterUser) => (
             <Avatar
                 size={64}
                 screenName={user.screen_name}
-                imageUrl={user.big_icon_url}
+                imageUrl={user.icon_url_48x48}
                 border="4px solid white"
             />
         </div>

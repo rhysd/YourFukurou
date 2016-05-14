@@ -31,12 +31,16 @@ export class TwitterUser {
         }
     }
 
-    get big_icon_url() {
+    get icon_url_73x73() {
         return this.json.profile_image_url.replace(re_normal_size, 'bigger');
     }
 
-    get mini_icon_url() {
+    get icon_url_48x48() {
         return this.json.profile_image_url;
+    }
+
+    get icon_url_24x24() {
+        return this.json.profile_image_url.replace(re_normal_size, 'mini');
     }
 
     get screen_name() {

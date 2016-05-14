@@ -2,6 +2,7 @@ import {List} from 'immutable';
 import {Twitter} from 'twit';
 import Item from '../item/item';
 import Tweet, {TwitterUser} from '../item/tweet';
+import TimelineActivity, {TimelineActivityKind} from '../item/timeline_activity';
 import Separator from '../item/separator';
 import log from '../log';
 import notifyTweet from '../notification/tweet';
@@ -309,7 +310,7 @@ export default class TimelineState {
         );
     }
 
-    updateLikedStatus(status: Tweet, from: TwitterUser) {
+    updateActivity(kind: TimelineActivityKind, status: Tweet, from: TwitterUser) {
         if (from.id === this.user.id) {
             // Note:
             // 'favorite' user event on stream is sent both when owner creates and when owner's
@@ -324,6 +325,28 @@ export default class TimelineState {
 
         notifyLiked(status, from);
 
-        return this.updateStatus(status);
+        const next = this.updateStatus(status);
+        const status_id = status.id;
+        const index = next.mention.findIndex(item => {
+            if (item instanceof TimelineActivity) {
+                return item.kind === kind && item.status.id === status_id;
+            } else {
+                return false;
+            }
+        });
+
+        if (index === -1) {
+            next.mention = next.mention.unshift(new TimelineActivity(kind, status, [from]));
+        } else {
+            next.mention = next.mention.update(index, item => {
+                if (item instanceof TimelineActivity) {
+                    return item.update(status, from);
+                } else {
+                    return item;
+                }
+            });
+        }
+
+        return next;
     }
 }

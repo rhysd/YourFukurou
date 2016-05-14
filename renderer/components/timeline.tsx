@@ -3,10 +3,12 @@ import {connect} from 'react-redux';
 import {List} from 'immutable';
 import Lightbox, {LightboxImage} from 'react-images';
 import Tweet from './tweet/index';
-import Message from './message';
 import ZigZagSeparator from './zigzag_separator';
+import TwitterActivity from './activity';
+import Message from './message';
 import Item from '../item/item';
 import TweetItem, {TwitterUser} from '../item/tweet';
+import TimelineActivity from '../item/timeline_activity';
 import Separator from '../item/separator';
 import log from '../log';
 import State from '../states/root';
@@ -41,6 +43,8 @@ function renderItem(i: Item, id: number, props: TimelineProps) {
             dispatch={props.dispatch}
             key={key}
         />;
+    } else if (i instanceof TimelineActivity) {
+        return <TwitterActivity activity={i} key={key}/>;
     } else if (i instanceof Separator) {
         return <ZigZagSeparator key={key}/>;
     } else {

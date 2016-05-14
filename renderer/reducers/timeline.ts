@@ -13,7 +13,7 @@ export default function timeline(state: TimelineState = new TimelineState(), act
         case Kind.UnretweetSucceeded:     return state.updateStatus(action.status);
         case Kind.LikeSucceeded:          return state.updateStatus(action.status);
         case Kind.UnlikeSucceeded:        return state.updateStatus(action.status);
-        case Kind.StatusLiked:            return state.updateLikedStatus(action.status, action.user);
+        case Kind.StatusLiked:            return state.updateActivity('liked', action.status, action.user);
         case Kind.SetCurrentUser:         return state.setUser(action.user);
         case Kind.UpdateCurrentUser:      return state.updateUser(action.user_json);
         case Kind.AddRejectedUserIds:     return state.addRejectedIds(action.ids);

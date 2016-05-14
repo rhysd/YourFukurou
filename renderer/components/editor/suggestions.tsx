@@ -231,7 +231,7 @@ function searchScreenNameSuggestionItems(query: string) {
     return DB.accounts
         .getUsersByScreenNameStartsWith(input, MAX_SUGGESTIONS)
         .then((us: TwitterUser[]) => us.map(u => ({
-            icon_url: u.mini_icon_url,
+            icon_url: u.icon_url_48x48,
             description: '@' + u.screen_name,
         })))
         .catch(() => [] as SuggestionItem[]);
