@@ -11,7 +11,7 @@
   --sidemenu-width: 80px;
   --color-twitter: #1da1f2;
   --color-twitter-weak: #8dd1ff;
-  --bg-color-ui-focused: #f5f8fa;
+  --bg-color-panel-hover: #f5f8fa;
   --color-timeline-border: #d0d0d0;
 }
 
@@ -107,6 +107,7 @@ body {
   text-decoration: none;
 }
 .external-link:hover {
+  cursor: pointer;
   text-decoration: underline;
 }
 
@@ -125,7 +126,7 @@ body {
   border-bottom: 1px solid var(--color-timeline-border);
 }
 .tweet__body:hover {
-  background-color: var(--bg-color-ui-focused);
+  background-color: var(--bg-color-panel-hover);
 }
 .tweet__body.tweet__body_mention {
   color: #fc4d5d;
@@ -300,6 +301,9 @@ body {
   flex-direction: column;
   border-bottom: 1px solid var(--color-timeline-border);
 }
+.activity:hover {
+  background-color: var(--bg-color-panel-hover);
+}
 .activity__header {
   display: flex;
   align-items: center;
@@ -310,6 +314,9 @@ body {
   color: black;
   font-weight: bold;
 }
+.activity__created-at {
+  color: var(--color-weak-text-link);
+}
 .activity__text {
   margin: 0 8px;
 }
@@ -319,7 +326,7 @@ body {
   align-items: center;
 }
 .activity__footer > * {
-  margin: 0 4px;
+  margin-right: 8px;
 }
 .activity__icon {
   border-radius: 20%;
