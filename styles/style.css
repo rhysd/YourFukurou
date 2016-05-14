@@ -44,6 +44,7 @@ body {
   display: flex;
 }
 .app-root__main {
+  width: calc(100% - var(--sidemenu-width));
   flex: auto;
   display: flex;
   flex-direction: column;
@@ -308,6 +309,8 @@ body {
   display: flex;
   align-items: center;
   padding: 8px;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .activity__screenname {
   margin: 0 8px;
@@ -320,10 +323,16 @@ body {
 .activity__text {
   margin: 0 8px;
 }
+.activity__text > * {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 .activity__footer {
   padding: 8px;
   display: flex;
   align-items: center;
+  overflow: hidden;
 }
 .activity__footer > * {
   margin-right: 8px;
