@@ -11,16 +11,16 @@
   },
   "files": [
     "authenticator.ts",
-    "channel.d.ts",
     "config.ts",
-    "config.d.ts",
     "ipc_sender.ts",
-    "lib.d.ts",
-    "loglevel-message-prefix.d.ts",
     "main.ts",
     "menu.ts",
-    "twit.d.ts",
-    "node-oauth.d.ts",
-    "twitter.ts"
+    "twitter.ts",
+    "typings/config.d.ts",
+    "typings/loglevel-message-prefix.d.ts",
+    "typings/twit.d.ts",
+    "typings/node-oauth.d.ts",
+    "typings/channel.d.ts",
+    "typings/lib.d.ts"
   ]
 }

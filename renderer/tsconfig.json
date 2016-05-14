@@ -52,12 +52,14 @@
     "log.ts",
     "tweet_parser.ts",
     "plugin_manager.ts",
-    "lib.d.ts",
-    "html5-notification.d.ts",
-    "draft-js.d.ts",
-    "node-emoji.d.ts",
-    "react-images.d.ts",
-    "rc-tooltip.d.ts",
-    "../main/twit.d.ts"
+    "typings/lib.d.ts",
+    "typings/html5-notification.d.ts",
+    "typings/draft-js.d.ts",
+    "typings/node-emoji.d.ts",
+    "typings/react-images.d.ts",
+    "typings/rc-tooltip.d.ts",
+    "../main/typings/twit.d.ts",
+    "../main/typings/channel.d.ts",
+    "../main/typings/config.d.ts"
   ]
 }
