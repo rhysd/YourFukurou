@@ -2,7 +2,7 @@ import * as React from 'react';
 import Tooltip = require('rc-tooltip');
 import Avatar from '../avatar';
 import {TwitterUser} from '../../item/tweet';
-import TwitterUserPopup from './user_popup';
+import TwitterProfile from './profile';
 
 interface TweetIconProps extends React.Props<any> {
     user: TwitterUser;
@@ -14,7 +14,7 @@ interface TweetIconProps extends React.Props<any> {
 const TweetIcon = (props: TweetIconProps) => (
     <Tooltip
         placement="bottomRight"
-        overlay={<TwitterUserPopup user={props.user} dispatch={props.dispatch}/>}
+        overlay={<TwitterProfile user={props.user} dispatch={props.dispatch}/>}
     >
         <div className="tweet__icon">
             <Avatar

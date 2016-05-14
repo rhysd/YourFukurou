@@ -5,7 +5,7 @@ import ExternalLink from '../external_link';
 import {TwitterUser} from '../../item/tweet';
 import {openPicturePreview} from '../../actions';
 
-interface TwitterUserPopup extends React.Props<any> {
+interface TwitterProfileProps extends React.Props<any> {
     user: TwitterUser;
     dispatch: Redux.Dispatch;
 }
@@ -121,7 +121,7 @@ function renderFooter(user: TwitterUser) {
     );
 }
 
-const TwitterUserPopup = (props: TwitterUserPopup) => {
+const TwitterProfile: React.StatelessComponent<TwitterProfileProps> = props => {
     const u = props.user;
     return (
         <div className="user-popup">
@@ -135,4 +135,4 @@ const TwitterUserPopup = (props: TwitterUserPopup) => {
         </div>
     );
 };
-export default TwitterUserPopup;
+export default TwitterProfile;
