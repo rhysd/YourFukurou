@@ -10,12 +10,23 @@ export default class TimelineActivity implements Item {
         public by: TwitterUser[]) {
     }
 
+    findUserById(id: number) {
+        for (const u of this.by) {
+            if (u.id === id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Note: Returns updated or not
     update(tw: Tweet, u: TwitterUser) {
         if (this.status.id !== tw.id) {
             return this;
         }
-        this.by.unshift(u);
+        if (this.findUserById(u.id)) {
+            this.by.unshift(u);
+        }
         this.status = tw;
         return this.clone();
     }
