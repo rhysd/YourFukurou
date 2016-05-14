@@ -120,11 +120,7 @@ export default class TimelineState {
         if (!status.isRetweet()) {
             return this.mention.unshift(status);
         }
-
-        // TODO:
-        // Create/Update 'retweeted' activity and insert it instead
-        // return updateActivityIn(this.mention, 'retweeted', status.retweeted_status, status.user);
-        return this.mention.unshift(status);
+        return updateActivityIn(this.mention, 'retweeted', status.retweeted_status, status.user);
     }
 
     addNewTweet(status: Tweet) {

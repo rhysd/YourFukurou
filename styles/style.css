@@ -332,10 +332,13 @@ body {
   border-radius: 20%;
   margin-right: 4px;
   padding: 4px;
+  color: white;
 }
 .activity__icon.activity__icon_liked {
-  color: white;
   background-color: #ff4f44;
+}
+.activity__icon.activity__icon_retweeted {
+  background-color: #19cf86;
 }
 
 .message__body {

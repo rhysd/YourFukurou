@@ -1,7 +1,7 @@
 import Item from './item';
 import Tweet, {TwitterUser} from './tweet';
 
-export type TimelineActivityKind = 'liked';
+export type TimelineActivityKind = 'liked' | 'retweeted';
 
 export default class TimelineActivity implements Item {
     constructor(

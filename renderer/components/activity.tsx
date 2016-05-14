@@ -4,6 +4,7 @@ import Tweet, {TwitterUser} from '../item/tweet';
 import Avatar from './avatar';
 import TweetText from './tweet/text';
 import ExternalLink from './external_link';
+import log from '../log';
 
 interface TwitterActivityProps extends React.Props<any> {
     activity: TimelineActivity;
@@ -16,7 +17,12 @@ function renderBadge(kind: TimelineActivityKind) {
             return <span className="activity__icon activity__icon_liked">
                 <i className="fa fa-heart"/>
             </span>;
+        case 'retweeted':
+            return <span className="activity__icon activity__icon_retweeted">
+                <i className="fa fa-retweet"/>
+            </span>;
         default:
+            log.error('Invalid timeline activity:', kind);
             return undefined;
     }
 }
@@ -50,6 +56,7 @@ function renderScreenNames(activity: TimelineActivity) {
 
     const activity_count =
         activity.kind === 'liked' ? activity.status.favorite_count :
+        activity.kind === 'retweeted' ? activity.status.retweet_count :
         0;
     const num_rest_users = activity_count - by.length;
     if (num_rest_users <= 0) {
@@ -86,10 +93,16 @@ function renderCreatedAt(status: Tweet) {
 }
 
 const TwitterActivity: React.StatelessComponent<TwitterActivityProps> = props => {
+    const kind = props.activity.kind;
+    const behaved =
+        kind === 'liked' ? 'Liked' :
+        kind === 'retweeted' ? 'Retweeted' :
+        undefined;
+
     return (
         <div className="activity">
             <div className="activity__header">
-                {renderBadge(props.activity.kind)} Liked by {renderScreenNames(props.activity)}
+                {renderBadge(kind)} {behaved} by {renderScreenNames(props.activity)}
                 <span className="spacer"/>
                 {renderCreatedAt(props.activity.status)}
             </div>
