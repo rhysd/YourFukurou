@@ -20,7 +20,7 @@ const TweetIcon = (props: TweetIconProps) => (
             <Avatar
                 size={48}
                 screenName={props.user.screen_name}
-                imageUrl={props.user.icon_url}
+                imageUrl={props.user.icon_url_73x73}
                 border="1px solid #d0d0d0"
             />
         </div>

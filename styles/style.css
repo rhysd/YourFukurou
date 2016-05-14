@@ -75,6 +75,9 @@ body {
 .side-menu__button.side-menu__button_active {
   color: var(--color-dark-active);
 }
+.side-menu__button:hover {
+  color: var(--color-twitter);
+}
 .side-menu__settings {
   font-size: 20px;
   color: var(--color-dark-inactive);
