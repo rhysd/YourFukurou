@@ -9,7 +9,7 @@ import TweetMedia from './media';
 import OtherActionsButton from './other_actions_button';
 
 interface TweetPrimaryProps extends React.Props<any> {
-    user: TwitterUser;
+    owner: TwitterUser;
     status: Tweet;
 }
 
@@ -68,7 +68,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         const s = this.props.status.getMainStatus();
         const action_props = {
             status: s,
-            user: this.props.user,
+            owner: this.props.owner,
         };
 
         return (

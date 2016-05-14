@@ -34,7 +34,7 @@ const Tweet: React.StatelessComponent<TweetProps> = props => {
         <div className={getClass(tw, props.owner, props.timeline)}>
             <TweetIcon user={tw.user} dispatch={props.dispatch}/>
             <TweetSecondary status={props.status}/>
-            <TweetPrimary status={props.status} user={props.user}/>
+            <TweetPrimary status={props.status} owner={props.owner}/>
         </div>
     );
 };

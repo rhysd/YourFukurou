@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import Tooltip = require('rc-tooltip');
-import Tweet from '../../item/tweet';
+import Tweet, {TwitterUser} from '../../item/tweet';
 import IconButton from '../icon_button';
 import {
     showMessage,
@@ -12,7 +12,7 @@ const electron = global.require('electron');
 
 interface OtherActionsButtonProps extends React.Props<any> {
     status: Tweet;
-    isMyTweet?: boolean;
+    owner?: TwitterUser;
     dispatch?: Redux.Dispatch;
 }
 
@@ -44,7 +44,8 @@ function copyJson(props: OtherActionsButtonProps) {
 
 function renderDeleteThisTweet(props: OtherActionsButtonProps) {
     'use strict';
-    if (!props.isMyTweet) {
+    const isMyTweet = props.status.user.id === props.owner.id;
+    if (!isMyTweet) {
         return undefined;
     }
 
