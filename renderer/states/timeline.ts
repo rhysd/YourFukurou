@@ -43,6 +43,30 @@ function updateStatusIn(items: List<Item>, status: Tweet) {
     }).toList();
 }
 
+function updateActivityIn(items: List<Item>, kind: TimelineActivityKind, status: Tweet, from: TwitterUser) {
+    'use strict';
+    const status_id = status.id;
+    const index = items.findIndex(item => {
+        if (item instanceof TimelineActivity) {
+            return item.kind === kind && item.status.id === status_id;
+        } else {
+            return false;
+        }
+    });
+
+    if (index === -1) {
+        return items.unshift(new TimelineActivity(kind, status, [from]));
+    } else {
+        return items.update(index, item => {
+            if (item instanceof TimelineActivity) {
+                return item.update(status, from);
+            } else {
+                return item;
+            }
+        });
+    }
+}
+
 // Note:
 // This must be an immutable class because it is a part of state in a reducer
 export default class TimelineState {
@@ -55,7 +79,7 @@ export default class TimelineState {
         public rejected_ids: List<number> = List<number>()
     ) {}
 
-    shouldReject(status: Tweet) {
+    checkMutedOrBlocked(status: Tweet) {
         if (this.rejected_ids.contains(status.user.id)) {
             return true;
         }
@@ -71,8 +95,40 @@ export default class TimelineState {
         return false;
     }
 
+    putInHome(status: Tweet) {
+        if (!status.isRetweet()) {
+            return this.home.unshift(status);
+        }
+
+        const status_id = status.retweeted_status.id;
+        const index = this.home.findIndex(item => {
+            if (item instanceof Tweet) {
+                return item.isRetweet() && item.retweeted_status.id === status_id;
+            } else {
+                return false;
+            }
+        });
+
+        if (index === -1) {
+            return this.home.unshift(status);
+        }
+
+        return this.home.delete(index).unshift(status);
+    }
+
+    putInMention(status: Tweet) {
+        if (!status.isRetweet()) {
+            return this.mention.unshift(status);
+        }
+
+        // TODO:
+        // Create/Update 'retweeted' activity and insert it instead
+        // return updateActivityIn(this.mention, 'retweeted', status.retweeted_status, status.user);
+        return this.mention.unshift(status);
+    }
+
     addNewTweet(status: Tweet) {
-        const muted_or_blocked = this.shouldReject(status);
+        const muted_or_blocked = this.checkMutedOrBlocked(status);
         if (muted_or_blocked) {
             log.debug('Status was marked as rejected because of muted/blocked user:', status.user.screen_name, status.json);
         }
@@ -85,7 +141,7 @@ export default class TimelineState {
                 (!AppConfig.mute.home || !muted_or_blocked);
 
         if (should_add_to_home) {
-            next_home = this.home.unshift(status);
+            next_home = this.putInHome(status);
         }
 
         const should_add_to_mention
@@ -95,7 +151,7 @@ export default class TimelineState {
                 (!AppConfig.mute.mention || !muted_or_blocked);
 
         if (should_add_to_mention) {
-            next_mention = this.mention.unshift(status);
+            next_mention = this.putInMention(status);
         }
 
         if (!should_add_to_home && !should_add_to_mention) {
@@ -319,32 +375,20 @@ export default class TimelineState {
             return this;
         }
 
-        if (this.shouldReject(status)) {
+        if (this.checkMutedOrBlocked(status)) {
             return this;
         }
 
         notifyLiked(status, from);
 
         const next = this.updateStatus(status);
-        const status_id = status.id;
-        const index = next.mention.findIndex(item => {
-            if (item instanceof TimelineActivity) {
-                return item.kind === kind && item.status.id === status_id;
-            } else {
-                return false;
-            }
-        });
+        next.mention = updateActivityIn(next.mention, kind, status, from);
 
-        if (index === -1) {
-            next.mention = next.mention.unshift(new TimelineActivity(kind, status, [from]));
-        } else {
-            next.mention = next.mention.update(index, item => {
-                if (item instanceof TimelineActivity) {
-                    return item.update(status, from);
-                } else {
-                    return item;
-                }
-            });
+        if (this.kind !== 'mention' && !this.notified.mention) {
+            next.notified = {
+                home: this.notified.home,
+                mention: true,
+            };
         }
 
         return next;

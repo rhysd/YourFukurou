@@ -160,7 +160,7 @@ body {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   font-weight: bold;
 }
 .tweet__secondary-retweetedby {
