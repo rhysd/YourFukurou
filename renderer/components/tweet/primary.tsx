@@ -15,6 +15,18 @@ interface TweetPrimaryProps extends React.Props<any> {
 
 export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}> {
     actions_elem: HTMLElement;
+    showActions: () => void;
+    hideActions: () => void;
+
+    constructor(props: TweetPrimaryProps) {
+        super(props);
+        this.showActions = () => {
+            this.actions_elem.style.display = 'flex';
+        };
+        this.hideActions = () => {
+            this.actions_elem.style.display = 'none';
+        }
+    }
 
     renderCreatedAt() {
         return (
@@ -62,8 +74,8 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         return (
             <div
                 className={'tweet__primary'}
-                onMouseEnter={() => { this.actions_elem.style.display = 'flex'; }}
-                onMouseLeave={() => { this.actions_elem.style.display = 'none'; }}
+                onMouseEnter={this.showActions}
+                onMouseLeave={this.hideActions}
             >
                 <TweetText status={s}/>
                 {this.renderQuotedStatus(s)}

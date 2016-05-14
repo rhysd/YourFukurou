@@ -126,6 +126,13 @@ body {
 .tweet__body:hover {
   background-color: var(--bg-color-ui-focused);
 }
+.tweet__body.tweet__body_mention {
+  color: #fc4d5d;
+  background-color: #fff7f7;
+}
+.tweet__body.tweet__body_mention:hover {
+  background-color: #ffe7e7;
+}
 .tweet__icon {
   flex: none;
   width: 56px;

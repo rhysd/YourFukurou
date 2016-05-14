@@ -10,6 +10,7 @@ import TweetItem, {TwitterUser} from '../item/tweet';
 import Separator from '../item/separator';
 import log from '../log';
 import State from '../states/root';
+import TimelineState from '../states/timeline';
 import {MessageState} from '../reducers/message';
 import {TweetMediaState} from '../reducers/tweet_media';
 import {
@@ -19,13 +20,12 @@ import {
 
 interface TimelineProps extends React.Props<any> {
     message: MessageState;
-    items: List<Item>;
-    user: TwitterUser;
+    timeline: TimelineState;
     media: TweetMediaState;
     dispatch?: Redux.Dispatch;
 }
 
-function nullHandler() {
+function nop() {
     'use strict';
     // Note: Do nothing.
 }
@@ -36,7 +36,8 @@ function renderItem(i: Item, id: number, props: TimelineProps) {
     if (i instanceof TweetItem) {
         return <Tweet
             status={i}
-            user={props.user}
+            timeline={props.timeline.kind}
+            owner={props.timeline.user}
             dispatch={props.dispatch}
             key={key}
         />;
@@ -55,9 +56,9 @@ function renderLightbox(props: TimelineProps) {
         return <Lightbox
             images={[]}
             isOpen={false}
-            onClickNext={nullHandler}
-            onClickPrev={nullHandler}
-            onClose={nullHandler}
+            onClickNext={nop}
+            onClickPrev={nop}
+            onClose={nop}
         />;
     }
 
@@ -88,7 +89,8 @@ function renderLightbox(props: TimelineProps) {
 }
 
 const Timeline = (props: TimelineProps) => {
-    const size = props.items.size;
+    const items = props.timeline.getCurrentTimeline();
+    const size = items.size;
     const msg = props.message;
     // TODO:
     // Determine the position to insert with ordered by id
@@ -96,7 +98,7 @@ const Timeline = (props: TimelineProps) => {
         {msg === null ?
             undefined :
             <Message text={msg.text} kind={msg.kind} dispatch={props.dispatch}/>}
-        {props.items
+        {items
             .map((i, idx) => renderItem(i, size - idx, props))
             .toArray()}
         {renderLightbox(props)}
@@ -107,8 +109,7 @@ function select(state: State): TimelineProps {
     'use strict';
     return {
         message: state.message,
-        items: state.timeline.getCurrentTimeline(),
-        user: state.timeline.user,
+        timeline: state.timeline,
         media: state.tweetMedia,
     };
 }
