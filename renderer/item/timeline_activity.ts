@@ -1,5 +1,6 @@
 import Item from './item';
 import Tweet, {TwitterUser} from './tweet';
+import log from '../log';
 
 export type TimelineActivityKind = 'liked' | 'retweeted';
 
@@ -10,24 +11,26 @@ export default class TimelineActivity implements Item {
         public by: TwitterUser[]) {
     }
 
-    findUserById(id: number) {
+    notExistsYet(id: number) {
         for (const u of this.by) {
             if (u.id === id) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     // Note: Returns updated or not
     update(tw: Tweet, u: TwitterUser) {
         if (this.status.id !== tw.id) {
+            log.error('Activity update: ID mismatch:', this.status, tw);
             return this;
         }
-        if (this.findUserById(u.id)) {
+        if (this.notExistsYet(u.id)) {
             this.by.unshift(u);
         }
         this.status = tw;
+        log.debug(`Activity '${this.kind}'was updated:`, tw, u);
         return this.clone();
     }
 

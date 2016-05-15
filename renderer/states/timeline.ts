@@ -57,13 +57,14 @@ function updateActivityIn(items: List<Item>, kind: TimelineActivityKind, status:
     if (index === -1) {
         return items.unshift(new TimelineActivity(kind, status, [from]));
     } else {
-        return items.update(index, item => {
-            if (item instanceof TimelineActivity) {
-                return item.update(status, from);
-            } else {
-                return item;
-            }
-        });
+        const will_updated = items.get(index);
+        if (will_updated instanceof TimelineActivity) {
+            const updated = will_updated.update(status, from);
+            return items.delete(index).unshift(updated);
+        } else {
+            log.error('Invalid activity for update:', will_updated);
+            return items;
+        }
     }
 }
 
@@ -116,13 +117,6 @@ export default class TimelineState {
         return this.home.delete(index).unshift(status);
     }
 
-    putInMention(status: Tweet) {
-        if (!status.isRetweet()) {
-            return this.mention.unshift(status);
-        }
-        return updateActivityIn(this.mention, 'retweeted', status.retweeted_status, status.user);
-    }
-
     addNewTweet(status: Tweet) {
         const muted_or_blocked = this.checkMutedOrBlocked(status);
         if (muted_or_blocked) {
@@ -136,23 +130,27 @@ export default class TimelineState {
             = !PM.shouldRejectTweetInHomeTimeline(status, this) &&
                 (!AppConfig.mute.home || !muted_or_blocked);
 
-        if (should_add_to_home) {
-            next_home = this.putInHome(status);
-        }
-
         const should_add_to_mention
             = this.user && status.mentionsTo(this.user) &&
                 (status.user.id !== this.user.id) &&
                 !PM.shouldRejectTweetInMentionTimeline(status, this) &&
                 (!AppConfig.mute.mention || !muted_or_blocked);
 
-        if (should_add_to_mention) {
-            next_mention = this.putInMention(status);
-        }
-
         if (!should_add_to_home && !should_add_to_mention) {
             // Note: Nothing was changed.
             return this;
+        }
+
+        if (should_add_to_home) {
+            next_home = this.putInHome(status);
+        }
+
+        if (should_add_to_mention) {
+            if (status.isRetweet()) {
+                next_mention = updateActivityIn(this.mention, 'retweeted', status.retweeted_status, status.user);
+            } else {
+                next_mention = this.mention.unshift(status);
+            }
         }
 
         notifyTweet(status, this.user);
