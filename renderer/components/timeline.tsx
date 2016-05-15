@@ -2,6 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {List} from 'immutable';
 import Lightbox, {LightboxImage} from 'react-images';
+import {Grid, AutoSizer, CellMeasurer} from 'react-virtualized';
 import Tweet from './tweet/index';
 import ZigZagSeparator from './zigzag_separator';
 import TwitterActivity from './activity';
@@ -32,23 +33,21 @@ function nop() {
     // Note: Do nothing.
 }
 
-function renderItem(i: Item, id: number, props: TimelineProps) {
+function renderItem(i: Item, props: TimelineProps) {
     'use strict';
-    const key = 'item-' + id;
     if (i instanceof TweetItem) {
         return <Tweet
             status={i}
             timeline={props.timeline.kind}
             owner={props.timeline.user}
             dispatch={props.dispatch}
-            key={key}
         />;
     } else if (i instanceof TimelineActivity) {
-        return <TwitterActivity activity={i} key={key}/>;
+        return <TwitterActivity activity={i}/>;
     } else if (i instanceof Separator) {
-        return <ZigZagSeparator key={key}/>;
+        return <ZigZagSeparator/>;
     } else {
-        log.error('Invalid item', key, i);
+        log.error('Invalid item', i);
         return undefined;
     }
 }
@@ -92,6 +91,41 @@ function renderLightbox(props: TimelineProps) {
     );
 }
 
+// XXX:
+// `rowHeight` must not be fixed!
+function renderVirtualizedTimeline(props: TimelineProps) {
+    'use strict';
+    const items = props.timeline.getCurrentTimeline();
+    const size = items.size;
+    const cell_renderer = ({rowIndex}) => renderItem(items.get(rowIndex), props);
+
+    return (
+        <AutoSizer>
+            {({width, height}) =>
+                <CellMeasurer
+                    cellRenderer={cell_renderer}
+                    columnCount={1}
+                    rowCount={size}
+                    width={width}
+                >
+                    {({getRowHeight}) =>
+                        <Grid
+                            columnCount={1}
+                            columnWidth={width}
+                            overscanColumnCount={0}
+                            height={height}
+                            width={width}
+                            cellRenderer={cell_renderer}
+                            rowCount={size}
+                            rowHeight={getRowHeight}
+                        />
+                    }
+                </CellMeasurer>
+            }
+        </AutoSizer>
+    );
+}
+
 const Timeline = (props: TimelineProps) => {
     const items = props.timeline.getCurrentTimeline();
     const size = items.size;
@@ -102,9 +136,7 @@ const Timeline = (props: TimelineProps) => {
         {msg === null ?
             undefined :
             <Message text={msg.text} kind={msg.kind} dispatch={props.dispatch}/>}
-        {items
-            .map((i, idx) => renderItem(i, size - idx, props))
-            .toArray()}
+        {renderVirtualizedTimeline(props)}
         {renderLightbox(props)}
     </div>;
 };

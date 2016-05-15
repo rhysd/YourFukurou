@@ -60,6 +60,7 @@
     "typings/node-emoji.d.ts",
     "typings/react-images.d.ts",
     "typings/rc-tooltip.d.ts",
+    "typings/react-virtualized.d.ts",
     "../main/typings/twit.d.ts",
     "../main/typings/channel.d.ts",
     "../main/typings/config.d.ts"
