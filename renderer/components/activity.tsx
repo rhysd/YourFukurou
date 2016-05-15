@@ -49,7 +49,7 @@ function renderScreenNames(activity: TimelineActivity) {
     if (by.length > 1) {
         for (let i = 1; i < by.length; ++i) {
             screen_names.push(
-                <span key={i}>and {renderScreenNameText(by[i])}</span>
+                <span key={i}>, {renderScreenNameText(by[i])}</span>
             );
         }
     }
@@ -77,7 +77,7 @@ function renderUserIcons(users: TwitterUser[]) {
                 screenName={u.screen_name}
                 imageUrl={u.icon_url_24x24}
                 size={24}
-                key={'icons-' + i}
+                key={i}
             />
         );
 }

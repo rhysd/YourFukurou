@@ -316,7 +316,7 @@ body {
   overflow: hidden;
 }
 .activity__screenname {
-  margin: 0 8px;
+  margin: 0 4px;
   color: black;
   font-weight: bold;
 }
@@ -343,14 +343,17 @@ body {
 .activity__icon {
   border-radius: 20%;
   margin-right: 4px;
-  padding: 4px;
   color: white;
 }
 .activity__icon.activity__icon_liked {
   background-color: #ff4f44;
+  padding: 4px;
+  font-size: 0.7em;
 }
 .activity__icon.activity__icon_retweeted {
   background-color: #19cf86;
+  padding: 3px;
+  font-size: 0.8em;
 }
 
 .message__body {
