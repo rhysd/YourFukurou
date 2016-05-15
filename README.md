@@ -89,7 +89,7 @@ The default value is `{"home": true, "mention": false}`.
 
 Plugin is a Node.js module.  User specifies the path to it with `config.json` configuration file.  The module will be loaded using `require()` in application.
 
-Plugin must export one object defined as below:
+Plugin must export one object to `export.plugin` which is defined as below:
 
 ```typescript
 interface Plugin {
@@ -128,7 +128,7 @@ function filterHomeTimeline(tweet, timeline) {
 }
 
 // Export as npm module
-module.exports = {
+exports.plugin = {
     filter: {
         home_timeline: filterHomeTimeline
     }

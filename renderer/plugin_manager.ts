@@ -42,7 +42,12 @@ class PluginManager {
     }
 
     loadPluginFromPath(p: string) {
-        const plugin: Plugin = global.require(p);
+        const mod = global.require(p) as {plugin?: Plugin};
+        if (!mod.plugin) {
+            log.error('Invalid plugin:', p, ' plugin must be exported to `exports.plugin`');
+            return;
+        }
+        const plugin = mod.plugin;
         plugin._path = p;
         if (this.validatePlugin(plugin)) {
             this.plugins.push(plugin);
