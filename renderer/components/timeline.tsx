@@ -2,6 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {List} from 'immutable';
 import Lightbox, {LightboxImage} from 'react-images';
+import * as ReactList from 'react-list';
 import Tweet from './tweet/index';
 import ZigZagSeparator from './zigzag_separator';
 import TwitterActivity from './activity';
@@ -32,9 +33,8 @@ function nop() {
     // Note: Do nothing.
 }
 
-function renderItem(i: Item, id: number, props: TimelineProps) {
+function renderItem(i: Item, key: string, props: TimelineProps) {
     'use strict';
-    const key = 'item-' + id;
     if (i instanceof TweetItem) {
         return <Tweet
             status={i}
@@ -94,7 +94,6 @@ function renderLightbox(props: TimelineProps) {
 
 const Timeline = (props: TimelineProps) => {
     const items = props.timeline.getCurrentTimeline();
-    const size = items.size;
     const msg = props.message;
     // TODO:
     // Determine the position to insert with ordered by id
@@ -102,9 +101,11 @@ const Timeline = (props: TimelineProps) => {
         {msg === null ?
             undefined :
             <Message text={msg.text} kind={msg.kind} dispatch={props.dispatch}/>}
-        {items
-            .map((i, idx) => renderItem(i, size - idx, props))
-            .toArray()}
+        <ReactList
+            itemRenderer={(idx, key) => renderItem(items.get(idx), key, props)}
+            length={items.size}
+            type="variable"
+        />
         {renderLightbox(props)}
     </div>;
 };
