@@ -204,8 +204,7 @@ export default class Twitter {
                     reject(err);
                     return;
                 }
-                console.log('TEST:', data);
-                log.debug('friendships/no_retweets/ids: Got muted ids:', data.length);
+                log.debug('friendships/no_retweets/ids: Got no-retweet ids:', data.length);
                 resolve(data);
             });
         });
@@ -219,7 +218,7 @@ export default class Twitter {
                     reject(err);
                     return;
                 }
-                log.debug('blocks/ids: Got muted ids:', data.ids.length);
+                log.debug('blocks/ids: Got block ids:', data.ids.length);
                 resolve(data.ids);
             });
         });
