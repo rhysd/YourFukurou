@@ -4,6 +4,7 @@ import {
     addMentions,
     addRejectedUserIds,
     removeRejectedUserIds,
+    addNoRetweetUserIds,
     addSeparator,
     retweetSucceeded,
     unretweetSucceeded,
@@ -136,6 +137,12 @@ export default class IpcChannelProxy {
         this.subscribe('yf:unrejected-ids', (_: Electron.IpcRendererEvent, ids: number[]) => {
             Store.dispatch(removeRejectedUserIds(ids));
             DB.rejected_ids.deleteIds(ids);
+        });
+
+        this.subscribe('yf:no-retweet-ids', (_: Electron.IpcRendererEvent, ids: number[]) => {
+            Store.dispatch(addNoRetweetUserIds(ids));
+            // TODO?
+            // Add no-retweet-users to database
         });
 
         log.debug('Started to receive messages');

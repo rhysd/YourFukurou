@@ -24,6 +24,7 @@ export enum Kind {
     AddMentions,
     AddRejectedUserIds,
     RemoveRejectedUserIds,
+    AddNoRetweetUserIds,
 
     SendRetweet,
     UndoRetweet,
@@ -111,6 +112,14 @@ export function removeRejectedUserIds(ids: number[]) {
     'use strict';
     return {
         type: Kind.RemoveRejectedUserIds,
+        ids,
+    };
+}
+
+export function addNoRetweetUserIds(ids: number[]) {
+    'use strict';
+    return {
+        type: Kind.AddNoRetweetUserIds,
         ids,
     };
 }

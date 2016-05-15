@@ -15,12 +15,11 @@ const editorDecolator = new CompositeDecorator([
 
 export default class TweetEditorState {
     constructor(
-        public core: EditorState = EditorState.createEmpty(editorDecolator),
-        public is_open: boolean = false,
-        public keymaps: EditorKeymaps = new EditorKeymaps(),
-        public in_reply_to_status: Tweet = null
-    ) {
-    }
+        public core: EditorState,
+        public is_open: boolean,
+        public keymaps: EditorKeymaps,
+        public in_reply_to_status: Tweet
+    ) {}
 
     onDraftEditorChange(new_core: EditorState) {
         return new TweetEditorState(
@@ -147,3 +146,11 @@ export default class TweetEditorState {
         return this.is_open ?  this.closeEditor() : this.openEditor();
     }
 }
+
+export const DefaultTweetEditorState =
+    new TweetEditorState(
+        EditorState.createEmpty(editorDecolator),
+        false,
+        new EditorKeymaps(),
+        null
+    );

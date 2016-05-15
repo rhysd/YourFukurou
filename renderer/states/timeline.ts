@@ -84,12 +84,13 @@ function updateActivityIn(items: List<Item>, kind: TimelineActivityKind, status:
 // This must be an immutable class because it is a part of state in a reducer
 export default class TimelineState {
     constructor(
-        public kind: TimelineKind = 'home',
-        public home: List<Item> = List<Item>(),
-        public mention: List<Item> = List<Item>(),
-        public user: TwitterUser = null,
-        public notified: {home: boolean; mention: boolean} = {home: false, mention: false},
-        public rejected_ids: List<number> = List<number>()
+        public kind: TimelineKind,
+        public home: List<Item>,
+        public mention: List<Item>,
+        public user: TwitterUser,
+        public notified: {home: boolean; mention: boolean},
+        public rejected_ids: List<number>,
+        public no_retweet_ids: List<number>
     ) {}
 
     checkMutedOrBlocked(status: Tweet) {
@@ -102,6 +103,10 @@ export default class TimelineState {
         }
 
         if (status.isQuotedTweet() && this.rejected_ids.contains(status.quoted_status.user.id)) {
+            return true;
+        }
+
+        if (status.isRetweet() && this.no_retweet_ids.contains(status.user.id)) {
             return true;
         }
 
@@ -178,7 +183,8 @@ export default class TimelineState {
             next_mention,
             this.user,
             next_notified,
-            this.rejected_ids
+            this.rejected_ids,
+            this.no_retweet_ids
         );
     }
 
@@ -197,7 +203,8 @@ export default class TimelineState {
             next_mention,
             this.user,
             this.notified,
-            this.rejected_ids
+            this.rejected_ids,
+            this.no_retweet_ids
         );
     }
 
@@ -215,7 +222,8 @@ export default class TimelineState {
             this.mention,
             this.user,
             next_notified,
-            this.rejected_ids
+            this.rejected_ids,
+            this.no_retweet_ids
         );
     }
 
@@ -241,7 +249,8 @@ export default class TimelineState {
             next_mention,
             this.user,
             this.notified,
-            this.rejected_ids
+            this.rejected_ids,
+            this.no_retweet_ids
         );
     }
 
@@ -263,7 +272,8 @@ export default class TimelineState {
             added.concat(this.mention).toList(),
             this.user,
             next_notified,
-            this.rejected_ids
+            this.rejected_ids,
+            this.no_retweet_ids
         );
     }
 
@@ -280,7 +290,8 @@ export default class TimelineState {
             next_mention,
             this.user,
             this.notified,
-            this.rejected_ids
+            this.rejected_ids,
+            this.no_retweet_ids
         );
     }
 
@@ -293,7 +304,8 @@ export default class TimelineState {
             this.mention,
             new_user,
             this.notified,
-            this.rejected_ids
+            this.rejected_ids,
+            this.no_retweet_ids
         );
     }
 
@@ -316,7 +328,8 @@ export default class TimelineState {
             this.mention,
             new_user,
             this.notified,
-            this.rejected_ids
+            this.rejected_ids,
+            this.no_retweet_ids
         );
     }
 
@@ -345,7 +358,7 @@ export default class TimelineState {
         };
 
         const next_home = this.home.filter(predicate).toList();
-        const next_mention = this.home.filter(predicate).toList();
+        const next_mention = this.mention.filter(predicate).toList();
         const next_rejected_ids = this.rejected_ids.merge(will_added);
 
         return new TimelineState(
@@ -354,7 +367,32 @@ export default class TimelineState {
             next_mention,
             this.user,
             this.notified,
-            next_rejected_ids
+            next_rejected_ids,
+            this.no_retweet_ids
+        );
+    }
+
+    addNoRetweetUserIds(ids: number[]) {
+        const predicate = (i: Item) => {
+            if (i instanceof Tweet) {
+                return !i.isRetweet() || ids.indexOf(i.retweeted_status.user.id) === -1;
+            } else {
+                return true;
+            }
+        };
+
+        const next_home = this.home.filter(predicate).toList();
+        const next_mention = this.mention.filter(predicate).toList();
+        const next_no_retweet_ids = this.no_retweet_ids.merge(ids);
+
+        return new TimelineState(
+            this.kind,
+            next_home,
+            next_mention,
+            this.user,
+            this.notified,
+            this.rejected_ids,
+            next_no_retweet_ids
         );
     }
 
@@ -369,7 +407,8 @@ export default class TimelineState {
             this.mention,
             this.user,
             this.notified,
-            next_rejected_ids
+            next_rejected_ids,
+            this.no_retweet_ids
         );
     }
 
@@ -401,3 +440,15 @@ export default class TimelineState {
         return next;
     }
 }
+
+export const DefaultTimelineState =
+    new TimelineState(
+        'home',
+        List<Item>(),
+        List<Item>(),
+        null,
+        {home: false, mention: false},
+        List<number>(),
+        List<number>()
+    );
+

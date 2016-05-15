@@ -1,7 +1,7 @@
 import {Action, Kind} from '../actions';
-import EditorCompletionState from '../states/editor_completion';
+import EditorCompletionState, {DefaultEditorCompletionState} from '../states/editor_completion';
 
-export default function editorCompletion(state: EditorCompletionState = new EditorCompletionState(), action: Action) {
+export default function editorCompletion(state: EditorCompletionState = DefaultEditorCompletionState, action: Action) {
     'use strict';
     switch (action.type) {
         case Kind.UpdateAutoCompletion:
@@ -14,8 +14,8 @@ export default function editorCompletion(state: EditorCompletionState = new Edit
             );
         case Kind.DownAutoCompletionFocus:      return state.downFocus();
         case Kind.UpAutoCompletionFocus:        return state.upFocus();
-        case Kind.StopAutoCompletion:           return new EditorCompletionState();
-        case Kind.SelectAutoCompleteSuggestion: return new EditorCompletionState();
+        case Kind.StopAutoCompletion:           return DefaultEditorCompletionState;
+        case Kind.SelectAutoCompleteSuggestion: return DefaultEditorCompletionState;
         default:                                return state;
     }
 }

@@ -13,6 +13,7 @@ type ChannelFromMain
     | 'yf:connection-failure'
     | 'yf:rejected-ids'
     | 'yf:unrejected-ids'
+    | 'yf:no-retweet-ids'
     | 'yf:friends'
     | 'yf:api-failure';
 

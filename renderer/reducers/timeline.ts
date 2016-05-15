@@ -1,7 +1,7 @@
 import {Action, Kind} from '../actions';
-import TimelineState from '../states/timeline';
+import TimelineState, {DefaultTimelineState} from '../states/timeline';
 
-export default function timeline(state: TimelineState = new TimelineState(), action: Action) {
+export default function timeline(state: TimelineState = DefaultTimelineState, action: Action) {
     'use strict';
     switch (action.type) {
         case Kind.AddTweetToTimeline:     return state.addNewTweet(action.status);
@@ -17,6 +17,7 @@ export default function timeline(state: TimelineState = new TimelineState(), act
         case Kind.SetCurrentUser:         return state.setUser(action.user);
         case Kind.UpdateCurrentUser:      return state.updateUser(action.user_json);
         case Kind.AddRejectedUserIds:     return state.addRejectedIds(action.ids);
+        case Kind.AddNoRetweetUserIds:    return state.addNoRetweetUserIds(action.ids);
         case Kind.RemoveRejectedUserIds:  return state.removeRejectedIds(action.ids);
         default:                          return state;
     }

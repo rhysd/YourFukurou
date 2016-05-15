@@ -3,14 +3,13 @@ import {searchSuggestionItems, SuggestionItem} from '../components/editor/sugges
 
 export default class EditorCompletionState {
     constructor(
-        public query: string = null,
-        public label: AutoCompleteLabel = null,
-        public pos_top: number = 0,
-        public pos_left: number = 0,
-        public suggestions: SuggestionItem[] = [],
-        public focus_idx: number = null
-    ) {
-    }
+        public query: string,
+        public label: AutoCompleteLabel,
+        public pos_top: number,
+        public pos_left: number,
+        public suggestions: SuggestionItem[],
+        public focus_idx: number
+    ) {}
 
     searchSuggestions(suggestions: SuggestionItem[], query: string, top: number, left: number, label: AutoCompleteLabel) {
         if (suggestions.length === 0) {
@@ -69,3 +68,5 @@ export default class EditorCompletionState {
         return this.cloneWithFocusIdx(next_idx);
     }
 }
+
+export const DefaultEditorCompletionState = new EditorCompletionState(null, null, 0, 0, [], null);

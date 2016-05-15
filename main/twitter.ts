@@ -196,6 +196,21 @@ export default class Twitter {
             .then(ids => this.sender.send('yf:rejected-ids', ids));
     }
 
+    fetchNoRetweets(params: Object = {}) {
+        return new Promise<number[]>((resolve, reject) => {
+            this.client.get('friendships/no_retweets/ids', params, (err, data, res) => {
+                if (err) {
+                    this.sendApiFailure(err, res);
+                    reject(err);
+                    return;
+                }
+                console.log('TEST:', data);
+                log.debug('friendships/no_retweets/ids: Got muted ids:', data.length);
+                resolve(data);
+            });
+        });
+    }
+
     fetchBlockIds(params: Object = {}) {
         return new Promise<number[]>((resolve, reject) => {
             this.client.get('blocks/ids', params, (err, data, res) => {

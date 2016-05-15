@@ -133,11 +133,12 @@ function open_window(access: AccessToken) {
                 })
                 .then(() => Promise.all([
                     twitter.fetchMuteIds(),
+                    twitter.fetchNoRetweets(),
                     twitter.fetchBlockIds(),
                     twitter.fetchHomeTimeline(),
                     twitter.fetchMentionTimeline(),
                 ]))
-                .then(([mute_ids, block_ids, tweets, mentions]) => {
+                .then(([mute_ids, no_retweet_ids, block_ids, tweets, mentions]) => {
                     // Note: Merge mute list with block list
                     for (const m of mute_ids) {
                         if (block_ids.indexOf(m) === -1) {
@@ -146,6 +147,7 @@ function open_window(access: AccessToken) {
                     }
                     log.debug('Total rejected ids: ', block_ids.length);
                     twitter.sender.send('yf:rejected-ids', block_ids);
+                    twitter.sender.send('yf:no-retweet-ids', no_retweet_ids);
                     for (const tw of tweets) {
                         twitter.sender.send('yf:tweet', tw);
                     }
