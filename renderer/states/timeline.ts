@@ -26,21 +26,33 @@ function containsStatusInTimeline(is: List<Item>, t: Tweet) {
 
 function updateStatusIn(items: List<Item>, status: Tweet) {
     'use strict';
-    return items.map(item => {
+    const status_id = status.id;
+    const index = items.findIndex(item => {
         if (item instanceof Tweet) {
-            const id = item.getMainStatus().id;
-            if (id === status.id) {
-                if (item.isRetweet()) {
-                    const cloned = item.clone();
-                    cloned.json.retweeted_status = status.json;
-                    return cloned;
-                } else {
-                    return status;
-                }
-            }
+            return item.getMainStatus().id === status_id;
+        } else {
+            return false;
         }
-        return item;
-    }).toList();
+    });
+
+    if (index === -1) {
+        return items;
+    }
+
+    return items.update(index, item => {
+        if (item instanceof Tweet) {
+            if (item.isRetweet()) {
+                const cloned = item.clone();
+                cloned.json.retweeted_status = status.json;
+                return cloned;
+            } else {
+                return status;
+            }
+        } else {
+            log.error('Never reaches here');
+            return item;
+        }
+    });
 }
 
 function updateActivityIn(items: List<Item>, kind: TimelineActivityKind, status: Tweet, from: TwitterUser) {
@@ -256,11 +268,12 @@ export default class TimelineState {
     }
 
     updateStatus(status: Tweet) {
-        // TODO:
-        // Calculate the index to replace at first.
-        // If there is no item to replace, simply return 'this'.
         const next_home = updateStatusIn(this.home, status);
         const next_mention = updateStatusIn(this.mention, status);
+        if (next_home === this.home && next_mention === this.mention) {
+            return this;
+        }
+
         return new TimelineState(
             this.kind,
             next_home,
