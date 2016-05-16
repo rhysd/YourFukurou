@@ -13,7 +13,7 @@ import TimelineActivity from '../item/timeline_activity';
 import Separator from '../item/separator';
 import log from '../log';
 import State from '../states/root';
-import TimelineState from '../states/timeline';
+import {TimelineKind} from '../states/timeline';
 import {MessageState} from '../reducers/message';
 import {TweetMediaState} from '../reducers/tweet_media';
 import {
@@ -23,23 +23,26 @@ import {
 
 interface TimelineProps extends React.Props<any> {
     message: MessageState;
-    timeline: TimelineState;
+    kind: TimelineKind,
+    items: List<Item>,
+    owner: TwitterUser,
     media: TweetMediaState;
     dispatch?: Redux.Dispatch;
 }
 
 function nop() {
     'use strict';
-    // Note: Do nothing.
+    // Note: No OPeration
 }
 
-function renderItem(i: Item, key: string, props: TimelineProps) {
+function renderItem(idx: number, key: string, props: TimelineProps) {
     'use strict';
+    const i = props.items.get(idx);
     if (i instanceof TweetItem) {
         return <Tweet
             status={i}
-            timeline={props.timeline.kind}
-            owner={props.timeline.user}
+            timeline={props.kind}
+            owner={props.owner}
             dispatch={props.dispatch}
             key={key}
         />;
@@ -92,30 +95,34 @@ function renderLightbox(props: TimelineProps) {
     );
 }
 
-const Timeline = (props: TimelineProps) => {
-    const items = props.timeline.getCurrentTimeline();
-    const msg = props.message;
-    // TODO:
-    // Determine the position to insert with ordered by id
-    return <div className="timeline">
-        {msg === null ?
+// TODO:
+// Determine the position to insert with ordered by id
+const Timeline = (props: TimelineProps) => (
+    <div className="timeline">
+        {props.message === null ?
             undefined :
-            <Message text={msg.text} kind={msg.kind} dispatch={props.dispatch}/>}
+            <Message
+                text={props.message.text}
+                kind={props.message.kind}
+                dispatch={props.dispatch}
+            />}
         <ReactList
-            itemRenderer={(idx, key) => renderItem(items.get(idx), key, props)}
-            length={items.size}
+            itemRenderer={(idx, key) => renderItem(idx, key, props)}
+            length={props.items.size}
             type="variable"
-            pageSize={20}
+            threshold={500}
         />
         {renderLightbox(props)}
-    </div>;
-};
+    </div>
+);
 
 function select(state: State): TimelineProps {
     'use strict';
     return {
         message: state.message,
-        timeline: state.timeline,
+        items: state.timeline.getCurrentTimeline(),
+        kind: state.timeline.kind,
+        owner: state.timeline.user,
         media: state.tweetMedia,
     };
 }
