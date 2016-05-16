@@ -243,10 +243,17 @@ export default class TimelineState {
         };
         const next_home = this.home.filter(predicate).toList();
         const next_mention = this.mention.filter(predicate).toList();
+        const home_updated = next_home.size !== this.home.size;
+        const mention_updated = next_mention.size !== this.mention.size;
+
+        if (!home_updated && !mention_updated) {
+            return this;
+        }
+
         return new TimelineState(
             this.kind,
-            next_home,
-            next_mention,
+            home_updated ? next_home : this.home,
+            mention_updated ? next_mention : this.mention,
             this.user,
             this.notified,
             this.rejected_ids,
@@ -359,12 +366,14 @@ export default class TimelineState {
 
         const next_home = this.home.filter(predicate).toList();
         const next_mention = this.mention.filter(predicate).toList();
+        const home_updated = next_home.size !== this.home.size;
+        const mention_updated = next_mention.size !== this.mention.size;
         const next_rejected_ids = this.rejected_ids.merge(will_added);
 
         return new TimelineState(
             this.kind,
-            next_home,
-            next_mention,
+            home_updated ? next_home : this.home,
+            mention_updated ? next_mention : this.mention,
             this.user,
             this.notified,
             next_rejected_ids,
