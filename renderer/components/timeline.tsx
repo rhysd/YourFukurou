@@ -105,6 +105,7 @@ const Timeline = (props: TimelineProps) => {
             itemRenderer={(idx, key) => renderItem(items.get(idx), key, props)}
             length={items.size}
             type="variable"
+            pageSize={20}
         />
         {renderLightbox(props)}
     </div>;
