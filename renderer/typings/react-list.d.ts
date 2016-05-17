@@ -5,6 +5,7 @@ declare namespace ReactList {
         length: number;
         type?: 'simple' | 'uniform' | 'variable';
         axis?: 'x' | 'y';
+        initialIndex?: number;
         itemSizeGetter?: (index: number) => number;
         itemsRenderer?: (items: any[], ref: Element) => React.ReactElement<any>;
         pageSize?: number;

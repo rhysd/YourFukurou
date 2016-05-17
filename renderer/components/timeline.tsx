@@ -111,6 +111,7 @@ const Timeline = (props: TimelineProps) => (
             length={props.items.size}
             type="variable"
             threshold={500}
+            useTranslate3d
         />
         {renderLightbox(props)}
     </div>
