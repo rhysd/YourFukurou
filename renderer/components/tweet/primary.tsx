@@ -57,7 +57,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         if (q === null) {
             return undefined;
         }
-        return <QuotedTweet status={q}/>;
+        return <QuotedTweet status={q} focused={this.props.focused}/>;
     }
 
     renderMedia(media: Twitter.MediaEntity[]) {
@@ -85,7 +85,9 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                 {this.renderMedia(s.media)}
                 <div className="tweet__primary-footer" >
                     <div
-                        className="tweet-actions"
+                        className={this.props.focused ?
+                                    'tweet-actions tweet-actions_focused' :
+                                    'tweet-actions'}
                         style={{display: 'none'}}
                         ref={r => {this.actions_elem = r; }}
                     >

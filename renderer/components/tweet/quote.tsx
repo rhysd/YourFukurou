@@ -8,6 +8,7 @@ import TweetMedia from './media';
 
 interface QuotedTweetProps extends React.Props<any> {
     status: TweetItem;
+    focused: boolean;
 }
 
 function renderMedia(media: Twitter.MediaEntity[]) {
@@ -37,7 +38,11 @@ function renderHeader(s: TweetItem) {
 
 const QuotedTweet = (props: QuotedTweetProps) => {
     const s = props.status.getMainStatus();
-    return <div className="tweet__quoted">
+    const class_name =
+        props.focused ?
+            'tweet__quoted tweet__quoted_focused' :
+            'tweet__quoted';
+    return <div className={class_name}>
         {renderHeader(s)}
         <TweetText className="tweet__quoted-text" status={s}/>
         {renderMedia(s.media)}

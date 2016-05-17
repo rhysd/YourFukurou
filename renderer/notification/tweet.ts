@@ -48,7 +48,7 @@ export default function notifyTweet(tw: Tweet, owner: TwitterUser) {
         return null;
     }
 
-    if (tw.user.id === owner.id) {
+    if (owner === null || tw.user.id === owner.id) {
         // Note:
         // When it's created by me, do not notify it because I'm already
         // knowing that.

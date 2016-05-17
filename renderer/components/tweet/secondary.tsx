@@ -7,18 +7,19 @@ interface TweetSecondaryProps extends React.Props<any> {
     focused?: boolean;
 }
 
-function retweetedBy(tw: Tweet) {
+function retweetedBy(tw: Tweet, focused: boolean) {
     'use strict';
     if (!tw.isRetweet()) {
         return undefined;
     }
 
     return (
-        <div className="tweet__secondary-retweetedby">
-            <i className="fa fa-retweet"/> <ScreenName
-                className="tweet__secondary-retweetedby-screenname"
-                user={tw.user}
-            />
+        <div className={
+            focused ?
+                'tweet__secondary-retweetedby tweet__secondary-retweetedby_focused' :
+                'tweet__secondary-retweetedby'
+            }>
+            <i className="fa fa-retweet"/> <ScreenName user={tw.user}/>
         </div>
     );
 }
@@ -36,7 +37,7 @@ const TweetSecondary = (props: TweetSecondaryProps) => {
         <div className="tweet__secondary-name" title={user.name}>
             {user.name}
         </div>
-        {retweetedBy(props.status)}
+        {retweetedBy(props.status, props.focused)}
     </div>;
 };
 export default TweetSecondary;
