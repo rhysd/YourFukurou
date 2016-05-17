@@ -42,10 +42,10 @@ const renderPrimary = (user: TwitterUser) => (
             />
         </div>
         <div className="user-popup__name">
-            <span className="user-popup__user-name">
+            <span className="user-popup__user-name" title={user.name}>
                 {user.name}
             </span>
-            <ScreenName user={user}/>
+            <ScreenName className="user-popup__screenname" user={user}/>
         </div>
     </div>
 );

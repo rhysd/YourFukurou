@@ -26,9 +26,7 @@ const TweetSecondary = (props: TweetSecondaryProps) => {
     const status = props.status.getMainStatus();
     const user = status.user;
     return <div className="tweet__secondary">
-        <div className="tweet__secondary-screenname">
-            <ScreenName user={user}/>
-        </div>
+        <ScreenName className="tweet__secondary-screenname" user={user}/>
         <div className="tweet__secondary-name" title={user.name}>
             {user.name}
         </div>

@@ -10,7 +10,7 @@ interface ScreenNameProps extends React.Props<any> {
 const ScreenName = (props: ScreenNameProps) => {
     const screen_name = '@' + props.user.screen_name;
     return (
-        <span className="tweet__screen-name">
+        <span>
             <ExternalLink
                 className={props.className}
                 url={props.user.userPageUrl()}

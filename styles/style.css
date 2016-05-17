@@ -107,7 +107,6 @@ body {
 
 .external-link {
   cursor: pointer;
-  color: var(--text-link-color);
   text-decoration: none;
 }
 .external-link:hover {
@@ -157,7 +156,7 @@ body {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: var(--color-weak-text-link);
+  color: var(--text-link-color);
 }
 .tweet__secondary-name {
   flex: none;
@@ -590,6 +589,9 @@ body {
   white-space: nowrap;
   overflow: hidden;
 }
+.user-popup__screenname {
+  color: var(--text-link-color);
+}
 .user-popup__counts {
   display: flex;
 }
@@ -607,15 +609,11 @@ body {
   display: block;
   font-weight: bold;
   font-size: 1rem;
-  color: black;
 }
 .user-popup__website,
 .user-popup__location {
   display: flex;
   align-items: center;
-}
-.user-popup__website-url {
-  color: black;
 }
 .user-popup__footer {
   padding: 0 16px 8px;
