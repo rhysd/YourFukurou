@@ -328,6 +328,10 @@ body {
 .activity:hover {
   background-color: var(--bg-color-panel-hover);
 }
+.activity.activity_focused {
+  color: white;
+  background-color: var(--bg-color-focused);
+}
 .activity__header {
   display: flex;
   align-items: center;
@@ -337,11 +341,13 @@ body {
 }
 .activity__screenname {
   margin: 0 4px;
-  color: black;
   font-weight: bold;
 }
 .activity__created-at {
   color: var(--color-weak-text-link);
+}
+.activity__created-at.activity__created-at_focused {
+  color: var(--color-focused-weak);
 }
 .activity__text {
   margin: 0 8px;
