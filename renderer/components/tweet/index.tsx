@@ -16,25 +16,30 @@ interface TweetProps extends React.Props<any> {
     status: TweetItem;
     owner: TwitterUser;
     timeline: TimelineKind;
+    focused?: boolean;
     dispatch: Redux.Dispatch;
 }
 
-function getClass(tw: TweetItem, owner: TwitterUser, timeline: TimelineKind) {
+function getClass(tw: TweetItem, props: TweetProps) {
     'use strict';
-    // Note:
-    // Change mention's color in except for mention timeline
-    return tw.mentionsTo(owner) && timeline !== 'mention' ?
-        'tweet__body tweet__body_mention' :
-        'tweet__body';
+    if (props.focused) {
+        return 'tweet__body tweet__body_focused';
+    }
+
+    if (tw.mentionsTo(props.owner) && props.timeline !== 'mention') {
+        return 'tweet__body tweet__body_mention';
+    }
+
+    return 'tweet__body';
 }
 
 const Tweet: React.StatelessComponent<TweetProps> = props => {
     const tw = props.status.getMainStatus();
     return (
-        <div className={getClass(tw, props.owner, props.timeline)}>
+        <div className={getClass(tw, props)}>
             <TweetIcon user={tw.user} dispatch={props.dispatch}/>
-            <TweetSecondary status={props.status}/>
-            <TweetPrimary status={props.status} owner={props.owner}/>
+            <TweetSecondary status={props.status} focused={props.focused}/>
+            <TweetPrimary status={props.status} owner={props.owner} focused={props.focused}/>
         </div>
     );
 };

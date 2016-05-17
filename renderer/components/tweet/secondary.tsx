@@ -4,6 +4,7 @@ import ScreenName from './screen_name';
 
 interface TweetSecondaryProps extends React.Props<any> {
     status: Tweet;
+    focused?: boolean;
 }
 
 function retweetedBy(tw: Tweet) {
@@ -26,7 +27,12 @@ const TweetSecondary = (props: TweetSecondaryProps) => {
     const status = props.status.getMainStatus();
     const user = status.user;
     return <div className="tweet__secondary">
-        <ScreenName className="tweet__secondary-screenname" user={user}/>
+        <ScreenName
+            className={props.focused ?
+                        'tweet__secondary-screenname tweet__secondary-screenname_focused' :
+                        'tweet__secondary-screenname'}
+            user={user}
+        />
         <div className="tweet__secondary-name" title={user.name}>
             {user.name}
         </div>

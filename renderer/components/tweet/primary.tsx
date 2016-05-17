@@ -11,6 +11,7 @@ import OtherActionsButton from './other_actions_button';
 interface TweetPrimaryProps extends React.Props<any> {
     owner: TwitterUser;
     status: Tweet;
+    focused: boolean;
 }
 
 export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}> {
@@ -29,14 +30,16 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
     }
 
     renderCreatedAt() {
+        const class_name = this.props.focused ?
+            'tweet__primary-created-at tweet__primary-created-at_focused':
+            'tweet__primary-created-at';
         return (
-            <a
-                className="tweet__primary-created-at"
-                href="#"
+            <span
+                className={class_name}
                 onClick={() => this.props.status.openStatusPageInBrowser()}
             >
                 {this.props.status.getCreatedAtString()}
-            </a>
+            </span>
         );
     }
 
@@ -73,11 +76,11 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
 
         return (
             <div
-                className={'tweet__primary'}
+                className="tweet__primary"
                 onMouseEnter={this.showActions}
                 onMouseLeave={this.hideActions}
             >
-                <TweetText status={s}/>
+                <TweetText status={s} focused={this.props.focused}/>
                 {this.renderQuotedStatus(s)}
                 {this.renderMedia(s.media)}
                 <div className="tweet__primary-footer" >
