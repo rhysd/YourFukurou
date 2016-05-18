@@ -13,7 +13,10 @@ const ExternalLink = (props: ExternalLinkProps) => (
     <span
         className={props.className + ' external-link'}
         title={props.title}
-        onClick={() => openExternal(props.url)}
+        onClick={e => {
+            e.stopPropagation();
+            openExternal(props.url);
+        }}
     >
         {props.children}
     </span>

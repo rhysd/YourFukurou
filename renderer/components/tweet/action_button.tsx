@@ -52,8 +52,9 @@ function onReplyClicked(props: TweetActionButtonProps) {
     props.dispatch(openEditorForReply(props.status, props.owner));
 }
 
-function onClick(props: TweetActionButtonProps) {
+function onClick(e: React.MouseEvent, props: TweetActionButtonProps) {
     'use strict';
+    e.stopPropagation();
     switch (props.kind) {
         case 'reply': onReplyClicked(props); break;
         case 'retweet': onRetweetClicked(props); break;
@@ -127,7 +128,7 @@ const TweetActionButton = (props: TweetActionButtonProps) => {
             name={icon}
             tip={props.kind}
             className={'tweet-actions__' + props.kind}
-            onClick={() => onClick(props)}
+            onClick={e => onClick(e, props)}
         />
         <div className="tweet-actions__count">
             {getCount(props)}

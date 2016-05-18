@@ -25,7 +25,10 @@ function renderHeader(s: TweetItem) {
         <div className="tweet__quoted-header">
             <span
                 className="tweet__quoted-icon"
-                onClick={() => s.openStatusPageInBrowser()}
+                onClick={e => {
+                    e.stopPropagation();
+                    s.openStatusPageInBrowser();
+                }}
             >
                 <i className="fa fa-quote-left"/>
             </span> from <ScreenName

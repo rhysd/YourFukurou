@@ -5,7 +5,7 @@ interface IconButtonProps extends React.Props<any> {
     className?: string;
     color?: string;
     tip?: string;
-    onClick?: (event?: MouseEvent) => void;
+    onClick?: (event: React.MouseEvent) => void;
 }
 
 const IconButton = (props: IconButtonProps) => (

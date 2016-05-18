@@ -18,6 +18,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
     actions_elem: HTMLElement;
     showActions: () => void;
     hideActions: () => void;
+    openStatus: (e: React.MouseEvent) => void;
 
     constructor(props: TweetPrimaryProps) {
         super(props);
@@ -27,6 +28,10 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         this.hideActions = () => {
             this.actions_elem.style.display = 'none';
         }
+        this.openStatus = e => {
+            e.stopPropagation();
+            this.props.status.openStatusPageInBrowser();
+        };
     }
 
     renderCreatedAt() {
@@ -36,7 +41,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         return (
             <span
                 className={class_name}
-                onClick={() => this.props.status.openStatusPageInBrowser()}
+                onClick={this.openStatus}
             >
                 {this.props.status.getCreatedAtString()}
             </span>
