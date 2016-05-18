@@ -7,7 +7,7 @@ export default class IpcSender {
     ) {}
 
     send(channel: ChannelFromMain, ...args: any[]) {
-        log.debug('SEND: Channel:', channel);
+        log.debug('---> Channel:', channel);
         this.sender.send(channel, ...args);
     }
 }
