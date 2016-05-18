@@ -58,6 +58,10 @@ export enum Kind {
 
     FocusOnItem,
     UnfocusItem,
+    FocusNextItem,
+    FocusPrevItem,
+    FocusTopItem,
+    FocusBottomItem,
 }
 
 export interface Action {
@@ -441,3 +445,32 @@ export function unfocusItem() {
         type: Kind.UnfocusItem,
     };
 }
+
+export function focusNextItem() {
+    'use strict';
+    return {
+        type: Kind.FocusNextItem,
+    };
+}
+
+export function focusPrevItem() {
+    'use strict';
+    return {
+        type: Kind.FocusPrevItem,
+    };
+}
+
+export function focusTopItem() {
+    'use strict';
+    return {
+        type: Kind.FocusTopItem,
+    };
+}
+
+export function focusBottomItem() {
+    'use strict';
+    return {
+        type: Kind.FocusBottomItem,
+    };
+}
+

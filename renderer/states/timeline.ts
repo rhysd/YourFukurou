@@ -250,6 +250,12 @@ export default class TimelineState {
     }
 
     focusOn(index: number) {
+        const size = this.getCurrentTimeline().size;
+        if (index < 0 || (size - 1) < index) {
+            log.debug('Focus index out of range:', index, size);
+            return this;
+        }
+
         return new TimelineState(
             this.kind,
             this.home,
@@ -260,6 +266,28 @@ export default class TimelineState {
             this.no_retweet_ids,
             index
         );
+    }
+
+    focusNext() {
+        if (this.focus_index === null) {
+            return this.focusTop();
+        }
+        return this.focusOn(this.focus_index + 1);
+    }
+
+    focusPrevious() {
+        if (this.focus_index === null) {
+            return this;
+        }
+        return this.focusOn(this.focus_index - 1);
+    }
+
+    focusTop() {
+        return this.focusOn(0);
+    }
+
+    focusBottom() {
+        return this.focusOn(this.getCurrentTimeline().size - 1);
     }
 
     switchTimeline(next_kind: TimelineKind) {

@@ -7,6 +7,10 @@ export default function timeline(state: TimelineState = DefaultTimelineState, ac
         case Kind.AddTweetToTimeline:     return state.addNewTweet(action.status);
         case Kind.ChangeCurrentTimeline:  return state.switchTimeline(action.timeline);
         case Kind.FocusOnItem:            return state.focusOn(action.index);
+        case Kind.FocusNextItem:          return state.focusNext();
+        case Kind.FocusPrevItem:          return state.focusPrevious();
+        case Kind.FocusTopItem:           return state.focusTop();
+        case Kind.FocusBottomItem:        return state.focusBottom();
         case Kind.UnfocusItem:            return state.focusOn(null);
         case Kind.DeleteStatusInTimeline: return state.deleteStatusWithId(action.tweet_id);
         case Kind.StatusLiked:            return state.updateActivity('liked', action.status, action.user);
