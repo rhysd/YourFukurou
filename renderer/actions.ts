@@ -325,7 +325,6 @@ export function openEditorForReply(in_reply_to: Tweet, owner: TwitterUser) {
     };
 }
 
-
 export function closeEditor() {
     'use strict';
     return {

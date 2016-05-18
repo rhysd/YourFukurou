@@ -53,7 +53,7 @@ function getCharFrom(e: KeyEvent) {
     if (e.code in SpecialChars) {
         return SpecialChars[e.code];
     }
-    return String.fromCharCode(e.charcode);
+    return String.fromCharCode(e.charcode).toLowerCase();
 }
 
 export default class KeyBinds<ActionType> {

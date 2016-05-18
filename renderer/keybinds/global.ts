@@ -1,14 +1,35 @@
 import * as I from 'immutable';
 import KeyBinds from './keybinds';
+import Store from '../store';
+import {
+    focusNextItem,
+    focusPrevItem,
+    focusTopItem,
+    focusBottomItem,
+    openEditor,
+} from '../actions';
 
-export type GlobalAction = 'open-tweet-form';
+export type GlobalAction =
+    'open-tweet-form'
+  | 'focus-next'
+  | 'focus-previous'
+  | 'focus-top'
+  | 'focus-bottom';
 
 const DefaultMap = I.Map<string, GlobalAction>({
     'tab': 'open-tweet-form',
+    'i': 'focus-top',
+    'm': 'focus-bottom',
+    'j': 'focus-next',
+    'k': 'focus-previous',
 });
 
 const ActionHandlers = I.Map<GlobalAction, () => void>({
-    'open-tweet-form': () => console.error('TODO'),
+    'open-tweet-form': () => Store.dispatch(openEditor()),
+    'focus-next': () => Store.dispatch(focusNextItem()),
+    'focus-previous': () => Store.dispatch(focusPrevItem()),
+    'focus-top': () => Store.dispatch(focusTopItem()),
+    'focus-bottom': () => Store.dispatch(focusBottomItem()),
 });
 
 // Note:
