@@ -69,9 +69,7 @@ PM.loadPlugins();
 
 // TODO:
 // Look config and register user-defined keymaps
-const keymaps = new GlobalKeyMaps();
-const handle_key = (e: KeyboardEvent) => keymaps.handle(e);
-window.addEventListener('keydown', handle_key);
+GlobalKeyMaps.listen(window);
 
 // Note: Debug purpose
 global.DB = DB;
@@ -80,5 +78,5 @@ global.PM = PM;
 // Note: Post process of application
 window.onunload = () => {
     proxy.terminate();
-    window.removeEventListener('keydown', handle_key);
+    GlobalKeyMaps.disable();
 };

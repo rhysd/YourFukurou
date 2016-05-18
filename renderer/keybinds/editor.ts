@@ -107,6 +107,7 @@ export default class EditorKeymaps {
             ctrlKey: isCtrlKeyCommand(e),
             altKey: isOptionKeyCommand(e),
             metaKey: hasCommandModifier(e),
+            shiftKey: false,  // Note: Editor handles shift key so we can't use it
         });
     }
 
@@ -127,6 +128,7 @@ export default class EditorKeymaps {
             ctrlKey: isCtrlKeyCommand(e),
             altKey: isOptionKeyCommand(e),
             metaKey: hasCommandModifier(e),
+            shiftKey: false,
         });
     }
 

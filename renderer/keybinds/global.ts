@@ -35,21 +35,38 @@ const ActionHandlers = I.Map<GlobalAction, () => void>({
 // Note:
 // At constructor, we need to load user defined key actions asynchronously.
 
-export default class GlobalKeyMaps {
+interface Listenable {
+    addEventListener(e: string, cb: (e: Event) => any, capture?: boolean): void;
+    removeEventListener(e: string, cb: (e: Event) => any): void;
+}
+
+export class GlobalKeyMaps {
     private keybinds: KeyBinds<GlobalAction>;
+    private listening: Listenable;
+    private handler: (e: KeyboardEvent) => void;
 
     constructor() {
         this.keybinds = new KeyBinds<GlobalAction>(
             DefaultMap,
             ActionHandlers
         );
+        this.listening = null;
+        this.handler = this.handle.bind(this);
     }
 
     enable() {
+        if (this.keybinds.enabled || this.listening === null) {
+            return;
+        }
+        this.listening.addEventListener('keydown', this.handler);
         this.keybinds.enabled = true;
     }
 
     disable() {
+        if (!this.keybinds.enabled || this.listening === null) {
+            return;
+        }
+        this.listening.removeEventListener('keydown', this.handler);
         this.keybinds.enabled = false;
     }
 
@@ -58,12 +75,14 @@ export default class GlobalKeyMaps {
     }
 
     handle(e: KeyboardEvent) {
+        e.preventDefault();
         const resolved = this.keybinds.resolveEvent({
             code: (e as any).code,  // KeyboardEvent.code is not defined in .d.ts
             charcode: e.keyCode,
             ctrlKey: e.ctrlKey,
             metaKey: e.metaKey,
             altKey: e.altKey,
+            shiftKey: e.shiftKey,
         });
 
         if (resolved === null) {
@@ -72,4 +91,11 @@ export default class GlobalKeyMaps {
 
         return this.keybinds.handleAction(resolved);
     }
+
+    listen(l: Listenable) {
+        this.listening = l;
+        l.addEventListener('keydown', this.handler);
+    }
 }
+
+export default new GlobalKeyMaps();
