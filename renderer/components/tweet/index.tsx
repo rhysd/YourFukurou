@@ -17,6 +17,7 @@ interface TweetProps extends React.Props<any> {
     owner: TwitterUser;
     timeline: TimelineKind;
     focused?: boolean;
+    onClick?: (e: MouseEvent) => void;
     dispatch: Redux.Dispatch;
 }
 
@@ -36,7 +37,7 @@ function getClass(tw: TweetItem, props: TweetProps) {
 const Tweet: React.StatelessComponent<TweetProps> = props => {
     const tw = props.status.getMainStatus();
     return (
-        <div className={getClass(tw, props)}>
+        <div className={getClass(tw, props)} onClick={props.onClick}>
             <TweetIcon user={tw.user} dispatch={props.dispatch}/>
             <TweetSecondary status={props.status} focused={props.focused}/>
             <TweetPrimary status={props.status} owner={props.owner} focused={props.focused}/>

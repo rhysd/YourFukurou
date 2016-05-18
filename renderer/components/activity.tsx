@@ -9,6 +9,7 @@ import log from '../log';
 interface TwitterActivityProps extends React.Props<any> {
     activity: TimelineActivity;
     focused?: boolean;
+    onClick?: (e: MouseEvent) => void;
 }
 
 function renderBadge(kind: TimelineActivityKind) {
@@ -103,7 +104,10 @@ const TwitterActivity: React.StatelessComponent<TwitterActivityProps> = props =>
         undefined;
 
     return (
-        <div className={props.focused ? 'activity activity_focused' : 'activity'}>
+        <div
+            className={props.focused ? 'activity activity_focused' : 'activity'}
+            onClick={props.onClick}
+        >
             <div className="activity__header">
                 {renderBadge(kind)} {behaved} by {renderScreenNames(props.activity)}
                 <span className="spacer"/>

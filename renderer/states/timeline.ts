@@ -249,6 +249,19 @@ export default class TimelineState {
         );
     }
 
+    focusOn(index: number) {
+        return new TimelineState(
+            this.kind,
+            this.home,
+            this.mention,
+            this.user,
+            this.notified,
+            this.rejected_ids,
+            this.no_retweet_ids,
+            index
+        );
+    }
+
     switchTimeline(next_kind: TimelineKind) {
         if (next_kind === this.kind) {
             return this;

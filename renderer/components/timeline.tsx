@@ -19,6 +19,8 @@ import {TweetMediaState} from '../reducers/tweet_media';
 import {
     closeTweetMedia,
     moveToNthPicturePreview,
+    focusOnItem,
+    unfocusItem,
 } from '../actions';
 
 interface TimelineProps extends React.Props<any> {
@@ -27,6 +29,7 @@ interface TimelineProps extends React.Props<any> {
     items: List<Item>,
     owner: TwitterUser,
     media: TweetMediaState;
+    focus_index: number;
     dispatch?: Redux.Dispatch;
 }
 
@@ -35,19 +38,35 @@ function nop() {
     // Note: No OPeration
 }
 
+function toggleFocus(focused: boolean, idx: number, dispatch: Redux.Dispatch) {
+    'use strict';
+    const action = focused ?
+        unfocusItem() : focusOnItem(idx);
+    dispatch(action);
+}
+
 function renderItem(idx: number, key: string, props: TimelineProps) {
     'use strict';
     const i = props.items.get(idx);
+    const focused = idx === props.focus_index;
+    const click_handler = () => toggleFocus(focused, idx, props.dispatch);
     if (i instanceof TweetItem) {
         return <Tweet
             status={i}
             timeline={props.kind}
             owner={props.owner}
+            focused={focused}
+            onClick={click_handler}
             dispatch={props.dispatch}
             key={key}
         />;
     } else if (i instanceof TimelineActivity) {
-        return <TwitterActivity activity={i} key={key}/>;
+        return <TwitterActivity
+            activity={i}
+            focused={focused}
+            onClick={click_handler}
+            key={key}
+        />;
     } else if (i instanceof Separator) {
         return <ZigZagSeparator key={key}/>;
     } else {
@@ -125,6 +144,7 @@ function select(state: State): TimelineProps {
         kind: state.timeline.kind,
         owner: state.timeline.user,
         media: state.tweetMedia,
+        focus_index: state.timeline.focus_index,
     };
 }
 export default connect(select)(Timeline);

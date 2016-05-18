@@ -55,6 +55,9 @@ export enum Kind {
     OpenPicturePreview,
     CloseTweetMedia,
     MoveToNthPicturePreview,
+
+    FocusOnItem,
+    UnfocusItem,
 }
 
 export interface Action {
@@ -421,5 +424,20 @@ export function moveToNthPicturePreview(index: number) {
     return {
         type: Kind.MoveToNthPicturePreview,
         index,
+    };
+}
+
+export function focusOnItem(index: number) {
+    'use strict';
+    return {
+        type: Kind.FocusOnItem,
+        index,
+    };
+}
+
+export function unfocusItem() {
+    'use strict';
+    return {
+        type: Kind.UnfocusItem,
     };
 }
