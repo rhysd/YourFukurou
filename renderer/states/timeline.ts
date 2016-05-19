@@ -585,6 +585,21 @@ export default class TimelineState {
             this.friend_ids.merge(will_added)
         );
     }
+
+    removeFriends(ids: number[]) {
+        const next_friend_ids = this.friend_ids.filter(id => ids.indexOf(id) === -1).toList();
+        return new TimelineState(
+            this.kind,
+            this.home,
+            this.mention,
+            this.user,
+            this.notified,
+            this.rejected_ids,
+            this.no_retweet_ids,
+            this.focus_index,
+            next_friend_ids
+        );
+    }
 }
 
 export const DefaultTimelineState =

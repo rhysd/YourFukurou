@@ -34,7 +34,7 @@ function renderBannar(user: TwitterUser, dispatch: Redux.Dispatch) {
     }
 }
 
-const renderPrimary = (user: TwitterUser, friends: List<number>) => (
+const renderPrimary = (user: TwitterUser, friends: List<number>, dispatch: Redux.Dispatch) => (
     <div className="user-popup__primary">
         <div className="user-popup__main-icon">
             <Avatar
@@ -51,7 +51,7 @@ const renderPrimary = (user: TwitterUser, friends: List<number>) => (
             <ScreenName className="user-popup__screenname" user={user}/>
         </div>
         <div className="spacer"/>
-        <FollowButton user={user} friends={friends}/>
+        <FollowButton user={user} friends={friends} dispatch={dispatch}/>
     </div>
 );
 
@@ -131,7 +131,7 @@ const TwitterProfile: React.StatelessComponent<TwitterProfileProps> = props => {
     return (
         <div className="user-popup">
             {renderBannar(u, props.dispatch)}
-            {renderPrimary(u, props.friends)}
+            {renderPrimary(u, props.friends, props.dispatch)}
             {renderCounts(u)}
             <div className="user-popup__description">
                 {u.description}

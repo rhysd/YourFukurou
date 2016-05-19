@@ -663,6 +663,10 @@ body {
   background-color: var(--color-twitter);
   border-color: var(--color-twitter-weak);
 }
+.follow-button.follow-button_cannot-follow {
+  background-color: #aaaaaa;
+  border-color: #eeeeee;
+}
 .follow-button.follow-button_will-follow:hover,
 .follow-button.follow-button_will-unfollow:hover {
   opacity: 0.8;

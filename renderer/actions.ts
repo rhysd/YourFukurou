@@ -30,21 +30,21 @@ export enum Kind {
     UndoRetweet,
     RetweetSucceeded,
     UnretweetSucceeded,
+    UpdateStatus,
     DestroyStatus,
-
     CreateLike,
     DestroyLike,
     LikeSucceeded,
     UnlikeSucceeded,
     StatusLiked,
+    Follow,
+    Unfollow,
 
     ChangeEditorState,
     OpenEditor,
     OpenEditorForReply,
     CloseEditor,
     ToggleEditor,
-
-    UpdateStatus,
 
     SelectAutoCompleteSuggestion,
     UpdateAutoCompletion,
@@ -64,6 +64,7 @@ export enum Kind {
     FocusBottomItem,
 
     AddFriends,
+    RemoveFriends,
 }
 
 export interface Action {
@@ -87,6 +88,7 @@ export interface Action {
     ids?: number[];
     index?: number;
     media_urls?: string[];
+    user_id?: number;
 }
 
 export function addTweetToTimeline(status: Tweet) {
@@ -270,6 +272,22 @@ export function statusLiked(status: Tweet, from: TwitterUser) {
             user: from,
             status,
         }));
+    };
+}
+
+export function follow(user_id: number) {
+    'use strict';
+    return {
+        type: Kind.Follow,
+        user_id,
+    };
+}
+
+export function unfollow(user_id: number) {
+    'use strict';
+    return {
+        type: Kind.Unfollow,
+        user_id,
     };
 }
 
@@ -479,6 +497,14 @@ export function addFriends(ids: number[]) {
     'use strict';
     return {
         type: Kind.AddFriends,
+        ids,
+    };
+}
+
+export function removeFriends(ids: number[]) {
+    'use strict';
+    return {
+        type: Kind.RemoveFriends,
         ids,
     };
 }
