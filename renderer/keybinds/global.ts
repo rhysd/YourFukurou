@@ -184,7 +184,12 @@ export class GlobalKeyMaps {
             ActionHandlers
         );
         this.listening = null;
-        this.handler = this.handle.bind(this);
+        this.handler = e => {
+            const handled = this.handle(e);
+            if (handled) {
+                e.preventDefault();
+            }
+        };
     }
 
     enable() {
@@ -208,7 +213,6 @@ export class GlobalKeyMaps {
     }
 
     handle(e: KeyboardEvent) {
-        e.preventDefault();
         const resolved = this.keybinds.resolveEvent({
             code: (e as any).code,  // KeyboardEvent.code is not defined in .d.ts
             charcode: e.keyCode,
