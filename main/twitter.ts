@@ -17,8 +17,11 @@ export default class Twitter {
         this.stream = null;
     }
 
-    subscribe(c: ChannelFromRenderer, cb: Electron.IpcMainEventListener) {
-        ipc.on(c, cb);
+    subscribe(c: ChannelFromRenderer, cb: Function) {
+        ipc.on(c, (_, ...args) => {
+            log.debug('<--- Channel:', c);
+            cb.apply(this, args);
+        });
     }
 
     sendApiFailure(err: Error, res: IncomingMessage) {
@@ -28,12 +31,12 @@ export default class Twitter {
 
     prepareClient(tokens: Twit.ConfigKeys) {
         this.client = new Twit(tokens);
-        this.subscribe('yf:request-retweet', (_: Electron.IpcMainEvent, tweet_id: string) => this.retweet(tweet_id));
-        this.subscribe('yf:undo-retweet', (_: Electron.IpcMainEvent, tweet_id: string) => this.unretweet(tweet_id));
-        this.subscribe('yf:request-like', (_: Electron.IpcMainEvent, tweet_id: string) => this.like(tweet_id));
-        this.subscribe('yf:destroy-like', (_: Electron.IpcMainEvent, tweet_id: string) => this.unlike(tweet_id));
-        this.subscribe('yf:update-status', (_: Electron.IpcMainEvent, text: string, in_reply_to?: string) => this.updateStatus(text, in_reply_to));
-        this.subscribe('yf:destroy-status', (_: Electron.IpcMainEvent, tweet_id: string) => this.destroyStatus(tweet_id));
+        this.subscribe('yf:request-retweet', (tweet_id: string) => this.retweet(tweet_id));
+        this.subscribe('yf:undo-retweet', (tweet_id: string) => this.unretweet(tweet_id));
+        this.subscribe('yf:request-like', (tweet_id: string) => this.like(tweet_id));
+        this.subscribe('yf:destroy-like', (tweet_id: string) => this.unlike(tweet_id));
+        this.subscribe('yf:update-status', (text: string, in_reply_to?: string) => this.updateStatus(text, in_reply_to));
+        this.subscribe('yf:destroy-status', (tweet_id: string) => this.destroyStatus(tweet_id));
     }
 
     updateStatus(text: string, in_reply_to?: string) {

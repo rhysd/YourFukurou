@@ -8,6 +8,8 @@ import log from '../log';
 
 interface TwitterActivityProps extends React.Props<any> {
     activity: TimelineActivity;
+    focused?: boolean;
+    onClick?: (e: MouseEvent) => void;
 }
 
 function renderBadge(kind: TimelineActivityKind) {
@@ -82,11 +84,13 @@ function renderUserIcons(users: TwitterUser[]) {
         );
 }
 
-function renderCreatedAt(status: Tweet) {
+function renderCreatedAt(status: Tweet, focused: boolean) {
     'use strict';
     return (
         <ExternalLink
-            className="activity__created-at"
+            className={focused ?
+                'activity__created-at activity__created-at_focused' :
+                'activity__created-at'}
             url={status.statusPageUrl()}
         >{status.getCreatedAtString()}</ExternalLink>
     );
@@ -100,14 +104,17 @@ const TwitterActivity: React.StatelessComponent<TwitterActivityProps> = props =>
         undefined;
 
     return (
-        <div className="activity">
+        <div
+            className={props.focused ? 'activity activity_focused' : 'activity'}
+            onClick={props.onClick}
+        >
             <div className="activity__header">
                 {renderBadge(kind)} {behaved} by {renderScreenNames(props.activity)}
                 <span className="spacer"/>
-                {renderCreatedAt(props.activity.status)}
+                {renderCreatedAt(props.activity.status, props.focused)}
             </div>
             <div className="activity__text">
-                <TweetText status={props.activity.status}/>
+                <TweetText status={props.activity.status} focused={props.focused}/>
             </div>
             <div className="activity__footer">
                 {renderUserIcons(props.activity.by)}

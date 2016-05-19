@@ -1,6 +1,7 @@
 import {EditorState, Modifier, CompositeDecorator, SelectionState, ContentState} from 'draft-js';
 import Tweet, {TwitterUser} from '../item/tweet';
 import EditorKeymaps from '../keybinds/editor';
+import GlobalKeyMaps from '../keybinds/global';
 import autoCompleteFactory from '../components/editor/auto_complete_decorator';
 import log from '../log';
 
@@ -110,6 +111,7 @@ export default class TweetEditorState {
     }
 
     openEditorWithInReplyTo(status: Tweet, owner: TwitterUser) {
+        GlobalKeyMaps.disable();
         const in_reply_to = status.getMainStatus();
         const next_core = this.setReplyText(in_reply_to, owner);
         return new TweetEditorState(
@@ -121,6 +123,7 @@ export default class TweetEditorState {
     }
 
     openEditor() {
+        GlobalKeyMaps.disable();
         return new TweetEditorState(
             this.core,
             true,
@@ -130,6 +133,7 @@ export default class TweetEditorState {
     }
 
     closeEditor() {
+        GlobalKeyMaps.enable();
         return new TweetEditorState(
             EditorState.push(
                 this.core,

@@ -55,6 +55,13 @@ export enum Kind {
     OpenPicturePreview,
     CloseTweetMedia,
     MoveToNthPicturePreview,
+
+    FocusOnItem,
+    UnfocusItem,
+    FocusNextItem,
+    FocusPrevItem,
+    FocusTopItem,
+    FocusBottomItem,
 }
 
 export interface Action {
@@ -318,7 +325,6 @@ export function openEditorForReply(in_reply_to: Tweet, owner: TwitterUser) {
     };
 }
 
-
 export function closeEditor() {
     'use strict';
     return {
@@ -423,3 +429,47 @@ export function moveToNthPicturePreview(index: number) {
         index,
     };
 }
+
+export function focusOnItem(index: number) {
+    'use strict';
+    return {
+        type: Kind.FocusOnItem,
+        index,
+    };
+}
+
+export function unfocusItem() {
+    'use strict';
+    return {
+        type: Kind.UnfocusItem,
+    };
+}
+
+export function focusNextItem() {
+    'use strict';
+    return {
+        type: Kind.FocusNextItem,
+    };
+}
+
+export function focusPrevItem() {
+    'use strict';
+    return {
+        type: Kind.FocusPrevItem,
+    };
+}
+
+export function focusTopItem() {
+    'use strict';
+    return {
+        type: Kind.FocusTopItem,
+    };
+}
+
+export function focusBottomItem() {
+    'use strict';
+    return {
+        type: Kind.FocusBottomItem,
+    };
+}
+

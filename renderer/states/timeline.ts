@@ -55,31 +55,6 @@ function updateStatusIn(items: List<Item>, status: Tweet) {
     });
 }
 
-function updateActivityIn(items: List<Item>, kind: TimelineActivityKind, status: Tweet, from: TwitterUser) {
-    'use strict';
-    const status_id = status.id;
-    const index = items.findIndex(item => {
-        if (item instanceof TimelineActivity) {
-            return item.kind === kind && item.status.id === status_id;
-        } else {
-            return false;
-        }
-    });
-
-    if (index === -1) {
-        return items.unshift(new TimelineActivity(kind, status, [from]));
-    } else {
-        const will_updated = items.get(index);
-        if (will_updated instanceof TimelineActivity) {
-            const updated = will_updated.update(status, from);
-            return items.delete(index).unshift(updated);
-        } else {
-            log.error('Invalid activity for update:', will_updated);
-            return items;
-        }
-    }
-}
-
 // Note:
 // This must be an immutable class because it is a part of state in a reducer
 export default class TimelineState {
@@ -90,8 +65,61 @@ export default class TimelineState {
         public user: TwitterUser,
         public notified: {home: boolean; mention: boolean},
         public rejected_ids: List<number>,
-        public no_retweet_ids: List<number>
+        public no_retweet_ids: List<number>,
+        public focus_index: number
     ) {}
+
+    updateActivityInMention(kind: TimelineActivityKind, status: Tweet, from: TwitterUser): [List<Item>, number] {
+        const status_id = status.id;
+        const index = this.mention.findIndex(item => {
+            if (item instanceof TimelineActivity) {
+                return item.kind === kind && item.status.id === status_id;
+            } else {
+                return false;
+            }
+        });
+
+        const next_focus_index =
+            this.kind === 'mention' && (index === -1 || index < this.focus_index) ?
+                this.nextFocusIndex(this.mention.size + 1) : this.focus_index;
+
+        if (index === -1) {
+            return [this.mention.unshift(new TimelineActivity(kind, status, [from])), next_focus_index];
+        } else {
+            const will_updated = this.mention.get(index);
+            if (will_updated instanceof TimelineActivity) {
+                const updated = will_updated.update(status, from);
+                return [this.mention.delete(index).unshift(updated), next_focus_index];
+            } else {
+                log.error('Invalid activity for update:', will_updated);
+                return [this.mention, next_focus_index];
+            }
+        }
+    }
+
+    // TODO:
+    // Should consider separator
+    nextFocusIndex(next_size: number) {
+        if (this.focus_index === null || next_size === 0) {
+            return null;
+        }
+        if (this.focus_index === (next_size - 1)) {
+            return this.focus_index;
+        }
+        return this.focus_index + 1;
+    }
+
+    // TODO:
+    // Should consider separator
+    prevFocusIndex(next_size: number) {
+        if (this.focus_index === null || next_size === 0) {
+            return null;
+        }
+        if (this.focus_index === 0) {
+            return 0;
+        }
+        return this.focus_index - 1;
+    }
 
     checkMutedOrBlocked(status: Tweet) {
         if (this.rejected_ids.contains(status.user.id)) {
@@ -113,9 +141,9 @@ export default class TimelineState {
         return false;
     }
 
-    putInHome(status: Tweet) {
+    putInHome(status: Tweet): [List<Item>, number] {
         if (!status.isRetweet()) {
-            return this.home.unshift(status);
+            return [this.home.unshift(status), this.nextFocusIndex(this.home.size + 1)];
         }
 
         const status_id = status.retweeted_status.id;
@@ -127,11 +155,15 @@ export default class TimelineState {
             }
         });
 
+        const next_focus_index =
+            this.kind === 'home' && (index === -1 || index < this.focus_index) ?
+                this.nextFocusIndex(this.home.size + 1) : this.focus_index;
+
         if (index === -1) {
-            return this.home.unshift(status);
+            return [this.home.unshift(status), next_focus_index];
         }
 
-        return this.home.delete(index).unshift(status);
+        return [this.home.delete(index).unshift(status), next_focus_index];
     }
 
     addNewTweet(status: Tweet) {
@@ -158,15 +190,18 @@ export default class TimelineState {
             return this;
         }
 
+        let next_focus_index = this.focus_index;
+
         if (should_add_to_home) {
-            next_home = this.putInHome(status);
+            [next_home, next_focus_index] = this.putInHome(status);
         }
 
         if (should_add_to_mention) {
             if (status.isRetweet()) {
-                next_mention = updateActivityIn(this.mention, 'retweeted', status.retweeted_status, status.user);
+                [next_mention, next_focus_index] = this.updateActivityInMention('retweeted', status.retweeted_status, status.user);
             } else {
                 next_mention = this.mention.unshift(status);
+                next_focus_index = this.nextFocusIndex(next_mention.size);
             }
         }
 
@@ -184,7 +219,8 @@ export default class TimelineState {
             this.user,
             next_notified,
             this.rejected_ids,
-            this.no_retweet_ids
+            this.no_retweet_ids,
+            next_focus_index
         );
     }
 
@@ -197,6 +233,10 @@ export default class TimelineState {
             this.mention.first() instanceof Separator ?
                 this.mention :
                 this.mention.unshift(sep);
+        const next_focus_index =
+            (next_home !== this.home && this.kind === 'home') ||
+            (next_mention !== this.mention && this.kind === 'mention') ?
+                this.nextFocusIndex(next_home.size) : this.focus_index;
         return new TimelineState(
             this.kind,
             next_home,
@@ -204,8 +244,50 @@ export default class TimelineState {
             this.user,
             this.notified,
             this.rejected_ids,
-            this.no_retweet_ids
+            this.no_retweet_ids,
+            next_focus_index
         );
+    }
+
+    focusOn(index: number) {
+        const size = this.getCurrentTimeline().size;
+        if (index < 0 || (size - 1) < index) {
+            log.debug('Focus index out of range:', index, size);
+            return this;
+        }
+
+        return new TimelineState(
+            this.kind,
+            this.home,
+            this.mention,
+            this.user,
+            this.notified,
+            this.rejected_ids,
+            this.no_retweet_ids,
+            index
+        );
+    }
+
+    focusNext() {
+        if (this.focus_index === null) {
+            return this.focusTop();
+        }
+        return this.focusOn(this.focus_index + 1);
+    }
+
+    focusPrevious() {
+        if (this.focus_index === null) {
+            return this;
+        }
+        return this.focusOn(this.focus_index - 1);
+    }
+
+    focusTop() {
+        return this.focusOn(0);
+    }
+
+    focusBottom() {
+        return this.focusOn(this.getCurrentTimeline().size - 1);
     }
 
     switchTimeline(next_kind: TimelineKind) {
@@ -223,7 +305,8 @@ export default class TimelineState {
             this.user,
             next_notified,
             this.rejected_ids,
-            this.no_retweet_ids
+            this.no_retweet_ids,
+            null
         );
     }
 
@@ -250,6 +333,9 @@ export default class TimelineState {
             return this;
         }
 
+        // XXX:
+        // Next focus index calculation is too complicated.  I skipped it.
+
         return new TimelineState(
             this.kind,
             home_updated ? next_home : this.home,
@@ -257,7 +343,8 @@ export default class TimelineState {
             this.user,
             this.notified,
             this.rejected_ids,
-            this.no_retweet_ids
+            this.no_retweet_ids,
+            this.focus_index
         );
     }
 
@@ -273,6 +360,11 @@ export default class TimelineState {
             mention: this.kind !== 'mention',
         };
 
+        const next_focus_index =
+            this.kind !== 'mention' || this.focus_index === null ?
+                this.focus_index :
+                (this.focus_index + added.size);
+
         return new TimelineState(
             this.kind,
             this.home,
@@ -280,7 +372,8 @@ export default class TimelineState {
             this.user,
             next_notified,
             this.rejected_ids,
-            this.no_retweet_ids
+            this.no_retweet_ids,
+            next_focus_index
         );
     }
 
@@ -298,7 +391,8 @@ export default class TimelineState {
             this.user,
             this.notified,
             this.rejected_ids,
-            this.no_retweet_ids
+            this.no_retweet_ids,
+            this.focus_index
         );
     }
 
@@ -312,7 +406,8 @@ export default class TimelineState {
             new_user,
             this.notified,
             this.rejected_ids,
-            this.no_retweet_ids
+            this.no_retweet_ids,
+            this.focus_index
         );
     }
 
@@ -336,7 +431,8 @@ export default class TimelineState {
             new_user,
             this.notified,
             this.rejected_ids,
-            this.no_retweet_ids
+            this.no_retweet_ids,
+            this.focus_index
         );
     }
 
@@ -370,6 +466,9 @@ export default class TimelineState {
         const mention_updated = next_mention.size !== this.mention.size;
         const next_rejected_ids = this.rejected_ids.merge(will_added);
 
+        // XXX:
+        // Next focus index calculation is too complicated.  I skipped it.
+
         return new TimelineState(
             this.kind,
             home_updated ? next_home : this.home,
@@ -377,7 +476,8 @@ export default class TimelineState {
             this.user,
             this.notified,
             next_rejected_ids,
-            this.no_retweet_ids
+            this.no_retweet_ids,
+            this.focus_index
         );
     }
 
@@ -394,6 +494,9 @@ export default class TimelineState {
         const next_mention = this.mention.filter(predicate).toList();
         const next_no_retweet_ids = this.no_retweet_ids.merge(ids);
 
+        // XXX:
+        // Next focus index calculation is too complicated.  I skipped it.
+
         return new TimelineState(
             this.kind,
             next_home,
@@ -401,7 +504,8 @@ export default class TimelineState {
             this.user,
             this.notified,
             this.rejected_ids,
-            next_no_retweet_ids
+            next_no_retweet_ids,
+            this.focus_index
         );
     }
 
@@ -417,7 +521,8 @@ export default class TimelineState {
             this.user,
             this.notified,
             next_rejected_ids,
-            this.no_retweet_ids
+            this.no_retweet_ids,
+            this.focus_index
         );
     }
 
@@ -437,7 +542,7 @@ export default class TimelineState {
         notifyLiked(status, from);
 
         const next = this.updateStatus(status);
-        next.mention = updateActivityIn(next.mention, kind, status, from);
+        [next.mention, next.focus_index] = next.updateActivityInMention(kind, status, from);
 
         if (this.kind !== 'mention' && !this.notified.mention) {
             next.notified = {
@@ -458,6 +563,7 @@ export const DefaultTimelineState =
         null,
         {home: false, mention: false},
         List<number>(),
-        List<number>()
+        List<number>(),
+        null
     );
 

@@ -7,6 +7,7 @@ export interface KeyEvent {
     ctrlKey: boolean;
     metaKey: boolean;
     altKey: boolean;
+    shiftKey: boolean;
 }
 
 interface PreparsedSeq {
@@ -14,6 +15,7 @@ interface PreparsedSeq {
     ctrlKey: boolean;
     metaKey: boolean;
     altKey: boolean;
+    shiftKey: boolean;
 }
 
 const ReCharFromSeq = /[^+]+$/;
@@ -53,7 +55,7 @@ function getCharFrom(e: KeyEvent) {
     if (e.code in SpecialChars) {
         return SpecialChars[e.code];
     }
-    return String.fromCharCode(e.charcode);
+    return String.fromCharCode(e.charcode).toLowerCase();
 }
 
 export default class KeyBinds<ActionType> {
@@ -96,11 +98,13 @@ export default class KeyBinds<ActionType> {
             return null;
         }
 
+        const c = m[0].toLowerCase();
         let p: PreparsedSeq = {
-            char: m[0],
+            char: c,
             ctrlKey: false,
             metaKey: false,
             altKey: false,
+            shiftKey: c !== m[0],
         };
 
         if (seq.includes('ctrl+')) {
@@ -137,6 +141,7 @@ export default class KeyBinds<ActionType> {
                     (key.ctrlKey === p.ctrlKey) &&
                     (key.metaKey === p.metaKey) &&
                     (key.altKey === p.altKey) &&
+                    (key.shiftKey === p.shiftKey) &&
                     getCharFrom(key) === p.char
                 );
 

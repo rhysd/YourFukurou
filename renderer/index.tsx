@@ -5,6 +5,7 @@ import {Stats} from 'fs';
 import * as React from 'react';
 import {render} from 'react-dom';
 import {Provider} from 'react-redux';
+import {whyDidYouUpdate} from 'why-did-you-update';
 import Store from './store';
 import IpcChannelProxy from './ipc_channel_proxy';
 import App from './components/app';
@@ -14,8 +15,8 @@ import {
 } from './actions';
 import DB from './database/db';
 import PM from './plugin_manager';
+import GlobalKeyMaps from './keybinds/global';
 import log from './log';
-import {whyDidYouUpdate} from 'why-did-you-update';
 
 const fs = global.require('fs');
 const electron = global.require('electron');
@@ -47,7 +48,6 @@ DB.rejected_ids
     .catch(() => log.debug('No cache for blocked/muted was found, skipped.'));
 
 const proxy = new IpcChannelProxy().start();
-window.onunload = () => proxy.terminate();
 
 const user_css_path = path.join(app.getPath('userData'), 'user.css');
 fs.lstat(user_css_path, (err: NodeJS.ErrnoException, stats: Stats) => {
@@ -67,5 +67,16 @@ fs.lstat(user_css_path, (err: NodeJS.ErrnoException, stats: Stats) => {
 
 PM.loadPlugins();
 
+// TODO:
+// Look config and register user-defined keymaps
+GlobalKeyMaps.listen(window);
+
+// Note: Debug purpose
 global.DB = DB;
 global.PM = PM;
+
+// Note: Post process of application
+window.onunload = () => {
+    proxy.terminate();
+    GlobalKeyMaps.disable();
+};

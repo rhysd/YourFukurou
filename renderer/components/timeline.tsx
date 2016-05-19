@@ -19,6 +19,8 @@ import {TweetMediaState} from '../reducers/tweet_media';
 import {
     closeTweetMedia,
     moveToNthPicturePreview,
+    focusOnItem,
+    unfocusItem,
 } from '../actions';
 
 interface TimelineProps extends React.Props<any> {
@@ -27,6 +29,7 @@ interface TimelineProps extends React.Props<any> {
     items: List<Item>,
     owner: TwitterUser,
     media: TweetMediaState;
+    focus_index: number;
     dispatch?: Redux.Dispatch;
 }
 
@@ -35,86 +38,119 @@ function nop() {
     // Note: No OPeration
 }
 
-function renderItem(idx: number, key: string, props: TimelineProps) {
-    'use strict';
-    const i = props.items.get(idx);
-    if (i instanceof TweetItem) {
-        return <Tweet
-            status={i}
-            timeline={props.kind}
-            owner={props.owner}
-            dispatch={props.dispatch}
-            key={key}
-        />;
-    } else if (i instanceof TimelineActivity) {
-        return <TwitterActivity activity={i} key={key}/>;
-    } else if (i instanceof Separator) {
-        return <ZigZagSeparator key={key}/>;
-    } else {
-        log.error('Invalid item', key, i);
-        return undefined;
+class Timeline extends React.Component<TimelineProps, {}> {
+    refs: {
+        list: ReactList.Node;
+        [key: string]: React.Component<any, any> | Element;
     }
-}
 
-function renderLightbox(props: TimelineProps) {
-    'use strict';
+    toggleFocus(focused: boolean, idx: number) {
+        const action = focused ?
+            unfocusItem() : focusOnItem(idx);
+        this.props.dispatch(action);
+    }
 
-    if (props.media === null || props.media.picture_urls.length === 0) {
-        return <Lightbox
-            images={[]}
-            isOpen={false}
-            onClickNext={nop}
-            onClickPrev={nop}
-            onClose={nop}
-        />;
+    renderItem(idx: number, key: string) {
+        const {items, focus_index, kind, owner, dispatch} = this.props;
+        const i = items.get(idx);
+        const focused = idx === focus_index;
+        const click_handler = () => this.toggleFocus(focused, idx);
+        if (i instanceof TweetItem) {
+            return <Tweet
+                status={i}
+                timeline={kind}
+                owner={owner}
+                focused={focused}
+                onClick={click_handler}
+                dispatch={dispatch}
+                key={key}
+            />;
+        } else if (i instanceof TimelineActivity) {
+            return <TwitterActivity
+                activity={i}
+                focused={focused}
+                onClick={click_handler}
+                key={key}
+            />;
+        } else if (i instanceof Separator) {
+            return <ZigZagSeparator key={key}/>;
+        } else {
+            log.error('Invalid item', key, i);
+            return undefined;
+        }
+    }
+
+    renderLightbox() {
+        const {media, dispatch} = this.props;
+
+        if (media === null || media.picture_urls.length === 0) {
+            return <Lightbox
+                images={[]}
+                isOpen={false}
+                onClickNext={nop}
+                onClickPrev={nop}
+                onClose={nop}
+            />;
+        }
+
+        // TODO:
+        // Currently only type: photo is supported.
+
+        // TODO:
+        // Consider to make 'srcset' property from 'sizes' property in an entity.
+        const images: LightboxImage[] =
+            media.picture_urls.map(e => ({ src: e }));
+
+        const idx = media.index;
+        const next_idx = (idx + 1) % images.length;
+        const prev_idx = idx === 0 ? (images.length - 1) : (idx - 1);
+
+        return (
+            <Lightbox
+                currentImage={media.index}
+                images={images}
+                isOpen
+                backdropClosesModal
+                width={window.innerWidth - 120}
+                onClickNext={() => dispatch(moveToNthPicturePreview(next_idx))}
+                onClickPrev={() => dispatch(moveToNthPicturePreview(prev_idx))}
+                onClose={() => dispatch(closeTweetMedia())}
+            />
+        );
+    }
+
+    componentWillReceiveProps(next: TimelineProps) {
+        if (next.focus_index !== this.props.focus_index && next.focus_index !== null) {
+            this.refs.list.scrollAround(next.focus_index);
+        }
     }
 
     // TODO:
-    // Currently only type: photo is supported.
-
-    // TODO:
-    // Consider to make 'srcset' property from 'sizes' property in an entity.
-    const images: LightboxImage[] =
-        props.media.picture_urls.map(e => ({ src: e }));
-
-    const idx = props.media.index;
-    const next_idx = (idx + 1) % images.length;
-    const prev_idx = idx === 0 ? (images.length - 1) : (idx - 1);
-
-    return (
-        <Lightbox
-            currentImage={props.media.index}
-            images={images}
-            isOpen
-            backdropClosesModal
-            width={window.innerWidth - 120}
-            onClickNext={() => props.dispatch(moveToNthPicturePreview(next_idx))}
-            onClickPrev={() => props.dispatch(moveToNthPicturePreview(prev_idx))}
-            onClose={() => props.dispatch(closeTweetMedia())}
-        />
-    );
+    // Determine the position to insert with ordered by id
+    render() {
+        const {message, dispatch, items} = this.props;
+        return (
+            <div className="timeline">
+                {message === null ?
+                    undefined :
+                    <Message
+                        text={message.text}
+                        kind={message.kind}
+                        dispatch={dispatch}
+                    />}
+                <ReactList
+                    itemRenderer={(idx, key) => this.renderItem(idx, key)}
+                    length={items.size}
+                    type="variable"
+                    threshold={500}
+                    useTranslate3d
+                    ref="list"
+                />
+                {this.renderLightbox()}
+            </div>
+        );
+    }
 }
-
-// TODO:
-// Determine the position to insert with ordered by id
-const Timeline = (props: TimelineProps) => (
-    <div className="timeline">
-        {props.message === null ?
-            undefined :
-            <Message
-                text={props.message.text}
-                kind={props.message.kind}
-                dispatch={props.dispatch}
-            />}
-        <ReactList
-            itemRenderer={(idx, key) => renderItem(idx, key, props)}
-            length={props.items.size}
-            type="variable"
-            threshold={500}
-        />
-        {renderLightbox(props)}
-    </div>
-);
 
 function select(state: State): TimelineProps {
     'use strict';
@@ -124,6 +160,7 @@ function select(state: State): TimelineProps {
         kind: state.timeline.kind,
         owner: state.timeline.user,
         media: state.tweetMedia,
+        focus_index: state.timeline.focus_index,
     };
 }
 export default connect(select)(Timeline);

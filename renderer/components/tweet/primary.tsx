@@ -11,12 +11,14 @@ import OtherActionsButton from './other_actions_button';
 interface TweetPrimaryProps extends React.Props<any> {
     owner: TwitterUser;
     status: Tweet;
+    focused: boolean;
 }
 
 export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}> {
     actions_elem: HTMLElement;
     showActions: () => void;
     hideActions: () => void;
+    openStatus: (e: React.MouseEvent) => void;
 
     constructor(props: TweetPrimaryProps) {
         super(props);
@@ -26,17 +28,23 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         this.hideActions = () => {
             this.actions_elem.style.display = 'none';
         }
+        this.openStatus = e => {
+            e.stopPropagation();
+            this.props.status.openStatusPageInBrowser();
+        };
     }
 
     renderCreatedAt() {
+        const class_name = this.props.focused ?
+            'tweet__primary-created-at tweet__primary-created-at_focused':
+            'tweet__primary-created-at';
         return (
-            <a
-                className="tweet__primary-created-at"
-                href="#"
-                onClick={() => this.props.status.openStatusPageInBrowser()}
+            <span
+                className={class_name}
+                onClick={this.openStatus}
             >
                 {this.props.status.getCreatedAtString()}
-            </a>
+            </span>
         );
     }
 
@@ -54,7 +62,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         if (q === null) {
             return undefined;
         }
-        return <QuotedTweet status={q}/>;
+        return <QuotedTweet status={q} focused={this.props.focused}/>;
     }
 
     renderMedia(media: Twitter.MediaEntity[]) {
@@ -73,16 +81,18 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
 
         return (
             <div
-                className={'tweet__primary'}
+                className="tweet__primary"
                 onMouseEnter={this.showActions}
                 onMouseLeave={this.hideActions}
             >
-                <TweetText status={s}/>
+                <TweetText status={s} focused={this.props.focused}/>
                 {this.renderQuotedStatus(s)}
                 {this.renderMedia(s.media)}
                 <div className="tweet__primary-footer" >
                     <div
-                        className="tweet-actions"
+                        className={this.props.focused ?
+                                    'tweet-actions tweet-actions_focused' :
+                                    'tweet-actions'}
                         style={{display: 'none'}}
                         ref={r => {this.actions_elem = r; }}
                     >

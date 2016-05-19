@@ -21,7 +21,10 @@ function getStyle(props: AvatarProps) {
 const Avatar = (props: AvatarProps) => (
     <div
         className="avatar"
-        onClick={() => shell.openExternal(`https://twitter.com/${props.screenName}`)}
+        onClick={e => {
+            e.stopPropagation();
+            shell.openExternal(`https://twitter.com/${props.screenName}`);
+        }}
     >
         <img
             className="avatar__inner"

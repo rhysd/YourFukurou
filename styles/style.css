@@ -13,6 +13,9 @@
   --color-twitter-weak: #8dd1ff;
   --bg-color-panel-hover: #f5f8fa;
   --color-timeline-border: #d0d0d0;
+  --bg-color-focused: #298cda;
+  --color-focused-weak: rgba(255, 255, 255, 0.7);
+  --bg-color-quote-focused: #79bcff;
 }
 
 html {
@@ -138,6 +141,10 @@ body {
 .tweet__body.tweet__body_mention:hover {
   background-color: #ffe7e7;
 }
+.tweet__body.tweet__body_focused {
+  color: white;
+  background-color: var(--bg-color-focused);
+}
 .tweet__icon {
   flex: none;
   width: 56px;
@@ -158,6 +165,9 @@ body {
   text-overflow: ellipsis;
   color: var(--text-link-color);
 }
+.tweet__secondary-screenname.tweet__secondary-screenname_focused {
+  color: white;
+}
 .tweet__secondary-name {
   flex: none;
   overflow: hidden;
@@ -175,8 +185,8 @@ body {
   color: var(--color-weak-text-link);
   font-size: 0.8rem;
 }
-.tweet__secondary-retweetedby-screenname {
-  color: var(--color-weak-text-link);
+.tweet__secondary-retweetedby.tweet__secondary-retweetedby_focused {
+  color: var(--color-focused-weak);
 }
 .tweet__primary {
   flex: auto;
@@ -200,6 +210,9 @@ body {
 .tweet__primary-created-at:hover {
   text-decoration: underline;
 }
+.tweet__primary-created-at.tweet__primary-created-at_focused {
+  color: var(--color-focused-weak);
+}
 .tweet__primary-conversation {
   flex: none;
   color: var(--color-weak-text-link);
@@ -215,6 +228,11 @@ body {
 .tweet__text-url {
   color: var(--text-link-color);
 }
+.tweet__text-hashtag.tweet__text-hashtag_focused,
+.tweet__text-mention.tweet__text-mention_focused,
+.tweet__text-url.tweet__text-url_focused {
+  color: var(--color-focused-weak);
+}
 .tweet__quoted {
   display: flex;
   flex-direction: column;
@@ -222,6 +240,9 @@ body {
   margin: 4px 0 4px 4px;
   padding: 8px;
   border-radius: 8px;
+}
+.tweet__quoted.tweet__quoted_focused {
+  background-color: var(--bg-color-quote-focused);
 }
 .tweet__quoted-icon {
   margin-right: 4px;
@@ -233,9 +254,6 @@ body {
   white-space: nowrap;
   text-overflow: ellipsis;
   margin-bottom: 4px;
-}
-.tweet__quoted-screenname {
-  color: #777777;
 }
 .tweet__quoted-text {
   color: #555555;
@@ -268,6 +286,9 @@ body {
 .tweet-actions {
   display: flex;
   color: var(--color-weak-text-link);
+}
+.tweet-actions.tweet-actions_focused {
+  color: var(--color-focused-weak);
 }
 .tweet-actions > * {
   flex: auto;
@@ -307,6 +328,10 @@ body {
 .activity:hover {
   background-color: var(--bg-color-panel-hover);
 }
+.activity.activity_focused {
+  color: white;
+  background-color: var(--bg-color-focused);
+}
 .activity__header {
   display: flex;
   align-items: center;
@@ -316,11 +341,13 @@ body {
 }
 .activity__screenname {
   margin: 0 4px;
-  color: black;
   font-weight: bold;
 }
 .activity__created-at {
   color: var(--color-weak-text-link);
+}
+.activity__created-at.activity__created-at_focused {
+  color: var(--color-focused-weak);
 }
 .activity__text {
   margin: 0 8px;

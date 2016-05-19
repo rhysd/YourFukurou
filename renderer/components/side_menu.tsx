@@ -18,7 +18,7 @@ interface SideMenuButtonProps extends React.Props<any> {
     notified: boolean;
     name: string;
     tip: string;
-    onClick: (event?: MouseEvent) => void;
+    onClick: (event: React.MouseEvent) => void;
 }
 
 const SideMenuButton = (props: SideMenuButtonProps) => {
