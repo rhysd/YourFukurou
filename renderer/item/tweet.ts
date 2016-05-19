@@ -235,10 +235,11 @@ export default class Tweet implements Item {
     }
 
     get urls() {
-        if (!this.json.entities || !this.json.entities.urls) {
+        const json = this.getMainJson();
+        if (!json.entities || !json.entities.urls) {
             return [];
         }
-        return this.json.entities.urls;
+        return json.entities.urls;
     }
 
     get media() {
@@ -264,6 +265,10 @@ export default class Tweet implements Item {
         } else {
             return this;
         }
+    }
+
+    getMainJson(): Twitter.Status {
+        return this.json.retweeted_status || this.json;
     }
 
     isRetweet() {
@@ -330,6 +335,12 @@ export default class Tweet implements Item {
 
     openStatusPageInBrowser() {
         shell.openExternal(this.statusPageUrl());
+    }
+
+    openAllLinksInBrowser() {
+        for (const u of this.urls.map(u => u.expanded_url)) {
+            shell.openExternal(u);
+        }
     }
 
     clone() {

@@ -1,16 +1,108 @@
 import * as I from 'immutable';
+import {Twitter} from 'twit';
 import KeyBinds from './keybinds';
 import Store from '../store';
+import Tweet from '../item/tweet';
 import {
     focusNextItem,
     focusPrevItem,
     focusTopItem,
     focusBottomItem,
     openEditor,
+    changeCurrentTimeline,
+    openPicturePreview,
+    createLike,
+    destroyLike,
+    sendRetweet,
+    undoRetweet,
 } from '../actions';
+
+function getCurrentStatus(): Tweet {
+    'use strict';
+    const timeline = Store.getState().timeline;
+    const idx = timeline.focus_index;
+    if (idx === null) {
+        return null;
+    }
+    const items = timeline.getCurrentTimeline();
+    const item = items.get(idx);
+    if (!item) {
+        return null;
+    }
+    if (item instanceof Tweet) {
+        return item;
+    } else {
+        return null;
+    }
+}
+
+function openMedia() {
+    'use strict';
+    const status = getCurrentStatus();
+    if (status === null) {
+        return;
+    }
+
+    const media = status.media;
+    if (media.length === 0) {
+        return;
+    }
+
+    Store.dispatch(
+        openPicturePreview(
+            media.map((m: Twitter.MediaEntity) => m.media_url)
+        )
+    );
+}
+
+function openLinks() {
+    'use strict';
+    const status = getCurrentStatus();
+    if (status !== null) {
+        status.openAllLinksInBrowser();
+    }
+}
+
+function openStatus() {
+    'use strict';
+    const status = getCurrentStatus();
+    if (status !== null) {
+        status.openStatusPageInBrowser();
+    }
+}
+
+function toggleRetweet() {
+    'use strict';
+    const status = getCurrentStatus();
+    if (status === null) {
+        return;
+    }
+    const s = status.getMainStatus();
+    const action = s.retweeted ? undoRetweet(s.id) : sendRetweet(s.id);
+    Store.dispatch(action);
+}
+
+function toggleLike() {
+    'use strict';
+    const status = getCurrentStatus();
+    if (status === null) {
+        return;
+    }
+    const s = status.getMainStatus();
+    const action = s.favorited ? destroyLike(s.id) : createLike(s.id);
+    Store.dispatch(action);
+}
 
 export type GlobalAction =
     'open-tweet-form'
+  | 'home-timeline'
+  | 'mention-timeline'
+  | 'open-media'
+  | 'open-links'
+  | 'retweet'
+  | 'like'
+  | 'reply'
+  | 'open-status-page'
   | 'focus-next'
   | 'focus-previous'
   | 'focus-top'
@@ -19,9 +111,16 @@ export type GlobalAction =
 const DefaultMap = I.Map<string, GlobalAction>({
     'tab': 'open-tweet-form',
     'i': 'focus-top',
-    'm': 'focus-bottom',
     'j': 'focus-next',
     'k': 'focus-previous',
+    'm': 'focus-bottom',
+    'o': 'open-media',
+    'O': 'open-status-page',
+    'ctrl+r': 'retweet',
+    'ctrl+f': 'like',
+    'l': 'open-links',
+    '1': 'home-timeline',
+    '2': 'mention-timeline',
 });
 
 const ActionHandlers = I.Map<GlobalAction, () => void>({
@@ -30,6 +129,13 @@ const ActionHandlers = I.Map<GlobalAction, () => void>({
     'focus-previous': () => Store.dispatch(focusPrevItem()),
     'focus-top': () => Store.dispatch(focusTopItem()),
     'focus-bottom': () => Store.dispatch(focusBottomItem()),
+    'home-timeline': () => Store.dispatch(changeCurrentTimeline('home')),
+    'mention-timeline': () => Store.dispatch(changeCurrentTimeline('mention')),
+    'open-media': openMedia,
+    'open-links': openLinks,
+    'open-status-page': openStatus,
+    'retweet': toggleRetweet,
+    'like': toggleLike,
 });
 
 // Note:

@@ -16,13 +16,6 @@ interface OtherActionsButtonProps extends React.Props<any> {
     dispatch?: Redux.Dispatch;
 }
 
-function openAllUrlsInTweet(props: OtherActionsButtonProps) {
-    'use strict';
-    for (const u of props.status.urls.map(u => u.expanded_url)) {
-        electron.shell.openExternal(u);
-    }
-}
-
 function statusUrlToClipboard(props: OtherActionsButtonProps) {
     'use strict';
     const url = props.status.getMainStatus().statusPageUrl();
@@ -65,7 +58,7 @@ const OtherActionsButton = (props: OtherActionsButtonProps) => {
             {renderDeleteThisTweet(props)}
             <div
                 className="tweet-actions__others-menu-item"
-                onClick={() => openAllUrlsInTweet(props)}
+                onClick={() => props.status.openStatusPageInBrowser()}
             >
                 Open URLs in tweet
             </div>
