@@ -26,7 +26,9 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
             this.actions_elem.style.display = 'flex';
         };
         this.hideActions = () => {
-            this.actions_elem.style.display = 'none';
+            if (!this.props.focused) {
+                this.actions_elem.style.display = 'none';
+            }
         }
         this.openStatus = e => {
             e.stopPropagation();
@@ -93,7 +95,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                         className={this.props.focused ?
                                     'tweet-actions tweet-actions_focused' :
                                     'tweet-actions'}
-                        style={{display: 'none'}}
+                        style={{display: this.props.focused ? 'flex' : 'none'}}
                         ref={r => {this.actions_elem = r; }}
                     >
                         <TweetActionButton kind="reply" {...action_props}/>
