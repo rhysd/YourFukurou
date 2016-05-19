@@ -122,7 +122,6 @@ body {
   width: auto;
   height: 100%;
   overflow: auto;
-  padding: 4px;
   background-color: white;
 }
 
@@ -593,6 +592,7 @@ body {
 .user-popup__primary {
   display: flex;
   padding: 0 8px;
+  align-items: center;
 }
 .user-popup__main-icon {
   margin-top: -32px;
@@ -644,6 +644,32 @@ body {
 }
 .user-popup__footer {
   padding: 0 16px 8px;
+}
+
+.follow-button {
+  color: white;
+  padding: 4px;
+  border-radius: 0.2em;
+  box-sizing: border-box;
+  margin-left: 4px;
+  border: solid 1px;
+  cursor: pointer;
+}
+.follow-button.follow-button_will-unfollow {
+  background-color: #ff4f44;
+  border-color: #ffe7e7;
+}
+.follow-button.follow-button_will-follow {
+  background-color: var(--color-twitter);
+  border-color: var(--color-twitter-weak);
+}
+.follow-button.follow-button_cannot-follow {
+  background-color: #aaaaaa;
+  border-color: #eeeeee;
+}
+.follow-button.follow-button_will-follow:hover,
+.follow-button.follow-button_will-unfollow:hover {
+  opacity: 0.8;
 }
 
 .rc-tooltip {

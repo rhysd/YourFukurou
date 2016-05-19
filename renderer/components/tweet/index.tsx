@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
+import {List} from 'immutable';
 import TweetItem, {TwitterUser} from '../../item/tweet';
 import TweetPrimary from './primary';
 import TweetSecondary from './secondary';
@@ -17,6 +18,7 @@ interface TweetProps extends React.Props<any> {
     owner: TwitterUser;
     timeline: TimelineKind;
     focused?: boolean;
+    friends?: List<number>;
     onClick?: (e: MouseEvent) => void;
     dispatch: Redux.Dispatch;
 }
@@ -38,7 +40,7 @@ const Tweet: React.StatelessComponent<TweetProps> = props => {
     const tw = props.status.getMainStatus();
     return (
         <div className={getClass(tw, props)} onClick={props.onClick}>
-            <TweetIcon user={tw.user} dispatch={props.dispatch}/>
+            <TweetIcon user={tw.user} friends={props.friends} dispatch={props.dispatch}/>
             <TweetSecondary status={props.status} focused={props.focused}/>
             <TweetPrimary status={props.status} owner={props.owner} focused={props.focused}/>
         </div>

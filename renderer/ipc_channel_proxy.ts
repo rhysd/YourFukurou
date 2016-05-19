@@ -3,6 +3,8 @@ import {
     addTweetToTimeline,
     addMentions,
     addRejectedUserIds,
+    addFriends,
+    removeFriends,
     removeRejectedUserIds,
     addNoRetweetUserIds,
     addSeparator,
@@ -57,6 +59,10 @@ export default class IpcChannelProxy {
 
         this.subscribe('yf:api-failure', (msg: string) => {
             Store.dispatch(showMessage('API error: ' + msg, 'error'));
+        });
+
+        this.subscribe('yf:friends', (ids: number[]) => {
+            Store.dispatch(addFriends(ids));
         });
 
         this.subscribe('yf:retweet-success', (json: Twitter.Status) => {
@@ -135,6 +141,21 @@ export default class IpcChannelProxy {
             Store.dispatch(addNoRetweetUserIds(ids));
             // TODO?
             // Add no-retweet-users to database
+        });
+
+        this.subscribe('yf:follow', (source: Twitter.User, target: Twitter.User) => {
+            if (Store.getState().timeline.user.id === source.id) {
+                // Note: When I follows someone
+                Store.dispatch(addFriends([target.id]));
+                Store.dispatch(setCurrentUser(new TwitterUser(source)));
+            } else {
+                // Note: When Someone follows me
+                Store.dispatch(setCurrentUser(new TwitterUser(target)));
+            }
+        });
+
+        this.subscribe('yf:unfollow', (target: Twitter.User) => {
+            Store.dispatch(removeFriends([target.id]));
         });
 
         log.debug('Started to receive messages');

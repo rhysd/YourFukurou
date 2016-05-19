@@ -10,6 +10,8 @@ type ChannelFromMain
     | 'yf:my-account-update'
     | 'yf:delete-status'
     | 'yf:liked-status'
+    | 'yf:follow'
+    | 'yf:unfollow'
     | 'yf:connection-failure'
     | 'yf:rejected-ids'
     | 'yf:unrejected-ids'
@@ -24,4 +26,6 @@ type ChannelFromRenderer
     | 'yf:destroy-like'
     | 'yf:update-status'
     | 'yf:destroy-status'
+    | 'yf:request-follow'
+    | 'yf:request-unfollow'
 ;

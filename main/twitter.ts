@@ -37,6 +37,8 @@ export default class Twitter {
         this.subscribe('yf:destroy-like', (tweet_id: string) => this.unlike(tweet_id));
         this.subscribe('yf:update-status', (text: string, in_reply_to?: string) => this.updateStatus(text, in_reply_to));
         this.subscribe('yf:destroy-status', (tweet_id: string) => this.destroyStatus(tweet_id));
+        this.subscribe('yf:request-follow', (user_id: number) => this.follow(user_id));
+        this.subscribe('yf:request-unfollow', (user_id: number) => this.unfollow(user_id));
     }
 
     updateStatus(text: string, in_reply_to?: string) {
@@ -110,6 +112,20 @@ export default class Twitter {
             // No need to send response to renderer process because
             // 'delete_status' event was already sent from streaming API.
             log.debug('Destroy status success:', ret.id);
+        });
+    }
+
+    follow(user_id: number) {
+        this.post('friendships/create', {user_id}, ret => {
+            // Note: User stream event will be notified
+            log.debug('Follow success:', ret);
+        });
+    }
+
+    unfollow(user_id: number) {
+        this.post('friendships/destroy', {user_id}, ret => {
+            // Note: User stream event will be notified
+            log.debug('Unfollow success:', ret);
         });
     }
 
@@ -259,6 +275,15 @@ export default class Twitter {
 
         this.stream.on('user_event', e => {
             log.debug(`${e.event.toUpperCase()}: From: @${e.source.screen_name}, To: @${e.target.screen_name}: `, e.target_object);
+        });
+
+        this.stream.on('follow', e => {
+            this.sender.send('yf:follow', e.source, e.target);
+        });
+
+        this.stream.on('unfollow', e => {
+            // Note: source is always me.
+            this.sender.send('yf:unfollow', e.target);
         });
 
         this.stream.on('unknown_user_event', msg => {
