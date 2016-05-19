@@ -9,12 +9,14 @@ import {
     focusTopItem,
     focusBottomItem,
     openEditor,
+    openEditorForReply,
     changeCurrentTimeline,
     openPicturePreview,
     createLike,
     destroyLike,
     sendRetweet,
     undoRetweet,
+    destroyStatus,
 } from '../actions';
 
 function getCurrentStatus(): Tweet {
@@ -93,6 +95,26 @@ function toggleLike() {
     Store.dispatch(action);
 }
 
+function reply() {
+    'use strict';
+    const owner = Store.getState().timeline.user;
+    const status = getCurrentStatus();
+    const action =
+        status === null ?
+            openEditor() :
+            openEditorForReply(status.getMainStatus(), owner);
+    Store.dispatch(action);
+}
+
+function deleteStatus() {
+    'use strict';
+    const status = getCurrentStatus();
+    if (status === null) {
+        return;
+    }
+    Store.dispatch(destroyStatus(status.id));
+}
+
 export type GlobalAction =
     'open-tweet-form'
   | 'home-timeline'
@@ -102,6 +124,7 @@ export type GlobalAction =
   | 'retweet'
   | 'like'
   | 'reply'
+  | 'delete-status'
   | 'open-status-page'
   | 'focus-next'
   | 'focus-previous'
@@ -116,11 +139,13 @@ const DefaultMap = I.Map<string, GlobalAction>({
     'm': 'focus-bottom',
     'o': 'open-media',
     'O': 'open-status-page',
-    'ctrl+r': 'retweet',
-    'ctrl+f': 'like',
     'l': 'open-links',
     '1': 'home-timeline',
     '2': 'mention-timeline',
+    'ctrl+r': 'retweet',
+    'ctrl+f': 'like',
+    'ctrl+D': 'delete-status',
+    'enter': 'reply',
 });
 
 const ActionHandlers = I.Map<GlobalAction, () => void>({
@@ -136,6 +161,8 @@ const ActionHandlers = I.Map<GlobalAction, () => void>({
     'open-status-page': openStatus,
     'retweet': toggleRetweet,
     'like': toggleLike,
+    'reply': reply,
+    'delete-status': deleteStatus,
 });
 
 // Note:
