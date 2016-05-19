@@ -66,7 +66,8 @@ export default class TimelineState {
         public notified: {home: boolean; mention: boolean},
         public rejected_ids: List<number>,
         public no_retweet_ids: List<number>,
-        public focus_index: number
+        public focus_index: number,
+        public friend_ids: List<number>
     ) {}
 
     updateActivityInMention(kind: TimelineActivityKind, status: Tweet, from: TwitterUser): [List<Item>, number] {
@@ -220,7 +221,8 @@ export default class TimelineState {
             next_notified,
             this.rejected_ids,
             this.no_retweet_ids,
-            next_focus_index
+            next_focus_index,
+            this.friend_ids
         );
     }
 
@@ -245,7 +247,8 @@ export default class TimelineState {
             this.notified,
             this.rejected_ids,
             this.no_retweet_ids,
-            next_focus_index
+            next_focus_index,
+            this.friend_ids
         );
     }
 
@@ -264,7 +267,8 @@ export default class TimelineState {
             this.notified,
             this.rejected_ids,
             this.no_retweet_ids,
-            index
+            index,
+            this.friend_ids
         );
     }
 
@@ -306,7 +310,8 @@ export default class TimelineState {
             next_notified,
             this.rejected_ids,
             this.no_retweet_ids,
-            null
+            null,
+            this.friend_ids
         );
     }
 
@@ -344,7 +349,8 @@ export default class TimelineState {
             this.notified,
             this.rejected_ids,
             this.no_retweet_ids,
-            this.focus_index
+            this.focus_index,
+            this.friend_ids
         );
     }
 
@@ -373,7 +379,8 @@ export default class TimelineState {
             next_notified,
             this.rejected_ids,
             this.no_retweet_ids,
-            next_focus_index
+            next_focus_index,
+            this.friend_ids
         );
     }
 
@@ -392,7 +399,8 @@ export default class TimelineState {
             this.notified,
             this.rejected_ids,
             this.no_retweet_ids,
-            this.focus_index
+            this.focus_index,
+            this.friend_ids
         );
     }
 
@@ -407,7 +415,8 @@ export default class TimelineState {
             this.notified,
             this.rejected_ids,
             this.no_retweet_ids,
-            this.focus_index
+            this.focus_index,
+            this.friend_ids
         );
     }
 
@@ -432,7 +441,8 @@ export default class TimelineState {
             this.notified,
             this.rejected_ids,
             this.no_retweet_ids,
-            this.focus_index
+            this.focus_index,
+            this.friend_ids
         );
     }
 
@@ -477,7 +487,8 @@ export default class TimelineState {
             this.notified,
             next_rejected_ids,
             this.no_retweet_ids,
-            this.focus_index
+            this.focus_index,
+            this.friend_ids
         );
     }
 
@@ -505,7 +516,8 @@ export default class TimelineState {
             this.notified,
             this.rejected_ids,
             next_no_retweet_ids,
-            this.focus_index
+            this.focus_index,
+            this.friend_ids
         );
     }
 
@@ -522,7 +534,8 @@ export default class TimelineState {
             this.notified,
             next_rejected_ids,
             this.no_retweet_ids,
-            this.focus_index
+            this.focus_index,
+            this.friend_ids
         );
     }
 
@@ -553,6 +566,25 @@ export default class TimelineState {
 
         return next;
     }
+
+    addFriends(ids: number[]) {
+        const will_added = ids.filter(id => !this.friend_ids.contains(id));
+        if (will_added.length === 0) {
+            return this;
+        }
+
+        return new TimelineState(
+            this.kind,
+            this.home,
+            this.mention,
+            this.user,
+            this.notified,
+            this.rejected_ids,
+            this.no_retweet_ids,
+            this.focus_index,
+            this.friend_ids.merge(will_added)
+        );
+    }
 }
 
 export const DefaultTimelineState =
@@ -564,6 +596,7 @@ export const DefaultTimelineState =
         {home: false, mention: false},
         List<number>(),
         List<number>(),
-        null
+        null,
+        List<number>()
     );
 

@@ -25,6 +25,7 @@
     "components/tweet/quote.tsx",
     "components/tweet/screen_name.tsx",
     "components/tweet/profile.tsx",
+    "components/tweet/follow_button.tsx",
     "components/editor/index.tsx",
     "components/editor/suggestions.tsx",
     "components/zigzag_separator.tsx",

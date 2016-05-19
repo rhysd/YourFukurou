@@ -2,6 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {Editor, EditorState, getDefaultKeyBinding} from 'draft-js';
 import {getTweetLength} from 'twitter-text';
+import {List} from 'immutable';
 import {
     changeEditorState,
     closeEditor,
@@ -29,6 +30,7 @@ interface TweetEditorProps extends React.Props<any> {
     inReplyTo: Tweet;
     completion: EditorCompletionState;
     user: TwitterUser;
+    friends: List<number>;
     dispatch?: Redux.Dispatch;
 }
 
@@ -163,14 +165,15 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
     }
 
     renderInReplyTo() {
-        if (!this.props.inReplyTo) {
+        const {inReplyTo, friends, dispatch} = this.props;
+        if (!inReplyTo) {
             return undefined;
         }
-        const tw = this.props.inReplyTo.getMainStatus();
+        const tw = inReplyTo.getMainStatus();
         return <div className="tweet-form__in-reply-to">
-            <TweetIcon user={tw.user} dispatch={this.props.dispatch}/>
-            <TweetSecondary status={this.props.inReplyTo}/>
-            <TweetText status={this.props.inReplyTo}/>
+            <TweetIcon user={tw.user} friends={friends} dispatch={dispatch}/>
+            <TweetSecondary status={inReplyTo}/>
+            <TweetText status={inReplyTo}/>
         </div>;
     }
 
@@ -234,6 +237,7 @@ function select(state: State): TweetEditorProps {
         inReplyTo: state.editor.in_reply_to_status,
         completion: state.editorCompletion,
         user: state.timeline.user,
+        friends: state.timeline.friend_ids,
     };
 }
 

@@ -30,6 +30,7 @@ interface TimelineProps extends React.Props<any> {
     owner: TwitterUser,
     media: TweetMediaState;
     focus_index: number;
+    friends: List<number>;
     dispatch?: Redux.Dispatch;
 }
 
@@ -51,7 +52,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
     }
 
     renderItem(idx: number, key: string) {
-        const {items, focus_index, kind, owner, dispatch} = this.props;
+        const {items, focus_index, kind, owner, friends, dispatch} = this.props;
         const i = items.get(idx);
         const focused = idx === focus_index;
         const click_handler = () => this.toggleFocus(focused, idx);
@@ -61,6 +62,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
                 timeline={kind}
                 owner={owner}
                 focused={focused}
+                friends={friends}
                 onClick={click_handler}
                 dispatch={dispatch}
                 key={key}
@@ -161,6 +163,7 @@ function select(state: State): TimelineProps {
         owner: state.timeline.user,
         media: state.tweetMedia,
         focus_index: state.timeline.focus_index,
+        friends: state.timeline.friend_ids,
     };
 }
 export default connect(select)(Timeline);

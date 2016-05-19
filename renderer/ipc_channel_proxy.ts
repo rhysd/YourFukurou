@@ -3,6 +3,7 @@ import {
     addTweetToTimeline,
     addMentions,
     addRejectedUserIds,
+    addFriends,
     removeRejectedUserIds,
     addNoRetweetUserIds,
     addSeparator,
@@ -57,6 +58,10 @@ export default class IpcChannelProxy {
 
         this.subscribe('yf:api-failure', (msg: string) => {
             Store.dispatch(showMessage('API error: ' + msg, 'error'));
+        });
+
+        this.subscribe('yf:friends', (ids: number[]) => {
+            Store.dispatch(addFriends(ids));
         });
 
         this.subscribe('yf:retweet-success', (json: Twitter.Status) => {

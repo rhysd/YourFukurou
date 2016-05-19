@@ -1,12 +1,15 @@
 import * as React from 'react';
+import {List} from 'immutable';
 import Avatar from '../avatar';
 import ScreenName from './screen_name';
+import FollowButton from './follow_button';
 import ExternalLink from '../external_link';
 import {TwitterUser} from '../../item/tweet';
 import {openPicturePreview} from '../../actions';
 
 interface TwitterProfileProps extends React.Props<any> {
     user: TwitterUser;
+    friends: List<number>;
     dispatch: Redux.Dispatch;
 }
 
@@ -31,7 +34,7 @@ function renderBannar(user: TwitterUser, dispatch: Redux.Dispatch) {
     }
 }
 
-const renderPrimary = (user: TwitterUser) => (
+const renderPrimary = (user: TwitterUser, friends: List<number>) => (
     <div className="user-popup__primary">
         <div className="user-popup__main-icon">
             <Avatar
@@ -47,6 +50,8 @@ const renderPrimary = (user: TwitterUser) => (
             </span>
             <ScreenName className="user-popup__screenname" user={user}/>
         </div>
+        <div className="spacer"/>
+        <FollowButton user={user} friends={friends}/>
     </div>
 );
 
@@ -126,7 +131,7 @@ const TwitterProfile: React.StatelessComponent<TwitterProfileProps> = props => {
     return (
         <div className="user-popup">
             {renderBannar(u, props.dispatch)}
-            {renderPrimary(u)}
+            {renderPrimary(u, props.friends)}
             {renderCounts(u)}
             <div className="user-popup__description">
                 {u.description}

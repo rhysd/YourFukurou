@@ -1,11 +1,13 @@
 import * as React from 'react';
 import Tooltip = require('rc-tooltip');
+import {List} from 'immutable';
 import Avatar from '../avatar';
 import {TwitterUser} from '../../item/tweet';
 import TwitterProfile from './profile';
 
 interface TweetIconProps extends React.Props<any> {
     user: TwitterUser;
+    friends: List<number>;
     dispatch: Redux.Dispatch;
 }
 
@@ -14,7 +16,13 @@ interface TweetIconProps extends React.Props<any> {
 const TweetIcon = (props: TweetIconProps) => (
     <Tooltip
         placement="bottomRight"
-        overlay={<TwitterProfile user={props.user} dispatch={props.dispatch}/>}
+        overlay={
+            <TwitterProfile
+                user={props.user}
+                friends={props.friends}
+                dispatch={props.dispatch}
+            />
+        }
     >
         <div className="tweet__icon">
             <Avatar

@@ -62,6 +62,8 @@ export enum Kind {
     FocusPrevItem,
     FocusTopItem,
     FocusBottomItem,
+
+    AddFriends,
 }
 
 export interface Action {
@@ -473,3 +475,10 @@ export function focusBottomItem() {
     };
 }
 
+export function addFriends(ids: number[]) {
+    'use strict';
+    return {
+        type: Kind.AddFriends,
+        ids,
+    };
+}
