@@ -14,8 +14,8 @@ import Separator from '../item/separator';
 import log from '../log';
 import State from '../states/root';
 import {TimelineKind} from '../states/timeline';
+import TweetMediaState from '../states/tweet_media';
 import {MessageState} from '../reducers/message';
-import {TweetMediaState} from '../reducers/tweet_media';
 import {
     closeTweetMedia,
     moveToNthPicturePreview,
@@ -85,13 +85,14 @@ class Timeline extends React.Component<TimelineProps, {}> {
     renderLightbox() {
         const {media, dispatch} = this.props;
 
-        if (media === null || media.picture_urls.length === 0) {
+        if (!media.is_open || media.picture_urls.length === 0) {
             return <Lightbox
                 images={[]}
                 isOpen={false}
                 onClickNext={nop}
                 onClickPrev={nop}
                 onClose={nop}
+                enableKeyboardInput={false}
             />;
         }
 
@@ -117,6 +118,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
                 onClickNext={() => dispatch(moveToNthPicturePreview(next_idx))}
                 onClickPrev={() => dispatch(moveToNthPicturePreview(prev_idx))}
                 onClose={() => dispatch(closeTweetMedia())}
+                enableKeyboardInput={true}
             />
         );
     }

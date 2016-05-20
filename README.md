@@ -66,7 +66,18 @@ These shortcuts are applied when tweet form is opened.  Global shortcuts will be
 | `ctrl+enter` | Send tweet.                                        | `send-tweet`             |
 | `enter`      | If completion item is focused, select it.          | `choose-suggestion`      |
 | `tab`        | If completion started, select next completion item | `select-next-suggestion` |
-| `escape`     | Close text form.                                   | N/A                      |
+| `escape`     | Close text form.                                   | `close-editor`           |
+
+### Media Preview
+
+These shortcuts are applied when preview of pictures in tweet is opened.  Global shortctus will be disabled while the preview is opened.
+
+| Defult                | Description                       | Action Name        |
+|-----------------------|-----------------------------------|--------------------|
+| `j` or `l` or `right` | Show next picture in preview.     | `next-picture`     |
+| `k` or `h` or `left`  | Show previous picture in preview. | `previous-picture` |
+| `escape` or `x`       | Close preview.                    | `close-preview`    |
+
 
 ## JSON Configuration File
 

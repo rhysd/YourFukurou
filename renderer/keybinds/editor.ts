@@ -7,6 +7,7 @@ import Store from '../store';
 import {
     upAutoCompletionFocus,
     downAutoCompletionFocus,
+    closeEditor,
 } from '../actions';
 
 const {
@@ -17,6 +18,7 @@ const {
 
 export type EditorAction = 'send-tweet'
                             | 'choose-suggestion'
+                            | 'close-editor'
                             | 'select-next-suggestion'
                             | 'select-previous-suggestion';
 
@@ -30,6 +32,7 @@ function isEditorAction(s: string): s is EditorAction {
     'use strict';
     return s === 'send-tweet' ||
            s === 'choose-suggestion' ||
+           s === 'close-editor' ||
            s === 'select-next-suggestion' ||
            s === 'select-previous-suggestion';
 }
@@ -76,6 +79,7 @@ function getCodeWorkaround(e: React.KeyboardEvent) {
 const ActionHandlers = I.Map<EditorAction, () => void>({
     'select-next-suggestion': () => Store.dispatch(downAutoCompletionFocus()),
     'select-previous-suggestion': () => Store.dispatch(upAutoCompletionFocus()),
+    'close-editor': () => Store.dispatch(closeEditor()),
 });
 
 export default class EditorKeymaps {
