@@ -1,12 +1,13 @@
 <img src="images/icon.png" width="70"/>Hackable [YoruFukurou](https://sites.google.com/site/yorufukurou/home-en) Alternative
 =====================================================================================
 
-This is a Twitter client to aim to replace YoruFukurou with high pluggablity.
+This is a Twitter client to aim to replace YoruFukurou with high pluggablity.  Under construction.
 
 Goals :bird::
 
 - Perspicuity
   - Display as many tweets on timeline as possible
+  - Height of app is most important for timeline
 - Everything can be done with keyboard
   - All actions can be done with key shortcuts
   - Flexible and customizable keybindings system
@@ -30,6 +31,42 @@ Goals :bird::
 You can specify your favorite styling by putting `user.css` in the application directory.
 
 To look up class names, you can use Chrome DevTools.  You can open DevTools from menu or setting `NODE_ENV` environment variable to 'development'.
+
+## Keyboard Shortcuts
+
+There are some keyboard shortcut contexts.  They can be customizable by action name (Please see below 'JSON Configuration File' section).
+
+### Global Shortcuts
+
+These shortcuts are applied by default.  If no shortcut is matched to the input, it will be handled by system's default manner.
+
+| Default  | Description                                | Action Name        |
+|----------|--------------------------------------------|--------------------|
+| `tab`    | Open tweet form.                           | `open-tweet-form`  |
+| `i`      | Move focus to top.                         | `focus-top`        |
+| `j`      | Move focus to next.                        | `focus-next`       |
+| `k`      | Move focus to previous.                    | `focus-previous`   |
+| `m`      | Move focus to bottom.                      | `focus-bottom`     |
+| `o`      | Open picture preview in focused tweet.     | `open-media`       |
+| `O`      | Open focused tweet page in browser.        | `open-status-page` |
+| `l`      | Open all links in focused tweet.           | `open-links`       |
+| `1`      | Switch to home timeline.                   | `home-timeline`    |
+| `2`      | Switch to mention timeline.                | `mention-timeline` |
+| `ctrl+r` | Retweet focused tweet.                     | `retweet`          |
+| `ctrl+f` | Like focused tweet.                        | `like`             |
+| `ctrl+D` | Delete focused tweet.                      | `delete-status`    |
+| `enter`  | Open tweet form to reply to focused tweet. | `reply`            |
+
+### Tweet Form
+
+These shortcuts are applied when tweet form is opened.  Global shortcuts will be disabled while tweet form is opened.
+
+| Default      | Description                                        | Action Name              |
+|--------------|----------------------------------------------------|--------------------------|
+| `ctrl+enter` | Send tweet.                                        | `send-tweet`             |
+| `enter`      | If completion item is focused, select it.          | `choose-suggestion`      |
+| `tab`        | If completion started, select next completion item | `select-next-suggestion` |
+| `escape`     | Close text form.                                   | N/A                      |
 
 ## JSON Configuration File
 
@@ -64,6 +101,10 @@ When you specify boolean value, muted/blocked tweets are shown/dismissed in all 
 When you want to constrol muted/blocked tweets in each timeline, you can specify an object value as well as `notification` property.  It can contain `home` and `mention` properties.  Corresponding values of properties must be boolean type.  For example, `"home": true` will dismiss muted/blocked tweets on home timeline.
 
 The default value is `{"home": true, "mention": false}`.
+
+### `keymaps`
+
+Coming soon.
 
 ### Example of `config.json`:
 
