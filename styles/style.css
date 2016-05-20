@@ -472,6 +472,7 @@ body {
   -webkit-animation-duration: 0.5s;
   box-sizing: border-box;
   border-bottom: solid 1px var(--color-timeline-border);
+  z-index: 1;
 }
 .tweet-form__editor {
   display: flex;
