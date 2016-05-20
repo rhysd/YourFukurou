@@ -12,6 +12,7 @@ import DB from '../database/db';
 import AppConfig from '../config';
 
 export type TimelineKind = 'home' | 'mention';
+export type Notified = {home: boolean; mention: boolean};
 
 function containsStatusInTimeline(is: List<Item>, t: Tweet) {
     'use strict';
@@ -63,7 +64,7 @@ export default class TimelineState {
         public home: List<Item>,
         public mention: List<Item>,
         public user: TwitterUser,
-        public notified: {home: boolean; mention: boolean},
+        public notified: Notified,
         public rejected_ids: List<number>,
         public no_retweet_ids: List<number>,
         public focus_index: number,

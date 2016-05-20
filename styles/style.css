@@ -1,7 +1,13 @@
 :root {
-  --bg-color-dark: #333333;
-  --color-dark-active: #eeeeee;
-  --color-dark-inactive: #888888;
+  --bg-color-dark: #192633;
+  --color-dark-active: #e8eaeb;
+  --color-dark-inactive: #c5c9cc;
+
+  --bg-color-light: white;
+  --color-light-active: #1da1f2;
+  --color-light-inactive: #8899a6;
+  --color-light-hover: #e8eaeb;
+
   --text-link-color: #2185d0;
   --color-weak-text-link: #888888;
   --bg-color-error: #ffc7c7;
@@ -12,7 +18,7 @@
   --color-twitter: #1da1f2;
   --color-twitter-weak: #8dd1ff;
   --bg-color-panel-hover: #f5f8fa;
-  --color-timeline-border: #d0d0d0;
+  --color-timeline-border: #e5e8ea;
   --bg-color-focused: #298cda;
   --color-focused-weak: rgba(255, 255, 255, 0.7);
   --bg-color-quote-focused: #79bcff;
@@ -30,7 +36,6 @@ body {
   height: 100%;
   width: 100%;
   overflow: hidden;
-  background-color: white;
 }
 #yourfukurou {
   width: 100%;
@@ -57,13 +62,14 @@ body {
   display: flex;
   flex-direction: column;
   padding-top: 32px; /* for title bar inset */
-  height: calc(100% - 32px);
+  height: 100%;
   width: var(--sidemenu-width);
-  color: #eeeeee;
-  background-color: var(--bg-color-dark);
+  background-color: var(--bg-color-light);
   flex: none;
   align-items: center;
   overflow: hidden;
+  box-sizing: border-box;
+  border-right: solid 1px var(--color-timeline-border);
 }
 .side-menu > * {
   margin-top: 8px;
@@ -71,15 +77,15 @@ body {
 .side-menu__button {
   font-size: 30px;
   text-align: center;
-  color: var(--color-dark-inactive);
+  color: var(--color-light-inactive);
   cursor: pointer;
   margin-left: 22px;
 }
-.side-menu__button.side-menu__button_active {
-  color: var(--color-dark-active);
-}
 .side-menu__button:hover {
-  color: var(--color-twitter);
+  color: var(--color-light-hover);
+}
+.side-menu__button.side-menu__button_active {
+  color: var(--color-light-active);
 }
 .side-menu__settings {
   font-size: 20px;
@@ -128,7 +134,7 @@ body {
 .tweet__body {
   display: flex;
   padding: 8px;
-  border-bottom: 1px solid var(--color-timeline-border);
+  border-bottom: solid 1px var(--color-timeline-border);
 }
 .tweet__body:hover {
   background-color: var(--bg-color-panel-hover);
@@ -322,7 +328,7 @@ body {
 .activity {
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid var(--color-timeline-border);
+  border-bottom: solid 1px var(--color-timeline-border);
 }
 .activity:hover {
   background-color: var(--bg-color-panel-hover);
@@ -447,7 +453,7 @@ body {
   width: 100%;
   height: 10px;
   background: #eeeeee;
-  border-bottom: 1px solid var(--color-timeline-border);
+  border-bottom: solid 1px var(--color-timeline-border);
 }
 .zigzag-separator__bottom:before {
   background: linear-gradient(45deg, transparent 33.333%, #eeeeee 33.333%, #eeeeee 66.667%, transparent 66.667%), linear-gradient(-45deg, transparent 33.333%, #eeeeee 33.333%, #eeeeee 66.667%, transparent 66.667%);
@@ -459,24 +465,28 @@ body {
   flex-direction: column;
   width: 100%;
   box-sizing: border-box;
-  background-color: var(--bg-color-dark);
+  background-color: var(--bg-color-light);
   padding: 8px;
   display: flex;
   animation-duration: 0.5s;
   -webkit-animation-duration: 0.5s;
+  box-sizing: border-box;
+  border-bottom: solid 1px var(--color-timeline-border);
 }
 .tweet-form__editor {
   display: flex;
   align-items: center;
 }
 .tweet-form__input {
-  background-color: white;
   width: 100%;
   max-width: 100%;
   flex: auto;
   border-radius: 4px;
   padding: 4px;
   position: relative;
+  background-color: #f5f8fa;
+  box-sizing: border-box;
+  border: solid 1px var(--color-timeline-border);
 }
 .tweet-form__counter {
   position: absolute;
@@ -495,7 +505,7 @@ body {
 }
 .tweet-form__cancel-btn {
   flex: none;
-  color: var(--color-dark-active);
+  color: var(--color-light-inactive);
   cursor: pointer;
   margin-right: 8px;
   font-size: 1em;
@@ -529,7 +539,9 @@ body {
   padding: 8px;
   margin-bottom: 8px;
   border-radius: 4px;
-  background-color: white;
+  background-color: #f5f8fa;
+  box-sizing: border-box;
+  border: solid 1px var(--color-timeline-border);
 }
 
 .autocomplete__suggestions {
@@ -537,7 +549,7 @@ body {
   display: flex;
   flex-direction: column;
   background-color: white;
-  border: 1px solid var(--color-timeline-border);
+  border: solid 1px var(--color-timeline-border);
   border-radius: 4px;
   padding: 4px;
   font-size: 1rem;

@@ -10,7 +10,7 @@ import {
     notImplementedYet,
 } from '../actions';
 import {TwitterUser} from '../item/tweet';
-import TimelineState from '../states/timeline';
+import {TimelineKind, Notified} from '../states/timeline';
 import log from '../log';
 
 interface SideMenuButtonProps extends React.Props<any> {
@@ -46,13 +46,14 @@ const SideMenuButton = (props: SideMenuButtonProps) => {
 
 interface SideMenuProps extends React.Props<any> {
     user: TwitterUser;
-    timeline: TimelineState;
+    kind: TimelineKind;
+    notified: Notified;
+    editor_open: boolean;
     dispatch?: Redux.Dispatch;
 }
 
 function openConfigWithEditor() {
     'use strict';
-    global.require('electron');
     const electron = global.require('electron');
     const config_path = electron.remote.getGlobal('config_path');
     const open = electron.shell.openItem;
@@ -60,65 +61,70 @@ function openConfigWithEditor() {
     log.debug('Open file:', config_path);
 }
 
-const SideMenu = (props: SideMenuProps) => (
-    <div className="side-menu">
-        <Avatar
-            screenName={props.user ? props.user.screen_name : ''}
-            imageUrl={props.user ? props.user.icon_url : undefined}
-            size={48}
-        />
-        <SideMenuButton
-            active
-            notified={false}
-            name="pencil-square-o"
-            tip="New Tweet"
-            onClick={() => props.dispatch(toggleEditor())}
-        />
-        <SideMenuButton
-            active={props.timeline.kind === 'home'}
-            notified={props.timeline.notified.home}
-            name="comment-o"
-            tip="Home"
-            onClick={() => props.dispatch(changeCurrentTimeline('home'))}
-        />
-        <SideMenuButton
-            active={props.timeline.kind === 'mention'}
-            notified={props.timeline.notified.mention}
-            name="comments"
-            tip="Notifications"
-            onClick={() => props.dispatch(changeCurrentTimeline('mention'))}
-        />
-        <SideMenuButton
-            active={false}
-            notified={false}
-            name="envelope-o"
-            tip="Direct Messages"
-            onClick={() => props.dispatch(notImplementedYet())}
-        />
-        <SideMenuButton
-            active={false}
-            notified={false}
-            name="search"
-            tip="Search"
-            onClick={() => props.dispatch(notImplementedYet())}
-        />
-        <div className="spacer"/>
-        <div>
-            <IconButton
-                className="side-menu__settings"
-                name="gear"
-                tip="Settings"
-                onClick={openConfigWithEditor}
+const SideMenu = (props: SideMenuProps) => {
+    const {kind, user, notified, dispatch, editor_open} = props;
+    return (
+        <div className="side-menu">
+            <Avatar
+                screenName={user ? user.screen_name : ''}
+                imageUrl={user ? user.icon_url : undefined}
+                size={48}
             />
+            <SideMenuButton
+                active={editor_open}
+                notified={false}
+                name="pencil-square-o"
+                tip="New Tweet"
+                onClick={() => dispatch(toggleEditor())}
+            />
+            <SideMenuButton
+                active={kind === 'home'}
+                notified={notified.home}
+                name="home"
+                tip="Home"
+                onClick={() => dispatch(changeCurrentTimeline('home'))}
+            />
+            <SideMenuButton
+                active={kind === 'mention'}
+                notified={notified.mention}
+                name="comments"
+                tip="Notifications"
+                onClick={() => dispatch(changeCurrentTimeline('mention'))}
+            />
+            <SideMenuButton
+                active={false}
+                notified={false}
+                name="envelope-o"
+                tip="Direct Messages"
+                onClick={() => dispatch(notImplementedYet())}
+            />
+            <SideMenuButton
+                active={false}
+                notified={false}
+                name="search"
+                tip="Search"
+                onClick={() => dispatch(notImplementedYet())}
+            />
+            <div className="spacer"/>
+            <div>
+                <IconButton
+                    className="side-menu__settings"
+                    name="gear"
+                    tip="Settings"
+                    onClick={openConfigWithEditor}
+                />
+            </div>
         </div>
-    </div>
-);
+    );
+}
 
 function select(state: State): SideMenuProps {
     'use strict';
     return {
         user: state.timeline.user,
-        timeline: state.timeline,
+        kind: state.timeline.kind,
+        notified: state.timeline.notified,
+        editor_open: state.editor.is_open,
     };
 }
 export default connect(select)(SideMenu);
