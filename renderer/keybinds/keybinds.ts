@@ -146,7 +146,6 @@ export default class KeyBinds<ActionType> {
                 );
 
         if (filtered.isEmpty()) {
-            log.debug('No action found for', key);
             return null;
         }
 

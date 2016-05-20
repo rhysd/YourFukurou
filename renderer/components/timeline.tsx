@@ -123,6 +123,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
 
     componentWillReceiveProps(next: TimelineProps) {
         if (next.focus_index !== this.props.focus_index && next.focus_index !== null) {
+            log.debug('Focus moves to:', next.focus_index);
             this.refs.list.scrollAround(next.focus_index);
         }
     }

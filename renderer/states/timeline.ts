@@ -203,7 +203,9 @@ export default class TimelineState {
                 [next_mention, next_focus_index] = this.updateActivityInMention('retweeted', status.retweeted_status, status.user);
             } else {
                 next_mention = this.mention.unshift(status);
-                next_focus_index = this.nextFocusIndex(next_mention.size);
+                if (this.kind === 'mention') {
+                    next_focus_index = this.nextFocusIndex(next_mention.size);
+                }
             }
         }
 

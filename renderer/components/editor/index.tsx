@@ -66,11 +66,10 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
 
             const action = this.props.keybinds.resolveEvent(e);
             if (action !== null) {
-                log.debug('Handling original keymap:', action);
+                log.debug('Handling custom keymap:', action);
                 return action;
             }
 
-            log.debug('Not handled:', e.keyCode);
             return getDefaultKeyBinding(e);
         };
         this.keyCommandHandler =
