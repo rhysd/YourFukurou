@@ -113,6 +113,14 @@ When you want to constrol muted/blocked tweets in each timeline, you can specify
 
 The default value is `{"home": true, "mention": false}`.
 
+### `hotkey_accelerator`
+
+Global hot key to access to YourFukurou instantly from everywhere.
+The value is called 'accelerator'.  Please note that the format is different from below `keymaps` configuration.  The format is described [here](https://github.com/electron/electron/blob/master/docs/api/accelerator.md).
+For example `CmrOrCtrl+.` represents 'Ctrl' (in OS X, 'Command') modifier and dot key.
+
+When the hot key is pressed, app window is toggled.  When window is not focused, app will be focused.  Otherwise, app will be hidden.
+
 ### `keymaps`
 
 Coming soon.
@@ -127,6 +135,7 @@ Coming soon.
     "like": false,
     "quoted": true
   },
+  "hotkey_accelerator": "CmrOrCtrl+`",
   "mute": {
     "home": true,
     "mention": true

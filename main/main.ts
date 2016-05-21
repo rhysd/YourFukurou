@@ -1,5 +1,5 @@
 import {join} from 'path';
-import {app, BrowserWindow, powerMonitor} from 'electron';
+import {app, BrowserWindow, powerMonitor, globalShortcut} from 'electron';
 import windowState = require('electron-window-state');
 import {authenticate, load_cached_tokens} from './authenticator';
 import log from './log';
@@ -12,7 +12,7 @@ let win = null as Electron.BrowserWindow;
 
 const already_running = app.makeSingleInstance((cmdline, working_dir) => {
     if (!win) {
-        return true; // XXX
+        return;
     }
 
     if (win.isMinimized()) {
@@ -20,8 +20,6 @@ const already_running = app.makeSingleInstance((cmdline, working_dir) => {
     }
 
     win.focus();
-
-    return true; // XXX
 });
 
 if (already_running) {
@@ -170,6 +168,11 @@ function open_window(access: AccessToken) {
                 }
             });
 
+            if (global.config.hotkey_accelerator) {
+                const hotkey = global.config.hotkey_accelerator;
+                globalShortcut.register(hotkey, () => win.isFocused() ? win.hide() : win.show());
+                log.debug('Hot key was set:' + hotkey);
+            }
         });
     } else {
         log.error('Failed to get access tokens');
