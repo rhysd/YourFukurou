@@ -3,6 +3,7 @@ import {Twitter} from 'twit';
 import KeyBinds from './keybinds';
 import Store from '../store';
 import Tweet from '../item/tweet';
+import TimelineActivity from '../item/timeline_activity';
 import {
     focusNextItem,
     focusPrevItem,
@@ -33,6 +34,8 @@ function getCurrentStatus(): Tweet {
     }
     if (item instanceof Tweet) {
         return item;
+    } else if (item instanceof TimelineActivity) {
+        return item.status;
     } else {
         return null;
     }

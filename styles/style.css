@@ -347,6 +347,7 @@ body {
 }
 .activity__user-icons {
   overflow: hidden;
+  display: flex;
 }
 .activity__user-icons > * {
   margin: 0 4px;
