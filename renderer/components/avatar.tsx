@@ -6,6 +6,7 @@ interface AvatarProps extends React.Props<any> {
     imageUrl?: string;
     size?: number;
     border?: string;
+    title?: string;
 }
 
 function getStyle(props: AvatarProps) {
@@ -25,6 +26,7 @@ const Avatar = (props: AvatarProps) => (
             e.stopPropagation();
             shell.openExternal(`https://twitter.com/${props.screenName}`);
         }}
+        title={props.title}
     >
         <img
             className="avatar__inner"

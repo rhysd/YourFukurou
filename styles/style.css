@@ -329,6 +329,7 @@ body {
   display: flex;
   flex-direction: column;
   border-bottom: solid 1px var(--color-timeline-border);
+  padding: 8px;
 }
 .activity:hover {
   background-color: var(--bg-color-panel-hover);
@@ -340,36 +341,35 @@ body {
 .activity__header {
   display: flex;
   align-items: center;
-  padding: 8px;
   white-space: nowrap;
   overflow: hidden;
-}
-.activity__screenname {
-  margin: 0 4px;
   font-weight: bold;
 }
+.activity__user-icons {
+  overflow: hidden;
+}
+.activity__user-icons > * {
+  margin: 0 4px;
+  border: solid 1px var(--color-timeline-border);
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+}
 .activity__created-at {
+  font-weight: normal;
+  overflow: hidden;
   color: var(--color-weak-text-link);
 }
 .activity__created-at.activity__created-at_focused {
   color: var(--color-focused-weak);
 }
 .activity__text {
-  margin: 0 8px;
+  margin-top: 8px;
 }
 .activity__text > * {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-}
-.activity__footer {
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-}
-.activity__footer > * {
-  margin-right: 8px;
 }
 .activity__icon {
   border-radius: 20%;

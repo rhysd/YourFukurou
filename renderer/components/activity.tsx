@@ -29,59 +29,38 @@ function renderBadge(kind: TimelineActivityKind) {
     }
 }
 
-function renderScreenNameText(user: TwitterUser, key?: number) {
+function renderUserIcons(users: TwitterUser[]) {
     'use strict';
-    return (
-        <ExternalLink
-            className="activity__screenname"
-            url={user.userPageUrl()}
-            title={user.name}
-            key={key}
-        >{'@' + user.screen_name}</ExternalLink>
-    );
+
+    const icons =
+        users.map((u, i) =>
+            <Avatar
+                screenName={u.screen_name}
+                imageUrl={u.icon_url_24x24}
+                size={24}
+                title={'@' + u.screen_name}
+                key={i}
+            />
+        );
+
+    return <div className="activity__user-icons">
+        {icons}
+    </div>;
 }
 
-function renderScreenNames(activity: TimelineActivity) {
+function renderRestUsers(activity: TimelineActivity) {
     'use strict';
-
-    const by = activity.by;
-
-    let screen_names = [ renderScreenNameText(by[0], 0) ];
-
-    if (by.length > 1) {
-        for (let i = 1; i < by.length; ++i) {
-            screen_names.push(
-                <span key={i}>, {renderScreenNameText(by[i])}</span>
-            );
-        }
-    }
 
     const activity_count =
         activity.kind === 'liked' ? activity.status.favorite_count :
         activity.kind === 'retweeted' ? activity.status.retweet_count :
         0;
-    const num_rest_users = activity_count - by.length;
+    const num_rest_users = activity_count - activity.by.length;
     if (num_rest_users <= 0) {
-        return screen_names;
+        return undefined;
     }
 
-    screen_names.push(
-        <span key="rest"> and {num_rest_users} {num_rest_users === 1 ? 'user' : 'users'}</span>
-    )
-
-    return screen_names;
-}
-
-function renderUserIcons(users: TwitterUser[]) {
-    'use strict';
-    return users.map((u, i) =>
-            <Avatar
-                screenName={u.screen_name}
-                imageUrl={u.icon_url_24x24}
-                size={24}
-                key={i}
-            />
-        );
+    return <span className="activity__rest"> and {num_rest_users} {num_rest_users === 1 ? 'user' : 'users'}</span>
 }
 
 function renderCreatedAt(status: Tweet, focused: boolean) {
@@ -97,7 +76,8 @@ function renderCreatedAt(status: Tweet, focused: boolean) {
 }
 
 const TwitterActivity: React.StatelessComponent<TwitterActivityProps> = props => {
-    const kind = props.activity.kind;
+    const {focused, onClick, activity} = props;
+    const kind = activity.kind;
     const behaved =
         kind === 'liked' ? 'Liked' :
         kind === 'retweeted' ? 'Retweeted' :
@@ -105,19 +85,16 @@ const TwitterActivity: React.StatelessComponent<TwitterActivityProps> = props =>
 
     return (
         <div
-            className={props.focused ? 'activity activity_focused' : 'activity'}
-            onClick={props.onClick}
+            className={focused ? 'activity activity_focused' : 'activity'}
+            onClick={onClick}
         >
             <div className="activity__header">
-                {renderBadge(kind)} {behaved} by {renderScreenNames(props.activity)}
+                {renderBadge(kind)} {behaved} by {renderUserIcons(activity.by)} {renderRestUsers(activity)}
                 <span className="spacer"/>
-                {renderCreatedAt(props.activity.status, props.focused)}
+                {renderCreatedAt(activity.status, focused)}
             </div>
-            <div className="activity__text">
-                <TweetText status={props.activity.status} focused={props.focused}/>
-            </div>
-            <div className="activity__footer">
-                {renderUserIcons(props.activity.by)}
+            <div className="activity__text" title={activity.status.text}>
+                <TweetText status={activity.status} focused={focused}/>
             </div>
         </div>
     );
