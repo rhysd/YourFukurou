@@ -27,31 +27,33 @@ function containsStatusInTimeline(is: List<Item>, t: Tweet) {
 
 function updateStatusIn(items: List<Item>, status: Tweet) {
     'use strict';
-
-    let changed = false;
     const status_id = status.id;
-    const replaced = items.map(item => {
+    const index = items.findIndex(item => {
         if (item instanceof Tweet) {
-            if (item.getMainStatus().id === status_id) {
-                changed = true;
-                if (item.isRetweet()) {
-                    const cloned = item.clone();
-                    cloned.json.retweeted_status = status.json;
-                    return cloned;
-                } else {
-                    console.log(item, ' was replaced by ', status);
-                    return status;
-                }
-            }
+            return item.getMainStatus().id === status_id;
+        } else {
+            return false;
         }
-        return item;
     });
 
-    if (!changed) {
+    if (index === -1) {
         return items;
-    } else {
-        return replaced.toList();
     }
+
+    return items.update(index, item => {
+        if (item instanceof Tweet) {
+            if (item.isRetweet()) {
+                const cloned = item.clone();
+                cloned.json.retweeted_status = status.json;
+                return cloned;
+            } else {
+                return status;
+            }
+        } else {
+            log.error('Never reaches here');
+            return item;
+        }
+    });
 }
 
 // Note:
@@ -546,17 +548,7 @@ export default class TimelineState {
             // 'favorite' user event on stream is sent both when owner creates and when owner's
             // tweet is favorited.  We're only interested in favorites created by others because
             // favorites created by owner is already handled by LikeSucceeded action.
-
-            // XXX:
-            // 'favorite' event just after user liked looks wrong.
-            // 'favorite_count' field is correctly updated, but 'favorited' is still 'false'.
-            // So I change the 'favorited' field from 'false' to 'true' here.
-            if (!status.json.favorited) {
-                log.debug("'favorited' field of liked status is wrongly 'false'.  It'll be changed to 'true'.");
-                status.json.favorited = true;
-            }
-
-            return this.updateStatus(status);
+            return this;
         }
 
         if (this.checkMutedOrBlocked(status)) {

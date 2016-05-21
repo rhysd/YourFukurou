@@ -11,8 +11,9 @@ import {
     retweetSucceeded,
     unretweetSucceeded,
     showMessage,
+    likeSucceeded,
+    unlikeSucceeded,
     statusLiked,
-    statusUnliked,
     setCurrentUser,
     updateCurrentUser,
     deleteStatusInTimeline,
@@ -88,6 +89,14 @@ export default class IpcChannelProxy {
             Store.dispatch(unretweetSucceeded(new Tweet(json)));
         });
 
+        this.subscribe('yf:like-success', (json: Twitter.Status) => {
+            Store.dispatch(likeSucceeded(new Tweet(json)));
+        });
+
+        this.subscribe('yf:unlike-success', (json: Twitter.Status) => {
+            Store.dispatch(unlikeSucceeded(new Tweet(json)));
+        });
+
         this.subscribe('yf:my-account', (json: Twitter.User) => {
             Store.dispatch(setCurrentUser(new TwitterUser(json)));
         });
@@ -102,10 +111,6 @@ export default class IpcChannelProxy {
 
         this.subscribe('yf:liked-status', (status: Twitter.Status, from_user: Twitter.User) => {
             Store.dispatch(statusLiked(new Tweet(status), new TwitterUser(from_user)));
-        });
-
-        this.subscribe('yf:unliked-status', (status: Twitter.Status) => {
-            Store.dispatch(statusUnliked(new Tweet(status)));
         });
 
         this.subscribe('yf:update-status-success', (json: Twitter.Status) => {

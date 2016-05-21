@@ -76,10 +76,8 @@ export default class Twitter {
             include_entities: true,
         };
         this.post('favorites/create', params, ret => {
-            // Note:
-            // We don't need to send the result to renderer process because
-            // 'favorite' event will be sent via user stream
-            log.debug('Like success:', ret);
+            this.sender.send('yf:like-success', ret);
+            log.debug('Like success:', ret.id);
         });
     }
 
@@ -89,10 +87,8 @@ export default class Twitter {
             include_entities: true,
         };
         this.post('favorites/destroy', params, ret => {
-            // Note:
-            // We don't need to send the result to renderer process because
-            // 'unfavorite' event will be sent via user stream
-            log.debug('Unlike success:', ret);
+            this.sender.send('yf:unlike-success', ret);
+            log.debug('Unlike success:', ret.id);
         });
     }
 
@@ -324,11 +320,8 @@ export default class Twitter {
         });
 
         this.stream.on('favorite', msg => {
+            // Note: msg.target is not used renderer process.  So I don't send it here.
             this.sender.send('yf:liked-status', msg.target_object, msg.source);
-        });
-
-        this.stream.on('unfavorite', msg => {
-            this.sender.send('yf:unliked-status', msg.target_object);
         });
 
         // Note:
@@ -337,6 +330,8 @@ export default class Twitter {
 
         // Note: Should watch more events
         //
+        // this.stream.on('favorite')
+        // this.stream.on('unfavorite')
         // this.stream.on('blocked')
         // this.stream.on('unblocked')
         // this.stream.on('follow')
