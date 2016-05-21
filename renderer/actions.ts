@@ -34,9 +34,8 @@ export enum Kind {
     DestroyStatus,
     CreateLike,
     DestroyLike,
-    LikeSucceeded,
-    UnlikeSucceeded,
     StatusLiked,
+    StatusUnliked,
     Follow,
     Unfollow,
 
@@ -244,32 +243,22 @@ export function destroyLike(tweet_id: string) {
     };
 }
 
-export function likeSucceeded(status: Tweet) {
-    'use strict';
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.LikeSucceeded,
-            status,
-        }));
-    };
-}
-
-export function unlikeSucceeded(status: Tweet) {
-    'use strict';
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.UnlikeSucceeded,
-            status,
-        }));
-    };
-}
-
 export function statusLiked(status: Tweet, from: TwitterUser) {
     'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.StatusLiked,
             user: from,
+            status,
+        }));
+    };
+}
+
+export function statusUnliked(status: Tweet) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.StatusUnliked,
             status,
         }));
     };

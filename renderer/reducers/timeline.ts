@@ -14,11 +14,10 @@ export default function timeline(state: TimelineState = DefaultTimelineState, ac
         case Kind.UnfocusItem:            return state.focusOn(null);
         case Kind.DeleteStatusInTimeline: return state.deleteStatusWithId(action.tweet_id);
         case Kind.StatusLiked:            return state.updateActivity('liked', action.status, action.user);
+        case Kind.StatusUnliked:          return state.updateStatus(action.status);
         case Kind.AddMentions:            return state.addMentions(action.mentions);
         case Kind.RetweetSucceeded:       return state.updateStatus(action.status.getMainStatus());
         case Kind.UnretweetSucceeded:     return state.updateStatus(action.status);
-        case Kind.LikeSucceeded:          return state.updateStatus(action.status);
-        case Kind.UnlikeSucceeded:        return state.updateStatus(action.status);
         case Kind.SetCurrentUser:         return state.setUser(action.user);
         case Kind.UpdateCurrentUser:      return state.updateUser(action.user_json);
         case Kind.AddRejectedUserIds:     return state.addRejectedIds(action.ids);
