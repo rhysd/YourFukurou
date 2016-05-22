@@ -128,6 +128,12 @@ export default class TimelineState {
             return true;
         }
 
+        for (const m of status.mentions) {
+            if (this.rejected_ids.contains(m.id)) {
+                return true;
+            }
+        }
+
         if (status.isRetweet() && this.rejected_ids.contains(status.retweeted_status.user.id)) {
             return true;
         }
