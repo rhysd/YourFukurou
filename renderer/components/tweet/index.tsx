@@ -18,6 +18,7 @@ interface TweetProps extends React.Props<any> {
     owner: TwitterUser;
     timeline: TimelineKind;
     focused?: boolean;
+    related?: boolean;
     friends?: List<number>;
     onClick?: (e: MouseEvent) => void;
     dispatch: Redux.Dispatch;
@@ -31,6 +32,10 @@ function getClass(tw: TweetItem, props: TweetProps) {
 
     if (tw.mentionsTo(props.owner) && props.timeline !== 'mention') {
         return 'tweet__body tweet__body_mention';
+    }
+
+    if (props.related) {
+        return 'tweet__body tweet__body_related';
     }
 
     return 'tweet__body';

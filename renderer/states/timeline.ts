@@ -143,13 +143,56 @@ export default class TimelineState {
         return false;
     }
 
+    updateRelatedStatuses(status: Tweet) {
+        const s = status.getMainStatus();
+        const id = s.id;
+
+        // Note:
+        // Set related statuses to newly added status
+        const statuses = [] as Tweet[];
+        this.home.forEach(item => {
+            if (item instanceof Tweet) {
+                const i = item.in_reply_to_status_id;
+                if (i && i === id) {
+                    statuses.push(item);
+                }
+            }
+        });
+        if (statuses.length > 0) {
+            status.related_statuses = statuses;
+        }
+
+        if (!s.hasInReplyTo()) {
+            // Note:
+            // If newly added status doesn't have in_reply_to status,
+            // no need to update existing statuses in home timeline.
+            return this.home;
+        }
+
+        // Note:
+        // Update existing statuses in timeline considering the newly added status.
+        const in_reply_to_id = s.in_reply_to_status_id;
+        return this.home.map(item => {
+            if (item instanceof Tweet) {
+                if (item.getMainStatus().id === in_reply_to_id) {
+                    const cloned = item.clone();
+                    cloned.related_statuses.push(status);
+                    log.debug('Related status updated:', cloned.related_statuses, cloned.json);
+                    return cloned;
+                }
+            }
+            return item;
+        }).toList();
+    }
+
     putInHome(status: Tweet): [List<Item>, number] {
+        const home = this.updateRelatedStatuses(status);
         if (!status.isRetweet()) {
-            return [this.home.unshift(status), this.nextFocusIndex(this.home.size + 1)];
+            return [home.unshift(status), this.nextFocusIndex(home.size + 1)];
         }
 
         const status_id = status.retweeted_status.id;
-        const index = this.home.findIndex(item => {
+        const index = home.findIndex(item => {
             if (item instanceof Tweet) {
                 return item.isRetweet() && item.retweeted_status.id === status_id;
             } else {
@@ -159,13 +202,13 @@ export default class TimelineState {
 
         const next_focus_index =
             this.kind === 'home' && (index === -1 || index < this.focus_index) ?
-                this.nextFocusIndex(this.home.size + 1) : this.focus_index;
+                this.nextFocusIndex(home.size + 1) : this.focus_index;
 
         if (index === -1) {
-            return [this.home.unshift(status), next_focus_index];
+            return [home.unshift(status), next_focus_index];
         }
 
-        return [this.home.delete(index).unshift(status), next_focus_index];
+        return [home.delete(index).unshift(status), next_focus_index];
     }
 
     addNewTweet(status: Tweet) {

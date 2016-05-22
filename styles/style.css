@@ -150,6 +150,9 @@ body {
   color: white;
   background-color: var(--bg-color-focused);
 }
+.tweet__body.tweet__body_related {
+  background-color: #e7fdd9;
+}
 .tweet__icon {
   flex: none;
   width: 56px;

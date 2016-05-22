@@ -143,6 +143,7 @@ export class TwitterUser {
 
 export default class Tweet implements Item {
     public user: TwitterUser;
+    public related_statuses: Tweet[];
     private retweeted_status_memo: Tweet;
     private quoted_status_memo: Tweet;
     private parsed_tokens_memo: TweetTextToken[];
@@ -154,6 +155,7 @@ export default class Tweet implements Item {
         this.quoted_status_memo = null;
         this.parsed_tokens_memo = null;
         this.created_at_memo = null;
+        this.related_statuses = [];
     }
 
     get id() {
@@ -344,7 +346,9 @@ export default class Tweet implements Item {
     }
 
     clone() {
-        return new Tweet(this.json);
+        const cloned = new Tweet(this.json);
+        cloned.related_statuses = this.related_statuses;
+        return cloned;
     }
 }
 

@@ -39,10 +39,42 @@ function nop() {
     // Note: No OPeration
 }
 
+function getStatusIdsRelatedTo(status: TweetItem): string[] {
+    'use strict';
+    if (status.related_statuses.length === 0) {
+        return [];
+    }
+    const ret = status.related_statuses.map(s => s.id);
+    const push = Array.prototype.push;
+    for (const s of status.related_statuses) {
+        push.apply(ret, getStatusIdsRelatedTo(s));
+    }
+    if (status.in_reply_to_status_id !== null) {
+        // XXX:
+        // Gather all in-reply-to status ids by climbing reply tree above
+        ret.push(status.in_reply_to_status_id);
+    }
+    return ret;
+}
+
 class Timeline extends React.Component<TimelineProps, {}> {
     refs: {
         list: ReactList.Node;
         [key: string]: React.Component<any, any> | Element;
+    }
+
+    getRelatedStatusIds() {
+        const {focus_index, items} = this.props;
+        if (focus_index === null) {
+            return [];
+        }
+
+        const item = items.get(focus_index);
+        if (item instanceof TweetItem) {
+            return getStatusIdsRelatedTo(item);
+        } else {
+            return [];
+        }
     }
 
     toggleFocus(focused: boolean, idx: number) {
@@ -51,7 +83,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
         this.props.dispatch(action);
     }
 
-    renderItem(idx: number, key: string) {
+    renderItem(idx: number, key: string, related_ids: string[]) {
         const {items, focus_index, kind, owner, friends, dispatch} = this.props;
         const i = items.get(idx);
         const focused = idx === focus_index;
@@ -62,6 +94,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
                 timeline={kind}
                 owner={owner}
                 focused={focused}
+                related={related_ids.indexOf(i.id) !== -1}
                 friends={friends}
                 onClick={click_handler}
                 dispatch={dispatch}
@@ -133,7 +166,8 @@ class Timeline extends React.Component<TimelineProps, {}> {
     // TODO:
     // Determine the position to insert with ordered by id
     render() {
-        const {message, dispatch, items} = this.props;
+        const {message, dispatch, items, focus_index} = this.props;
+        const related_ids = this.getRelatedStatusIds();
         return (
             <div className="timeline">
                 {message === null ?
@@ -144,7 +178,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
                         dispatch={dispatch}
                     />}
                 <ReactList
-                    itemRenderer={(idx, key) => this.renderItem(idx, key)}
+                    itemRenderer={(idx, key) => this.renderItem(idx, key, related_ids)}
                     length={items.size}
                     type="variable"
                     threshold={500}
