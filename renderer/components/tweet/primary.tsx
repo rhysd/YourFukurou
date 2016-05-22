@@ -54,7 +54,10 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         if (!s.hasInReplyTo()) {
             return undefined;
         }
-        return <div className="tweet__primary-conversation">
+        const class_name = this.props.focused ?
+            'tweet__primary-conversation tweet__primary-conversation_focused' :
+            'tweet__primary-conversation';
+        return <div className={class_name}>
             <i className="fa fa-comments" style={{marginRight: '4px'}}/>
         </div>;
     }

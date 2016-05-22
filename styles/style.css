@@ -21,7 +21,6 @@
   --color-timeline-border: #e5e8ea;
   --bg-color-focused: #298cda;
   --color-focused-weak: rgba(255, 255, 255, 0.7);
-  --bg-color-quote-focused: #79bcff;
 }
 
 html {
@@ -151,7 +150,11 @@ body {
   background-color: var(--bg-color-focused);
 }
 .tweet__body.tweet__body_related {
-  background-color: #e7fdd9;
+  background-color: #f7ffe9;
+  color: #002010;
+}
+.tweet__body.tweet__body_related:hover {
+  background-color: #e7efd9;
 }
 .tweet__icon {
   flex: none;
@@ -225,6 +228,9 @@ body {
   flex: none;
   color: var(--color-weak-text-link);
 }
+.tweet__primary-conversation.tweet__primary-conversation_focused {
+  color: var(--color-focused-weak);
+}
 .tweet__text {
   flex: auto;
   word-wrap: break-word;
@@ -244,13 +250,15 @@ body {
 .tweet__quoted {
   display: flex;
   flex-direction: column;
-  background-color: #eeeeee;
+  background-color: var(--bg-color-panel-hover);
+  border: solid 1px var(--color-timeline-border);
   margin: 4px 0 4px 4px;
   padding: 8px;
   border-radius: 8px;
 }
 .tweet__quoted.tweet__quoted_focused {
-  background-color: var(--bg-color-quote-focused);
+  background-color: #79bcff;
+  border-color: #99ccff;
 }
 .tweet__quoted-icon {
   margin-right: 4px;
