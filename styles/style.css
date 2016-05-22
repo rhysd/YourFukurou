@@ -449,26 +449,26 @@ body {
 }
 .zigzag-separator__top {
   width: 100%;
-  height: 20px;
-  background-color: #eeeeee
+  height: 15px;
+  background-color: white;
+  z-index: 1;
+  margin-top: -1px;  /* hide above item's border */
 }
 .zigzag-separator__middle {
   width: 100%;
   height: 5px;
-  background-color: #cccccc;
+  background-color: #e5e8ea;
 }
 .zigzag-separator__middle:before {
-  background: linear-gradient(45deg, transparent 33.333%, #cccccc 33.333%, #cccccc 66.667%, transparent 66.667%), linear-gradient(-45deg, transparent 33.333%, #cccccc 33.333%, #cccccc 66.667%, transparent 66.667%);
+  background: linear-gradient(45deg, transparent 33.333%, #e5e8ea 33.333%, #e5e8ea 66.667%, transparent 66.667%), linear-gradient(-45deg, transparent 33.333%, #e5e8ea 33.333%, #e5e8ea 66.667%, transparent 66.667%);
   background-size: 20px 40px;
 }
 .zigzag-separator__bottom {
   width: 100%;
-  height: 10px;
-  background: #eeeeee;
-  border-bottom: solid 1px var(--color-timeline-border);
+  background: white;
 }
 .zigzag-separator__bottom:before {
-  background: linear-gradient(45deg, transparent 33.333%, #eeeeee 33.333%, #eeeeee 66.667%, transparent 66.667%), linear-gradient(-45deg, transparent 33.333%, #eeeeee 33.333%, #eeeeee 66.667%, transparent 66.667%);
+  background: linear-gradient(45deg, transparent 33.333%, white 33.333%, white 66.667%, transparent 66.667%), linear-gradient(-45deg, transparent 33.333%, white 33.333%, white 66.667%, transparent 66.667%);
   background-size: 20px 40px;
 }
 
