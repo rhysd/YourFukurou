@@ -19,6 +19,7 @@ interface TweetProps extends React.Props<any> {
     timeline: TimelineKind;
     focused?: boolean;
     related?: boolean;
+    focused_user?: boolean;
     friends?: List<number>;
     onClick?: (e: MouseEvent) => void;
     dispatch: Redux.Dispatch;
@@ -36,6 +37,10 @@ function getClass(tw: TweetItem, props: TweetProps) {
 
     if (props.related) {
         return 'tweet__body tweet__body_related';
+    }
+
+    if (props.focused_user) {
+        return 'tweet__body tweet__body_user-related';
     }
 
     return 'tweet__body';

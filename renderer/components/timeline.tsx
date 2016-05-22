@@ -68,6 +68,20 @@ class Timeline extends React.Component<TimelineProps, {}> {
         [key: string]: React.Component<any, any> | Element;
     }
 
+    getFocusedUserId() {
+        const {focus_index, items} = this.props;
+        if (focus_index === null) {
+            return null;
+        }
+
+        const item = items.get(focus_index);
+        if (item instanceof TweetItem) {
+            return item.getMainStatus().user.id;
+        } else {
+            return null;
+        }
+    }
+
     getRelatedStatusIds() {
         const {focus_index, items} = this.props;
         if (focus_index === null) {
@@ -88,7 +102,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
         this.props.dispatch(action);
     }
 
-    renderItem(idx: number, key: string, related_ids: string[]) {
+    renderItem(idx: number, key: string, related_ids: string[], focused_user_id: number) {
         const {items, focus_index, kind, owner, friends, dispatch} = this.props;
         const i = items.get(idx);
         const focused = idx === focus_index;
@@ -100,6 +114,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
                 owner={owner}
                 focused={focused}
                 related={related_ids.indexOf(i.id) !== -1}
+                focused_user={focused_user_id === i.getMainStatus().user.id}
                 friends={friends}
                 onClick={click_handler}
                 dispatch={dispatch}
@@ -173,6 +188,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
     render() {
         const {message, dispatch, items, focus_index} = this.props;
         const related_ids = this.getRelatedStatusIds();
+        const focused_user_id = this.getFocusedUserId();
         return (
             <div className="timeline">
                 {message === null ?
@@ -183,7 +199,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
                         dispatch={dispatch}
                     />}
                 <ReactList
-                    itemRenderer={(idx, key) => this.renderItem(idx, key, related_ids)}
+                    itemRenderer={(idx, key) => this.renderItem(idx, key, related_ids, focused_user_id)}
                     length={items.size}
                     type="variable"
                     threshold={500}

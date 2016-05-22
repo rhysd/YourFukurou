@@ -156,6 +156,12 @@ body {
 .tweet__body.tweet__body_related:hover {
   background-color: #e7efd9;
 }
+.tweet__body.tweet__body_user-related {
+  background-color: #e8f0ff;
+}
+.tweet__body.tweet__body_user-related:hover {
+  background-color: #d8e0ef;
+}
 .tweet__icon {
   flex: none;
   width: 56px;
