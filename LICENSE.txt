@@ -20,7 +20,7 @@ THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 
-Logo of this app is created based on Neovim logo licensed under CCA 3.0 Unported.
-The Neovim logo by Jason Long is licensed under the Creative Commons Attribution 3.0 Unported License.
+Original icon image was made by Freepik(http://www.freepik.com) and is licensed by Creative Commons BY 3.0.
 
-https://creativecommons.org/licenses/by/3.0/legalcode
+http://creativecommons.org/licenses/by/3.0/
+
