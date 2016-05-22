@@ -49,11 +49,16 @@ function getStatusIdsRelatedTo(status: TweetItem): string[] {
     for (const s of status.related_statuses) {
         push.apply(ret, getStatusIdsRelatedTo(s));
     }
-    if (status.in_reply_to_status_id !== null) {
-        // XXX:
-        // Gather all in-reply-to status ids by climbing reply tree above
+
+    let s = status;
+    while (s.in_reply_to_status_id !== null) {
         ret.push(status.in_reply_to_status_id);
+        if (s.in_reply_to_status === null) {
+            break;
+        }
+        s = s.in_reply_to_status;
     }
+
     return ret;
 }
 

@@ -143,9 +143,12 @@ export default class TimelineState {
         return false;
     }
 
+    // Note:
+    // Currently this method is only for home timeline.
     updateRelatedStatuses(status: Tweet) {
         const s = status.getMainStatus();
         const id = s.id;
+        const in_reply_to_id = s.in_reply_to_status_id;
 
         // Note:
         // Set related statuses to newly added status
@@ -156,28 +159,33 @@ export default class TimelineState {
                 if (i && i === id) {
                     statuses.push(item);
                 }
+                if (in_reply_to_id === item.id) {
+                    status.in_reply_to_status = item;
+                }
             }
         });
         if (statuses.length > 0) {
             status.related_statuses = statuses;
         }
 
-        if (!s.hasInReplyTo()) {
-            // Note:
-            // If newly added status doesn't have in_reply_to status,
-            // no need to update existing statuses in home timeline.
-            return this.home;
-        }
-
         // Note:
         // Update existing statuses in timeline considering the newly added status.
-        const in_reply_to_id = s.in_reply_to_status_id;
         return this.home.map(item => {
             if (item instanceof Tweet) {
-                if (item.getMainStatus().id === in_reply_to_id) {
+                const main = item.getMainStatus();
+                if (main.id === in_reply_to_id) {
                     const cloned = item.clone();
                     cloned.related_statuses.push(status);
                     log.debug('Related status updated:', cloned.related_statuses, cloned.json);
+                    return cloned;
+                } else if (main.in_reply_to_status_id === id) {
+                    // Note:
+                    // When above 'main.id === in_reply_to_id' condition is met,
+                    // it never reaches here because no status can refer the same status
+                    // as both in-reply-to status and in-reply-to-ed status at once.
+                    const cloned = item.clone();
+                    cloned.in_reply_to_status = s;
+                    log.debug('In-reply-to status updated:', cloned);
                     return cloned;
                 }
             }
