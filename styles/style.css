@@ -256,7 +256,6 @@ body {
 .tweet__quoted {
   display: flex;
   flex-direction: column;
-  color: black;
   background-color: var(--bg-color-panel-hover);
   border: solid 1px var(--color-timeline-border);
   margin: 4px 0 4px 4px;
@@ -752,7 +751,7 @@ body {
   height: 1rem;
 }
 .mini-tweet__icon-image.mini-tweet__icon-image_2cols {
-  height: 2rem;
+  height: calc(2rem + 4px);
 }
 .mini-tweet__secondary {
   flex: none;
@@ -811,12 +810,17 @@ body {
   text-overflow: ellipsis;
 }
 .mini-tweet__quoted {
-  color: black;
+  margin-top: 4px;
   background-color: var(--bg-color-panel-hover);
   border: solid 1px var(--color-timeline-border);
   height: 1rem;
   border-radius: 0.2rem;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  width: 100%;
   padding: 0 4px;
+  display: flex;
+  align-items: center;
 }
 .mini-tweet__quoted.mini-tweet__quoted_focused {
   background-color: #79bcff;

@@ -14,11 +14,14 @@ function renderQuoted(s: Tweet, focused: boolean) {
         return undefined;
     }
     return (
-        <div className={
-            focused ?
-                'mini-tweet__quoted mini-tweet__quote_focused' :
-                'mini-tweet__quoted'
-        }>
+        <div
+            className={
+                focused ?
+                    'mini-tweet__quoted mini-tweet__quote_focused' :
+                    'mini-tweet__quoted'
+            }
+            title={q.text}
+        >
             <TweetText className="mini-tweet__quoted-text" status={q}/>
         </div>
     )
