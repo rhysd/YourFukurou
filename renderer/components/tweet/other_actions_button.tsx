@@ -23,8 +23,10 @@ function statusUrlToClipboard(props: OtherActionsButtonProps) {
     props.dispatch(showMessage('Copied status URL to clipboard.', 'info'));
 }
 
-function deleteThisTweet(props: OtherActionsButtonProps) {
+function deleteThisTweet(e: React.MouseEvent, props: OtherActionsButtonProps) {
     'use strict';
+    e.preventDefault();
+    e.stopPropagation();
     props.dispatch(destroyStatus(props.status.id));
 }
 
@@ -45,7 +47,7 @@ function renderDeleteThisTweet(props: OtherActionsButtonProps) {
     return (
         <div
             className="tweet-actions__others-menu-item"
-            onClick={() => deleteThisTweet(props)}
+            onClick={e => deleteThisTweet(e, props)}
         >
             Delete this tweet
         </div>

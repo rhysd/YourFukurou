@@ -69,6 +69,8 @@ body {
   overflow: hidden;
   box-sizing: border-box;
   border-right: solid 1px var(--color-timeline-border);
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
 }
 .side-menu > * {
   margin-top: 8px;
@@ -87,6 +89,7 @@ body {
   color: var(--color-light-active);
 }
 .side-menu__settings {
+  margin-top: auto;
   font-size: 20px;
   color: var(--color-dark-inactive);
   cursor: pointer;
@@ -309,6 +312,7 @@ body {
 .tweet-actions {
   display: flex;
   color: var(--color-weak-text-link);
+  margin-right: auto;
 }
 .tweet-actions.tweet-actions_focused {
   color: var(--color-focused-weak);
@@ -378,6 +382,7 @@ body {
   font-weight: normal;
   overflow: hidden;
   color: var(--color-weak-text-link);
+  margin-left: auto;
 }
 .activity__created-at.activity__created-at_focused {
   color: var(--color-focused-weak);
@@ -706,7 +711,7 @@ body {
 
 .mini-tweet {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
   box-sizing: border-box;
   padding: 4px 8px;
@@ -763,6 +768,7 @@ body {
 }
 .mini-tweet__secondary.mini-tweet__secondary_2cols {
   flex-direction: column;
+  justify-content: space-around;
   align-items: flex-start;
 }
 .mini-tweet__secondary > * {
@@ -813,7 +819,6 @@ body {
   margin-top: 4px;
   background-color: var(--bg-color-panel-hover);
   border: solid 1px var(--color-timeline-border);
-  height: 1rem;
   border-radius: 0.2rem;
   box-sizing: border-box;
   overflow-x: hidden;
@@ -825,6 +830,10 @@ body {
 .mini-tweet__quoted.mini-tweet__quoted_focused {
   background-color: #79bcff;
   border: none;
+}
+.mini-tweet__quoted-icon {
+  margin-right: 4px;
+  color: var(--color-weak-text-link);
 }
 .mini-tweet__has-pic {
   opacity: 0.6;

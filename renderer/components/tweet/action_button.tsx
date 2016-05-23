@@ -54,6 +54,7 @@ function onReplyClicked(props: TweetActionButtonProps) {
 
 function onClick(e: React.MouseEvent, props: TweetActionButtonProps) {
     'use strict';
+    e.preventDefault();
     e.stopPropagation();
     switch (props.kind) {
         case 'reply': onReplyClicked(props); break;

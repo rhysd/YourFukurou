@@ -7,6 +7,18 @@ interface MiniTweetTextProps extends React.Props<any> {
     focused: boolean;
 }
 
+function renderPicIcon(tw: Tweet) {
+    'use strict';
+    if (tw.media.length === 0) {
+        return undefined;
+    }
+    return (
+        <div className="mini-tweet__has-pic">
+            <i className="fa fa-picture-o"/>
+        </div>
+    );
+}
+
 function renderQuoted(s: Tweet, focused: boolean) {
     'use strict';
     const q = s.quoted_status;
@@ -22,7 +34,11 @@ function renderQuoted(s: Tweet, focused: boolean) {
             }
             title={q.text}
         >
+            <span className="mini-tweet__quoted-icon">
+                <i className="fa fa-quote-left"/>
+            </span>
             <TweetText className="mini-tweet__quoted-text" status={q}/>
+            {renderPicIcon(q)}
         </div>
     )
 }

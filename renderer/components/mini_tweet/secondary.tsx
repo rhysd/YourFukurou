@@ -40,7 +40,7 @@ const MiniTweetSecondary: React.StatelessComponent<MiniTweetSecondaryProps> = pr
     const s = props.status.getMainStatus();
     return (
         <div className={
-            props.status.isQuotedTweet() ?
+            s.isQuotedTweet() ?
                 'mini-tweet__secondary mini-tweet__secondary_2cols' :
                 'mini-tweet__secondary'
         }>

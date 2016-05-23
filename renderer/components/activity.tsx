@@ -90,7 +90,6 @@ const TwitterActivity: React.StatelessComponent<TwitterActivityProps> = props =>
         >
             <div className="activity__header">
                 {renderBadge(kind)} {behaved} by {renderUserIcons(activity.by)} {renderRestUsers(activity)}
-                <span className="spacer"/>
                 {renderCreatedAt(activity.status, focused)}
             </div>
             <div className="activity__text" title={activity.status.text}>

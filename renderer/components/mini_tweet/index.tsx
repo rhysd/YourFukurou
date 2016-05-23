@@ -53,7 +53,7 @@ const MiniTweet: React.StatelessComponent<MiniTweetProps> = props => {
     const tw = props.status.getMainStatus();
     return (
         <div className={getClass(tw, props)} onClick={props.onClick}>
-            <MiniTweetIcon user={tw.user} quoted={props.status.isQuotedTweet()}/>
+            <MiniTweetIcon user={tw.user} quoted={tw.isQuotedTweet()}/>
             <MiniTweetSecondary status={props.status} focused={props.focused}/>
             <MiniTweetText status={props.status} focused={props.focused}/>
             {renderPicIcon(tw)}

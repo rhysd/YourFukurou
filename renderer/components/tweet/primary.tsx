@@ -106,7 +106,6 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                         <TweetActionButton kind="like" {...action_props}/>
                         <OtherActionsButton {...action_props}/>
                     </div>
-                    <div className="spacer"/>
                     {this.renderConversation(s)}
                     {this.renderCreatedAt()}
                 </div>

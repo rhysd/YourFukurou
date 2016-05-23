@@ -105,15 +105,12 @@ const SideMenu = (props: SideMenuProps) => {
                 tip="Search"
                 onClick={() => dispatch(notImplementedYet())}
             />
-            <div className="spacer"/>
-            <div>
-                <IconButton
-                    className="side-menu__settings"
-                    name="gear"
-                    tip="Settings"
-                    onClick={openConfigWithEditor}
-                />
-            </div>
+            <IconButton
+                className="side-menu__settings"
+                name="gear"
+                tip="Settings"
+                onClick={openConfigWithEditor}
+            />
         </div>
     );
 }
