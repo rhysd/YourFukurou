@@ -83,6 +83,15 @@ These shortcuts are applied when preview of pictures in tweet is opened.  Global
 
 You can put `config.json` in the application directory.  You can configure this app with it.  Properties of the json are below:
 
+### `expand_tweet`
+
+It controls tweets in timeline should be expanded or not.  Value can be one of `"always"`, `"focused"` and `"never"`.  If `"always"`, all tweets are expanded.  If `"focused"`, only focused tweet is expanded and others are collapsed.  If `"never"`, all tweets are collapsed.
+
+Collapsed tweet is displayed in one line (when it has quote, it will be two lines) and many things in tweet will be simplified.
+
+Default value is `"always"`.
+
+
 ### `notification`
 
 Enable/Disable notification from app.

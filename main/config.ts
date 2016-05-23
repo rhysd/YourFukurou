@@ -7,6 +7,7 @@ export const DefaultConfig = {
     notification: true,
     notification_sound: true,
     hotkey_accelerator: null,
+    expand_tweet: 'always',
     plugin: [],
     mute: {
         home: true,

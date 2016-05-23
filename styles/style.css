@@ -256,6 +256,7 @@ body {
 .tweet__quoted {
   display: flex;
   flex-direction: column;
+  color: black;
   background-color: var(--bg-color-panel-hover);
   border: solid 1px var(--color-timeline-border);
   margin: 4px 0 4px 4px;
@@ -701,6 +702,129 @@ body {
 .follow-button.follow-button_will-follow:hover,
 .follow-button.follow-button_will-unfollow:hover {
   opacity: 0.8;
+}
+
+.mini-tweet {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 8px;
+  border-bottom: solid 1px var(--color-timeline-border);
+}
+.mini-tweet:hover {
+  background-color: var(--bg-color-panel-hover);
+}
+.mini-tweet.mini-tweet_mention {
+  color: #fc4d5d;
+  background-color: #fff7f7;
+}
+.mini-tweet.mini-tweet_mention:hover {
+  background-color: #ffe7e7;
+}
+.mini-tweet.mini-tweet_focused {
+  color: white;
+  background-color: var(--bg-color-focused);
+}
+.mini-tweet.mini-tweet_related {
+  background-color: #f7ffe9;
+  color: #002010;
+}
+.mini-tweet.mini-tweet_related:hover {
+  background-color: #e7efd9;
+}
+.mini-tweet.mini-tweet_user-related {
+  background-color: #e8f0ff;
+}
+.mini-tweet.mini-tweet_user-related:hover {
+  background-color: #d8e0ef;
+}
+.mini-tweet__icon {
+  flex: none;
+  width: 56px;
+  overflow: hidden;
+}
+.mini-tweet__icon-image {
+  object-fit: cover;
+  border: 1px solid #dddddd;
+  border-radius: 0.3rem;
+  box-sizing: border-box;
+  height: 1rem;
+}
+.mini-tweet__icon-image.mini-tweet__icon-image_2cols {
+  height: 2rem;
+}
+.mini-tweet__secondary {
+  flex: none;
+  width: 20%;
+  max-width: 120px;
+  display: flex;
+  align-items: center;
+  padding-right: 8px;
+}
+.mini-tweet__secondary.mini-tweet__secondary_2cols {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.mini-tweet__secondary > * {
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.mini-tweet__secondary-screenname {
+  color: var(--text-link-color);
+}
+.mini-tweet__secondary-screenname.mini-tweet__secondary-screenname_focused {
+  color: white;
+}
+.mini-tweet__secondary-retweeted {
+  flex: none;
+  color: var(--color-weak-text-link);
+  font-size: 0.8rem;
+  margin-left: 4px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.mini-tweet__secondary-rt-icon {
+  height: 1rem;
+  margin-left: 4px;
+}
+.mini-tweet__secondary-rt-image {
+  border: solid 1px #dddddd;
+  box-sizing: border-box;
+  border-radius: 0.2rem;
+  width: 1rem;
+  height: 1rem;
+}
+.mini-tweet__secondary-retweeted.mini-tweet__secondary-retweeted_focused {
+  color: var(--color-focused-weak);
+}
+.mini-tweet__text {
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.mini-tweet__text > * {
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.mini-tweet__quoted {
+  color: black;
+  background-color: var(--bg-color-panel-hover);
+  border: solid 1px var(--color-timeline-border);
+  height: 1rem;
+  border-radius: 0.2rem;
+  padding: 0 4px;
+}
+.mini-tweet__quoted.mini-tweet__quoted_focused {
+  background-color: #79bcff;
+  border-color: #99ccff;
+}
+.mini-tweet__has-pic {
+  opacity: 0.6;
+  margin-left: 4px;
 }
 
 .rc-tooltip {

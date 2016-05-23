@@ -83,6 +83,15 @@ export class CachedConfig {
             return undefined;
         }
     }
+
+    shouldExpandTweet(focused: boolean) {
+        switch (this.remote_config.expand_tweet) {
+            case 'always':  return true;
+            case 'focused': return focused;
+            case 'never':   return false;
+            default:        return false;
+        }
+    }
 }
 
 export default new CachedConfig();

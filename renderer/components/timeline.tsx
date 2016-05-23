@@ -4,6 +4,7 @@ import {List} from 'immutable';
 import Lightbox, {LightboxImage} from 'react-images';
 import * as ReactList from 'react-list';
 import Tweet from './tweet/index';
+import MiniTweet from './mini_tweet/index';
 import ZigZagSeparator from './zigzag_separator';
 import TwitterActivity from './activity';
 import Message from './message';
@@ -22,6 +23,7 @@ import {
     focusOnItem,
     unfocusItem,
 } from '../actions';
+import Config from '../config';
 
 interface TimelineProps extends React.Props<any> {
     message: MessageState;
@@ -108,18 +110,32 @@ class Timeline extends React.Component<TimelineProps, {}> {
         const focused = idx === focus_index;
         const click_handler = () => this.toggleFocus(focused, idx);
         if (i instanceof TweetItem) {
-            return <Tweet
-                status={i}
-                timeline={kind}
-                owner={owner}
-                focused={focused}
-                related={related_ids.indexOf(i.id) !== -1}
-                focused_user={focused_user_id === i.getMainStatus().user.id}
-                friends={friends}
-                onClick={click_handler}
-                dispatch={dispatch}
-                key={key}
-            />;
+            if (Config.shouldExpandTweet(focused)) {
+                return <Tweet
+                    status={i}
+                    timeline={kind}
+                    owner={owner}
+                    focused={focused}
+                    related={related_ids.indexOf(i.id) !== -1}
+                    focused_user={focused_user_id === i.getMainStatus().user.id}
+                    friends={friends}
+                    onClick={click_handler}
+                    dispatch={dispatch}
+                    key={key}
+                />;
+            } else {
+                return <MiniTweet
+                    status={i}
+                    timeline={kind}
+                    owner={owner}
+                    focused={focused}
+                    related={related_ids.indexOf(i.id) !== -1}
+                    focused_user={focused_user_id === i.getMainStatus().user.id}
+                    onClick={click_handler}
+                    dispatch={dispatch}
+                    key={key}
+                />;
+            }
         } else if (i instanceof TimelineActivity) {
             return <TwitterActivity
                 activity={i}
@@ -185,6 +201,9 @@ class Timeline extends React.Component<TimelineProps, {}> {
 
     // TODO:
     // Determine the position to insert with ordered by id
+    // TODO:
+    // When 'expand_tweet' == 'never' or 'expand_tweet' == 'focused' and focus == null,
+    // we can know all elements' height.  Scrolling can be optimized.
     render() {
         const {message, dispatch, items, focus_index} = this.props;
         const related_ids = this.getRelatedStatusIds();

@@ -14,6 +14,7 @@ interface Config {
     notification: boolean | NotificationConfig;
     notification_sound: boolean | string;
     hotkey_accelerator: string;
+    expand_tweet: 'always' | 'focused' | 'never';
     plugin: string[];
     mute: boolean | MuteConfig;
 }
