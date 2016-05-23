@@ -109,6 +109,7 @@ body {
   cursor: pointer;
 }
 .avatar__inner {
+  display: block;
   border-radius: calc(100% / 6);
   background-color: white;
 }
@@ -744,10 +745,9 @@ body {
   overflow: hidden;
 }
 .mini-tweet__icon-image {
+  display: block;
   object-fit: cover;
-  border: 1px solid #dddddd;
   border-radius: 0.3rem;
-  box-sizing: border-box;
   height: 1rem;
 }
 .mini-tweet__icon-image.mini-tweet__icon-image_2cols {
@@ -824,7 +824,7 @@ body {
 }
 .mini-tweet__quoted.mini-tweet__quoted_focused {
   background-color: #79bcff;
-  border-color: #99ccff;
+  border: none;
 }
 .mini-tweet__has-pic {
   opacity: 0.6;
