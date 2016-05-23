@@ -9,6 +9,7 @@ import {
     focusPrevItem,
     focusTopItem,
     focusBottomItem,
+    unfocusItem,
     openEditor,
     openEditorForReply,
     changeCurrentTimeline,
@@ -129,6 +130,7 @@ export type GlobalAction =
   | 'reply'
   | 'delete-status'
   | 'open-status-page'
+  | 'unfocus'
   | 'focus-next'
   | 'focus-previous'
   | 'focus-top'
@@ -149,6 +151,7 @@ const DefaultMap = I.Map<string, GlobalAction>({
     'ctrl+f': 'like',
     'ctrl+D': 'delete-status',
     'enter': 'reply',
+    'escape': 'unfocus',
 });
 
 const ActionHandlers = I.Map<GlobalAction, () => void>({
@@ -166,6 +169,7 @@ const ActionHandlers = I.Map<GlobalAction, () => void>({
     'like': toggleLike,
     'reply': reply,
     'delete-status': deleteStatus,
+    'unfocus': () => Store.dispatch(unfocusItem()),
 });
 
 // Note:

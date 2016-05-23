@@ -56,6 +56,7 @@ These shortcuts are applied by default.  If no shortcut is matched to the input,
 | `ctrl+f` | Like focused tweet.                        | `like`             |
 | `ctrl+D` | Delete focused tweet.                      | `delete-status`    |
 | `enter`  | Open tweet form to reply to focused tweet. | `reply`            |
+| `escape` | Unfocus current item.                      | `unfocus`          |
 
 ### Tweet Form
 

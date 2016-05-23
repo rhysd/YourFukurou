@@ -133,7 +133,10 @@ function open_window(access: AccessToken) {
                     twitter.fetchMuteIds(),
                     twitter.fetchNoRetweets(),
                     twitter.fetchBlockIds(),
-                    twitter.fetchHomeTimeline(),
+                    twitter.fetchHomeTimeline({
+                        include_entities: true,
+                        count: global.config.expand_tweet === 'always' ? 20 : 40,
+                    }),
                     twitter.fetchMentionTimeline(),
                 ]))
                 .then(([mute_ids, no_retweet_ids, block_ids, tweets, mentions]) => {
