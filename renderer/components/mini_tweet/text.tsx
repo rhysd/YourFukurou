@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Tweet from '../../item/tweet';
 import TweetText from '../tweet/text';
+import ScreenName from '../tweet/screen_name';
 
 interface MiniTweetTextProps extends React.Props<any> {
     status: Tweet;
@@ -37,6 +38,7 @@ function renderQuoted(s: Tweet, focused: boolean) {
             <span className="mini-tweet__quoted-icon">
                 <i className="fa fa-quote-left"/>
             </span>
+            <ScreenName className="mini-tweet__quoted-screenname" user={q.user}/>
             <TweetText className="mini-tweet__quoted-text" status={q}/>
             {renderPicIcon(q)}
         </div>

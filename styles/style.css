@@ -809,6 +809,7 @@ body {
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 .mini-tweet__text > * {
   overflow-x: hidden;
@@ -835,6 +836,9 @@ body {
 .mini-tweet__quoted-icon {
   margin-right: 4px;
   color: var(--color-weak-text-link);
+}
+.mini-tweet__quoted-screenname {
+  opacity: 0.6;
 }
 .mini-tweet__has-pic {
   opacity: 0.6;
