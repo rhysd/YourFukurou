@@ -193,6 +193,9 @@ class Timeline extends React.Component<TimelineProps, {}> {
     }
 
     componentWillReceiveProps(next: TimelineProps) {
+        // Note:
+        // When we should manage visible range of timline, we can notify the range to store
+        // by dispatching action with the result of `this.refs.list.getVisibleRange()`.
         if (next.focus_index !== this.props.focus_index && next.focus_index !== null) {
             log.debug('Focus moves to:', next.focus_index);
             this.refs.list.scrollAround(next.focus_index);

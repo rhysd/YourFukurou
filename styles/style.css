@@ -756,7 +756,7 @@ body {
   height: 1rem;
 }
 .mini-tweet__icon-image.mini-tweet__icon-image_2cols {
-  height: calc(2rem + 4px);
+  height: calc(2rem + 6px);
 }
 .mini-tweet__secondary {
   flex: none;
@@ -817,6 +817,7 @@ body {
 }
 .mini-tweet__quoted {
   margin-top: 4px;
+  color: #555555;
   background-color: var(--bg-color-panel-hover);
   border: solid 1px var(--color-timeline-border);
   border-radius: 0.2rem;

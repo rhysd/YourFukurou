@@ -202,7 +202,10 @@ export default class TimelineState {
     putInHome(status: Tweet): [List<Item>, number] {
         const home = this.updateRelatedStatuses(status);
         if (!status.isRetweet()) {
-            return [home.unshift(status), this.nextFocusIndex(home.size + 1)];
+            return [
+                home.unshift(status),
+                this.kind === 'home' ? this.nextFocusIndex(home.size + 1) : this.focus_index,
+            ];
         }
 
         const status_id = status.retweeted_status.id;

@@ -152,6 +152,8 @@ const DefaultMap = I.Map<string, GlobalAction>({
     'ctrl+D': 'delete-status',
     'enter': 'reply',
     'escape': 'unfocus',
+    'down': 'focus-next',
+    'up': 'focus-up',
 });
 
 const ActionHandlers = I.Map<GlobalAction, () => void>({
