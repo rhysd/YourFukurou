@@ -7,6 +7,11 @@ const app_path = join(__dirname, '..', '..');
 export function createApp() {
     return new Application({
         path: electron,
-        args: [app_path]
+        args: [app_path],
     });
 };
+
+process.on('unhandledRejection', (err: Error) => {
+    console.error(err);
+    throw err;
+});

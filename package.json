@@ -15,7 +15,7 @@
     "dummy": "NODE_ENV=development YOURFUKUROU_DUMMY_TWEETS=true ./bin/cli.js",
     "watch": "guard --watchdir main renderer",
     "lint": "tslint $(git ls-files | grep -E \".tsx?$\")",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsc -p test/e2e && ava"
   },
   "repository": {
     "type": "git",
@@ -75,6 +75,8 @@
   "ava": {
     "files": [
       "test/e2e/first.js"
-    ]
+    ],
+    "timeout": "60s",
+    "serial": true
   }
 }

@@ -841,6 +841,7 @@ body {
 }
 .mini-tweet__has-pic {
   opacity: 0.6;
+  margin: auto 0px auto 4px;
   margin-left: 4px;
 }
 
