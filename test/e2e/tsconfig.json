@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "noImplicitAny": true,
+    "target": "es2015"
+  },
+  "files": [
+    "helper.ts",
+    "first.ts",
+    "typings/spectron.d.ts"
+  ]
+}

@@ -5,3 +5,4 @@
 /typings
 /renderer/js
 /env.sh
+/test/e2e/*.js

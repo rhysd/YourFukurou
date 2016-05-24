@@ -13,5 +13,10 @@
     "redux": "registry:dt/redux#3.3.1+20160326112656",
     "redux-thunk": "registry:dt/redux-thunk#2.0.1+20160317120654",
     "twitter-text": "registry:dt/twitter-text#1.13.4+20160412151713"
+  },
+  "globalDevDependencies": {
+    "github-electron/electron-prebuilt": "registry:dt/github-electron/electron-prebuilt#0.30.1+20160316155526",
+    "q": "registry:dt/q#0.0.0+20160417152954",
+    "webdriverio": "registry:dt/webdriverio#3.3.0+20160316155526"
   }
 }
