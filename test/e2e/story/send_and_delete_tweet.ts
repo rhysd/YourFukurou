@@ -7,7 +7,11 @@ test.beforeEach(async (t) => {
     return await t.context.yf.start();
 });
 
-test.afterEach(async (t) => await t.context.yf.stop());
+test.afterEach.always(async (t) => {
+    if (t.context.yf && t.context.yf.isRunning()) {
+        await t.context.yf.stop();
+    }
+});
 
 test(async (t) => {
     const client = t.context.yf.client;
