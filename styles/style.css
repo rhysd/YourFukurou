@@ -312,7 +312,6 @@ body {
 .tweet-actions {
   display: flex;
   color: var(--color-weak-text-link);
-  margin-right: auto;
 }
 .tweet-actions.tweet-actions_focused {
   color: var(--color-focused-weak);
