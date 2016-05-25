@@ -36,6 +36,11 @@ test(async (t) => {
     await message.ensureInfoMessage();
     const timeline = await message.waitForMessageDismissed();
 
+    // Find sent tweet
     const tw = await timeline.findTweetByText(text);
     t.not(tw, null);
+
+    // Delete it
+    await timeline.deleteTweet(tw);
+    await client.waitForExist('span=' + text, 100, true);
 });

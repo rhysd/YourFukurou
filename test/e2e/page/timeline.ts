@@ -1,3 +1,5 @@
+import Message from './message';
+
 export default class Timeline {
     constructor(public client: WebdriverIO.Client<void>) {
     }
@@ -27,6 +29,17 @@ export default class Timeline {
             }
         }
         return null;
+    }
+
+    async deleteTweet(element_id: string) {
+        // Focus
+        await this.client.elementIdClick(element_id);
+
+        const btn = await this.client.elementIdElement(element_id, '.tweet-actions__others');
+        await this.client.elementIdClick(btn.value.ELEMENT);
+
+        await this.client.click('.tweet-actions__others-menu-item');
+        await this.client.pause(3000);  // Wait response of favorites/create
     }
 
     async ensureNoFocusedItem() {
