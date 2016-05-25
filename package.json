@@ -15,7 +15,8 @@
     "dummy": "NODE_ENV=development YOURFUKUROU_DUMMY_TWEETS=true ./bin/cli.js",
     "watch": "guard --watchdir main renderer",
     "lint": "tslint $(git ls-files | grep -E \".tsx?$\")",
-    "test": "tsc -p test/e2e && ava"
+    "build-test": "tsc -p test/e2e",
+    "test": "npm run build-test && ava"
   },
   "repository": {
     "type": "git",
@@ -74,7 +75,8 @@
   },
   "ava": {
     "files": [
-      "test/e2e/first.js"
+      "test/e2e/story/initial_timeline.js",
+      "test/e2e/story/send_and_delete_tweet.js"
     ],
     "timeout": "60s",
     "serial": true

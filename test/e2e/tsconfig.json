@@ -8,7 +8,11 @@
   },
   "files": [
     "helper.ts",
-    "first.ts",
+    "page/editor.ts",
+    "page/side_menu.ts",
+    "page/timeline.ts",
+    "story/initial_timeline.ts",
+    "story/send_and_delete_tweet.ts",
     "typings/spectron.d.ts"
   ]
 }
