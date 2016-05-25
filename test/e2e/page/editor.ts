@@ -1,4 +1,5 @@
 import Timeline from './timeline';
+import Message from './message';
 
 export default class Editor {
     constructor(public client: WebdriverIO.Client<void>) {
@@ -18,7 +19,7 @@ export default class Editor {
 
     async sendTweet() {
         await this.client.click('.tweet-form__send-btn.tweet-form__send-btn_active');
-        return new Timeline(this.client);
+        return new Message(this.client);
     }
 
     async cancelTweet() {

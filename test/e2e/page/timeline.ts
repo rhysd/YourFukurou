@@ -20,13 +20,12 @@ export default class Timeline {
         const tweets = await this.allTweets();
         for (const id of tweets.map(e => e.ELEMENT)) {
             try {
-                await this.client.elementIdElements(id, 'span*=' + text);
+                await this.client.elementIdElements(id, 'span=' + text);
                 return id;
             } catch (e) {
                 // Note: Not found
             }
         }
-        console.log(await this.client.element('span*=' + text));
         return null;
     }
 

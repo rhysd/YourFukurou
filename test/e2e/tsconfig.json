@@ -9,6 +9,7 @@
   "files": [
     "helper.ts",
     "page/editor.ts",
+    "page/message.ts",
     "page/side_menu.ts",
     "page/timeline.ts",
     "story/initial_timeline.ts",
