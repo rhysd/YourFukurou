@@ -42,6 +42,11 @@ export default class Timeline {
         await this.client.pause(3000);  // Wait response of favorites/create
     }
 
+    async clickTweet(element_id: string) {
+        const elem = await this.client.elementIdElement(element_id, '.tweet__secondary');
+        await this.client.elementIdClick(elem.value.ELEMENT);
+    }
+
     async ensureNoFocusedItem() {
         await this.client.waitForExist('.tweet__body.tweet__body_focused', 5000, true);
         return this;

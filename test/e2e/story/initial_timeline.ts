@@ -38,7 +38,7 @@ test(async (t) => {
 
     const tweets = await tl.allTweets();
     for (const id of tweets.map(e => e.ELEMENT)) {
-        await client.elementIdClick(id);
+        await tl.clickTweet(id);
         await tl.ensureFocusedItem();
         await client.pause(100);
     }
