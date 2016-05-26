@@ -47,11 +47,19 @@ function renderDeleteThisTweet(props: OtherActionsButtonProps) {
     return (
         <div
             className="tweet-actions__others-menu-item"
-            onClick={e => deleteThisTweet(e, props)}
+            onClick={e => {
+                e.stopPropagation();
+                deleteThisTweet(e, props);
+            }}
         >
             Delete this tweet
         </div>
     );
+}
+
+function doNotPropagateEvent(e: React.MouseEvent) {
+    'use strict';
+    e.stopPropagation();
 }
 
 const OtherActionsButton = (props: OtherActionsButtonProps) => {
@@ -60,35 +68,46 @@ const OtherActionsButton = (props: OtherActionsButtonProps) => {
             {renderDeleteThisTweet(props)}
             <div
                 className="tweet-actions__others-menu-item"
-                onClick={() => props.status.openStatusPageInBrowser()}
+                onClick={e => {
+                    e.stopPropagation();
+                    props.status.openStatusPageInBrowser();
+                }}
             >
                 Open URLs in tweet
             </div>
             <div
                 className="tweet-actions__others-menu-item"
-                onClick={() => statusUrlToClipboard(props)}
+                onClick={e => {
+                    e.stopPropagation();
+                    statusUrlToClipboard(props);
+                }}
             >
                 Copy tweet URL
             </div>
             <div
                 className="tweet-actions__others-menu-item"
-                onClick={() => copyJson(props)}
+                onClick={e => {
+                    e.stopPropagation();
+                    copyJson(props);
+                }}
             >
                 Copy tweet JSON
             </div>
         </div>;
 
     return (
-        <Tooltip
-            placement="bottom"
-            trigger={['click']}
-            overlay={overlay}
-            destroyTooltipOnHide
-        >
-            <div className="tweet-actions__others">
-                <i className="fa fa-ellipsis-h"/>
-            </div>
-        </Tooltip>
+        <div onClick={doNotPropagateEvent}>
+            <Tooltip
+                placement="bottom"
+                trigger={['click']}
+                overlay={overlay}
+                destroyTooltipOnHide
+            >
+                <div className="tweet-actions__others">
+                    <i className="fa fa-ellipsis-h"/>
+                </div>
+            </Tooltip>
+        </div>
     );
 };
 
