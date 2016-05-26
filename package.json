@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/rhysd/YourFukurou#readme",
   "devDependencies": {
-    "ava": "^0.15.0",
+    "ava": "github:rhysd/ava#typescript-after-always",
     "browserify": "^13.0.1",
     "electron-packager": "^7.0.1",
     "spectron": "^3.1.0",

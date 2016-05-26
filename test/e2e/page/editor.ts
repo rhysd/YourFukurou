@@ -10,11 +10,11 @@ export default class Editor {
     }
 
     async sendButtonIsInactive() {
-        return this.client.waitForExist('.tweet-form__send-btn.tweet-form__send-btn_inactive', 500);
+        return this.client.waitForExist('.tweet-form__send-btn.tweet-form__send-btn_inactive', 1000);
     }
 
     async sendButtonIsActive() {
-        return this.client.waitForExist('.tweet-form__send-btn.tweet-form__send-btn_active', 500);
+        return this.client.waitForExist('.tweet-form__send-btn.tweet-form__send-btn_active', 1000);
     }
 
     async sendTweet() {
