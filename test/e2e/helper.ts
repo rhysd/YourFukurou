@@ -1,4 +1,5 @@
 import {join} from 'path';
+import {writeFileSync} from 'fs';
 import {Application} from 'spectron';
 import * as electron from 'electron-prebuilt';
 
@@ -8,8 +9,15 @@ export function createApp() {
     return new Application({
         path: electron,
         args: [app_path],
+        env: process.env,
     });
 };
+
+export function captureScreenShot(app: Application, path_name: string) {
+    app.browserWindow.capturePage((img: any) => {
+        writeFileSync('screenshot.png', img.toPng());
+    });
+}
 
 process.on('unhandledRejection', (err: Error) => {
     console.error(err);

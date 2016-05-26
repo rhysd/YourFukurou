@@ -1,0 +1,32 @@
+language: node_js
+
+node_js: "6"
+
+os:
+    - osx
+
+before_script:
+    - |
+        if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+            "export DISPLAY=:99.0"
+            "sh -e /etc/init.d/xvfb start"
+            sleep 3
+        fi
+
+script:
+    - npm run dep
+    - npm run build
+    - npm run test
+
+cache:
+  directories:
+    - node_modules
+
+notifications:
+    email:
+        on_success: never
+        on_failure: change
+
+
+
+
