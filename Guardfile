@@ -27,4 +27,9 @@ guard :shell do
     timestamp m[0]
     npm_run 'build-renderer'
   end
+
+  watch %r[^test/e2e/story/.+\.ts$] do |m|
+    timestamp m[0]
+    npm_run 'build-test'
+  end
 end

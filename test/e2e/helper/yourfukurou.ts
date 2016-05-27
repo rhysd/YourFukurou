@@ -19,4 +19,28 @@ export default class YourFukurou extends Application {
             writeFileSync(join(dir || '.', name), img);
         });
     }
+
+    async getRendererProcessLogs() {
+        const logs = await this.client.getRenderProcessLogs();
+        return logs.map(l => `[${l.level}]: ${l.message}`);
+    }
+
+    async getMainProcessLogs() {
+        return this.client.getMainProcessLogs();
+    }
+
+    async getLogsJson() {
+        const rl = await this.getRendererProcessLogs();
+        const ml = await this.getMainProcessLogs();
+        const obj = {
+            main: ml,
+            renderer: rl,
+        };
+        return JSON.stringify(obj, null, 2);
+    }
+
+    async dumpLogsTo(file_name: string, dir?: string) {
+        const json = await this.getLogsJson();
+        writeFileSync(join(dir || '.', file_name), json, 'utf8');
+    }
 }

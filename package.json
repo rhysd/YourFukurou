@@ -13,9 +13,9 @@
     "app": "./bin/cli.js",
     "debug": "NODE_ENV=development ./bin/cli.js",
     "dummy": "NODE_ENV=development YOURFUKUROU_DUMMY_TWEETS=true ./bin/cli.js",
-    "watch": "guard --watchdir main renderer",
+    "watch": "guard --watchdir main renderer test",
     "lint": "tslint $(git ls-files | grep -E \".tsx?$\")",
-    "build-test": "tsc -p test/e2e",
+    "build-test": "tsc --pretty -p test/e2e",
     "test": "npm run build-test && ava"
   },
   "repository": {

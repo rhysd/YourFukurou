@@ -8,9 +8,11 @@ test.beforeEach(async (t) => {
 });
 
 test.afterEach.always(async (t) => {
-    if (t.context.yf && t.context.yf.isRunning()) {
-        await t.context.yf.captureScreenShot('screenshot_send_and_delete_tweet.png');
-        await t.context.yf.stop();
+    const yf = t.context.yf;
+    if (yf && yf.isRunning()) {
+        await yf.dumpLogsTo('send_and_delete_tweet_log.json');
+        await yf.captureScreenShot('screenshot_send_and_delete_tweet.png');
+        await yf.stop();
     }
 });
 

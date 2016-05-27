@@ -14,4 +14,7 @@ for ss in `ls ./test/e2e/story/screenshot_*.png`; do
     bash dropbox_uploader.sh upload "${TRAVIS_REPO_SLUG}/${TRAVIS_JOB_ID}/${ss}"
 done
 
-
+for log in `ls ./test/e2e/story/*_log.json`; do
+    echo "${log}"
+    cat "${log}"
+done

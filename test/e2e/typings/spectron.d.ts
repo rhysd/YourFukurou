@@ -4,9 +4,15 @@
 /// <reference path="../../../typings/globals/github-electron/electron-prebuilt/index.d.ts" />
 
 declare namespace WebdriverIO {
+    export interface ConsoleMessage {
+        level: string;
+        message: string;
+        source: string;
+        timestamp: number;
+    }
     export interface Client<T> {
         getMainProcessLogs(): Promise<string[]>;
-        getRenderProcessLogs(): Promise<string[]>;
+        getRenderProcessLogs(): Promise<ConsoleMessage[]>;
         getSelectedText(): Promise<string>;
         getWindowCount(): Promise<number>;
         waitUntilTextExists(selector: string, text: string, timeout?: number): Promise<void>;
