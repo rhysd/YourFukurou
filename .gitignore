@@ -7,3 +7,4 @@
 /env.sh
 /test/e2e/**/*.js
 sub_account_tokens.sh
+screenshot_*.png

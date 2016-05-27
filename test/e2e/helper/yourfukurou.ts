@@ -14,9 +14,9 @@ export default class YourFukurou extends Application {
         });
     }
 
-    captureScreenShot(dir?: string) {
-        this.browserWindow.capturePage((img: any) => {
-            writeFileSync(join(dir || '.', 'screenshot.png'), img.toPng());
+    captureScreenShot(name: string, dir?: string) {
+        this.browserWindow.capturePage().then((img: Buffer) => {
+            writeFileSync(join(dir || '.', name), img);
         });
     }
 }

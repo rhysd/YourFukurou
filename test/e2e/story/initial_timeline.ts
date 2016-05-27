@@ -9,6 +9,7 @@ test.beforeEach(async (t) => {
 
 test.afterEach.always(async (t) => {
     if (t.context.yf && t.context.yf.isRunning()) {
+        await t.context.yf.captureScreenShot('screenshot_initial_timeline.png');
         await t.context.yf.stop();
     }
 });
