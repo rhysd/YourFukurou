@@ -6,17 +6,15 @@ os:
     - osx
 
 before_script:
-    - |
-        if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-            "export DISPLAY=:99.0"
-            "sh -e /etc/init.d/xvfb start"
-            sleep 3
-        fi
+    - ./scripts/travis-before-script.sh
 
 script:
     - npm run dep
     - npm run build
     - npm run test
+
+after_failure:
+    - ./scripts/travis-after-failure.sh
 
 cache:
   directories:
