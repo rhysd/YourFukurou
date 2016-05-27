@@ -10,8 +10,9 @@ export default class Timeline {
         return this;
     }
 
-    clickFirstTweet() {
-        return this.client.click('.tweet__body');
+    async clickFirstTweet() {
+        const e = await this.client.element('.tweet__body');
+        await this.clickTweet(e.value.ELEMENT);
     }
 
     async allTweets() {
