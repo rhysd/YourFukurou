@@ -1,5 +1,6 @@
 import Timeline from './timeline';
 import Message from './message';
+import {DefaultTimeout} from '../helper/timeouts';
 
 export default class Editor {
     constructor(public client: WebdriverIO.Client<void>) {
@@ -10,11 +11,11 @@ export default class Editor {
     }
 
     async sendButtonIsInactive() {
-        return this.client.waitForExist('.tweet-form__send-btn.tweet-form__send-btn_inactive', 1000);
+        return this.client.waitForExist('.tweet-form__send-btn.tweet-form__send-btn_inactive', DefaultTimeout);
     }
 
     async sendButtonIsActive() {
-        return this.client.waitForExist('.tweet-form__send-btn.tweet-form__send-btn_active', 1000);
+        return this.client.waitForExist('.tweet-form__send-btn.tweet-form__send-btn_active', DefaultTimeout);
     }
 
     async sendTweet() {

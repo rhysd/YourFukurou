@@ -1,11 +1,12 @@
 import Message from './message';
+import {DefaultTimeout} from '../helper/timeouts';
 
 export default class Timeline {
     constructor(public client: WebdriverIO.Client<void>) {
     }
 
     async ensureRootNode() {
-        await this.client.waitForExist('#yourfukurou', 5000);
+        await this.client.waitForExist('#yourfukurou', DefaultTimeout);
         return this;
     }
 
@@ -48,12 +49,12 @@ export default class Timeline {
     }
 
     async ensureNoFocusedItem() {
-        await this.client.waitForExist('.tweet__body.tweet__body_focused', 5000, true);
+        await this.client.waitForExist('.tweet__body.tweet__body_focused', DefaultTimeout, true);
         return this;
     }
 
     async ensureFocusedItem() {
-        await this.client.waitForExist('.tweet__body.tweet__body_focused', 5000);
+        await this.client.waitForExist('.tweet__body.tweet__body_focused', DefaultTimeout);
         return this;
     }
 }
