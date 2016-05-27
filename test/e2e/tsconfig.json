@@ -7,7 +7,7 @@
     "target": "es2015"
   },
   "files": [
-    "helper.ts",
+    "helper/yourfukurou.ts",
     "page/editor.ts",
     "page/message.ts",
     "page/side_menu.ts",

@@ -1,9 +1,9 @@
 import test from 'ava';
-import {createApp} from '../helper';
+import YourFukurou from '../helper/yourfukurou';
 import SideMenu from '../page/side_menu';
 
 test.beforeEach(async (t) => {
-    t.context.yf = createApp();
+    t.context.yf = new YourFukurou();
     return await t.context.yf.start();
 });
 

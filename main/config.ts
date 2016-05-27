@@ -18,7 +18,9 @@ export const DefaultConfig = {
 export default function loadConfig() {
     'use strict';
     return new Promise<[string, Config]>((resolve, reject) => {
-        const config_path = path.join(app.getPath('userData'), 'config.json');
+        const config_path =
+            process.env.YOURFUKUROU_CONFIG_JSON_PATH ||
+            path.join(app.getPath('userData'), 'config.json');
 
         fs.readFile(config_path, 'utf8', (err, content) => {
             if (err) {

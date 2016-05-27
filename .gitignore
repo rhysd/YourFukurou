@@ -6,3 +6,4 @@
 /renderer/js
 /env.sh
 /test/e2e/**/*.js
+sub_account_tokens.sh

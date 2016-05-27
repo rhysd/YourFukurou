@@ -1,9 +1,9 @@
 import test from 'ava';
-import {createApp} from '../helper';
+import YourFukurou from '../helper/yourfukurou';
 import Timeline from '../page/timeline';
 
 test.beforeEach(async (t) => {
-    t.context.yf = createApp();
+    t.context.yf = new YourFukurou();
     return await t.context.yf.start();
 });
 
