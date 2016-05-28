@@ -124,6 +124,10 @@ export default class TimelineState {
     }
 
     checkMutedOrBlocked(status: Tweet) {
+        if (this.user && status.user.id === this.user.id) {
+            return false;
+        }
+
         if (this.rejected_ids.contains(status.user.id)) {
             return true;
         }

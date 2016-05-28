@@ -8,6 +8,7 @@ import {
     upAutoCompletionFocus,
     downAutoCompletionFocus,
     closeEditor,
+    stopAutoCompletion,
 } from '../actions';
 
 const {
@@ -19,11 +20,13 @@ const {
 export type EditorAction = 'send-tweet'
                             | 'choose-suggestion'
                             | 'close-editor'
+                            | 'cancel-suggestion'
                             | 'select-next-suggestion'
                             | 'select-previous-suggestion';
 
 const DefaultMap = I.Map<string, EditorAction>({
     'ctrl+enter': 'send-tweet',
+    'ctrl+g': 'cancel-suggestion',
     'enter': 'choose-suggestion',
     'tab': 'select-next-suggestion',
 });
@@ -31,6 +34,7 @@ const DefaultMap = I.Map<string, EditorAction>({
 function isEditorAction(s: string): s is EditorAction {
     'use strict';
     return s === 'send-tweet' ||
+           s === 'cancel-suggestion' ||
            s === 'choose-suggestion' ||
            s === 'close-editor' ||
            s === 'select-next-suggestion' ||
@@ -80,6 +84,7 @@ const ActionHandlers = I.Map<EditorAction, () => void>({
     'select-next-suggestion': () => Store.dispatch(downAutoCompletionFocus()),
     'select-previous-suggestion': () => Store.dispatch(upAutoCompletionFocus()),
     'close-editor': () => Store.dispatch(closeEditor()),
+    'cancel-suggestion': () => Store.dispatch(stopAutoCompletion()),
 });
 
 export default class EditorKeymaps {

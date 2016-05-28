@@ -68,6 +68,7 @@ These shortcuts are applied when tweet form is opened.  Global shortcuts will be
 | `enter`      | If completion item is focused, select it.          | `choose-suggestion`      |
 | `tab`        | If completion started, select next completion item | `select-next-suggestion` |
 | `escape`     | Close text form.                                   | `close-editor`           |
+| `ctrl+g`     | Close current auto completion.                     | `cancel-suggestion`      |
 
 ### Media Preview
 

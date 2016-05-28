@@ -182,15 +182,7 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
 function searchEmojiSuggestionItems(query: string) {
     'use strict';
     if (query.endsWith(':')) {
-        const name = query.slice(1, query.length - 1);  // Note: Omit first and last ':'
-        if (emoji[name]) {
-            return Promise.resolve([{
-                code: emoji[name],
-                description: name,
-            }]);
-        } else {
-            return Promise.resolve([]);
-        }
+        return Promise.resolve([]);
     }
 
     // TODO:

@@ -7,7 +7,7 @@ export type AutoCompleteLabel = 'EMOJI' | 'SCREENNAME' | 'HASHTAG';
 
 function createAutoCompleteStrategy(re: RegExp) {
     'use strict';
-    return function autoCOmpleteStrategy(contentBlock: ContentBlock, callback: (s: number, e: number) => void) {
+    return function autoCompleteStrategy(contentBlock: ContentBlock, callback: (s: number, e: number) => void) {
         const text = contentBlock.getText();
         while (true) {
             const match = re.exec(text);
