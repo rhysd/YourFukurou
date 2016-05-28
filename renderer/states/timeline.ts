@@ -512,7 +512,13 @@ export default class TimelineState {
 
         notifyLiked(status, from);
 
-        const next = this.updateStatus(status);
+        const status_updated = this.updateStatus(status);
+
+        // Note:
+        // this.updateStatus doesn't update timeline if no item is updated.
+        // So I need to update explicitly when timeline is not updated yet.
+        const next = status_updated === this ? status_updated.update() : status_updated;
+
         [next.mention, next.focus_index] = next.updateActivityInMention(kind, status, from);
 
         if (this.kind !== 'mention' && !this.notified.mention) {
