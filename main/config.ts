@@ -13,6 +13,7 @@ export const DefaultConfig = {
         home: true,
         mention: false,
     },
+    proxy: null,
 } as Config;
 
 export default function loadConfig() {

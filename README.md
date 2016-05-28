@@ -135,6 +135,10 @@ When the hot key is pressed, app window is toggled.  When window is not focused,
 
 Coming soon.
 
+### `proxy`
+
+host + port number joined with ':' such as 'example.com:80080'.
+
 ### Example of `config.json`:
 
 ```json
@@ -146,10 +150,12 @@ Coming soon.
     "quoted": true
   },
   "hotkey_accelerator": "CmrOrCtrl+`",
+  "expand_tweet": "focused",
   "mute": {
     "home": true,
     "mention": true
   },
+  "proxy": "example.com:80080",
   "plugin": [
     "my-plugin.js"
   ]

@@ -38,6 +38,10 @@ const prepare_app = loadConfig()
         .then(c => {
             global.config_path = c[0];
             global.config = c[1];
+            if (global.config.proxy) {
+                process.env.http_proxy = `http://${global.config.proxy}`;
+                process.env.https_proxy = `https://${global.config.proxy}`;
+            }
         })
         .catch(e => {
             log.error('Fatal error on loading configuration:', e);

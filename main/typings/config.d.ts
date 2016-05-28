@@ -17,4 +17,5 @@ interface Config {
     expand_tweet: 'always' | 'focused' | 'never';
     plugin: string[];
     mute: boolean | MuteConfig;
+    proxy: string;
 }
