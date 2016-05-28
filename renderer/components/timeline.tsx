@@ -140,6 +140,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
             return <TwitterActivity
                 activity={i}
                 focused={focused}
+                collapsed={!Config.shouldExpandTweet(focused)}
                 onClick={click_handler}
                 key={key}
             />;

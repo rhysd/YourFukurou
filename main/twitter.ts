@@ -394,9 +394,6 @@ export default class Twitter {
                 const send_all = () => {
                     this.sender.send('yf:tweet', tweets[idx]);
                     ++idx;
-                    if (random_range(0, 20) < 1) {
-                        this.sender.send('yf:connection-failure');
-                    }
                     if (idx < tweets.length) {
                         setTimeout(send_all, random_range(500, 5000));
                     }

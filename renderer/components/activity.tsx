@@ -9,6 +9,7 @@ import log from '../log';
 interface TwitterActivityProps extends React.Props<any> {
     activity: TimelineActivity;
     focused?: boolean;
+    collapsed?: boolean;
     onClick?: (e: MouseEvent) => void;
 }
 
@@ -75,7 +76,8 @@ function renderCreatedAt(status: Tweet, focused: boolean) {
     );
 }
 
-const TwitterActivity: React.StatelessComponent<TwitterActivityProps> = props => {
+function renderExpanded(props: TwitterActivityProps) {
+    'use strict';
     const {focused, onClick, activity} = props;
     const kind = activity.kind;
     const behaved =
@@ -97,5 +99,28 @@ const TwitterActivity: React.StatelessComponent<TwitterActivityProps> = props =>
             </div>
         </div>
     );
-};
+}
+
+function renderCollapsed(props: TwitterActivityProps) {
+    'use strict';
+    const {focused, onClick, activity} = props;
+    return (
+        <div
+            className={focused ?
+                    'activity activity_mini activity_focused' :
+                    'activity activity_mini'}
+            onClick={onClick}
+        >
+            <div className="activity__header activity__header_mini">
+                {renderBadge(activity.kind)} {renderUserIcons(activity.by)}
+            </div>
+            <div className="activity__text activity__text_mini" title={activity.status.text}>
+                <TweetText status={activity.status} focused={focused}/>
+            </div>
+        </div>
+    );
+}
+
+const TwitterActivity: React.StatelessComponent<TwitterActivityProps> =
+    props => props.collapsed ?  renderCollapsed(props) : renderExpanded(props);
 export default TwitterActivity;

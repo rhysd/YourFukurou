@@ -355,6 +355,9 @@ body {
 .activity:hover {
   background-color: var(--bg-color-panel-hover);
 }
+.activity.activity_mini {
+  flex-direction: row;
+}
 .activity.activity_focused {
   color: white;
   background-color: var(--bg-color-focused);
@@ -365,6 +368,11 @@ body {
   white-space: nowrap;
   overflow: hidden;
   font-weight: bold;
+}
+.activity__header.activity__header_mini {
+  min-width: 20%;
+  max-width: 120px;
+  padding-right: 8px;
 }
 .activity__user-icons {
   overflow: hidden;
@@ -388,6 +396,10 @@ body {
 }
 .activity__text {
   margin-top: 8px;
+  overflow: hidden;
+}
+.activity__text.activity__text_mini {
+  margin: auto 0px;
 }
 .activity__text > * {
   overflow: hidden;
