@@ -6,6 +6,7 @@
 /renderer/js
 /env.sh
 /test/e2e/**/*.js
+/test/e2e/**/config.json
 sub_account_tokens.sh
 screenshot_*.png
 *_log.json

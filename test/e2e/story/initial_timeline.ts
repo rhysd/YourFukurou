@@ -34,14 +34,13 @@ test(async (t) => {
 
     // Toggle tweet item
     await tl.ensureNoFocusedItem();
-    await tl.clickFirstTweet();
+    await (await tl.firstTweet()).click();
     await tl.ensureFocusedItem();
-    await tl.clickFirstTweet();
+    await (await tl.firstTweet()).click();
     await tl.ensureNoFocusedItem();
 
-    const tweets = await tl.allTweets();
-    for (const id of tweets.map(e => e.ELEMENT)) {
-        await tl.clickTweet(id);
+    for (const tw of await tl.allTweets()) {
+        await tw.click();
         await tl.ensureFocusedItem();
         await client.pause(100);
     }

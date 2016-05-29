@@ -28,7 +28,7 @@ test(async (t) => {
     t.is((await menu.activeButtons()).length, 2);
 
     // Input text and check 'send tweet' button state
-    const text = "Test.  If this tweet won't be removed, it means test failed";
+    const text = "Test: If this tweet won't be removed, it means test failed.";
     t.true(await editor.sendButtonIsInactive());
     await editor.inputKeys(text);
     t.true(await editor.sendButtonIsActive());
@@ -39,11 +39,13 @@ test(async (t) => {
     await message.ensureInfoMessage();
     const timeline = await message.waitForMessageDismissed();
 
-    // Find sent tweet
-    const tw = await timeline.findTweetByText(text);
+    // Wait for receiving sent tweet via user stream
+    await client.pause(3000);
+
+    let tw = await timeline.findTweetByText(text);
     t.not(tw, null);
 
-    // Delete it
-    await timeline.deleteTweet(tw);
-    await client.waitForExist('span=' + text, 100, true);
+    await tw.delete();
+    tw = await timeline.findTweetByText(text);
+    t.is(tw, null);
 });
