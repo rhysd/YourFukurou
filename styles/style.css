@@ -169,7 +169,6 @@ body {
 .tweet__icon {
   flex: none;
   width: 56px;
-  height: 56px;
 }
 .tweet__secondary {
   flex: none;
@@ -205,9 +204,14 @@ body {
   text-overflow: ellipsis;
   color: var(--color-weak-text-link);
   font-size: 0.8rem;
+  display: flex;
+  align-items: center;
 }
 .tweet__secondary-retweetedby.tweet__secondary-retweetedby_focused {
   color: var(--color-focused-weak);
+}
+.tweet__small-icon {
+  margin-left: 4px;
 }
 .tweet__primary {
   flex: auto;
@@ -357,6 +361,7 @@ body {
 }
 .activity.activity_mini {
   flex-direction: row;
+  padding: 4px;
 }
 .activity.activity_focused {
   color: white;
@@ -371,7 +376,8 @@ body {
 }
 .activity__header.activity__header_mini {
   width: calc(56px + 20%);
-  max-width: 176px; /* icon width + secondary width */
+  min-width: calc(40px + 20%); /* Considering padding 8+8px */
+  max-width: 176px; /* Icon width + secondary width */
   padding-right: 8px;
 }
 .activity__user-icons {

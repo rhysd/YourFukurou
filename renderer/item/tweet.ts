@@ -31,6 +31,14 @@ export class TwitterUser {
         }
     }
 
+    get mini_icon_url() {
+        if (window.devicePixelRatio < 1.5) {
+            return this.icon_url_24x24;
+        } else {
+            return this.icon_url_48x48;
+        }
+    }
+
     get icon_url_73x73() {
         return this.json.profile_image_url.replace(re_normal_size, 'bigger');
     }
@@ -261,6 +269,13 @@ export default class Tweet implements Item {
             return [];
         }
         return this.json.entities.user_mentions;
+    }
+
+    get hashtags() {
+        if (!this.json.entities || !this.json.entities.hashtags) {
+            return [];
+        }
+        return this.json.entities.hashtags;
     }
 
     getMainStatus() {

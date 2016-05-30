@@ -37,7 +37,7 @@ function renderUserIcons(users: TwitterUser[]) {
         users.map((u, i) =>
             <Avatar
                 screenName={u.screen_name}
-                imageUrl={u.icon_url_24x24}
+                imageUrl={u.mini_icon_url}
                 size={24}
                 title={'@' + u.screen_name}
                 key={i}
