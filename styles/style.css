@@ -120,6 +120,9 @@ body {
 .external-link {
   cursor: pointer;
   text-decoration: none;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .external-link:hover {
   cursor: pointer;
@@ -199,9 +202,6 @@ body {
 .tweet__secondary-retweetedby {
   flex: none;
   margin-top: auto;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   color: var(--color-weak-text-link);
   font-size: 0.8rem;
   display: flex;
@@ -861,6 +861,12 @@ body {
   opacity: 0.6;
   margin: auto 0px auto 4px;
   margin-left: 4px;
+}
+
+.screenname__body {
+  display: flex;
+  align-items: center;
+  overflow-x: hidden;
 }
 
 .rc-tooltip {

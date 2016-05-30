@@ -30,11 +30,13 @@ function retweetedBy(tw: Tweet, focused: boolean) {
     }
 
     return (
-        <div className={
-            focused ?
-                'tweet__secondary-retweetedby tweet__secondary-retweetedby_focused' :
-                'tweet__secondary-retweetedby'
-            }>
+        <div
+            className={
+                focused ?
+                    'tweet__secondary-retweetedby tweet__secondary-retweetedby_focused' :
+                    'tweet__secondary-retweetedby'
+            }
+        >
             <i className="fa fa-retweet"/> <ScreenName user={tw.user}/> <SmallIcon user={tw.user}/>
         </div>
     );
