@@ -4,6 +4,7 @@ import MyAccounts, {MyAccountsTable} from './my_accounts';
 import Hashtags, {HashtagsTable} from './hashtags';
 import Statuses, {StatusesTable} from './statuses';
 import RejectedIds, {RejectedIdsTable} from './rejected_ids';
+import HashtagCompletionHistory from './hashtag_completion_history';
 
 // Note:
 // Simply notify tables' type information to TypeScript compiler
@@ -23,6 +24,7 @@ export class Database {
     hashtags: Hashtags;
     statuses: Statuses;
     rejected_ids: RejectedIds;
+    hashtag_completion_history: HashtagCompletionHistory;
 
     constructor () {
         this.db = new Dexie('YourFukurou') as TypedDexie;
@@ -39,6 +41,7 @@ export class Database {
         this.hashtags = new Hashtags(this.db.hashtags);
         this.statuses = new Statuses(this.db.statuses);
         this.rejected_ids = new RejectedIds(this.db.rejected_ids);
+        this.hashtag_completion_history = new HashtagCompletionHistory();
     }
 }
 

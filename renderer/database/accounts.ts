@@ -2,6 +2,7 @@ import Dexie from 'dexie';
 import log from '../log';
 import {TwitterUser} from '../item/tweet';
 import {Twitter} from 'twit';
+import {SuggestionItem, MaxSuggestions} from '../components/editor/suggestions';
 
 interface AccountsScheme {
     id: number;
@@ -136,6 +137,25 @@ export default class Accounts {
             });
     }
 
+    getScreenNameSuggestions(query: string) {
+        return this.table
+            .where('screenname').startsWith(query)
+            .limit(MaxSuggestions)
+            .reverse()
+            .sortBy('completion_count')
+            .then(
+                found =>
+                    found.map(e => ({
+                        icon_url: e.json.profile_image_url,
+                        description: '@' + e.screenname,
+                    } as SuggestionItem))
+            )
+            .catch((e: Error) => {
+                log.error('Error on getting screen name suggestion item: ', query, e);
+                return [] as SuggestionItem[];
+            });
+    }
+
     // TODO:
     // Consider the order
     getAllUsers() {
@@ -144,6 +164,38 @@ export default class Accounts {
                 log.error('Error on getting all accounts:', e);
                 throw e;
             });
+    }
+
+    upCompletionCount(ids: number[]) {
+        if (ids.length === 0) {
+            return Promise.resolve(false);
+        }
+
+        return this.table
+            .where('id').anyOf(ids)
+            .modify(e => {
+                e.completion_count += 1;
+            })
+            .then(num_modified => num_modified > 0)
+            .catch((e: Error): boolean => {
+                log.error('Error on upping completion count of IDs:', ids, e);
+                throw e;
+            });
+    }
+
+    upCompletionCountOfMentions(json: Twitter.Status) {
+        const ids = [] as number[];
+        if (json.in_reply_to_user_id) {
+            ids.push(json.in_reply_to_user_id);
+        }
+
+        if (json.entities && json.entities.user_mentions) {
+            for (const m of json.entities.user_mentions) {
+                ids.push(m.id);
+            }
+        }
+
+        return this.upCompletionCount(ids);
     }
 
     dump() {

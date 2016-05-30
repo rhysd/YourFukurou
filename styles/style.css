@@ -370,8 +370,8 @@ body {
   font-weight: bold;
 }
 .activity__header.activity__header_mini {
-  min-width: 20%;
-  max-width: 120px;
+  width: calc(56px + 20%);
+  max-width: 176px; /* icon width + secondary width */
   padding-right: 8px;
 }
 .activity__user-icons {

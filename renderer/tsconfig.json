@@ -34,6 +34,7 @@
     "database/accounts.ts",
     "database/hashtags.ts",
     "database/statuses.ts",
+    "database/hashtag_completion_history.ts",
     "reducers/root.ts",
     "reducers/editor.ts",
     "reducers/editor_completion.ts",

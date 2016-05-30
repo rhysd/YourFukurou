@@ -44,12 +44,16 @@ function getCurrentStatus(): Tweet {
 
 function openMedia() {
     'use strict';
-    const status = getCurrentStatus();
+    let status = getCurrentStatus();
     if (status === null) {
         return;
     }
+    status = status.getMainStatus();
 
-    const media = status.media;
+    let media = status.media;
+    if (media.length === 0 && status.hasQuote()) {
+        media = status.quoted_status.media;
+    }
     if (media.length === 0) {
         return;
     }

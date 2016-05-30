@@ -88,7 +88,7 @@ export default class Hashtags {
             });
     }
 
-    getHashtagsByScreenNameStartsWith(str: string, limit?: number) {
+    getHashtagsStartWith(str: string, limit?: number) {
         const query = limit ?
             this.table.where('text').startsWith(str).limit(limit) :
             this.table.where('text').startsWith(str);
@@ -101,6 +101,18 @@ export default class Hashtags {
             });
     }
 
+    getHashtagsExceptFor(exceptions: string[], limit?: number) {
+        const query = limit ?
+            this.table.where('text').noneOf(exceptions).limit(limit) :
+            this.table.where('text').noneOf(exceptions);
+
+        return query.toArray()
+            .then(hs => hs.map(h => h.text))
+            .catch((e: Error): string[] => {
+                log.error(`Error on getting accounts with exceptions:`, exceptions, e);
+                throw e;
+            });
+    }
 
     dump() {
         return this.table.toArray()

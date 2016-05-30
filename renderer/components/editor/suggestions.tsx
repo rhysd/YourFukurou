@@ -8,7 +8,7 @@ import {TwitterUser} from '../../item/tweet';
 import DB from '../../database/db';
 import log from '../../log';
 
-const MAX_SUGGESTIONS = 5;
+export const MaxSuggestions = 5;
 
 export interface SuggestionItem {
     code?: string;
@@ -200,7 +200,7 @@ function searchEmojiSuggestionItems(query: string) {
             });
             count += 1;
         }
-        if (count > MAX_SUGGESTIONS) {
+        if (count > MaxSuggestions) {
             return Promise.resolve(suggestions);
         }
     }
@@ -220,16 +220,15 @@ function searchScreenNameSuggestionItems(query: string) {
     // previous suggestions.
 
     const input = query.slice(1);  // Note: Omit '@'
-    return DB.accounts
-        .getUsersByScreenNameStartsWith(input, MAX_SUGGESTIONS)
-        .then((us: TwitterUser[]) => us.map(u => ({
-            icon_url: u.icon_url_48x48,
-            description: '@' + u.screen_name,
-        })))
-        .catch(() => [] as SuggestionItem[]);
+    return DB.accounts.getScreenNameSuggestions(input);
 }
 
-function searchHashtagSuggestionItems(query: string) {
+function hashtagTextToSuggestion(text: string) {
+    'use strict';
+    return {description: '#' + text} as SuggestionItem;
+}
+
+function searchHashtagSuggestionItems(query: string): Promise<SuggestionItem[]> {
     'use strict';
     if (RE_QUERY_END.test(query)) {
         return Promise.resolve([]);
@@ -240,11 +239,21 @@ function searchHashtagSuggestionItems(query: string) {
     // previous suggestions.
 
     const input = query.slice(1);  // Note: Omit '#'
-    return DB.hashtags
-        .getHashtagsByScreenNameStartsWith(input, MAX_SUGGESTIONS)
-        .then((hs: string[]) => hs.map(h => ({
-            description: '#' + h,
-        })))
+    if (input.length === 0) {
+        const stored = DB.hashtag_completion_history.getHashtags();
+        const from_history = stored.map(hashtagTextToSuggestion);
+
+        if (from_history.length >= MaxSuggestions) {
+            return Promise.resolve(from_history);
+        }
+
+        return DB.hashtags.getHashtagsExceptFor(stored, MaxSuggestions - from_history.length)
+            .then(hs => from_history.concat(hs.map(hashtagTextToSuggestion)))
+            .catch(() => from_history);
+    }
+
+    return DB.hashtags.getHashtagsStartWith(input, MaxSuggestions)
+        .then(hs => hs.map(hashtagTextToSuggestion))
         .catch(() => [] as SuggestionItem[]);
 }
 
