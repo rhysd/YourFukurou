@@ -14,7 +14,7 @@
     "debug": "NODE_ENV=development ./bin/cli.js",
     "dummy": "NODE_ENV=development YOURFUKUROU_DUMMY_TWEETS=true ./bin/cli.js",
     "watch": "guard --watchdir main renderer",
-    "lint": "tslint $(git ls-files | grep -E \".tsx?$\")",
+    "lint": "tslint $(git ls-files | grep -E \".tsx?$\") && stylelint styles/style.css",
     "build-test": "tsc --pretty -p test/e2e",
     "test": "npm run build-test && ava"
   },
@@ -41,6 +41,8 @@
     "browserify": "^13.0.1",
     "electron-packager": "^7.0.2",
     "spectron": "^3.1.2",
+    "stylelint": "^6.5.1",
+    "stylelint-config-standard": "^8.0.0",
     "tslint": "^3.9.0",
     "typescript": "^1.8.10",
     "typings": "^1.0.4",
