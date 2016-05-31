@@ -1,10 +1,12 @@
 import {join} from 'path';
 import {app, BrowserWindow, powerMonitor, globalShortcut} from 'electron';
 import windowState = require('electron-window-state');
+import * as Twit from 'twit';
 import {authenticate, load_cached_tokens} from './authenticator';
 import log from './log';
-import IpcSender from './ipc_sender';
-import Twitter from './twitter';
+import * as Ipc from './ipc';
+import TwitterRestAPI from './twitter/rest';
+import TwitterUserStream from './twitter/user_stream';
 import setApplicationMenu from './menu';
 import loadConfig from './config';
 
@@ -90,24 +92,24 @@ function open_window(access: AccessToken) {
     if (access.token && access.token_secret) {
         win.webContents.on('dom-ready', () => {
             log.debug('dom-ready: Ready to connect to Twitter API');
-            const twitter = new Twitter();
-            twitter.prepareClient({
+            const twit = new Twit({
                 consumer_key,
                 consumer_secret,
                 access_token: access.token,
                 access_token_secret: access.token_secret,
             });
-            twitter.sender = new IpcSender(win.webContents);
+            const sender = new Ipc.Sender(win.webContents);
+            const rest = new TwitterRestAPI(sender, twit);
+            const stream = new TwitterUserStream(sender, twit);
 
             if (should_use_dummy_data) {
-                twitter
-                    .sendDummyAccount()
-                    .then(() => twitter.sendDummyStream())
+                rest.sendDummyAccount()
+                    .then(() => stream.sendDummyStream())
                     .catch(e => log.error('Unexpected error on dummy stream:', e));
                 return;
             }
 
-            twitter
+            rest
                 .sendAuthenticatedAccount()
                 .catch(err => {
                     if (!err || (err instanceof Error) || err[0].code !== 32) {
@@ -121,27 +123,29 @@ function open_window(access: AccessToken) {
                                 log.error('Invalid access tokens:', a);
                                 return;
                             }
-                            twitter.prepareClient({
+                            const twit_again = new Twit({
                                 consumer_key,
                                 consumer_secret,
-                                access_token: a.token,
-                                access_token_secret: a.token_secret,
+                                access_token: access.token,
+                                access_token_secret: access.token_secret,
                             });
+                            rest.client = twit_again;
+                            stream.client = twit_again;
                         })
-                        .then(() => twitter.sendAuthenticatedAccount())
+                        .then(() => rest.sendAuthenticatedAccount())
                         .catch(e => {
                             log.error('Give up: Second authentication try failed.  If you use environment variables for tokens, please check them:', e);
                         });
                 })
                 .then(() => Promise.all([
-                    twitter.fetchMuteIds(),
-                    twitter.fetchNoRetweets(),
-                    twitter.fetchBlockIds(),
-                    twitter.fetchHomeTimeline({
+                    rest.fetchMuteIds(),
+                    rest.fetchNoRetweets(),
+                    rest.fetchBlockIds(),
+                    rest.fetchHomeTimeline({
                         include_entities: true,
                         count: global.config.expand_tweet === 'always' ? 20 : 40,
                     }),
-                    twitter.fetchMentionTimeline(),
+                    rest.fetchMentionTimeline(),
                 ]))
                 .then(([mute_ids, no_retweet_ids, block_ids, tweets, mentions]) => {
                     // Note: Merge mute list with block list
@@ -151,27 +155,27 @@ function open_window(access: AccessToken) {
                         }
                     }
                     log.debug('Total rejected ids: ', block_ids.length);
-                    twitter.sender.send('yf:rejected-ids', block_ids);
-                    twitter.sender.send('yf:no-retweet-ids', no_retweet_ids);
+                    sender.send('yf:rejected-ids', block_ids);
+                    sender.send('yf:no-retweet-ids', no_retweet_ids);
                     for (const tw of tweets) {
-                        twitter.sender.send('yf:tweet', tw);
+                        sender.send('yf:tweet', tw);
                     }
-                    twitter.sender.send('yf:mentions', mentions);
+                    sender.send('yf:mentions', mentions);
                 })
-                .then(() => twitter.connectToStream())
+                .then(() => stream.connectToStream())
                 .catch((e: any) => log.error('Unexpected error on streaming', e));
 
             powerMonitor.on('suspend', () => {
                 log.debug("PC's going to suspend, stop streaming");
                 if (!should_use_dummy_data) {
-                    twitter.stopStreaming();
+                    stream.stopStreaming();
                 }
             });
             powerMonitor.on('resume', () => {
-                log.debug("PC's resuming, will reconnect after 3secs: " + twitter.isStopped());
-                if (twitter.isStopped() && !should_use_dummy_data) {
-                    twitter.sendConnectionFailure();
-                    twitter.connectToStream();
+                log.debug("PC's resuming, will reconnect after 3secs: " + stream.isStopped());
+                if (stream.isStopped() && !should_use_dummy_data) {
+                    stream.sendConnectionFailure();
+                    stream.connectToStream();
                 }
             });
 
