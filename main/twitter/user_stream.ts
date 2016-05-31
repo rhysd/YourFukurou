@@ -125,38 +125,6 @@ export default class TwitterUserStream {
         });
     }
 
-    // TODO:
-    // Should separate DummyUserStream from TwitterUserStream
-    sendDummyStream() {
-        log.debug('Starting to send dummy stream');
-        const dummy_json_path = join(app.getPath('userData'), 'tweets.json');
-        return new Promise<void>((resolve, reject) => {
-            readFile(dummy_json_path, 'utf8', (err, data) => {
-                if (err) {
-                    log.error('File not found:', dummy_json_path);
-                    reject();
-                    return;
-                }
-                const tweets = JSON.parse(data) as Object[];
-                let idx = 0;
-
-                const random_range =
-                    (min: number, max: number) => Math.random() * (max - min) + min;
-
-                const send_all = () => {
-                    this.sender.send('yf:tweet', tweets[idx]);
-                    ++idx;
-                    if (idx < tweets.length) {
-                        setTimeout(send_all, random_range(500, 5000));
-                    }
-                };
-
-                send_all();
-                resolve();
-            });
-        });
-    }
-
     stopStreaming() {
         if (this.stream === null) {
             log.debug('Stream already stopped');

@@ -58,65 +58,80 @@ export default class DummyRestAPI {
     }
 
     sendAuthenticatedAccount() {
-        const dummy_json_path = join(app.getPath('userData'), 'account.json');
-        return new Promise<void>((resolve, reject) => {
-            readFile(dummy_json_path, 'utf8', (err, data) => {
-                if (err) {
-                    log.error('File not found:', dummy_json_path);
-                    resolve();
-                    return;
-                }
-                const account = JSON.parse(data) as Object;
-                this.sender.send('yf:my-account', account);
-                log.debug('Dummy account:', account);
-                resolve();
-            });
-        });
+        return this.readJson('dummy_account.json')
+            .then(account => this.sender.send('yf:my-account', account));
     }
 
     fetchHomeTimeline(params: Object = {include_entities: true}) {
         // TODO: Send home timeline to 
         log.info('fetchHomeTimeline:', params);
-        return Promise.resolve([] as Object[]);
+        return this.readJson('dummy_home_tweets.json')
+            .catch(e => [] as Object[]);
     }
 
     sendHomeTimeline(params: Object = {include_entities: true}) {
         log.info('sendHomeTimeline:', params);
-        return Promise.resolve();
+        return this.fetchHomeTimeline(params)
+            .then(tweets => {
+                for (const tw of tweets) {
+                    this.sender.send('yf:tweet', tw);
+                }
+            });
     }
 
     fetchMentionTimeline(params: Object = {include_entities: true}) {
         log.info('fetchMentionTimeline:', params);
-        return Promise.resolve([] as Object[]);
+        return this.readJson('dummy_mention_tweets.json')
+            .catch(e => [] as Object[]);
     }
 
     sendMentionTimeline(params: Object = {include_entities: true}) {
         log.info('sendMentionTimeline:', params);
-        return Promise.resolve();
+        return this.fetchMentionTimeline(params)
+            .then(tweets => this.sender.send('yf:mentions', tweets));
     }
 
     fetchMuteIds(params: Object = {}) {
         log.info('fetchMuteIds:', params);
-        return Promise.resolve([] as number[]);
+        return this.readJson('dummy_mute_ids.json').catch(e => [] as number[]);
     }
 
     sendMuteIds(params: Object = {}) {
         log.info('sendMuteIds:', params);
-        return Promise.resolve();
+        return this.fetchMuteIds(params)
+            .then(ids => this.sender.send('yf:rejected-ids', ids));
     }
 
     fetchNoRetweets(params: Object = {}) {
         log.info('fetchNoRetweets:', params);
-        return Promise.resolve([] as number[]);
+        return this.readJson('dummy_nortweet_ids.json').catch(e => [] as number[]);
     }
 
     fetchBlockIds(params: Object = {}) {
         log.info('fetchBlockIds:', params);
-        return Promise.resolve([] as number[]);
+        return this.readJson('dummy_block_ids.json').catch(e => [] as number[]);
     }
 
     sendBlockIds(params: Object = {}) {
         log.info('sendBlockIds:', params);
-        return Promise.resolve([] as number[]);
+        return this.fetchBlockIds(params)
+            .then(ids => this.sender.send('yf:rejected-ids', ids));
     }
+
+    private readJson(file: string) {
+        const json_path = join(app.getPath('userData'), file);
+        return new Promise<any>((resolve, reject) => {
+            readFile(json_path, 'utf8', (err, data) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(JSON.parse(data));
+            });
+        }).catch((e: Error) => {
+            log.error(e);
+            throw e;
+        });
+    }
+
 }

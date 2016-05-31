@@ -236,21 +236,4 @@ export default class TwitterRestAPI {
         return this.fetchBlockIds(params)
             .then(ids => this.sender.send('yf:rejected-ids', ids));
     }
-
-    sendDummyAccount() {
-        const dummy_json_path = join(app.getPath('userData'), 'account.json');
-        return new Promise<void>((resolve, reject) => {
-            readFile(dummy_json_path, 'utf8', (err, data) => {
-                if (err) {
-                    log.error('File not found:', dummy_json_path);
-                    resolve();
-                    return;
-                }
-                const account = JSON.parse(data) as Object;
-                this.sender.send('yf:my-account', account);
-                log.debug('Dummy account:', account);
-                resolve();
-            });
-        });
-    }
 }

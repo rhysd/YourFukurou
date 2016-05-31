@@ -19,7 +19,7 @@ export default class DummyUserStream {
         this.running = true;
 
         log.debug('Starting to send dummy stream');
-        const dummy_json_path = join(app.getPath('userData'), 'tweets.json');
+        const dummy_json_path = join(app.getPath('userData'), 'dummy_stream_tweets.json');
         readFile(dummy_json_path, 'utf8', (err, data) => {
             if (err) {
                 log.error('File not found:', dummy_json_path);
