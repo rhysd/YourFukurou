@@ -61,7 +61,9 @@ function renderRestUsers(activity: TimelineActivity) {
         return undefined;
     }
 
-    return <span className="activity__rest"> and {num_rest_users} {num_rest_users === 1 ? 'user' : 'users'}</span>
+    return (
+        <span className="activity__rest"> and {num_rest_users} {num_rest_users === 1 ? 'user' : 'users'}</span>
+    );
 }
 
 function renderCreatedAt(status: Tweet, focused: boolean) {

@@ -42,7 +42,7 @@ function renderQuoted(s: Tweet, focused: boolean) {
             <TweetText className="mini-tweet__quoted-text" status={q}/>
             {renderPicIcon(q)}
         </div>
-    )
+    );
 }
 
 // TODO: Quoted tweet
@@ -54,5 +54,5 @@ const MiniTweetText: React.StatelessComponent<MiniTweetTextProps> = props => {
             {renderQuoted(tw, props.focused)}
         </div>
     );
-}
+};
 export default MiniTweetText;

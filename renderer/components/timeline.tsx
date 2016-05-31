@@ -27,9 +27,9 @@ import Config from '../config';
 
 interface TimelineProps extends React.Props<any> {
     message: MessageState;
-    kind: TimelineKind,
-    items: List<Item>,
-    owner: TwitterUser,
+    kind: TimelineKind;
+    items: List<Item>;
+    owner: TwitterUser;
     media: TweetMediaState;
     focus_index: number;
     friends: List<number>;
@@ -68,7 +68,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
     refs: {
         list: ReactList.Node;
         [key: string]: React.Component<any, any> | Element;
-    }
+    };
 
     getFocusedUserId() {
         const {focus_index, items} = this.props;

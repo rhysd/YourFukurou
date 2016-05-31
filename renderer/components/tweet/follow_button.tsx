@@ -24,8 +24,10 @@ const FollowButton: React.StatelessComponent<FollowButtonProps> = props => {
         props.user.protected ?
             'follow-button follow-button_cannot-follow' :
             'follow-button follow-button_will-follow';
-    return <div className={name} onClick={e => onClick(e, following, props.dispatch, props.user.id)}>
-        {following ? 'Unfollow' : 'Follow'}
-    </div>
+    return (
+        <div className={name} onClick={e => onClick(e, following, props.dispatch, props.user.id)}>
+            {following ? 'Unfollow' : 'Follow'}
+        </div>
+    );
 };
 export default FollowButton;

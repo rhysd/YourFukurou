@@ -24,7 +24,7 @@ interface SideMenuButtonProps extends React.Props<any> {
 const SideMenuButton = (props: SideMenuButtonProps) => {
     const indicator_props =
         props.notified ? {
-                className: 'side-menu__button-indicator animated slideInRight'
+                className: 'side-menu__button-indicator animated slideInRight',
             } : {
                 className: 'side-menu__button-indicator',
                 style: {opacity: 0},
@@ -113,7 +113,7 @@ const SideMenu = (props: SideMenuProps) => {
             />
         </div>
     );
-}
+};
 
 function select(state: State): SideMenuProps {
     'use strict';

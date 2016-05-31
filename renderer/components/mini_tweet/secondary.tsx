@@ -33,7 +33,7 @@ function renderRetweeted(props: MiniTweetSecondaryProps) {
                 />
             </div>
         </div>
-    )
+    );
 }
 
 const MiniTweetSecondary: React.StatelessComponent<MiniTweetSecondaryProps> = props => {

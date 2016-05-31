@@ -29,7 +29,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
             if (!this.props.focused) {
                 this.actions_elem.style.display = 'none';
             }
-        }
+        };
         this.openStatus = e => {
             e.stopPropagation();
             this.props.status.openStatusPageInBrowser();
@@ -38,7 +38,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
 
     renderCreatedAt() {
         const class_name = this.props.focused ?
-            'tweet__primary-created-at tweet__primary-created-at_focused':
+            'tweet__primary-created-at tweet__primary-created-at_focused' :
             'tweet__primary-created-at';
         return (
             <span

@@ -27,6 +27,6 @@ const MiniTweetIcon: React.StatelessComponent<MiniTweetIconProps> = props => {
                 height={48}
             />
         </div>
-    )
+    );
 };
 export default MiniTweetIcon;
