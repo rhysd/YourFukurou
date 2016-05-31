@@ -7,6 +7,8 @@ import log from './log';
 import * as Ipc from './ipc';
 import TwitterRestAPI from './twitter/rest';
 import TwitterUserStream from './twitter/user_stream';
+import DummyRestAPI from './twitter/dummy_rest';
+import DummyUserStream from './twitter/dummy_user_stream';
 import setApplicationMenu from './menu';
 import loadConfig from './config';
 
@@ -64,40 +66,19 @@ function setupHotkey() {
     }
 }
 
-function resumeStreamOnPowerOn(stream: TwitterUserStream) {
+function resumeStreamOnPowerOn(stream: TwitterUserStream | DummyUserStream) {
     'use strict';
     powerMonitor.on('suspend', () => {
         log.debug("PC's going to suspend, stop streaming");
-        if (!should_use_dummy_data) {
-            stream.stopStreaming();
-        }
+        stream.stopStreaming();
     });
     powerMonitor.on('resume', () => {
         log.debug("PC's resuming, will reconnect after 3secs: " + stream.isStopped());
-        if (stream.isStopped() && !should_use_dummy_data) {
+        if (stream.isStopped()) {
             stream.sendConnectionFailure();
             stream.connectToStream();
         }
     });
-}
-
-// XXX: 'access' is actually not necessarry
-function setupDummyStream(access: AccessToken) {
-    'use strict';
-
-    const twit = new Twit({
-        consumer_key,
-        consumer_secret,
-        access_token: access.token,
-        access_token_secret: access.token_secret,
-    });
-    const sender = new Ipc.Sender(win.webContents);
-    const rest = new TwitterRestAPI(sender, twit);
-    const stream = new TwitterUserStream(sender, twit);
-
-    return rest.sendDummyAccount()
-        .then(() => stream.sendDummyStream())
-        .catch(e => log.error('Unexpected error on dummy stream:', e));
 }
 
 function startApp([access]: [AccessToken]) {
@@ -110,13 +91,9 @@ function startApp([access]: [AccessToken]) {
 
     log.debug('dom-ready: Ready to connect to Twitter API');
 
-    if (should_use_dummy_data) {
-        return setupDummyStream(access);
-    }
-
     let twit: Twit
       , sender: Ipc.Sender
-      , rest: TwitterRestAPI;
+      , rest: TwitterRestAPI | DummyRestAPI;
 
     function verifyAccount() {
         'use strict';
@@ -127,7 +104,11 @@ function startApp([access]: [AccessToken]) {
             access_token_secret: access.token_secret,
         });
         sender = new Ipc.Sender(win.webContents);
-        rest = new TwitterRestAPI(sender, twit);
+        if (should_use_dummy_data) {
+            rest = new DummyRestAPI(sender);
+        } else {
+            rest = new TwitterRestAPI(sender, twit);
+        }
 
         return rest.sendAuthenticatedAccount();
     }
@@ -170,7 +151,8 @@ function startApp([access]: [AccessToken]) {
             sender.send('yf:mentions', mentions);
         })
         .then(() => {
-            const stream = new TwitterUserStream(sender, twit);
+            const stream = should_use_dummy_data ?
+                new DummyUserStream(sender) : new TwitterUserStream(sender, twit);
             stream.connectToStream();
             resumeStreamOnPowerOn(stream);
         });

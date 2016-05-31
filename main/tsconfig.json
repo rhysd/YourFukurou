@@ -16,6 +16,8 @@
     "menu.ts",
     "twitter/rest.ts",
     "twitter/user_stream.ts",
+    "twitter/dummy_rest.ts",
+    "twitter/dummy_user_stream.ts",
     "typings/config.d.ts",
     "typings/loglevel-message-prefix.d.ts",
     "typings/twit.d.ts",
