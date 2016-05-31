@@ -30,6 +30,7 @@
     "components/editor/suggestions.tsx",
     "components/zigzag_separator.tsx",
     "components/activity.tsx",
+    "components/undraggable_clickable.tsx",
     "database/db.ts",
     "database/accounts.ts",
     "database/hashtags.ts",

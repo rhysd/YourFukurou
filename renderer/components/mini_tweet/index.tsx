@@ -3,6 +3,7 @@ import Tweet, {TwitterUser} from '../../item/tweet';
 import MiniTweetIcon from './icon';
 import MiniTweetSecondary from './secondary';
 import MiniTweetText from './text';
+import UndraggableClickable from '../undraggable_clickable';
 import {TimelineKind} from '../../states/timeline';
 
 interface MiniTweetProps extends React.Props<any> {
@@ -52,12 +53,12 @@ function renderPicIcon(tw: Tweet) {
 const MiniTweet: React.StatelessComponent<MiniTweetProps> = props => {
     const tw = props.status.getMainStatus();
     return (
-        <div className={getClass(tw, props)} onClick={props.onClick}>
+        <UndraggableClickable className={getClass(tw, props)} onClick={props.onClick}>
             <MiniTweetIcon user={tw.user} quoted={tw.isQuotedTweet()}/>
             <MiniTweetSecondary status={props.status} focused={props.focused}/>
             <MiniTweetText status={props.status} focused={props.focused}/>
             {renderPicIcon(tw)}
-        </div>
+        </UndraggableClickable>
     );
 };
 export default MiniTweet;

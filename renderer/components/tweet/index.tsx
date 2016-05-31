@@ -5,6 +5,7 @@ import TweetItem, {TwitterUser} from '../../item/tweet';
 import TweetPrimary from './primary';
 import TweetSecondary from './secondary';
 import TweetIcon from './icon';
+import UndraggableClickable from '../undraggable_clickable';
 import State from '../../states/root';
 import {TimelineKind} from '../../states/timeline';
 
@@ -21,7 +22,7 @@ interface TweetProps extends React.Props<any> {
     related?: boolean;
     focused_user?: boolean;
     friends?: List<number>;
-    onClick?: (e: MouseEvent) => void;
+    onClick?: (e: React.MouseEvent) => void;
     dispatch: Redux.Dispatch;
 }
 
@@ -49,11 +50,14 @@ function getClass(tw: TweetItem, props: TweetProps) {
 const Tweet: React.StatelessComponent<TweetProps> = props => {
     const tw = props.status.getMainStatus();
     return (
-        <div className={getClass(tw, props)} onClick={props.onClick}>
+        <UndraggableClickable
+            className={getClass(tw, props)}
+            onClick={props.onClick}
+        >
             <TweetIcon user={tw.user} friends={props.friends} dispatch={props.dispatch}/>
             <TweetSecondary status={props.status} focused={props.focused}/>
             <TweetPrimary status={props.status} owner={props.owner} focused={props.focused}/>
-        </div>
+        </UndraggableClickable>
     );
 };
 
