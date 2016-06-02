@@ -13,6 +13,7 @@ export const DefaultConfig = {
         home: true,
         mention: false,
     },
+    max_timeline_items: null,
     proxy: null,
 } as Config;
 

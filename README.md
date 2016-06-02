@@ -120,7 +120,7 @@ Show/Dismiss muted/blocked tweets in each timelines.
 
 When you specify boolean value, muted/blocked tweets are shown/dismissed in all timelines.  When `true` is specified, they will be displayed.
 
-When you want to constrol muted/blocked tweets in each timeline, you can specify an object value as well as `notification` property.  It can contain `home` and `mention` properties.  Corresponding values of properties must be boolean type.  For example, `"home": true` will dismiss muted/blocked tweets on home timeline.
+When you want to control muted/blocked tweets in each timeline, you can specify an object value as well as `notification` property.  It can contain `home` and `mention` properties.  Corresponding values of properties must be boolean type.  For example, `"home": true` will dismiss muted/blocked tweets on home timeline.
 
 The default value is `{"home": true, "mention": false}`.
 
@@ -138,7 +138,11 @@ Coming soon.
 
 ### `proxy`
 
-host + port number joined with ':' such as 'example.com:80080'.
+host + port number joined with ':' such as 'example.com:80080'.  When `null` is set, `$https_proxy` environment variable will be used.
+
+### `max_timeline_items`
+
+If some number value is specified, number of items in timeline is limited to the number.  If you follow so many users and you feel updating timeline consumes too much CPU power, please limit the number of items in timeline.  In most cases, you need not to specify this value and can leave this value as `null`.
 
 ### Example of `config.json`:
 

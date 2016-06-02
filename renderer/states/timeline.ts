@@ -11,6 +11,8 @@ import PM from '../plugin_manager';
 import DB from '../database/db';
 import AppConfig from '../config';
 
+const MaxTimelineLength = AppConfig.remote_config.max_timeline_items;
+
 export type TimelineKind = 'home' | 'mention';
 export type Notified = {home: boolean; mention: boolean};
 
@@ -273,6 +275,15 @@ export default class TimelineState {
             }
         }
 
+        if (MaxTimelineLength !== null) {
+            if (home.size > MaxTimelineLength) {
+                home = home.take(MaxTimelineLength).toList();
+            }
+            if (mention.size > MaxTimelineLength) {
+                mention = mention.take(MaxTimelineLength).toList();
+            }
+        }
+
         notifyTweet(status, this.user);
 
         const notified = {
@@ -394,8 +405,13 @@ export default class TimelineState {
                 this.focus_index :
                 (this.focus_index + added.size);
 
+        let next_mention = added.concat(this.mention);
+        if (MaxTimelineLength !== null && next_mention.size > MaxTimelineLength) {
+            next_mention = next_mention.take(MaxTimelineLength);
+        }
+
         return this.update({
-            mention: added.concat(this.mention).toList(),
+            mention: next_mention.toList(),
             notified,
             focus_index,
         });
@@ -521,9 +537,12 @@ export default class TimelineState {
         // Note:
         // this.updateStatus doesn't update timeline if no item is updated.
         // So I need to update explicitly when timeline is not updated yet.
-        const next = status_updated === this ? status_updated.update() : status_updated;
+        const next = status_updated === this ? status_updated.update({}) : status_updated;
 
         [next.mention, next.focus_index] = next.updateActivityInMention(kind, status, from);
+        if (MaxTimelineLength !== null && next.mention.size > MaxTimelineLength) {
+            next.mention = next.mention.take(MaxTimelineLength).toList();
+        }
 
         if (this.kind !== 'mention' && !this.notified.mention) {
             next.notified = {
@@ -561,7 +580,7 @@ export default class TimelineState {
         no_retweet_ids?: List<number>;
         focus_index?: number;
         friend_ids?: List<number>;
-    } = {}) {
+    }) {
         return new TimelineState(
             next.kind           === undefined ? this.kind : next.kind,
             next.home           === undefined ? this.home : next.home,
