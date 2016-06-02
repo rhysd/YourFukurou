@@ -20,7 +20,7 @@ THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 
-Original icon image was made by Freepik(http://www.freepik.com) and is licensed by Creative Commons BY 3.0.
+Icon image was originally drawn by Rybson(http://jp.freepik.com/index.php?goto=41&idd=643652&url=aHR0cDovL3d3dy5zeGMuaHUvcGhvdG8vOTgxNjk0)
+and I modified to use for this app's icon.  Licensed under FreeImages.com Content License.
 
-http://creativecommons.org/licenses/by/3.0/
-
+http://www.freeimages.com/license
