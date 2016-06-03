@@ -99,7 +99,7 @@ export default class TweetEditorState {
         if (in_reply_to.mentions.length > 0) {
             text +=
                 in_reply_to.mentions
-                    .filter(m => m.id !== owner.id)
+                    .filter(m => m.id !== owner.id && m.id !== in_reply_to.user.id)
                     .map(m => `@${m.screen_name} `).join('');
         }
 
