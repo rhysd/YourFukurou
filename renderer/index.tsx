@@ -9,10 +9,7 @@ import {whyDidYouUpdate} from 'why-did-you-update';
 import Store from './store';
 import IpcChannelProxy from './ipc_channel_proxy';
 import App from './components/app';
-import {
-    setCurrentUser,
-    addRejectedUserIds,
-} from './actions';
+import {setCurrentUser} from './actions';
 import DB from './database/db';
 import PM from './plugin_manager';
 import GlobalKeyMaps from './keybinds/global';
@@ -42,10 +39,6 @@ DB.my_accounts
     .then(id => DB.accounts.getUserById(id))
     .then(u => Store.dispatch(setCurrentUser(u)))
     .catch(() => log.debug('No cache for account was found, skipped.'));
-DB.rejected_ids
-    .getAllIds()
-    .then(ids => Store.dispatch(addRejectedUserIds(ids)))
-    .catch(() => log.debug('No cache for blocked/muted was found, skipped.'));
 
 const proxy = new IpcChannelProxy().start();
 

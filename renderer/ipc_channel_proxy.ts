@@ -131,12 +131,10 @@ export default class IpcChannelProxy {
 
         this.subscribe('yf:rejected-ids', (ids: number[]) => {
             Store.dispatch(addRejectedUserIds(ids));
-            DB.rejected_ids.storeIds(ids);
         });
 
         this.subscribe('yf:unrejected-ids', (ids: number[]) => {
             Store.dispatch(removeRejectedUserIds(ids));
-            DB.rejected_ids.deleteIds(ids);
         });
 
         this.subscribe('yf:no-retweet-ids', (ids: number[]) => {
@@ -158,6 +156,21 @@ export default class IpcChannelProxy {
 
         this.subscribe('yf:unfollow', (target: Twitter.User) => {
             Store.dispatch(removeFriends([target.id]));
+        });
+
+        this.subscribe('yf:initialization', (tweets: Twitter.Status[], mentions: Twitter.Status[], rejected_ids: number[], no_retweet_ids: number[]) => {
+            Store.dispatch(addRejectedUserIds(rejected_ids));
+            Store.dispatch(addNoRetweetUserIds(no_retweet_ids));
+
+            for (const tw of tweets) {
+                Store.dispatch(addTweetToTimeline(new Tweet(tw)));
+            }
+            DB.accounts.storeAccountsInTweets(tweets);
+            DB.hashtags.storeHashtagsInTweets(tweets);
+
+            Store.dispatch(addMentions(mentions.map(j => new Tweet(j))));
+            DB.accounts.storeAccountsInTweets(mentions);
+            DB.hashtags.storeHashtagsInTweets(mentions);
         });
 
         log.debug('Started to receive messages');

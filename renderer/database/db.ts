@@ -3,7 +3,6 @@ import Accounts, {AccountsTable} from './accounts';
 import MyAccounts, {MyAccountsTable} from './my_accounts';
 import Hashtags, {HashtagsTable} from './hashtags';
 import Statuses, {StatusesTable} from './statuses';
-import RejectedIds, {RejectedIdsTable} from './rejected_ids';
 import HashtagCompletionHistory from './hashtag_completion_history';
 
 // Note:
@@ -14,7 +13,6 @@ interface TypedDexie extends Dexie {
     my_accounts: MyAccountsTable;
     hashtags: HashtagsTable;
     statuses: StatusesTable;
-    rejected_ids: RejectedIdsTable;
 }
 
 export class Database {
@@ -23,7 +21,6 @@ export class Database {
     my_accounts: MyAccounts;
     hashtags: Hashtags;
     statuses: Statuses;
-    rejected_ids: RejectedIds;
     hashtag_completion_history: HashtagCompletionHistory;
 
     constructor () {
@@ -33,14 +30,12 @@ export class Database {
             my_accounts: MyAccounts.getScheme(1),
             hashtags: Hashtags.getScheme(1),
             statuses: Statuses.getScheme(1),
-            rejected_ids: RejectedIds.getScheme(1),
         });
 
         this.accounts = new Accounts(this.db.accounts);
         this.my_accounts = new MyAccounts(this.db.my_accounts);
         this.hashtags = new Hashtags(this.db.hashtags);
         this.statuses = new Statuses(this.db.statuses);
-        this.rejected_ids = new RejectedIds(this.db.rejected_ids);
         this.hashtag_completion_history = new HashtagCompletionHistory();
     }
 }

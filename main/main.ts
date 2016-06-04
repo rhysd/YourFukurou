@@ -143,12 +143,7 @@ function startApp([access]: [AccessToken]) {
                 }
             }
             log.debug('Total rejected ids: ', block_ids.length);
-            sender.send('yf:rejected-ids', block_ids);
-            sender.send('yf:no-retweet-ids', no_retweet_ids);
-            for (const tw of tweets) {
-                sender.send('yf:tweet', tw);
-            }
-            sender.send('yf:mentions', mentions);
+            sender.send('yf:initialization', tweets, mentions, block_ids, no_retweet_ids);
         })
         .then(() => {
             const stream = should_use_dummy_data ?
