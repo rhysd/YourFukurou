@@ -33,6 +33,7 @@ interface TimelineProps extends React.Props<any> {
     media: TweetMediaState;
     focus_index: number;
     friends: List<number>;
+    overlay: boolean;
     dispatch?: Redux.Dispatch;
 }
 
@@ -193,6 +194,13 @@ class Timeline extends React.Component<TimelineProps, {}> {
         );
     }
 
+    renderOverlay() {
+        if (!this.props.overlay) {
+            return undefined;
+        }
+        return <div className="timeline__overlay"/>;
+    }
+
     componentWillReceiveProps(next: TimelineProps) {
         // Note:
         // When we should manage visible range of timline, we can notify the range to store
@@ -230,6 +238,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
                     ref="list"
                 />
                 {this.renderLightbox()}
+                {this.renderOverlay()}
             </div>
         );
     }
@@ -245,6 +254,7 @@ function select(state: State): TimelineProps {
         media: state.tweetMedia,
         focus_index: state.timeline.focus_index,
         friends: state.timeline.friend_ids,
+        overlay: state.slaveTimeline !== null,
     };
 }
 export default connect(select)(Timeline);

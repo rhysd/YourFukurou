@@ -139,8 +139,6 @@ export default class IpcChannelProxy {
 
         this.subscribe('yf:no-retweet-ids', (ids: number[]) => {
             Store.dispatch(addNoRetweetUserIds(ids));
-            // TODO?
-            // Add no-retweet-users to database
         });
 
         this.subscribe('yf:follow', (source: Twitter.User, target: Twitter.User) => {
@@ -172,8 +170,6 @@ export default class IpcChannelProxy {
             DB.accounts.storeAccountsInTweets(mentions);
             DB.hashtags.storeHashtagsInTweets(mentions);
         });
-
-        Store.dispatch(addSeparator());
 
         log.debug('Started to receive messages');
         return this;

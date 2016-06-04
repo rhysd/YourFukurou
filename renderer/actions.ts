@@ -65,6 +65,9 @@ export enum Kind {
 
     AddFriends,
     RemoveFriends,
+
+    OpenUserTimeline,
+    CloseSlaveTimeline,
 }
 
 export interface Action {
@@ -506,5 +509,20 @@ export function removeFriends(ids: number[]) {
     return {
         type: Kind.RemoveFriends,
         ids,
+    };
+}
+
+export function openUserTimeline(user: TwitterUser) {
+    'use strict';
+    return {
+        type: Kind.OpenUserTimeline,
+        user,
+    };
+}
+
+export function closeSlaveTimeline() {
+    'use strict';
+    return {
+        type: Kind.CloseSlaveTimeline,
     };
 }

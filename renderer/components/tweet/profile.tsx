@@ -7,24 +7,27 @@ import ExternalLink from '../external_link';
 import {TwitterUser} from '../../item/tweet';
 import {openPicturePreview} from '../../actions';
 
+type Size = 'normal' | 'big';
+
 interface TwitterProfileProps extends React.Props<any> {
     user: TwitterUser;
     friends: List<number>;
+    size?: Size;
     dispatch: Redux.Dispatch;
 }
 
-function renderBannar(user: TwitterUser, dispatch: Redux.Dispatch) {
+function renderBannar(user: TwitterUser, dispatch: Redux.Dispatch, size?: Size) {
     'use strict';
     const bg_color_style = {
         backgroundColor: '#' + user.bg_color,
     };
-    const url = user.mini_banner_url;
+    const url = size && size === 'big' ? user.max_size_banner_url : user.mini_banner_url;
     if (url) {
         return (
             <div
                 className="user-popup__background"
                 style={{cursor: 'pointer'}}
-                onClick={() => dispatch(openPicturePreview([user.big_banner_url]))}
+                onClick={() => dispatch(openPicturePreview([user.max_size_banner_url]))}
             >
                 <img src={url} style={bg_color_style}/>
             </div>
@@ -128,9 +131,12 @@ function renderFooter(user: TwitterUser) {
 
 const TwitterProfile: React.StatelessComponent<TwitterProfileProps> = props => {
     const u = props.user;
+    const style = {
+        width: props.size && props.size === 'big' ? undefined : '300px',
+    };
     return (
-        <div className="user-popup">
-            {renderBannar(u, props.dispatch)}
+        <div className="user-popup" style={style}>
+            {renderBannar(u, props.dispatch, props.size)}
             {renderPrimary(u, props.friends, props.dispatch)}
             {renderCounts(u)}
             <div className="user-popup__description">

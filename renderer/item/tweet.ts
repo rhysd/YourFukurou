@@ -67,6 +67,14 @@ export class TwitterUser {
         return this.json.id;
     }
 
+    get max_size_banner_url() {
+        if (!this.json.profile_banner_url) {
+            return null;
+        }
+        // Note: Currently 1500x500 is biggest banner image.
+        return this.json.profile_banner_url + '/1500x500';
+    }
+
     get big_banner_url() {
         return this.getBannerUrl('web');
     }

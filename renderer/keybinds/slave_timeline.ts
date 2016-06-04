@@ -1,59 +1,18 @@
 import * as I from 'immutable';
 import KeyBinds from './keybinds';
 import Store from '../store';
-import {moveToNthPicturePreview, closeTweetMedia} from '../actions';
+import {closeSlaveTimeline} from '../actions';
 import log from '../log';
 
-function nextPic() {
-    'use strict';
-    const media = Store.getState().tweetMedia;
-    if (!media.is_open) {
-        return;
-    }
+export type SlaveTimelineAction = 'close';
 
-    const idx = media.index;
-    if (idx + 1 >= media.picture_urls.length) {
-        return;
-    }
-
-    Store.dispatch(moveToNthPicturePreview(idx + 1));
-}
-
-function prevPic() {
-    'use strict';
-    const media = Store.getState().tweetMedia;
-    if (!media.is_open) {
-        return;
-    }
-
-    const idx = media.index;
-    if (idx <= 0) {
-        return;
-    }
-
-    Store.dispatch(moveToNthPicturePreview(idx - 1));
-}
-
-export type MediaPreviewAction =
-        'next-picture' |
-        'previous-picture' |
-        'close-preview';
-
-const DefaultMap = I.Map<string, MediaPreviewAction>({
-    'j': 'next-picture',
-    'k': 'previous-picture',
-    'l': 'next-picture',
-    'h': 'previous-picture',
-    'x': 'close-preview',
-    'escape': 'close-preview',
-    'left': 'previous-picture',
-    'right': 'next-picture',
+const DefaultMap = I.Map<string, SlaveTimelineAction>({
+    'x': 'close',
+    'escape': 'close',
 });
 
-const ActionHandlers = I.Map<MediaPreviewAction, () => void>({
-    'next-picture': nextPic,
-    'previous-picture': prevPic,
-    'close-preview': () => Store.dispatch(closeTweetMedia()),
+const ActionHandlers = I.Map<SlaveTimelineAction, () => void>({
+    'close': () => Store.dispatch(closeSlaveTimeline()),
 });
 
 interface Listenable {
@@ -61,13 +20,15 @@ interface Listenable {
     removeEventListener(e: string, cb: (e: Event) => any): void;
 }
 
-export default class MediaPreviewKeyMaps {
-    private keybinds: KeyBinds<MediaPreviewAction>;
+// Note:
+// Need to create common class for MediaPreviewKeyMaps and SlaveTimelineKeyMaps
+export default class SlaveTimelineKeyMaps {
+    private keybinds: KeyBinds<SlaveTimelineAction>;
     private listening: Listenable;
     private handler: (e: KeyboardEvent) => void;
 
     constructor() {
-        this.keybinds = new KeyBinds<MediaPreviewAction>(
+        this.keybinds = new KeyBinds<SlaveTimelineAction>(
             DefaultMap,
             ActionHandlers
         );
@@ -114,7 +75,8 @@ export default class MediaPreviewKeyMaps {
         }
     }
 
-    register(seq: string, action: MediaPreviewAction) {
+    register(seq: string, action: SlaveTimelineAction) {
         this.keybinds.registerSequence(seq, action);
     }
 }
+

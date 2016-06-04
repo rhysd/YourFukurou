@@ -19,6 +19,7 @@ import {
     sendRetweet,
     undoRetweet,
     destroyStatus,
+    openUserTimeline,
 } from '../actions';
 
 function getCurrentStatus(): Tweet {
@@ -123,6 +124,16 @@ function deleteStatus() {
     Store.dispatch(destroyStatus(status.id));
 }
 
+function showUser() {
+    'use strict';
+    const status = getCurrentStatus();
+    if (status === null) {
+        return;
+    }
+    const user = status.getMainStatus().user;
+    Store.dispatch(openUserTimeline(user));
+}
+
 export type GlobalAction =
     'open-tweet-form'
   | 'home-timeline'
@@ -134,6 +145,7 @@ export type GlobalAction =
   | 'reply'
   | 'delete-status'
   | 'open-status-page'
+  | 'show-user'
   | 'unfocus'
   | 'focus-next'
   | 'focus-previous'
@@ -147,6 +159,7 @@ const DefaultMap = I.Map<string, GlobalAction>({
     'k': 'focus-previous',
     'm': 'focus-bottom',
     'o': 'open-media',
+    'u': 'show-user',
     'O': 'open-status-page',
     'l': 'open-links',
     '1': 'home-timeline',
@@ -171,6 +184,7 @@ const ActionHandlers = I.Map<GlobalAction, () => void>({
     'open-media': openMedia,
     'open-links': openLinks,
     'open-status-page': openStatus,
+    'show-user': showUser,
     'retweet': toggleRetweet,
     'like': toggleLike,
     'reply': reply,
