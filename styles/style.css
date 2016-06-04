@@ -8,7 +8,7 @@
   --color-light-inactive: #8899a6;
   --color-light-hover: #e8eaeb;
 
-  --text-link-color: #2185d0;
+  --color-text-link: #2185d0;
   --color-weak-text-link: #888888;
   --bg-color-error: #ffc7c7;
   --color-error: #ff4f44;
@@ -21,6 +21,7 @@
   --color-timeline-border: #e5e8ea;
   --bg-color-focused: #298cda;
   --color-focused-weak: rgba(255, 255, 255, 0.7);
+  --color-screenname: #4078c0;
 }
 
 html {
@@ -231,7 +232,7 @@ body {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: var(--text-link-color);
+  color: var(--color-screenname);
 }
 
 .tweet__secondary-screenname.tweet__secondary-screenname_focused {
@@ -310,10 +311,16 @@ body {
   white-space: pre-wrap;
 }
 
-.tweet__text-hashtag,
-.tweet__text-mention,
+.tweet__text-mention {
+  color: var(--color-screenname);
+}
+
+.tweet__text-hashtag {
+  color: var(--color-text-link);
+}
+
 .tweet__text-url {
-  color: var(--text-link-color);
+  color: var(--color-weak-text-link);
 }
 
 .tweet__text-hashtag.tweet__text-hashtag_focused,
@@ -692,7 +699,7 @@ body {
 
 .tweet-form__decorated-SCREENNAME,
 .tweet-form__decorated-HASHTAG {
-  color: var(--text-link-color);
+  color: var(--color-text-link);
 }
 
 .tweet-form__cancel-btn {
@@ -849,7 +856,7 @@ body {
 }
 
 .user-popup__screenname {
-  color: var(--text-link-color);
+  color: var(--color-screenname);
 }
 
 .user-popup__counts {
@@ -1005,7 +1012,7 @@ body {
 }
 
 .mini-tweet__secondary-screenname {
-  color: var(--text-link-color);
+  color: var(--color-screenname);
 }
 
 .mini-tweet__secondary-screenname.mini-tweet__secondary-screenname_focused {
