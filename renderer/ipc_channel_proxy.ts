@@ -173,6 +173,8 @@ export default class IpcChannelProxy {
             DB.hashtags.storeHashtagsInTweets(mentions);
         });
 
+        Store.dispatch(addSeparator());
+
         log.debug('Started to receive messages');
         return this;
     }

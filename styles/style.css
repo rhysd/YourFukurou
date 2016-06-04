@@ -448,7 +448,7 @@ body {
 
 .activity.activity_mini {
   flex-direction: row;
-  padding: 4px;
+  padding: 4px 8px;
 }
 
 .activity.activity_focused {
@@ -466,7 +466,6 @@ body {
 
 .activity__header.activity__header_mini {
   width: calc(56px + 20%);
-  min-width: calc(40px + 20%); /* Considering padding 8+8px */
   max-width: 176px; /* Icon width + secondary width */
   padding-right: 8px;
 }
@@ -502,6 +501,7 @@ body {
 
 .activity__text.activity__text_mini {
   margin: auto 0;
+  max-width: calc(100% - 168px); /* 168 == header width + padding */
 }
 
 .activity__text > * {
@@ -578,11 +578,11 @@ body {
 
 /* zigzag-separator {{{ */
 
-.zigzag-separator__jagged {
+.zigzag-separator .zigzag-separator__jagged {
   position: relative;
 }
 
-.zigzag-separator__jagged::before {
+.zigzag-separator .zigzag-separator__jagged::before {
   content: "";
   display: block;
   position: absolute;
@@ -599,6 +599,10 @@ body {
   margin-top: -1px;  /* hide above item's border */
 }
 
+.zigzag-separator__top.zigzag-separator__top_focused {
+  background-color: var(--bg-color-focused);
+}
+
 .zigzag-separator__middle {
   width: 100%;
   height: 5px;
@@ -612,12 +616,28 @@ body {
 
 .zigzag-separator__bottom {
   width: 100%;
-  background: white;
+  background-color: white;
+  padding-bottom: 4px;
+}
+
+.zigzag-separator__focused-bottom {
+  width: 100%;
+  background-color: var(--bg-color-focused);
+  padding-bottom: 4px;
 }
 
 .zigzag-separator__bottom::before {
   background: linear-gradient(45deg, transparent 33.333%, white 33.333%, white 66.667%, transparent 66.667%), linear-gradient(-45deg, transparent 33.333%, white 33.333%, white 66.667%, transparent 66.667%);
   background-size: 20px 40px;
+}
+
+.zigzag-separator__focused-bottom::before {
+  background: linear-gradient(45deg, transparent 33.333%, var(--bg-color-focused) 33.333%, var(--bg-color-focused) 66.667%, transparent 66.667%), linear-gradient(-45deg, transparent 33.333%, var(--bg-color-focused) 33.333%, var(--bg-color-focused) 66.667%, transparent 66.667%);
+  background-size: 20px 40px;
+}
+
+.zigzag-separator.zigzag-separator_focused .zigzag-separator__bottom::before {
+  color: var(--bg-color-focused);
 }
 
 /* }}} */
@@ -904,7 +924,7 @@ body {
 
 .mini-tweet {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   width: 100%;
   box-sizing: border-box;
   padding: 4px 8px;

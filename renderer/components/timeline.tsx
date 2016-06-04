@@ -145,7 +145,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
                 key={key}
             />;
         } else if (i instanceof Separator) {
-            return <ZigZagSeparator key={key}/>;
+            return <ZigZagSeparator focused={focused} key={key}/>;
         } else {
             log.error('Invalid item', key, i);
             return undefined;
