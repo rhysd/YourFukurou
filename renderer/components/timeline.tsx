@@ -239,7 +239,6 @@ class Timeline extends React.Component<TimelineProps, {}> {
                     itemRenderer={(idx, key) => this.renderItem(idx, key, related_ids, focused_user_id)}
                     length={items.size}
                     type="variable"
-                    threshold={500}
                     useTranslate3d
                     ref="list"
                 />

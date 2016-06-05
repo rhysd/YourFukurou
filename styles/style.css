@@ -1143,8 +1143,7 @@ body {
 .slave-timeline {
   min-width: 50%;
   width: 50%;
-  height: auto;
-  overflow: auto;
+  height: 100vh;
   border-left: solid 1px var(--color-timeline-border);
   -webkit-animation-duration: 0.5s;
   animation-duration: 0.5s;
@@ -1153,6 +1152,7 @@ body {
 .user-timeline {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .user-timeline__profile {
@@ -1168,6 +1168,7 @@ body {
   flex: auto;
   display: flex;
   flex-direction: column;
+  overflow: auto;
 }
 
 /* }}} */
