@@ -17,7 +17,7 @@ import {TimelineKind} from '../../states/timeline';
 interface TweetProps extends React.Props<any> {
     status: TweetItem;
     owner: TwitterUser;
-    timeline: TimelineKind;
+    timeline?: TimelineKind;
     focused?: boolean;
     related?: boolean;
     focused_user?: boolean;
@@ -32,7 +32,8 @@ function getClass(tw: TweetItem, props: TweetProps) {
         return 'tweet__body tweet__body_focused';
     }
 
-    if (tw.mentionsTo(props.owner) && props.timeline !== 'mention') {
+    const timeline = props.timeline || 'home';
+    if (tw.mentionsTo(props.owner) && timeline !== 'mention') {
         return 'tweet__body tweet__body_mention';
     }
 

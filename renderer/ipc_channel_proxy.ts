@@ -2,6 +2,7 @@ const {ipcRenderer: ipc} = global.require('electron');
 import {
     addTweetToTimeline,
     addMentions,
+    addUserTweets,
     addRejectedUserIds,
     addFriends,
     removeFriends,
@@ -127,6 +128,13 @@ export default class IpcChannelProxy {
             // Do not notify mentions because this IPC message is sent from main
             // process at app starting.  If we were to notify mentions here, so many
             // notifications are sent to a user.
+        });
+
+        this.subscribe('yf:user-timeline', (user_id: number, json: Twitter.Status[]) => {
+            Store.dispatch(addUserTweets(user_id, json.map(j => new Tweet(j))));
+            // Note:
+            // This is user specific timeline.  So we need not to store hashtags and accounts
+            // in the tweet texts.
         });
 
         this.subscribe('yf:rejected-ids', (ids: number[]) => {

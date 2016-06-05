@@ -2,6 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {List} from 'immutable';
 import UserSlave from './user';
+import {TwitterUser} from '../../item/tweet';
 import State from '../../states/root';
 import SlaveTimeline, {UserTimeline} from '../../states/slave_timeline';
 import log from '../../log';
@@ -9,6 +10,7 @@ import log from '../../log';
 interface SlaveTimelineProps extends React.Props<any> {
     slave: SlaveTimeline;
     friends: List<number>;
+    owner: TwitterUser;
     dispatch?: Redux.Dispatch;
 }
 
@@ -19,6 +21,7 @@ function renderSlave(props: SlaveTimelineProps) {
         return <UserSlave
             timeline={slave}
             friends={props.friends}
+            owner={props.owner}
             dispatch={props.dispatch}
         />;
     } else {
@@ -42,6 +45,7 @@ function select(state: State): SlaveTimelineProps {
     return {
         slave: state.slaveTimeline,
         friends: state.timeline.friend_ids,
+        owner: state.timeline.user,
     };
 }
 

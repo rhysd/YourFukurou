@@ -2,6 +2,7 @@ type ChannelFromMain
     = 'yf:initialization'
     | 'yf:tweet'
     | 'yf:mentions'
+    | 'yf:user-timeline'
     | 'yf:retweet-success'
     | 'yf:unretweet-success'
     | 'yf:like-success'
@@ -18,7 +19,8 @@ type ChannelFromMain
     | 'yf:unrejected-ids'
     | 'yf:no-retweet-ids'
     | 'yf:friends'
-    | 'yf:api-failure';
+    | 'yf:api-failure'
+;
 
 type ChannelFromRenderer
     = 'yf:request-retweet'
@@ -29,4 +31,5 @@ type ChannelFromRenderer
     | 'yf:destroy-status'
     | 'yf:request-follow'
     | 'yf:request-unfollow'
+    | 'yf:request-user-timeline'
 ;

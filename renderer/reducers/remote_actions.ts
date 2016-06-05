@@ -41,6 +41,9 @@ export default function remoteActions(state: {} = null, action: Action) {
         case Kind.Unfollow:
             sendToMain('yf:request-unfollow', action.user_id);
             break;
+        case Kind.OpenUserTimeline:
+            sendToMain('yf:request-user-timeline', action.user.id);
+            break;
         default:
             break;
     }

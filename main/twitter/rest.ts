@@ -22,6 +22,7 @@ export default class TwitterRestAPI {
         s.subscribe('yf:destroy-status', (tweet_id: string) => this.destroyStatus(tweet_id));
         s.subscribe('yf:request-follow', (user_id: number) => this.follow(user_id));
         s.subscribe('yf:request-unfollow', (user_id: number) => this.unfollow(user_id));
+        s.subscribe('yf:request-user-timeline', (user_id: number) => this.sendUserTimeline(user_id));
         this.subscriber = s;
     }
 
@@ -235,5 +236,36 @@ export default class TwitterRestAPI {
     sendBlockIds(params: Object = {}) {
         return this.fetchBlockIds(params)
             .then(ids => this.sender.send('yf:rejected-ids', ids));
+    }
+
+    fetchUserTimeline(
+        user_id: number,
+        include_rts = true,
+        exclude_replies = false,
+        count = 40
+    ) {
+        const params = {
+            user_id,
+            trim_user: false,
+            include_rts,
+            exclude_replies,
+            count,
+        };
+        return new Promise<Object[]>((resolve, reject) => {
+            this.client.get('statuses/user_timeline', params, (err, tweets, res) => {
+                if (err) {
+                    this.sendApiFailure(err, res);
+                    reject(err);
+                    return;
+                }
+                log.debug('statuses/user_timeline', tweets.length);
+                resolve(tweets);
+            });
+        });
+    }
+
+    sendUserTimeline(user_id: number, include_rts = true, exclude_replies = false, count = 40) {
+        return this.fetchUserTimeline(user_id, include_rts, exclude_replies, count)
+            .then(tweets => this.sender.send('yf:user-timeline', user_id, tweets));
     }
 }

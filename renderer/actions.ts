@@ -68,6 +68,7 @@ export enum Kind {
 
     OpenUserTimeline,
     CloseSlaveTimeline,
+    AddUserTweets,
 }
 
 export interface Action {
@@ -77,6 +78,7 @@ export interface Action {
     msg_kind?: MessageKind;
     tweet_id?: string;
     status?: Tweet;
+    statuses?: Tweet[];
     user?: TwitterUser;
     user_json?: Twitter.User;
     editor?: EditorState;
@@ -524,5 +526,14 @@ export function closeSlaveTimeline() {
     'use strict';
     return {
         type: Kind.CloseSlaveTimeline,
+    };
+}
+
+export function addUserTweets(user_id: number, statuses: Tweet[]) {
+    'use strict';
+    return {
+        type: Kind.AddUserTweets,
+        user_id,
+        statuses,
     };
 }
