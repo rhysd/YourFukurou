@@ -50,9 +50,11 @@ interface Window {
     cancelIdleCallback(handle: IdleCallbackHandle): void;
 }
 
+interface ScrollIntoViewOptions {
+    behavior?: 'auto' | 'instant' | 'smooth';
+    block?: 'start' | 'end';
+}
+
 interface Element {
-    scrollIntoView(options?: boolean | {
-        behavior?: 'auto' | 'instant' | 'smooth',
-        block?: 'start' | 'end',
-    }): void;
+    scrollIntoView(options?: boolean | ScrollIntoViewOptions): void;
 }
