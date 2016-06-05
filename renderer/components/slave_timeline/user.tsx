@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {List} from 'immutable';
-import * as ReactList from 'react-list';
 import TwitterProfile from '../tweet/profile';
 import Tweet from '../tweet/index';
 import Item from '../../item/item';
@@ -17,63 +16,55 @@ interface UserSlaveProps extends React.Props<UserSlave> {
 }
 
 export default class UserSlave extends React.Component<UserSlaveProps, {}> {
-    refs: {
-        list: ReactList.Node;
-        [key: string]: React.Component<any, any> | Element;
-    };
-    renderTweet: (idx: number, key: string) => JSX.Element;
+    tweets_root: HTMLElement;
 
-    constructor(props: UserSlaveProps) {
-        super(props);
-        this.renderTweet = this.renderTweet_.bind(this);
+    scrollTweetIntoView(index: number) {
+        if (!this.tweets_root) {
+            log.error('Ref to root element of tweets is invalid:', this.tweets_root);
+            return;
+        }
+
+        const tweets = this.tweets_root.children;
+        const tweet = tweets.item(index);
+        if (!tweet) {
+            log.error('Invalid index to scroll into view:', index, tweet);
+            return;
+        }
+
+        tweet.scrollIntoView({behavior: 'smooth'});
     }
 
-    renderTweet_(idx: number, key: string) {
+    renderTweets() {
         const {timeline, owner, friends, dispatch} = this.props;
         const focus_idx = timeline.focus_index;
 
         // TODO:
         // Consider mini tweet view configuration
 
-        const item = timeline.items.get(idx);
-        const focused = focus_idx === idx;
-        console.log('RENDER ITEM:', item, focused);
-        if (item instanceof TweetItem) {
-            return (
-                <Tweet
+        return timeline.items.map((item, idx) => {
+            const focused = focus_idx === idx;
+            if (item instanceof TweetItem) {
+                return <Tweet
                     status={item}
                     owner={owner}
                     focused={focused}
                     friends={friends}
                     dispatch={dispatch}
-                    key={key}
+                    key={idx}
                     onClick={() => dispatch(focused ? blurSlaveTimeline() : focusSlaveOn(idx))}
-                />
-            );
-        } else {
-            log.error('Invalid item for slave user timeline:', item);
-            return undefined;
-        }
+                />;
+            } else {
+                log.error('Invalid item for slave user timeline:', item);
+                return undefined;
+            }
+        }).toArray();
     }
 
-    componentWillReceiveProps(next: UserSlaveProps) {
-        // Note:
-        // When we should manage visible range of timline, we can notify the range to store
-        // by dispatching action with the result of `this.refs.list.getVisibleRange()`.
-        const idx = next.timeline.focus_index;
-        if (idx !== this.props.timeline.focus_index && idx !== null) {
-            log.debug('Focus moves to:', idx);
-            this.refs.list.scrollAround(idx);
-
-            // XXX:
-            // This needs to notify item's focus update to <ReactList>.
-            // When renderTweet is changed, the prop change will update <ReactList> hence its
-            // element is updated properly.
-            // Otherwise, <ReactList> can't know that some item will update or not and NEVER
-            // updates its items.
-            this.renderTweet = this.renderTweet_.bind(this);
+    componentDidUpdate() {
+        const idx = this.props.timeline.focus_index;
+        if (idx !== null) {
+            this.scrollTweetIntoView(idx);
         }
-        console.log('FOCUS:', this.props.timeline.focus_index, '->', idx);
     }
 
     render() {
@@ -88,14 +79,8 @@ export default class UserSlave extends React.Component<UserSlaveProps, {}> {
                         dispatch={dispatch}
                     />
                 </div>
-                <div className="user-timeline__tweets">
-                    <ReactList
-                        type="variable"
-                        itemRenderer={this.renderTweet}
-                        length={timeline.items.size}
-                        useTranslate3d
-                        ref="list"
-                    />
+                <div className="user-timeline__tweets" ref={r => { this.tweets_root = r; }}>
+                    {this.renderTweets()}
                 </div>
             </div>
         );
