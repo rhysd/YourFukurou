@@ -171,7 +171,7 @@ body {
 .timeline {
   flex: auto;
   width: auto;
-  height: 100%;
+  height: auto;
   overflow: auto;
   background-color: white;
   position: relative;
@@ -1143,20 +1143,31 @@ body {
 .slave-timeline {
   min-width: 50%;
   width: 50%;
-  height: 100%;
+  height: auto;
+  overflow: auto;
   border-left: solid 1px var(--color-timeline-border);
   -webkit-animation-duration: 0.5s;
   animation-duration: 0.5s;
 }
 
-.slave-timeline__user {
+.user-timeline {
   display: flex;
   flex-direction: column;
 }
 
-.slave-timeline__user-profile {
+.user-timeline__profile {
   width: 100%;
+  height: auto;
+  flex: none;
   border-bottom: solid 1px var(--color-timeline-border);
+}
+
+.user-timeline__tweets {
+  width: 100%;
+  height: auto;
+  flex: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 /* }}} */

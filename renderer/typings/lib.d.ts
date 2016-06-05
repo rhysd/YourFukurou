@@ -49,3 +49,10 @@ interface Window {
     requestIdleCallback(callback: (timeRemaining: number, didTimeout: boolean) => void, options?: Object): IdleCallbackHandle;
     cancelIdleCallback(handle: IdleCallbackHandle): void;
 }
+
+interface Element {
+    scrollIntoView(options?: boolean | {
+        behavior?: 'auto' | 'instant' | 'smooth',
+        block?: 'start' | 'end',
+    }): void;
+}

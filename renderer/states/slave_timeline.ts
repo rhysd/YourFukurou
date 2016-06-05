@@ -6,6 +6,12 @@ import GlobalKeymaps from '../keybinds/global';
 
 interface SlaveTimeline {
     close(): SlaveTimeline;
+    focusNext(): SlaveTimeline;
+    focusPrev(): SlaveTimeline;
+    focusTop(): SlaveTimeline;
+    focusBottom(): SlaveTimeline;
+    focusOn(index: number): SlaveTimeline;
+    blur(): SlaveTimeline;
 }
 export default SlaveTimeline;
 
@@ -35,6 +41,50 @@ export class UserTimeline implements SlaveTimeline {
         this.keybinds.disable();
         GlobalKeymaps.enable();
         return null;
+    }
+
+    blur() {
+        return this.focusOn(null);
+    }
+
+    focusNext() {
+        if (this.focus_index === null) {
+            return this.focusOn(0);
+        }
+        if (this.focus_index === this.items.size - 1) {
+            return this;
+        }
+        return this.focusOn(this.focus_index + 1);
+    }
+
+    focusPrev() {
+        if (this.focus_index === null) {
+            return this;
+        }
+        if (this.focus_index === 0) {
+            return this;
+        }
+        return this.focusOn(this.focus_index - 1);
+    }
+
+    focusTop() {
+        return this.focusOn(0);
+    }
+
+    focusBottom() {
+        return this.focusOn(this.items.size - 1);
+    }
+
+    focusOn(idx: number) {
+        if (idx === this.focus_index) {
+            return this;
+        }
+        return new UserTimeline(
+            this.user,
+            this.items,
+            idx,
+            this.keybinds
+        );
     }
 }
 

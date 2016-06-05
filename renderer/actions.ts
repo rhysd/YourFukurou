@@ -69,6 +69,12 @@ export enum Kind {
     OpenUserTimeline,
     CloseSlaveTimeline,
     AddUserTweets,
+    BlurSlaveTimeline,
+    FocusSlaveNext,
+    FocusSlavePrev,
+    FocusSlaveTop,
+    FocusSlaveBottom,
+    FocusSlaveOn,
 }
 
 export interface Action {
@@ -537,3 +543,47 @@ export function addUserTweets(user_id: number, statuses: Tweet[]) {
         statuses,
     };
 }
+
+export function focusSlaveNext() {
+    'use strict';
+    return {
+        type: Kind.FocusSlaveNext,
+    };
+}
+
+export function focusSlavePrev() {
+    'use strict';
+    return {
+        type: Kind.FocusSlavePrev,
+    };
+}
+
+export function focusSlaveTop() {
+    'use strict';
+    return {
+        type: Kind.FocusSlaveTop,
+    };
+}
+
+export function focusSlaveBottom() {
+    'use strict';
+    return {
+        type: Kind.FocusSlaveBottom,
+    };
+}
+
+export function focusSlaveOn(index: number) {
+    'use strict';
+    return {
+        type: Kind.FocusSlaveOn,
+        index,
+    };
+}
+
+export function blurSlaveTimeline() {
+    'use strict';
+    return {
+        type: Kind.BlurSlaveTimeline,
+    };
+}
+

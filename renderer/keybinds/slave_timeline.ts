@@ -1,18 +1,40 @@
 import * as I from 'immutable';
 import KeyBinds from './keybinds';
 import Store from '../store';
-import {closeSlaveTimeline} from '../actions';
+import {
+    closeSlaveTimeline,
+    focusSlaveNext,
+    focusSlavePrev,
+    focusSlaveTop,
+    focusSlaveBottom,
+    blurSlaveTimeline,
+} from '../actions';
 import log from '../log';
 
-export type SlaveTimelineAction = 'close';
+export type SlaveTimelineAction =
+    'focus-top' |
+    'focus-bottom' |
+    'focus-next' |
+    'focus-prev' |
+    'blur' |
+    'close';
 
 const DefaultMap = I.Map<string, SlaveTimelineAction>({
+    'j': 'focus-next',
+    'k': 'focus-prev',
+    'i': 'focus-top',
+    'm': 'focus-bottom',
+    'escape': 'blur',
     'x': 'close',
-    'escape': 'close',
 });
 
 const ActionHandlers = I.Map<SlaveTimelineAction, () => void>({
     'close': () => Store.dispatch(closeSlaveTimeline()),
+    'focus-next': () => Store.dispatch(focusSlaveNext()),
+    'focus-prev': () => Store.dispatch(focusSlavePrev()),
+    'focus-top': () => Store.dispatch(focusSlaveTop()),
+    'focus-bottom': () => Store.dispatch(focusSlaveBottom()),
+    'blur': () => Store.dispatch(blurSlaveTimeline()),
 });
 
 interface Listenable {

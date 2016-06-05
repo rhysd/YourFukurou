@@ -195,14 +195,16 @@ class Timeline extends React.Component<TimelineProps, {}> {
         );
     }
 
-    renderOverlay() {
-        const {overlay, dispatch} = this.props;
+    onOverlayClicked(e: React.MouseEvent) {
+        e.stopPropagation();
+        this.props.dispatch(closeSlaveTimeline());
+    }
 
-        if (!overlay) {
+    renderOverlay() {
+        if (!this.props.overlay) {
             return undefined;
         }
-
-        return <div className="timeline__overlay" onClick={() => dispatch(closeSlaveTimeline())}/>;
+        return <div className="timeline__overlay" onClick={this.onOverlayClicked.bind(this)}/>;
     }
 
     componentWillReceiveProps(next: TimelineProps) {
