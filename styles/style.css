@@ -1142,6 +1142,7 @@ body {
 
 .slave-timeline {
   min-width: 50%;
+  width: 50%;
   height: 100%;
   border-left: solid 1px var(--color-timeline-border);
   -webkit-animation-duration: 0.5s;

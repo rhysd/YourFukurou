@@ -22,6 +22,7 @@ import {
     moveToNthPicturePreview,
     focusOnItem,
     unfocusItem,
+    closeSlaveTimeline,
 } from '../actions';
 import Config from '../config';
 
@@ -195,10 +196,13 @@ class Timeline extends React.Component<TimelineProps, {}> {
     }
 
     renderOverlay() {
-        if (!this.props.overlay) {
+        const {overlay, dispatch} = this.props;
+
+        if (!overlay) {
             return undefined;
         }
-        return <div className="timeline__overlay"/>;
+
+        return <div className="timeline__overlay" onClick={() => dispatch(closeSlaveTimeline())}/>;
     }
 
     componentWillReceiveProps(next: TimelineProps) {

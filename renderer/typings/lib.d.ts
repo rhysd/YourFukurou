@@ -10,6 +10,24 @@ declare module NodeJS {
     }
 }
 
+declare module 'why-did-you-update' {
+    interface Options {
+        include?: RegExp;
+        exclude?: RegExp;
+    }
+    export function whyDidYouUpdate(react: typeof __React, options?: Options): void;
+}
+
+declare namespace Redux {
+    interface DispatchProps {
+        dispatch: Redux.Dispatch;
+    }
+}
+
+/*
+ * Shims for ES2015 APIs
+ */
+
 interface String {
     includes: (sub: string) => boolean;
     startsWith: (sub: string, pos?: number) => boolean;
@@ -26,16 +44,8 @@ interface ObjectConstructor {
     assign(target: any, ...source: any[]): any;
 }
 
-declare module 'why-did-you-update' {
-    interface Options {
-        include?: RegExp;
-        exclude?: RegExp;
-    }
-    export function whyDidYouUpdate(react: typeof __React, options?: Options): void;
-}
-
-declare namespace Redux {
-    interface DispatchProps {
-        dispatch: Redux.Dispatch;
-    }
+type IdleCallbackHandle = number;
+interface Window {
+    requestIdleCallback(callback: (timeRemaining: number, didTimeout: boolean) => void, options?: Object): IdleCallbackHandle;
+    cancelIdleCallback(handle: IdleCallbackHandle): void;
 }
