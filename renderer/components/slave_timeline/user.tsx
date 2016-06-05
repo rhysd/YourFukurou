@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {List} from 'immutable';
-import FocusableTimeline from './focusable_timeline';
+import IndexAutoScroll from './index_auto_scroll';
 import TwitterProfile from '../tweet/profile';
 import Tweet from '../tweet/index';
 import Item from '../../item/item';
@@ -56,9 +56,9 @@ const UserSlave: React.StatelessComponent<UserSlaveProps> = props => {
                     dispatch={dispatch}
                 />
             </div>
-            <FocusableTimeline className="user-timeline__tweets" focusIndex={timeline.focus_index}>
+            <IndexAutoScroll className="user-timeline__tweets" index={timeline.focus_index}>
                 {renderTweets(props)}
-            </FocusableTimeline>
+            </IndexAutoScroll>
         </div>
     );
 };

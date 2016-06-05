@@ -1,12 +1,12 @@
 import * as React from 'react';
 import log from '../../log';
 
-interface FocusableTimelineProps extends React.Props<FocusableTimeline> {
+interface IndexAutoScrollProps extends React.Props<IndexAutoScroll> {
     className?: string;
-    focusIndex: number;
+    index: number;
 }
 
-export default class FocusableTimeline extends React.Component<FocusableTimelineProps, {}> {
+export default class IndexAutoScroll extends React.Component<IndexAutoScrollProps, {}> {
     root: HTMLElement;
 
     scrollTweetIntoView(index: number) {
@@ -35,7 +35,7 @@ export default class FocusableTimeline extends React.Component<FocusableTimeline
     }
 
     componentDidUpdate() {
-        const idx = this.props.focusIndex;
+        const idx = this.props.index;
         if (idx !== null) {
             this.scrollTweetIntoView(idx);
         }

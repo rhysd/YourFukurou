@@ -30,7 +30,7 @@
     "components/editor/suggestions.tsx",
     "components/slave_timeline/index.tsx",
     "components/slave_timeline/user.tsx",
-    "components/slave_timeline/focusable_timeline.tsx",
+    "components/slave_timeline/index_auto_scroll.tsx",
     "components/zigzag_separator.tsx",
     "components/activity.tsx",
     "components/undraggable_clickable.tsx",

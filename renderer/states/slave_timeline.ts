@@ -15,16 +15,21 @@ interface SlaveTimeline {
 }
 export default SlaveTimeline;
 
+function newKeybinds() {
+    'use strict';
+    const keybinds = new SlaveTimelineKeymaps();
+    GlobalKeymaps.disable();
+    keybinds.enable(window);
+    return keybinds;
+}
+
 export class UserTimeline implements SlaveTimeline {
     constructor(
         public user: TwitterUser,
         public items: List<Item> = List<Item>(),
         public focus_index: number = null,
-        public keybinds: SlaveTimelineKeymaps = new SlaveTimelineKeymaps
-    ) {
-        GlobalKeymaps.disable();
-        keybinds.enable(window);
-    }
+        public keybinds: SlaveTimelineKeymaps = newKeybinds()
+    ) {}
 
     addTweets(statuses: Tweet[]) {
         const next_items = this.items.unshift.apply(this.items, statuses);
