@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Tooltip = require('rc-tooltip');
 import {List} from 'immutable';
-import Avatar from '../avatar';
+import Icon from '../icon';
 import {TwitterUser} from '../../item/tweet';
 import TwitterProfile from './profile';
 
@@ -13,7 +13,7 @@ interface TweetIconProps extends React.Props<any> {
 
 // TODO:
 // Calculate the placement from the position of icon
-const TweetIcon = (props: TweetIconProps) => (
+const PopupIcon = (props: TweetIconProps) => (
     <Tooltip
         placement="bottomRight"
         overlay={
@@ -25,13 +25,13 @@ const TweetIcon = (props: TweetIconProps) => (
         }
     >
         <div className="tweet__icon">
-            <Avatar
+            <Icon
                 size={48}
-                screenName={props.user.screen_name}
-                imageUrl={props.user.icon_url_73x73}
+                user={props.user}
                 border="1px solid #d0d0d0"
+                dispatch={props.dispatch}
             />
         </div>
     </Tooltip>
 );
-export default TweetIcon;
+export default PopupIcon;

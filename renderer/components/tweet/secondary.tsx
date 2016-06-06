@@ -1,29 +1,15 @@
 import * as React from 'react';
 import Tweet, {TwitterUser} from '../../item/tweet';
 import ScreenName from './screen_name';
-import Avatar from '../avatar';
-
-interface SmallIconProps extends React.Props<any> {
-    user: TwitterUser;
-}
-
-const SmallIcon: React.StatelessComponent<SmallIconProps> = props => (
-    <div className="tweet__small-icon">
-        <Avatar
-            screenName={props.user.screen_name}
-            imageUrl={props.user.icon_url_24x24}
-            size={12}
-            title={'@' + props.user.screen_name}
-        />
-    </div>
-);
+import Icon from '../icon';
 
 interface TweetSecondaryProps extends React.Props<any> {
     status: Tweet;
     focused?: boolean;
+    dispatch: Redux.Dispatch;
 }
 
-function retweetedBy(tw: Tweet, focused: boolean) {
+function retweetedBy(tw: Tweet, focused: boolean, dispatch: Redux.Dispatch) {
     'use strict';
     if (!tw.isRetweet()) {
         return undefined;
@@ -37,17 +23,17 @@ function retweetedBy(tw: Tweet, focused: boolean) {
                     'tweet__secondary-retweetedby'
             }
         >
-            <i className="fa fa-retweet"/> <ScreenName user={tw.user}/> <SmallIcon user={tw.user}/>
+            <i className="fa fa-retweet"/> <ScreenName user={tw.user}/> <Icon size={12} user={tw.user} dispatch={dispatch}/>
         </div>
     );
 }
 
 const TweetSecondary = (props: TweetSecondaryProps) => {
-    const status = props.status.getMainStatus();
-    const user = status.user;
+    const {status, focused, dispatch} = props;
+    const user = status.getMainStatus().user;
     return <div className="tweet__secondary">
         <ScreenName
-            className={props.focused ?
+            className={focused ?
                         'tweet__secondary-screenname tweet__secondary-screenname_focused' :
                         'tweet__secondary-screenname'}
             user={user}
@@ -55,7 +41,7 @@ const TweetSecondary = (props: TweetSecondaryProps) => {
         <div className="tweet__secondary-name" title={user.name}>
             {user.name}
         </div>
-        {retweetedBy(props.status, props.focused)}
+        {retweetedBy(status, focused, dispatch)}
     </div>;
 };
 export default TweetSecondary;

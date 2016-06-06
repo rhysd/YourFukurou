@@ -5,6 +5,7 @@ import {Twitter} from 'twit';
 const shell = global.require('electron').shell;
 
 const re_normal_size = /normal(?=\.\w+$)/i;
+const re_size_part = /_normal(?=\.\w+$)/i;
 
 function truncateCount(count: number) {
     'use strict';
@@ -21,6 +22,10 @@ function truncateCount(count: number) {
 
 export class TwitterUser {
     constructor(public json: Twitter.User) {}
+
+    get original_icon_url() {
+        return this.json.profile_image_url.replace(re_size_part, '');
+    }
 
     get icon_url() {
         const url = this.json.profile_image_url;

@@ -6,7 +6,7 @@ interface AvatarProps extends React.Props<any> {
     imageUrl?: string;
     size?: number;
     border?: string;
-    title?: string;
+    onClick: (e: React.MouseEvent) => void;
 }
 
 function getStyle(props: AvatarProps) {
@@ -22,11 +22,8 @@ function getStyle(props: AvatarProps) {
 const Avatar = (props: AvatarProps) => (
     <div
         className="avatar"
-        onClick={e => {
-            e.stopPropagation();
-            shell.openExternal(`https://twitter.com/${props.screenName}`);
-        }}
-        title={props.title}
+        onClick={props.onClick}
+        title={'@' + props.screenName}
     >
         <img
             className="avatar__inner"

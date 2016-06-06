@@ -22,7 +22,7 @@ import AutoCompleteSuggestions, {SuggestionItem} from './suggestions';
 import {AutoCompleteLabel} from './auto_complete_decorator';
 import TweetText from '../tweet/text';
 import TweetSecondary from '../tweet/secondary';
-import TweetIcon from '../tweet/icon';
+import PopupIcon from '../tweet/popup_icon';
 
 interface TweetEditorProps extends React.Props<any> {
     editor: EditorState;
@@ -170,8 +170,8 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
         }
         const tw = inReplyTo.getMainStatus();
         return <div className="tweet-form__in-reply-to">
-            <TweetIcon user={tw.user} friends={friends} dispatch={dispatch}/>
-            <TweetSecondary status={inReplyTo}/>
+            <PopupIcon user={tw.user} friends={friends} dispatch={dispatch}/>
+            <TweetSecondary status={inReplyTo} dispatch={dispatch}/>
             <TweetText status={inReplyTo}/>
         </div>;
     }

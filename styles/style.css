@@ -149,6 +149,20 @@ body {
 
 /* }}} */
 
+/* user-icon {{{ */
+
+.user-icon {
+  cursor: pointer;
+}
+
+.user-icon__inner {
+  display: block;
+  border-radius: calc(100% / 6);
+  background-color: white;
+}
+
+/* }}} */
+
 /* external-link {{{ */
 
 .external-link {
@@ -292,12 +306,12 @@ body {
   align-items: center;
 }
 
-.tweet__secondary-retweetedby.tweet__secondary-retweetedby_focused {
-  color: var(--color-focused-weak);
+.tweet__secondary-retweetedby > * {
+  margin-right: 4px;
 }
 
-.tweet__small-icon {
-  margin-left: 4px;
+.tweet__secondary-retweetedby.tweet__secondary-retweetedby_focused {
+  color: var(--color-focused-weak);
 }
 
 .tweet__primary {

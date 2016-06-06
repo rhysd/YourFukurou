@@ -4,7 +4,7 @@ import {List} from 'immutable';
 import TweetItem, {TwitterUser} from '../../item/tweet';
 import TweetPrimary from './primary';
 import TweetSecondary from './secondary';
-import TweetIcon from './icon';
+import PopupIcon from './popup_icon';
 import UndraggableClickable from '../undraggable_clickable';
 import State from '../../states/root';
 import {TimelineKind} from '../../states/timeline';
@@ -55,8 +55,8 @@ const Tweet: React.StatelessComponent<TweetProps> = props => {
             className={getClass(tw, props)}
             onClick={props.onClick}
         >
-            <TweetIcon user={tw.user} friends={props.friends} dispatch={props.dispatch}/>
-            <TweetSecondary status={props.status} focused={props.focused}/>
+            <PopupIcon user={tw.user} friends={props.friends} dispatch={props.dispatch}/>
+            <TweetSecondary status={props.status} focused={props.focused} dispatch={props.dispatch}/>
             <TweetPrimary status={props.status} owner={props.owner} focused={props.focused}/>
         </UndraggableClickable>
     );

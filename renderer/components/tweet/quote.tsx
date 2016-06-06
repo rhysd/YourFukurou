@@ -2,7 +2,6 @@ import * as React from 'react';
 import {Twitter} from 'twit';
 import TweetItem from '../../item/tweet';
 import ScreenName from './screen_name';
-import TweetIcon from './icon';
 import TweetText from './text';
 import TweetMedia from './media';
 

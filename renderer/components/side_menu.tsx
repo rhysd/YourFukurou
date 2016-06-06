@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import State from '../states/root';
 import IconButton from './icon_button';
-import Avatar from './avatar';
+import Icon from './icon';
 import {
     showMessage,
     toggleEditor,
@@ -65,11 +65,7 @@ const SideMenu = (props: SideMenuProps) => {
     const {kind, user, notified, dispatch, editor_open} = props;
     return (
         <div className="side-menu">
-            <Avatar
-                screenName={user ? user.screen_name : ''}
-                imageUrl={user ? user.icon_url : undefined}
-                size={48}
-            />
+            <Icon size={48} user={user} dispatch={dispatch}/>
             <SideMenuButton
                 active={editor_open}
                 notified={false}

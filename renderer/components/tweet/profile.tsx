@@ -43,8 +43,9 @@ const renderPrimary = (user: TwitterUser, friends: List<number>, dispatch: Redux
             <Avatar
                 size={64}
                 screenName={user.screen_name}
-                imageUrl={user.icon_url_48x48}
+                imageUrl={user.icon_url_73x73}
                 border="4px solid white"
+                onClick={() => dispatch(openPicturePreview([user.original_icon_url]))}
             />
         </div>
         <div className="user-popup__name">

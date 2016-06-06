@@ -144,6 +144,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
                 focused={focused}
                 collapsed={!Config.shouldExpandTweet(focused)}
                 onClick={click_handler}
+                dispatch={dispatch}
                 key={key}
             />;
         } else if (i instanceof Separator) {

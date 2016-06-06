@@ -18,7 +18,7 @@
     "components/side_menu.tsx",
     "components/external_link.tsx",
     "components/tweet/action_button.tsx",
-    "components/tweet/icon.tsx",
+    "components/tweet/popup_icon.tsx",
     "components/tweet/index.tsx",
     "components/tweet/primary.tsx",
     "components/tweet/secondary.tsx",
