@@ -1,26 +1,17 @@
 import * as React from 'react';
+import {Twitter} from 'twit';
 import Tweet from '../../item/tweet';
 import TweetText from '../tweet/text';
 import ScreenName from '../tweet/screen_name';
+import {renderPicIcon} from './index';
 
 interface MiniTweetTextProps extends React.Props<any> {
     status: Tweet;
     focused: boolean;
+    dispatch: Redux.Dispatch;
 }
 
-function renderPicIcon(tw: Tweet) {
-    'use strict';
-    if (tw.media.length === 0) {
-        return undefined;
-    }
-    return (
-        <div className="mini-tweet__has-pic">
-            <i className="fa fa-picture-o"/>
-        </div>
-    );
-}
-
-function renderQuoted(s: Tweet, focused: boolean) {
+function renderQuoted(s: Tweet, focused: boolean, dispatch: Redux.Dispatch) {
     'use strict';
     const q = s.quoted_status;
     if (q === null) {
@@ -40,18 +31,17 @@ function renderQuoted(s: Tweet, focused: boolean) {
             </span>
             <ScreenName className="mini-tweet__quoted-screenname" user={q.user}/>
             <TweetText className="mini-tweet__quoted-text" status={q}/>
-            {renderPicIcon(q)}
+            {renderPicIcon(q, dispatch)}
         </div>
     );
 }
 
-// TODO: Quoted tweet
 const MiniTweetText: React.StatelessComponent<MiniTweetTextProps> = props => {
     const tw = props.status.getMainStatus();
     return (
         <div className="mini-tweet__text" title={tw.text}>
             <TweetText status={tw} focused={props.focused}/>
-            {renderQuoted(tw, props.focused)}
+            {renderQuoted(tw, props.focused, props.dispatch)}
         </div>
     );
 };

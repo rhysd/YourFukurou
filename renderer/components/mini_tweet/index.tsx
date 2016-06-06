@@ -5,6 +5,7 @@ import MiniTweetSecondary from './secondary';
 import MiniTweetText from './text';
 import UndraggableClickable from '../undraggable_clickable';
 import {TimelineKind} from '../../states/timeline';
+import {openPicturePreview} from '../../actions';
 
 interface MiniTweetProps extends React.Props<any> {
     status: Tweet;
@@ -38,26 +39,31 @@ function getClass(tw: Tweet, props: MiniTweetProps) {
     return 'mini-tweet';
 }
 
-function renderPicIcon(tw: Tweet) {
+export function renderPicIcon(tw: Tweet, dispatch: Redux.Dispatch) {
     'use strict';
-    if (tw.media.length === 0) {
+    const media = tw.media;
+    if (media.length === 0) {
         return undefined;
     }
+
+    const open_media = () => dispatch(openPicturePreview(media.map(m => m.media_url)));
+
     return (
-        <div className="mini-tweet__has-pic">
+        <div className="mini-tweet__has-pic" onClick={open_media}>
             <i className="fa fa-picture-o"/>
         </div>
     );
 }
 
 const MiniTweet: React.StatelessComponent<MiniTweetProps> = props => {
-    const tw = props.status.getMainStatus();
+    const {status, onClick, focused, dispatch} = props;
+    const tw = status.getMainStatus();
     return (
-        <UndraggableClickable className={getClass(tw, props)} onClick={props.onClick}>
+        <UndraggableClickable className={getClass(tw, props)} onClick={onClick}>
             <MiniTweetIcon user={tw.user} quoted={tw.isQuotedTweet()}/>
-            <MiniTweetSecondary status={props.status} focused={props.focused}/>
-            <MiniTweetText status={props.status} focused={props.focused}/>
-            {renderPicIcon(tw)}
+            <MiniTweetSecondary status={status} focused={focused}/>
+            <MiniTweetText status={status} focused={focused} dispatch={dispatch}/>
+            {renderPicIcon(tw, dispatch)}
         </UndraggableClickable>
     );
 };
