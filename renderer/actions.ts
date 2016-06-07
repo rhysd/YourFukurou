@@ -340,19 +340,21 @@ export function changeEditorState(editor: EditorState) {
     };
 }
 
-export function openEditor() {
+export function openEditor(text?: string) {
     'use strict';
     return {
         type: Kind.OpenEditor,
+        text,
     };
 }
 
-export function openEditorForReply(in_reply_to: Tweet, owner: TwitterUser) {
+export function openEditorForReply(in_reply_to: Tweet, owner: TwitterUser, text?: string) {
     'use strict';
     return {
         type: Kind.OpenEditorForReply,
         status: in_reply_to,
         user: owner,
+        text,
     };
 }
 

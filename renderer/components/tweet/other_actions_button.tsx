@@ -6,6 +6,8 @@ import IconButton from '../icon_button';
 import {
     showMessage,
     destroyStatus,
+    openEditor,
+    openEditorForReply,
 } from '../../actions';
 
 const electron = global.require('electron');
@@ -57,6 +59,41 @@ function renderDeleteThisTweet(props: OtherActionsButtonProps) {
     );
 }
 
+function correctThisTweet(e: React.MouseEvent, props: OtherActionsButtonProps) {
+    'use strict';
+    e.stopPropagation();
+    e.preventDefault();
+
+    const {dispatch, status, owner} = props;
+    props.dispatch(destroyStatus(status.id));
+    if (status.in_reply_to_status !== null) {
+        dispatch(openEditorForReply(status.in_reply_to_status, owner, status.text));
+    } else {
+        dispatch(openEditor(status.text));
+        if (status.hasInReplyTo()) {
+            // XXX
+            log.warn('Corrected status has in_reply_to_status_id but does not have in_reply_to_status.  Fallback into normal tweet:', status);
+        }
+    }
+}
+
+function renderCorrectThisTweet(props: OtherActionsButtonProps) {
+    'use strict';
+    const isMyTweet = props.status.user.id === props.owner.id;
+    if (!isMyTweet) {
+        return undefined;
+    }
+
+    return (
+        <div
+            className="tweet-actions__others-menu-item"
+            onClick={e => correctThisTweet(e, props)}
+        >
+            Correct this tweet
+        </div>
+    );
+}
+
 function doNotPropagateEvent(e: React.MouseEvent) {
     'use strict';
     e.stopPropagation();
@@ -93,6 +130,7 @@ const OtherActionsButton = (props: OtherActionsButtonProps) => {
             >
                 Copy tweet JSON
             </div>
+            {renderCorrectThisTweet(props)}
         </div>;
 
     return (

@@ -110,10 +110,12 @@ export default class TweetEditorState {
         }
     }
 
-    openEditorWithInReplyTo(status: Tweet, owner: TwitterUser) {
+    openEditorWithInReplyTo(status: Tweet, owner: TwitterUser, preset_text?: string) {
         GlobalKeyMaps.disable();
         const in_reply_to = status.getMainStatus();
-        const next_core = this.setReplyText(in_reply_to, owner);
+        const next_core = preset_text ?
+                this.setTextToEditor(preset_text) :
+                this.setReplyText(in_reply_to, owner);
         return new TweetEditorState(
             next_core,
             true,
@@ -122,10 +124,10 @@ export default class TweetEditorState {
         );
     }
 
-    openEditor() {
+    openEditor(preset_text?: string) {
         GlobalKeyMaps.disable();
         return new TweetEditorState(
-            this.core,
+            preset_text ? this.setTextToEditor(preset_text) : this.core,
             true,
             this.keymaps,
             null
