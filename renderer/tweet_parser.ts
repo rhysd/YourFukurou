@@ -55,9 +55,10 @@ function htmlUnescape(text: string) {
 const RE_ENTITY = /(?:@\w+|https?:\/\/t\.co\/\w+|#)/;
 
 export default class TweetTextParser {
+    public text: string;
+    private input: string;
     private pos: number;
     private len: number;
-    private text: string;
     private hashtags: TweetTextHashtag[];
     private urls: TweetTextUrl[];
     private mentions: TweetTextMention[];
@@ -65,8 +66,9 @@ export default class TweetTextParser {
 
     constructor(private json: Twitter.Status) {
         this.pos = 0;
-        this.text = htmlUnescape(json.text);
-        this.len = this.text.length;
+        this.input = htmlUnescape(json.text);
+        this.text = this.input;
+        this.len = this.input.length;
         if (!json.entities) {
             this.hashtags = [];
             this.urls = [];
@@ -104,7 +106,7 @@ export default class TweetTextParser {
     getHashTagWithMatch(match: RegExpExecArray) {
         const hint_idx = match.index + 1;
         for (const h of this.hashtags) {
-            if (this.text.startsWith(h.text, hint_idx)) {
+            if (this.input.startsWith(h.text, hint_idx)) {
                 // XXX: Correct index to keep pace with other getSomething() methods.
                 match.index += h.text.length;
                 return h;
@@ -127,17 +129,17 @@ export default class TweetTextParser {
     }
 
     eatOne() {
-        const match = RE_ENTITY.exec(this.text);
+        const match = RE_ENTITY.exec(this.input);
         if (match === null) {
-            const t = this.text;
-            this.text = '';
+            const t = this.input;
+            this.input = '';
             return [t];
         }
 
         let tokens = [] as TweetTextToken[];
 
         if (match.index !== 0) {
-            tokens.push(this.text.slice(0, match.index));
+            tokens.push(this.input.slice(0, match.index));
         }
 
         const entity = this.eatEntity(match);
@@ -147,7 +149,7 @@ export default class TweetTextParser {
             tokens.push(entity);
         }
 
-        this.text = this.text.slice(match.index + match[0].length);
+        this.input = this.input.slice(match.index + match[0].length);
         return tokens;
     }
 
@@ -159,7 +161,7 @@ export default class TweetTextParser {
         let tokens = [] as TweetTextToken[];
         const push = Array.prototype.push;
 
-        while (this.text !== '') {
+        while (this.input !== '') {
             const ts = this.eatOne();
             push.apply(tokens, ts);
         }

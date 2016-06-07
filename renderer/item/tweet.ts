@@ -243,6 +243,7 @@ export default class Tweet implements Item {
         if (this.parsed_tokens_memo === null) {
             const parser = new TweetTextParser(this.json);
             this.parsed_tokens_memo = parser.parse();
+            this.json.text = parser.text;
         }
         return this.parsed_tokens_memo;
     }

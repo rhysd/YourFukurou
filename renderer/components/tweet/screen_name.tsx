@@ -1,27 +1,42 @@
 import * as React from 'react';
-import ExternalLink from '../external_link';
+import {connect} from 'react-redux';
 import {TwitterUser} from '../../item/tweet';
+import {openUserTimeline} from '../../actions';
 
-interface ScreenNameProps extends React.Props<any> {
+interface ConnectedProps extends React.Props<any> {
     user: TwitterUser;
     className?: string;
 }
 
-const ScreenName = (props: ScreenNameProps) => {
+type Props = ConnectedProps & {
+    onClick: (e: React.MouseEvent) => void;
+}
+
+const ScreenName = (props: Props) => {
     const screen_name = '@' + props.user.screen_name;
     return (
         <span className="screenname__body">
-            <ExternalLink
-                className={props.className}
-                url={props.user.userPageUrl()}
+            <span
+                className={props.className + ' external-link'}
                 title={screen_name}
+                onClick={props.onClick}
             >
                 {screen_name}
-            </ExternalLink>
+            </span>
             {props.user.protected
                 ? <i className="fa fa-lock" style={{marginLeft: '4px'}}/>
                 : undefined}
         </span>
     );
 };
-export default ScreenName;
+
+const dispatchToProps =
+    (dispatch: Redux.Dispatch, props: ConnectedProps) =>
+        Object.assign({
+            onClick: (e: React.MouseEvent) => {
+                e.stopPropagation();
+                dispatch(openUserTimeline(props.user));
+            },
+        }, props);
+
+export default connect(null, dispatchToProps)(ScreenName);
