@@ -13,6 +13,8 @@ import {TwitterUser} from '../item/tweet';
 import {TimelineKind, Notified} from '../states/timeline';
 import log from '../log';
 
+const {shell} = global.require('electron');
+
 interface SideMenuButtonProps extends React.Props<any> {
     active: boolean;
     notified: boolean;
@@ -44,12 +46,15 @@ const SideMenuButton = (props: SideMenuButtonProps) => {
     );
 };
 
-interface SideMenuProps extends React.Props<any> {
+interface Props extends React.Props<any> {
     user: TwitterUser;
     kind: TimelineKind;
     notified: Notified;
     editor_open: boolean;
-    dispatch?: Redux.Dispatch;
+    onEdit: () => void;
+    onHome: () => void;
+    onMention: () => void;
+    dispatch: Redux.Dispatch;
 }
 
 function openConfigWithEditor() {
@@ -61,8 +66,18 @@ function openConfigWithEditor() {
     log.debug('Open file:', config_path);
 }
 
-const SideMenu = (props: SideMenuProps) => {
-    const {kind, user, notified, dispatch, editor_open} = props;
+function openDirectMessagePage() {
+    'use strict';
+    shell.openExternal('https://mobile.twitter.com/messages');
+}
+
+function openSearchPage() {
+    'use strict';
+    shell.openExternal('https://twitter.com/search-home');
+}
+
+const SideMenu = (props: Props) => {
+    const {kind, user, notified, dispatch, editor_open, onEdit, onHome, onMention} = props;
     return (
         <div className="side-menu">
             <Icon size={48} user={user} dispatch={dispatch}/>
@@ -71,35 +86,35 @@ const SideMenu = (props: SideMenuProps) => {
                 notified={false}
                 name="pencil-square-o"
                 tip="New Tweet"
-                onClick={() => dispatch(toggleEditor())}
+                onClick={onEdit}
             />
             <SideMenuButton
                 active={kind === 'home'}
                 notified={notified.home}
                 name="home"
                 tip="Home"
-                onClick={() => dispatch(changeCurrentTimeline('home'))}
+                onClick={onHome}
             />
             <SideMenuButton
                 active={kind === 'mention'}
                 notified={notified.mention}
                 name="comments"
                 tip="Notifications"
-                onClick={() => dispatch(changeCurrentTimeline('mention'))}
+                onClick={onMention}
             />
             <SideMenuButton
                 active={false}
                 notified={false}
                 name="envelope-o"
                 tip="Direct Messages"
-                onClick={() => dispatch(notImplementedYet())}
+                onClick={openDirectMessagePage}
             />
             <SideMenuButton
                 active={false}
                 notified={false}
                 name="search"
                 tip="Search"
-                onClick={() => dispatch(notImplementedYet())}
+                onClick={openSearchPage}
             />
             <IconButton
                 className="side-menu__settings"
@@ -111,7 +126,7 @@ const SideMenu = (props: SideMenuProps) => {
     );
 };
 
-function select(state: State): SideMenuProps {
+function select(state: State) {
     'use strict';
     return {
         user: state.timeline.user,
@@ -120,4 +135,19 @@ function select(state: State): SideMenuProps {
         editor_open: state.editor.is_open,
     };
 }
-export default connect(select)(SideMenu);
+
+function mapDispatch(dispatch: Redux.Dispatch) {
+    'use strict';
+    return {
+        onEdit: () => dispatch(toggleEditor()),
+        onHome: () => dispatch(changeCurrentTimeline('home')),
+        onMention: () => dispatch(changeCurrentTimeline('mention')),
+        dispatch, // TODO: Remove all dispatch prop
+    };
+}
+
+export default connect(
+    select,
+    mapDispatch,
+    (s, d) => Object.assign({}, s, d)
+)(SideMenu);
