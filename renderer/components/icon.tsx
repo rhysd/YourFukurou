@@ -1,24 +1,23 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import {TwitterUser} from '../item/tweet';
 import {openUserTimeline} from '../actions';
 
-interface IconProps extends React.Props<Icon> {
+interface ConnectedProps {
     user: TwitterUser;
     size: number;
     border?: string;
-    dispatch: Redux.Dispatch;
 }
 
-export default class Icon extends React.Component<IconProps, {}> {
+interface DispatchProps {
+    onClick: (e: React.MouseEvent) => void;
+}
+
+type IconProps = ConnectedProps & DispatchProps & React.Props<any>;
+
+class Icon extends React.Component<IconProps, {}> {
     constructor(props: IconProps) {
         super(props);
-        this.onClick = this.onClick.bind(this);
-    }
-
-    onClick(e: React.MouseEvent) {
-        e.stopPropagation();
-        const {dispatch, user} = this.props;
-        dispatch(openUserTimeline(user));
     }
 
     getImageUrl() {
@@ -54,7 +53,7 @@ export default class Icon extends React.Component<IconProps, {}> {
             <div
                 className="user-icon"
                 title={'@' + screen_name}
-                onClick={this.onClick}
+                onClick={this.props.onClick}
             >
                 <img
                     className="user-icon__inner"
@@ -66,3 +65,15 @@ export default class Icon extends React.Component<IconProps, {}> {
         );
     }
 }
+
+function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+    'use strict';
+    return {
+        onClick: e => {
+            e.stopPropagation();
+            dispatch(openUserTimeline(props.user));
+        },
+    };
+}
+
+export default connect(null, mapDispatch)(Icon);

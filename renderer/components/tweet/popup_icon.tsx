@@ -8,7 +8,6 @@ import TwitterProfile from './profile';
 interface TweetIconProps extends React.Props<any> {
     user: TwitterUser;
     friends: List<number>;
-    dispatch: Redux.Dispatch;
 }
 
 // TODO:
@@ -20,7 +19,6 @@ const PopupIcon = (props: TweetIconProps) => (
             <TwitterProfile
                 user={props.user}
                 friends={props.friends}
-                dispatch={props.dispatch}
             />
         }
     >
@@ -29,7 +27,6 @@ const PopupIcon = (props: TweetIconProps) => (
                 size={48}
                 user={props.user}
                 border="1px solid #d0d0d0"
-                dispatch={props.dispatch}
             />
         </div>
     </Tooltip>

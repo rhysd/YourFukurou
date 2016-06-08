@@ -1,20 +1,19 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import {List} from 'immutable';
 import {TwitterUser} from '../../item/tweet';
 import {follow, unfollow} from '../../actions';
 
-interface FollowButtonProps extends React.Props<any> {
+interface ConnectedProps extends React.Props<any> {
     user: TwitterUser;
     friends: List<number>;
-    dispatch: Redux.Dispatch;
 }
 
-function onClick(e: React.MouseEvent, following: boolean, dispatch: Redux.Dispatch, user_id: number) {
-    'use strict';
-    e.stopPropagation();
-    const action = following ? unfollow(user_id) : follow(user_id);
-    dispatch(action);
+interface DispatchProps {
+    onClick: (e: React.MouseEvent) => void;
 }
+
+type FollowButtonProps = ConnectedProps & DispatchProps;
 
 const FollowButton: React.StatelessComponent<FollowButtonProps> = props => {
     const following = props.friends.includes(props.user.id);
@@ -25,9 +24,22 @@ const FollowButton: React.StatelessComponent<FollowButtonProps> = props => {
             'follow-button follow-button_cannot-follow' :
             'follow-button follow-button_will-follow';
     return (
-        <div className={name} onClick={e => onClick(e, following, props.dispatch, props.user.id)}>
+        <div className={name} onClick={props.onClick}>
             {following ? 'Unfollow' : 'Follow'}
         </div>
     );
 };
-export default FollowButton;
+
+function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+    'use strict';
+    return {
+        onClick: e => {
+            e.stopPropagation();
+            const following = props.friends.includes(props.user.id);
+            const action = following ? unfollow(props.user.id) : follow(props.user.id);
+            dispatch(action);
+        },
+    };
+}
+
+export default connect(null, mapDispatch)(FollowButton);

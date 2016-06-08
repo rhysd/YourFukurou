@@ -23,7 +23,6 @@ interface TweetProps extends React.Props<any> {
     focused_user?: boolean;
     friends?: List<number>;
     onClick?: (e: React.MouseEvent) => void;
-    dispatch: Redux.Dispatch;
 }
 
 function getClass(tw: TweetItem, props: TweetProps) {
@@ -55,8 +54,8 @@ const Tweet: React.StatelessComponent<TweetProps> = props => {
             className={getClass(tw, props)}
             onClick={props.onClick}
         >
-            <PopupIcon user={tw.user} friends={props.friends} dispatch={props.dispatch}/>
-            <TweetSecondary status={props.status} focused={props.focused} dispatch={props.dispatch}/>
+            <PopupIcon user={tw.user} friends={props.friends}/>
+            <TweetSecondary status={props.status} focused={props.focused}/>
             <TweetPrimary status={props.status} owner={props.owner} focused={props.focused}/>
         </UndraggableClickable>
     );

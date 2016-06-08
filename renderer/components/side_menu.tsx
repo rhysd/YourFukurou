@@ -54,7 +54,6 @@ interface Props extends React.Props<any> {
     onEdit: () => void;
     onHome: () => void;
     onMention: () => void;
-    dispatch: Redux.Dispatch;
 }
 
 function openConfigWithEditor() {
@@ -77,10 +76,10 @@ function openSearchPage() {
 }
 
 const SideMenu = (props: Props) => {
-    const {kind, user, notified, dispatch, editor_open, onEdit, onHome, onMention} = props;
+    const {kind, user, notified, editor_open, onEdit, onHome, onMention} = props;
     return (
         <div className="side-menu">
-            <Icon size={48} user={user} dispatch={dispatch}/>
+            <Icon size={48} user={user}/>
             <SideMenuButton
                 active={editor_open}
                 notified={false}
@@ -142,7 +141,6 @@ function mapDispatch(dispatch: Redux.Dispatch) {
         onEdit: () => dispatch(toggleEditor()),
         onHome: () => dispatch(changeCurrentTimeline('home')),
         onMention: () => dispatch(changeCurrentTimeline('mention')),
-        dispatch, // TODO: Remove all dispatch prop
     };
 }
 

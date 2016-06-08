@@ -124,7 +124,6 @@ class Timeline extends React.Component<TimelineProps, {}> {
                     focused_user={focused_user_id === i.getMainStatus().user.id}
                     friends={friends}
                     onClick={click_handler}
-                    dispatch={dispatch}
                     key={key}
                 />;
             } else {
@@ -146,7 +145,6 @@ class Timeline extends React.Component<TimelineProps, {}> {
                 focused={focused}
                 collapsed={!Config.shouldExpandTweet(focused)}
                 onClick={click_handler}
-                dispatch={dispatch}
                 key={key}
             />;
         } else if (i instanceof Separator) {

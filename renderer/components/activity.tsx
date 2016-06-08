@@ -11,7 +11,6 @@ interface TwitterActivityProps extends React.Props<any> {
     focused?: boolean;
     collapsed?: boolean;
     onClick?: (e: MouseEvent) => void;
-    dispatch: Redux.Dispatch;
 }
 
 function renderBadge(kind: TimelineActivityKind) {
@@ -31,7 +30,7 @@ function renderBadge(kind: TimelineActivityKind) {
     }
 }
 
-function renderUserIcons(users: TwitterUser[], dispatch: Redux.Dispatch) {
+function renderUserIcons(users: TwitterUser[]) {
     'use strict';
 
     const icons =
@@ -39,7 +38,6 @@ function renderUserIcons(users: TwitterUser[], dispatch: Redux.Dispatch) {
             <Icon
                 size={24}
                 user={u}
-                dispatch={dispatch}
                 key={i}
             />
         );
@@ -80,7 +78,7 @@ function renderCreatedAt(status: Tweet, focused: boolean) {
 
 function renderExpanded(props: TwitterActivityProps) {
     'use strict';
-    const {focused, onClick, activity, dispatch} = props;
+    const {focused, onClick, activity} = props;
     const kind = activity.kind;
     const behaved =
         kind === 'liked' ? 'Liked' :
@@ -93,7 +91,7 @@ function renderExpanded(props: TwitterActivityProps) {
             onClick={onClick}
         >
             <div className="activity__header">
-                {renderBadge(kind)} {behaved} by {renderUserIcons(activity.by, dispatch)} {renderRestUsers(activity)}
+                {renderBadge(kind)} {behaved} by {renderUserIcons(activity.by)} {renderRestUsers(activity)}
                 {renderCreatedAt(activity.status, focused)}
             </div>
             <div className="activity__text" title={activity.status.text}>
@@ -105,7 +103,7 @@ function renderExpanded(props: TwitterActivityProps) {
 
 function renderCollapsed(props: TwitterActivityProps) {
     'use strict';
-    const {focused, onClick, activity, dispatch} = props;
+    const {focused, onClick, activity} = props;
     return (
         <div
             className={focused ?
@@ -114,7 +112,7 @@ function renderCollapsed(props: TwitterActivityProps) {
             onClick={onClick}
         >
             <div className="activity__header activity__header_mini">
-                {renderBadge(activity.kind)} {renderUserIcons(activity.by, dispatch)}
+                {renderBadge(activity.kind)} {renderUserIcons(activity.by)}
             </div>
             <div className="activity__text activity__text_mini" title={activity.status.text}>
                 <TweetText status={activity.status} focused={focused}/>

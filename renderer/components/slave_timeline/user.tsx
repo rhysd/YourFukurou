@@ -33,7 +33,6 @@ function renderTweets(props: UserSlaveProps) {
                 owner={owner}
                 focused={focused}
                 friends={friends}
-                dispatch={dispatch}
                 key={idx}
                 onClick={() => dispatch(focused ? blurSlaveTimeline() : focusSlaveOn(idx))}
             />;
@@ -45,7 +44,7 @@ function renderTweets(props: UserSlaveProps) {
 }
 
 const UserSlave: React.StatelessComponent<UserSlaveProps> = props => {
-    const {timeline, friends, dispatch} = props;
+    const {timeline, friends} = props;
     return (
         <div className="user-timeline">
             <div className="user-timeline__profile">
@@ -53,7 +52,6 @@ const UserSlave: React.StatelessComponent<UserSlaveProps> = props => {
                     user={timeline.user}
                     friends={friends}
                     size="big"
-                    dispatch={dispatch}
                 />
             </div>
             <IndexAutoScroll className="user-timeline__tweets" index={timeline.focus_index}>

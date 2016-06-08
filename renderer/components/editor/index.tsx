@@ -164,14 +164,14 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
     }
 
     renderInReplyTo() {
-        const {inReplyTo, friends, dispatch} = this.props;
+        const {inReplyTo, friends} = this.props;
         if (!inReplyTo) {
             return undefined;
         }
         const tw = inReplyTo.getMainStatus();
         return <div className="tweet-form__in-reply-to">
-            <PopupIcon user={tw.user} friends={friends} dispatch={dispatch}/>
-            <TweetSecondary status={inReplyTo} dispatch={dispatch}/>
+            <PopupIcon user={tw.user} friends={friends}/>
+            <TweetSecondary status={inReplyTo}/>
             <TweetText status={inReplyTo}/>
         </div>;
     }

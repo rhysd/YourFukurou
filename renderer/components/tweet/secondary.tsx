@@ -6,10 +6,9 @@ import Icon from '../icon';
 interface TweetSecondaryProps extends React.Props<any> {
     status: Tweet;
     focused?: boolean;
-    dispatch: Redux.Dispatch;
 }
 
-function retweetedBy(tw: Tweet, focused: boolean, dispatch: Redux.Dispatch) {
+function retweetedBy(tw: Tweet, focused: boolean) {
     'use strict';
     if (!tw.isRetweet()) {
         return undefined;
@@ -23,13 +22,13 @@ function retweetedBy(tw: Tweet, focused: boolean, dispatch: Redux.Dispatch) {
                     'tweet__secondary-retweetedby'
             }
         >
-            <i className="fa fa-retweet"/> <ScreenName user={tw.user}/> <Icon size={12} user={tw.user} dispatch={dispatch}/>
+            <i className="fa fa-retweet"/> <ScreenName user={tw.user}/> <Icon size={12} user={tw.user}/>
         </div>
     );
 }
 
 const TweetSecondary = (props: TweetSecondaryProps) => {
-    const {status, focused, dispatch} = props;
+    const {status, focused} = props;
     const user = status.getMainStatus().user;
     return <div className="tweet__secondary">
         <ScreenName
@@ -41,7 +40,7 @@ const TweetSecondary = (props: TweetSecondaryProps) => {
         <div className="tweet__secondary-name" title={user.name}>
             {user.name}
         </div>
-        {retweetedBy(status, focused, dispatch)}
+        {retweetedBy(status, focused)}
     </div>;
 };
 export default TweetSecondary;

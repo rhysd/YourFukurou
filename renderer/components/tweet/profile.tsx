@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import {List} from 'immutable';
 import Avatar from '../avatar';
 import ScreenName from './screen_name';
@@ -9,15 +10,22 @@ import {openPicturePreview} from '../../actions';
 
 type Size = 'normal' | 'big';
 
-interface TwitterProfileProps extends React.Props<any> {
+interface ConnectedProps extends React.Props<any> {
     user: TwitterUser;
     friends: List<number>;
     size?: Size;
-    dispatch: Redux.Dispatch;
 }
 
-function renderBannar(user: TwitterUser, dispatch: Redux.Dispatch, size?: Size) {
+interface DispatchProps {
+    onBannerClick: (e: React.MouseEvent) => void;
+    onIconClick: (e: React.MouseEvent) => void;
+}
+
+type TwitterProfileProps = ConnectedProps & DispatchProps;
+
+function renderBannar(props: TwitterProfileProps) {
     'use strict';
+    const {user, onIconClick, size} = props;
     const bg_color_style = {
         backgroundColor: '#' + user.bg_color,
     };
@@ -27,7 +35,7 @@ function renderBannar(user: TwitterUser, dispatch: Redux.Dispatch, size?: Size) 
             <div
                 className="user-popup__background"
                 style={{cursor: 'pointer'}}
-                onClick={() => dispatch(openPicturePreview([user.max_size_banner_url]))}
+                onClick={onIconClick}
             >
                 <img src={url} style={bg_color_style}/>
             </div>
@@ -37,27 +45,30 @@ function renderBannar(user: TwitterUser, dispatch: Redux.Dispatch, size?: Size) 
     }
 }
 
-const renderPrimary = (user: TwitterUser, friends: List<number>, dispatch: Redux.Dispatch) => (
-    <div className="user-popup__primary">
-        <div className="user-popup__main-icon">
-            <Avatar
-                size={64}
-                screenName={user.screen_name}
-                imageUrl={user.icon_url_73x73}
-                border="4px solid white"
-                onClick={() => dispatch(openPicturePreview([user.original_icon_url]))}
-            />
+const renderPrimary = (props: TwitterProfileProps) => {
+    const {user, friends, onIconClick} = props;
+    return (
+        <div className="user-popup__primary">
+            <div className="user-popup__main-icon">
+                <Avatar
+                    size={64}
+                    screenName={user.screen_name}
+                    imageUrl={user.icon_url_73x73}
+                    border="4px solid white"
+                    onClick={onIconClick}
+                />
+            </div>
+            <div className="user-popup__name">
+                <span className="user-popup__user-name" title={user.name}>
+                    {user.name}
+                </span>
+                <ScreenName className="user-popup__screenname" user={user}/>
+            </div>
+            <div className="spacer"/>
+            <FollowButton user={user} friends={friends}/>
         </div>
-        <div className="user-popup__name">
-            <span className="user-popup__user-name" title={user.name}>
-                {user.name}
-            </span>
-            <ScreenName className="user-popup__screenname" user={user}/>
-        </div>
-        <div className="spacer"/>
-        <FollowButton user={user} friends={friends} dispatch={dispatch}/>
-    </div>
-);
+    );
+}
 
 const renderCounts = (user: TwitterUser) => (
     <div className="user-popup__counts">
@@ -137,8 +148,8 @@ const TwitterProfile: React.StatelessComponent<TwitterProfileProps> = props => {
     };
     return (
         <div className="user-popup" style={style}>
-            {renderBannar(u, props.dispatch, props.size)}
-            {renderPrimary(u, props.friends, props.dispatch)}
+            {renderBannar(props)}
+            {renderPrimary(props)}
             {renderCounts(u)}
             <div className="user-popup__description">
                 {u.description}
@@ -147,4 +158,19 @@ const TwitterProfile: React.StatelessComponent<TwitterProfileProps> = props => {
         </div>
     );
 };
-export default TwitterProfile;
+
+function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+    'use strict';
+    return {
+        onBannerClick: e => {
+            e.stopPropagation();
+            dispatch(openPicturePreview([props.user.max_size_banner_url]));
+        },
+        onIconClick: e => {
+            e.stopPropagation();
+            dispatch(openPicturePreview([props.user.original_icon_url]));
+        },
+    };
+}
+
+export default connect(null, mapDispatch)(TwitterProfile);
