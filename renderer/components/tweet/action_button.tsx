@@ -136,7 +136,7 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
                 case 'like':    onLikeClicked(props.status, dispatch); break;
                 default:        break;
             }
-        }
+        },
     };
 }
 

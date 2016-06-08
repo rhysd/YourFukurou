@@ -148,7 +148,7 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
         },
         onCopyUrl: e => {
             e.stopPropagation();
-            statusUrlToClipboard(props.status, dispatch)
+            statusUrlToClipboard(props.status, dispatch);
         },
         onCopyJson: e => {
             e.stopPropagation();

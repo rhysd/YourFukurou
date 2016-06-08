@@ -68,7 +68,7 @@ const renderPrimary = (props: TwitterProfileProps) => {
             <FollowButton user={user} friends={friends}/>
         </div>
     );
-}
+};
 
 const renderCounts = (user: TwitterUser) => (
     <div className="user-popup__counts">

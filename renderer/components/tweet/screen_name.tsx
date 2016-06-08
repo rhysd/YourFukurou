@@ -32,11 +32,14 @@ const ScreenName = (props: Props) => {
 
 const dispatchToProps =
     (dispatch: Redux.Dispatch, props: ConnectedProps) =>
-        Object.assign({
-            onClick: (e: React.MouseEvent) => {
-                e.stopPropagation();
-                dispatch(openUserTimeline(props.user));
+        Object.assign(
+            {
+                onClick: (e: React.MouseEvent) => {
+                    e.stopPropagation();
+                    dispatch(openUserTimeline(props.user));
+                },
             },
-        }, props);
+            props
+        );
 
 export default connect(null, dispatchToProps)(ScreenName);
