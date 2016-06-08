@@ -109,7 +109,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
     }
 
     renderItem(idx: number, key: string, related_ids: string[], focused_user_id: number) {
-        const {items, focus_index, kind, owner, friends, dispatch} = this.props;
+        const {items, focus_index, kind, owner, friends} = this.props;
         const i = items.get(idx);
         const focused = idx === focus_index;
         const click_handler = () => this.toggleFocus(focused, idx);
@@ -135,7 +135,6 @@ class Timeline extends React.Component<TimelineProps, {}> {
                     related={related_ids.indexOf(i.id) !== -1}
                     focused_user={focused_user_id === i.getMainStatus().user.id}
                     onClick={click_handler}
-                    dispatch={dispatch}
                     key={key}
                 />;
             }

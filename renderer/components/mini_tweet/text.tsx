@@ -1,17 +1,24 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import {Twitter} from 'twit';
 import Tweet from '../../item/tweet';
 import TweetText from '../tweet/text';
 import ScreenName from '../tweet/screen_name';
 import {renderPicIcon} from './index';
+import {openPicturePreview} from '../../actions';
 
-interface MiniTweetTextProps extends React.Props<any> {
+interface ConnectedProps extends React.Props<any> {
     status: Tweet;
     focused: boolean;
-    dispatch: Redux.Dispatch;
 }
 
-function renderQuoted(s: Tweet, focused: boolean, dispatch: Redux.Dispatch) {
+interface DispatchProps {
+    onClick: (e: React.MouseEvent) => void;
+}
+
+type MiniTweetTextProps = ConnectedProps & DispatchProps;
+
+function renderQuoted(s: Tweet, focused: boolean, onClick: (e: React.MouseEvent) => void) {
     'use strict';
     const q = s.quoted_status;
     if (q === null) {
@@ -31,7 +38,7 @@ function renderQuoted(s: Tweet, focused: boolean, dispatch: Redux.Dispatch) {
             </span>
             <ScreenName className="mini-tweet__quoted-screenname" user={q.user}/>
             <TweetText className="mini-tweet__quoted-text" status={q}/>
-            {renderPicIcon(q, dispatch)}
+            {renderPicIcon(q, onClick)}
         </div>
     );
 }
@@ -41,8 +48,20 @@ const MiniTweetText: React.StatelessComponent<MiniTweetTextProps> = props => {
     return (
         <div className="mini-tweet__text" title={tw.text}>
             <TweetText status={tw} focused={props.focused}/>
-            {renderQuoted(tw, props.focused, props.dispatch)}
+            {renderQuoted(tw, props.focused, props.onClick)}
         </div>
     );
 };
-export default MiniTweetText;
+
+function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+    'use strict';
+    return {
+        onClick: e => {
+            e.stopPropagation();
+            const urls = props.status.getMainStatus().media.map(m => m.media_url);
+            dispatch(openPicturePreview(urls));
+        },
+    };
+}
+
+export default connect(null, mapDispatch)(MiniTweetText);
