@@ -43,6 +43,8 @@ function nop() {
     // Note: No OPeration
 }
 
+const NoImage: string[] = [];
+
 function getStatusIdsRelatedTo(status: TweetItem): string[] {
     'use strict';
     if (status.related_statuses.length === 0) {
@@ -160,7 +162,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
 
         if (!media.is_open || media.picture_urls.length === 0) {
             return <Lightbox
-                images={[]}
+                images={NoImage}
                 isOpen={false}
                 onClickNext={nop}
                 onClickPrev={nop}

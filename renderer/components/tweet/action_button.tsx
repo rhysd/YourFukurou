@@ -13,54 +13,42 @@ import {
 
 type TweetActionKind = 'reply' | 'like' | 'retweet';
 
-interface TweetActionButtonProps extends React.Props<any> {
+interface ConnectedProps extends React.Props<any> {
     status: Tweet;
     kind: TweetActionKind;
     owner?: TwitterUser;
-    dispatch?: Redux.Dispatch;
 }
 
-function onLikeClicked(props: TweetActionButtonProps) {
+interface DispatchProps {
+    onClick: (e: React.MouseEvent) => void;
+}
+
+type TweetActionButtonProps = ConnectedProps & DispatchProps;
+
+function onLikeClicked(status: Tweet, dispatch: Redux.Dispatch) {
     'use strict';
-    if (props.status.favorited) {
-        props.dispatch(destroyLike(props.status.id));
+    if (status.favorited) {
+        dispatch(destroyLike(status.id));
     } else {
-        props.dispatch(createLike(props.status.id));
+        dispatch(createLike(status.id));
     }
 }
 
-function onRetweetClicked(props: TweetActionButtonProps) {
+function onRetweetClicked(status: Tweet, owner: TwitterUser, dispatch: Redux.Dispatch) {
     'use strict';
-    if (props.status.user.id === props.owner.id) {
-        props.dispatch(showMessage('You cannot retweet your tweet', 'error'));
+    if (status.user.id === owner.id) {
+        dispatch(showMessage('You cannot retweet your tweet', 'error'));
         return;
     }
-    if (props.status.user.protected) {
-        props.dispatch(showMessage("Cannot retweet protected user's tweet", 'error'));
+    if (status.user.protected) {
+        dispatch(showMessage("Cannot retweet protected user's tweet", 'error'));
         return;
     }
 
-    if (props.status.retweeted) {
-        props.dispatch(undoRetweet(props.status.id));
+    if (status.retweeted) {
+        dispatch(undoRetweet(status.id));
     } else {
-        props.dispatch(sendRetweet(props.status.id));
-    }
-}
-
-function onReplyClicked(props: TweetActionButtonProps) {
-    'use strict';
-    props.dispatch(openEditorForReply(props.status, props.owner));
-}
-
-function onClick(e: React.MouseEvent, props: TweetActionButtonProps) {
-    'use strict';
-    e.preventDefault();
-    e.stopPropagation();
-    switch (props.kind) {
-        case 'reply': onReplyClicked(props); break;
-        case 'retweet': onRetweetClicked(props); break;
-        case 'like': onLikeClicked(props); break;
-        default: break;
+        dispatch(sendRetweet(status.id));
     }
 }
 
@@ -129,7 +117,7 @@ const TweetActionButton = (props: TweetActionButtonProps) => {
             name={icon}
             tip={props.kind}
             className={'tweet-actions__' + props.kind}
-            onClick={e => onClick(e, props)}
+            onClick={props.onClick}
         />
         <div className="tweet-actions__count">
             {getCount(props)}
@@ -137,4 +125,19 @@ const TweetActionButton = (props: TweetActionButtonProps) => {
     </div>;
 };
 
-export default connect()(TweetActionButton);
+function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+    'use strict';
+    return {
+        onClick: e => {
+            e.stopPropagation();
+            switch (props.kind) {
+                case 'reply':   dispatch(openEditorForReply(props.status, props.owner)); break;
+                case 'retweet': onRetweetClicked(props.status, props.owner, dispatch); break;
+                case 'like':    onLikeClicked(props.status, dispatch); break;
+                default:        break;
+            }
+        }
+    };
+}
+
+export default connect(null, mapDispatch)(TweetActionButton);

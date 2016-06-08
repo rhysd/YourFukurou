@@ -12,31 +12,33 @@ import {
 
 const electron = global.require('electron');
 
-interface OtherActionsButtonProps extends React.Props<any> {
+interface ConnectedProps {
     status: Tweet;
     owner?: TwitterUser;
-    dispatch?: Redux.Dispatch;
 }
 
-function statusUrlToClipboard(props: OtherActionsButtonProps) {
+interface DispatchProps {
+    onDeleteTweet: (e: React.MouseEvent) => void;
+    onUrlOpen: (e: React.MouseEvent) => void;
+    onCopyUrl: (e: React.MouseEvent) => void;
+    onCopyJson: (e: React.MouseEvent) => void;
+    onCorrectTweet: (e: React.MouseEvent) => void;
+}
+
+type OtherActionsButtonProps = ConnectedProps & DispatchProps & React.Props<any>;
+
+function statusUrlToClipboard(status: Tweet, dispatch: Redux.Dispatch) {
     'use strict';
-    const url = props.status.getMainStatus().statusPageUrl();
+    const url = status.getMainStatus().statusPageUrl();
     electron.clipboard.write({ text: url });
-    props.dispatch(showMessage('Copied status URL to clipboard.', 'info'));
+    dispatch(showMessage('Copied status URL to clipboard.', 'info'));
 }
 
-function deleteThisTweet(e: React.MouseEvent, props: OtherActionsButtonProps) {
+function copyJson(status: Tweet, dispatch: Redux.Dispatch) {
     'use strict';
-    e.preventDefault();
-    e.stopPropagation();
-    props.dispatch(destroyStatus(props.status.id));
-}
-
-function copyJson(props: OtherActionsButtonProps) {
-    'use strict';
-    const json = JSON.stringify(props.status.json, null, 2);
+    const json = JSON.stringify(status.json, null, 2);
     electron.clipboard.write({ text: json });
-    props.dispatch(showMessage('Copied status JSON to clipboard.', 'info'));
+    dispatch(showMessage('Copied status JSON to clipboard.', 'info'));
 }
 
 function renderDeleteThisTweet(props: OtherActionsButtonProps) {
@@ -49,23 +51,16 @@ function renderDeleteThisTweet(props: OtherActionsButtonProps) {
     return (
         <div
             className="tweet-actions__others-menu-item"
-            onClick={e => {
-                e.stopPropagation();
-                deleteThisTweet(e, props);
-            }}
+            onClick={props.onDeleteTweet}
         >
             Delete this tweet
         </div>
     );
 }
 
-function correctThisTweet(e: React.MouseEvent, props: OtherActionsButtonProps) {
+function correctThisTweet(status: Tweet, owner: TwitterUser, dispatch: Redux.Dispatch) {
     'use strict';
-    e.stopPropagation();
-    e.preventDefault();
-
-    const {dispatch, status, owner} = props;
-    props.dispatch(destroyStatus(status.id));
+    dispatch(destroyStatus(status.id));
     if (status.in_reply_to_status !== null) {
         dispatch(openEditorForReply(status.in_reply_to_status, owner, status.text));
     } else {
@@ -87,7 +82,7 @@ function renderCorrectThisTweet(props: OtherActionsButtonProps) {
     return (
         <div
             className="tweet-actions__others-menu-item"
-            onClick={e => correctThisTweet(e, props)}
+            onClick={props.onCorrectTweet}
         >
             Correct this tweet
         </div>
@@ -105,28 +100,19 @@ const OtherActionsButton = (props: OtherActionsButtonProps) => {
             {renderDeleteThisTweet(props)}
             <div
                 className="tweet-actions__others-menu-item"
-                onClick={e => {
-                    e.stopPropagation();
-                    props.status.openStatusPageInBrowser();
-                }}
+                onClick={props.onUrlOpen}
             >
                 Open URLs in tweet
             </div>
             <div
                 className="tweet-actions__others-menu-item"
-                onClick={e => {
-                    e.stopPropagation();
-                    statusUrlToClipboard(props);
-                }}
+                onClick={props.onCopyUrl}
             >
                 Copy tweet URL
             </div>
             <div
                 className="tweet-actions__others-menu-item"
-                onClick={e => {
-                    e.stopPropagation();
-                    copyJson(props);
-                }}
+                onClick={props.onCopyJson}
             >
                 Copy tweet JSON
             </div>
@@ -149,4 +135,30 @@ const OtherActionsButton = (props: OtherActionsButtonProps) => {
     );
 };
 
-export default connect()(OtherActionsButton);
+function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+    'use strict';
+    return {
+        onDeleteTweet: e => {
+            e.stopPropagation();
+            dispatch(destroyStatus(props.status.id));
+        },
+        onUrlOpen: e => {
+            e.stopPropagation();
+            props.status.openStatusPageInBrowser();
+        },
+        onCopyUrl: e => {
+            e.stopPropagation();
+            statusUrlToClipboard(props.status, dispatch)
+        },
+        onCopyJson: e => {
+            e.stopPropagation();
+            copyJson(props.status, dispatch);
+        },
+        onCorrectTweet: e => {
+            e.stopPropagation();
+            correctThisTweet(props.status, props.owner, dispatch);
+        },
+    };
+}
+
+export default connect(null, mapDispatch)(OtherActionsButton);

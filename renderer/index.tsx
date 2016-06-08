@@ -19,7 +19,7 @@ const fs = global.require('fs');
 const electron = global.require('electron');
 const app = electron.remote.app;
 
-if (process.env.YOURFUKUROU_WHY_DID_YOU_UPDATE) {
+if (global.process.env.YOURFUKUROU_WHY_DID_YOU_UPDATE) {
     whyDidYouUpdate(React);
 }
 
