@@ -1168,6 +1168,7 @@ body {
   height: auto;
   flex: none;
   border-bottom: solid 1px var(--color-timeline-border);
+  box-shadow: 0 4px 4px -4px #aaaaaa;
 }
 
 .user-timeline__tweets {
@@ -1186,4 +1187,5 @@ body {
 .rc-tooltip-inner {
   padding: 0;
   border: 0;
+  box-shadow: 0 0 4px 1px #aaaaaa;
 }
