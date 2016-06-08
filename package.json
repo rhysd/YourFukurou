@@ -78,7 +78,9 @@
   "ava": {
     "files": [
       "test/e2e/story/initial_timeline.js",
-      "test/e2e/story/send_and_delete_tweet.js"
+      "test/e2e/story/send_and_delete_tweet.js",
+      "test/e2e/story/switch_timeline.js",
+      "test/e2e/story/actions.js"
     ],
     "timeout": "60s",
     "serial": true
