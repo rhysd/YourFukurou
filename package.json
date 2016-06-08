@@ -13,7 +13,7 @@
     "app": "NODE_ENV=production ./bin/cli.js",
     "debug": "NODE_ENV=development ./bin/cli.js",
     "dummy": "NODE_ENV=development YOURFUKUROU_DUMMY_TWEETS=true ./bin/cli.js",
-    "watch": "guard --watchdir main renderer",
+    "watch": "guard --watchdir main renderer test",
     "lint": "tslint $(git ls-files | grep -E \".tsx?$\") && stylelint styles/style.css",
     "build-test": "tsc --pretty -p test/e2e",
     "test": "npm run build-test && ava"
@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/rhysd/YourFukurou#readme",
   "devDependencies": {
-    "ava": "^0.15.2",
+    "ava": "github:avajs/ava",
     "browserify": "^13.0.1",
     "electron-packager": "^7.0.3",
     "spectron": "^3.2.2",

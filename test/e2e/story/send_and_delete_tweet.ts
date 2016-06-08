@@ -51,6 +51,7 @@ test(async (t) => {
     */
     let tw = await timeline.firstTweet();
 
+    await tw.click(); // Focus to show action buttons
     await tw.delete();
     tw = await timeline.findTweetByText(text);
     t.is(tw, null);

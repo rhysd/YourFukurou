@@ -11,8 +11,18 @@ export default class Timeline {
         return this;
     }
 
+    async waitForTweet() {
+        await this.client.waitForExist('.tweet__body', DefaultTimeout);
+        return this;
+    }
+
     async firstTweet() {
         const e = await this.client.element('.tweet__body');
+        return new Tweet(this.client, e.value.ELEMENT);
+    }
+
+    async secondTweet() {
+        const e = await this.client.element('.tweet__body:nth-Child(2)');
         return new Tweet(this.client, e.value.ELEMENT);
     }
 
