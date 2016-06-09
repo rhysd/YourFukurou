@@ -167,6 +167,38 @@ If some number value is specified, number of items in timeline is limited to the
 }
 ```
 
+
+## Screenshots
+
+- Timeline
+
+| `expand_tweet=always` (default) | `expand_tweet=focused` |
+|---------------------------------|------------------------|
+| ![full view](https://raw.githubusercontent.com/rhysd/ss/master/YourFukurou/full-view.png) | ![mini view](https://raw.githubusercontent.com/rhysd/ss/master/YourFukurou/mini-view.png) |
+
+- Mentions and Activities
+
+| `expand_tweet=always` (default) | `expand_tweet=focused` |
+|---------------------------------|------------------------|
+| ![full view](https://raw.githubusercontent.com/rhysd/ss/master/YourFukurou/activity_full.png) | ![mini view]() |
+
+- User Profile Popup and Drawer Timeline
+
+![user profile popup and drawer timeline](https://raw.githubusercontent.com/rhysd/ss/master/YourFukurou/user-popup-and-drawer-timeline.gif)
+
+- Tweet Form
+
+![tweet form](https://raw.githubusercontent.com/rhysd/ss/master/YourFukurou/tweet-form.png)
+
+- Reply Form
+
+![reply form](https://github.com/rhysd/ss/blob/master/YourFukurou/reply-form.png)
+
+- Screen Name Completion
+
+![completion](https://raw.githubusercontent.com/rhysd/ss/master/YourFukurou/completion.png)
+
+
 ## Plugin
 
 Plugin is a Node.js module.  User specifies the path to it with `config.json` configuration file.  The module will be loaded using `require()` in application.

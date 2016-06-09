@@ -1,10 +1,9 @@
 /bower_components
 /node_modules
-/npm-debug.log
+npm-debug.log
 /build
 /typings
 /renderer/js
-/env.sh
 /test/e2e/**/*.js
 /test/e2e/**/config.json
 sub_account_tokens.sh

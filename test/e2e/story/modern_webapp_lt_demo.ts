@@ -36,7 +36,7 @@ test(async (t) => {
     const timeline = await message.waitForMessageDismissed();
 
     // Wait for receiving sent tweet via user stream
-    await client.pause(3000);
+    await client.pause(SLOW_DOWN);
 
     const tw = await timeline.firstTweet();
     await tw.click(); // Focus to show action buttons
