@@ -1,6 +1,7 @@
 const {ipcRenderer: ipc} = global.require('electron');
 import {
     addTweetToTimeline,
+    addTweetsToTimeline,
     addMentions,
     addUserTweets,
     addRejectedUserIds,
@@ -168,9 +169,7 @@ export default class IpcChannelProxy {
             Store.dispatch(addRejectedUserIds(rejected_ids));
             Store.dispatch(addNoRetweetUserIds(no_retweet_ids));
 
-            for (const tw of tweets) {
-                Store.dispatch(addTweetToTimeline(new Tweet(tw)));
-            }
+            Store.dispatch(addTweetsToTimeline(tweets.map(tw => new Tweet(tw))));
             DB.accounts.storeAccountsInTweets(tweets);
             DB.hashtags.storeHashtagsInTweets(tweets);
 

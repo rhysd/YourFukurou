@@ -18,6 +18,7 @@ export enum Kind {
     NotImplementedYet,
 
     AddTweetToTimeline,
+    AddTweetsToTimeline,
     SetCurrentUser,
     UpdateCurrentUser,
     DeleteStatusInTimeline,
@@ -108,6 +109,16 @@ export function addTweetToTimeline(status: Tweet) {
         setImmediate(() => dispatch({
             type: Kind.AddTweetToTimeline,
             status,
+        }));
+    };
+}
+
+export function addTweetsToTimeline(statuses: Tweet[]) {
+    'use strict';
+    return (dispatch: Redux.Dispatch) => {
+        setImmediate(() => dispatch({
+            type: Kind.AddTweetsToTimeline,
+            statuses,
         }));
     };
 }

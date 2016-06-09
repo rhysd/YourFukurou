@@ -234,6 +234,14 @@ export default class TimelineState {
         return [home.delete(index).unshift(status), next_focus_index];
     }
 
+    addNewTweets(statuses: Tweet[]) {
+        let next: TimelineState = this;
+        for (const s of statuses) {
+            next = next.addNewTweet(s);
+        }
+        return next;
+    }
+
     addNewTweet(status: Tweet) {
         const muted_or_blocked = this.checkMutedOrBlocked(status);
         if (muted_or_blocked) {

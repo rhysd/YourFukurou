@@ -5,6 +5,7 @@ export default function timeline(state: TimelineState = DefaultTimelineState, ac
     'use strict';
     switch (action.type) {
         case Kind.AddTweetToTimeline:     return state.addNewTweet(action.status);
+        case Kind.AddTweetsToTimeline:     return state.addNewTweets(action.statuses);
         case Kind.ChangeCurrentTimeline:  return state.switchTimeline(action.timeline);
         case Kind.FocusOnItem:            return state.focusOn(action.index);
         case Kind.FocusNextItem:          return state.focusNext();
