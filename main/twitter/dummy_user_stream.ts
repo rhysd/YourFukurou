@@ -1,12 +1,11 @@
-import {readFile} from 'fs';
-import {join} from 'path';
-import {app} from 'electron';
 import * as Twit from 'twit';
 import log from '../log';
 import {Sender} from '../ipc';
+import Fixture from './fixture';
 
 export default class DummyUserStream {
     running: boolean;
+    fixture: Fixture;
 
     constructor(
         private sender: Sender
@@ -19,13 +18,7 @@ export default class DummyUserStream {
         this.running = true;
 
         log.debug('Starting to send dummy stream');
-        const dummy_json_path = join(app.getPath('userData'), 'dummy_stream_tweets.json');
-        readFile(dummy_json_path, 'utf8', (err, data) => {
-            if (err) {
-                log.error('File not found:', dummy_json_path);
-                return;
-            }
-            const tweets = JSON.parse(data) as Object[];
+        this.fixture.read('stream_tweets').then((tweets: Object[]) => {
             let idx = 0;
 
             const random_range =

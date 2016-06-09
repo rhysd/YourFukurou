@@ -1,11 +1,10 @@
-import {join} from 'path';
-import {readFile} from 'fs';
-import {app} from 'electron';
 import * as Ipc from '../ipc';
 import log from '../log';
+import Fixture from './fixture';
 
 export default class DummyRestAPI {
     private subscriber: Ipc.Subscriber;
+    private fixture: Fixture;
 
     constructor(private sender: Ipc.Sender) {
         const s = new Ipc.Subscriber();
@@ -19,6 +18,7 @@ export default class DummyRestAPI {
         s.subscribe('yf:request-unfollow', (user_id: number) => this.unfollow(user_id));
 
         this.subscriber = s;
+        this.fixture = new Fixture();
     }
 
     updateStatus(text: string, in_reply_to?: string) {
@@ -58,15 +58,14 @@ export default class DummyRestAPI {
     }
 
     sendAuthenticatedAccount() {
-        return this.readJson('dummy_account.json')
+        return this.fixture.read('account')
             .then(account => this.sender.send('yf:my-account', account));
     }
 
     fetchHomeTimeline(params: Object = {include_entities: true}) {
         // TODO: Send home timeline to 
         log.info('fetchHomeTimeline:', params);
-        return this.readJson('dummy_home_tweets.json')
-            .catch(e => [] as Object[]);
+        return this.fixture.read('home_tweets').catch(e => [] as Object[]);
     }
 
     sendHomeTimeline(params: Object = {include_entities: true}) {
@@ -81,8 +80,7 @@ export default class DummyRestAPI {
 
     fetchMentionTimeline(params: Object = {include_entities: true}) {
         log.info('fetchMentionTimeline:', params);
-        return this.readJson('dummy_mention_tweets.json')
-            .catch(e => [] as Object[]);
+        return this.fixture.read('mention_tweets').catch(e => [] as Object[]);
     }
 
     sendMentionTimeline(params: Object = {include_entities: true}) {
@@ -93,7 +91,7 @@ export default class DummyRestAPI {
 
     fetchMuteIds(params: Object = {}) {
         log.info('fetchMuteIds:', params);
-        return this.readJson('dummy_mute_ids.json').catch(e => [] as number[]);
+        return this.fixture.read('mute_ids').catch(e => [] as number[]);
     }
 
     sendMuteIds(params: Object = {}) {
@@ -104,12 +102,12 @@ export default class DummyRestAPI {
 
     fetchNoRetweets(params: Object = {}) {
         log.info('fetchNoRetweets:', params);
-        return this.readJson('dummy_nortweet_ids.json').catch(e => [] as number[]);
+        return this.fixture.read('nortweet_ids').catch(e => [] as number[]);
     }
 
     fetchBlockIds(params: Object = {}) {
         log.info('fetchBlockIds:', params);
-        return this.readJson('dummy_block_ids.json').catch(e => [] as number[]);
+        return this.fixture.read('block_ids').catch(e => [] as number[]);
     }
 
     sendBlockIds(params: Object = {}) {
@@ -117,21 +115,4 @@ export default class DummyRestAPI {
         return this.fetchBlockIds(params)
             .then(ids => this.sender.send('yf:rejected-ids', ids));
     }
-
-    private readJson(file: string) {
-        const json_path = join(app.getPath('userData'), file);
-        return new Promise<any>((resolve, reject) => {
-            readFile(json_path, 'utf8', (err, data) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                resolve(JSON.parse(data));
-            });
-        }).catch((e: Error) => {
-            log.error(e);
-            throw e;
-        });
-    }
-
 }
