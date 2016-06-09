@@ -1,17 +1,28 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
 import TimelineActivity, {TimelineActivityKind} from '../item/timeline_activity';
 import Tweet, {TwitterUser} from '../item/tweet';
 import Icon from './icon';
 import TweetText from './tweet/text';
 import ExternalLink from './external_link';
 import log from '../log';
+import {
+    focusOnItem,
+    unfocusItem,
+} from '../actions';
 
-interface TwitterActivityProps extends React.Props<any> {
+interface ConnectedProps extends React.Props<any> {
     activity: TimelineActivity;
     focused?: boolean;
     collapsed?: boolean;
-    onClick?: (e: MouseEvent) => void;
+    itemIndex?: number;
 }
+
+interface DispatchProps {
+    onClick: (e: MouseEvent) => void;
+}
+
+type TwitterActivityProps = ConnectedProps & DispatchProps;
 
 function renderBadge(kind: TimelineActivityKind) {
     'use strict';
@@ -123,4 +134,20 @@ function renderCollapsed(props: TwitterActivityProps) {
 
 const TwitterActivity: React.StatelessComponent<TwitterActivityProps> =
     props => props.collapsed ?  renderCollapsed(props) : renderExpanded(props);
-export default TwitterActivity;
+
+function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+    'use strict';
+    return {
+        onClick: e => {
+            e.stopPropagation();
+            if (props.itemIndex === undefined) {
+                return;
+            }
+            const action = props.focused ?
+                unfocusItem() : focusOnItem(props.itemIndex);
+            dispatch(action);
+        },
+    };
+}
+
+export default connect(null, mapDispatch)(TwitterActivity);

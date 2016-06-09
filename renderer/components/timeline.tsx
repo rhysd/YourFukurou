@@ -20,8 +20,6 @@ import {MessageState} from '../reducers/message';
 import {
     closeTweetMedia,
     moveToNthPicturePreview,
-    focusOnItem,
-    unfocusItem,
     closeSlaveTimeline,
 } from '../actions';
 import Config from '../config';
@@ -102,17 +100,10 @@ class Timeline extends React.Component<TimelineProps, {}> {
         }
     }
 
-    toggleFocus(focused: boolean, idx: number) {
-        const action = focused ?
-            unfocusItem() : focusOnItem(idx);
-        this.props.dispatch(action);
-    }
-
     renderItem(idx: number, key: string, related_ids: string[], focused_user_id: number) {
         const {items, focus_index, kind, owner, friends} = this.props;
         const i = items.get(idx);
         const focused = idx === focus_index;
-        const click_handler = () => this.toggleFocus(focused, idx);
         if (i instanceof TweetItem) {
             if (Config.shouldExpandTweet(focused)) {
                 return <Tweet
@@ -123,7 +114,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
                     related={related_ids.indexOf(i.id) !== -1}
                     focused_user={focused_user_id === i.getMainStatus().user.id}
                     friends={friends}
-                    onClick={click_handler}
+                    itemIndex={idx}
                     key={key}
                 />;
             } else {
@@ -134,7 +125,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
                     focused={focused}
                     related={related_ids.indexOf(i.id) !== -1}
                     focused_user={focused_user_id === i.getMainStatus().user.id}
-                    onClick={click_handler}
+                    itemIndex={idx}
                     key={key}
                 />;
             }
@@ -143,7 +134,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
                 activity={i}
                 focused={focused}
                 collapsed={!Config.shouldExpandTweet(focused)}
-                onClick={click_handler}
+                itemIndex={idx}
                 key={key}
             />;
         } else if (i instanceof Separator) {

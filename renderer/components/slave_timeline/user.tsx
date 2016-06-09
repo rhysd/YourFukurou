@@ -33,8 +33,8 @@ function renderTweets(props: UserSlaveProps) {
                 owner={owner}
                 focused={focused}
                 friends={friends}
+                itemIndex={idx}
                 key={idx}
-                onClick={() => dispatch(focused ? blurSlaveTimeline() : focusSlaveOn(idx))}
             />;
         } else {
             log.error('Invalid item for slave user timeline:', item);

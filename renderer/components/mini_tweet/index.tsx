@@ -6,20 +6,25 @@ import MiniTweetSecondary from './secondary';
 import MiniTweetText from './text';
 import UndraggableClickable from '../undraggable_clickable';
 import {TimelineKind} from '../../states/timeline';
-import {openPicturePreview} from '../../actions';
+import {
+    openPicturePreview,
+    focusOnItem,
+    unfocusItem,
+} from '../../actions';
 
 interface ConnectedProps extends React.Props<any> {
     status: Tweet;
     owner: TwitterUser;
     timeline: TimelineKind;
-    onClick: (e: React.MouseEvent) => void;
     focused?: boolean;
     related?: boolean;
     focused_user?: boolean;
+    itemIndex?: number;
 }
 
 interface DispatchProps {
     onPicClicked: (e: React.MouseEvent) => void;
+    onClick: (e: React.MouseEvent) => void;
 }
 
 type MiniTweetProps = ConnectedProps & DispatchProps;
@@ -79,6 +84,15 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
             e.stopPropagation();
             const urls = props.status.getMainStatus().media.map(m => m.media_url);
             dispatch(openPicturePreview(urls));
+        },
+        onClick: e => {
+            e.stopPropagation();
+            if (props.itemIndex === undefined) {
+                return;
+            }
+            dispatch(
+                props.focused ? unfocusItem() : focusOnItem(props.itemIndex)
+            );
         },
     };
 }

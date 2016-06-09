@@ -8,13 +8,17 @@ import PopupIcon from './popup_icon';
 import UndraggableClickable from '../undraggable_clickable';
 import State from '../../states/root';
 import {TimelineKind} from '../../states/timeline';
+import {
+    focusOnItem,
+    unfocusItem,
+} from '../../actions';
 
 // TODO:
 // Enable to expand/contract tweet panel like as YoruFukurou
 // TODO:
 // Enable to focus/unfocus tweet panel like as YoruFukurou
 
-interface TweetProps extends React.Props<any> {
+interface ConnectedProps extends React.Props<any> {
     status: TweetItem;
     owner: TwitterUser;
     timeline?: TimelineKind;
@@ -22,8 +26,14 @@ interface TweetProps extends React.Props<any> {
     related?: boolean;
     focused_user?: boolean;
     friends?: List<number>;
-    onClick?: (e: React.MouseEvent) => void;
+    itemIndex?: number;
 }
+
+interface DispatchProps {
+    onClick: (e: React.MouseEvent) => void;
+}
+
+type TweetProps = ConnectedProps & DispatchProps;
 
 function getClass(tw: TweetItem, props: TweetProps) {
     'use strict';
@@ -61,4 +71,19 @@ const Tweet: React.StatelessComponent<TweetProps> = props => {
     );
 };
 
-export default Tweet;
+function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+    'use strict';
+    return {
+        onClick: e => {
+            e.stopPropagation();
+            if (props.itemIndex === undefined) {
+                return;
+            }
+            const action = props.focused ?
+                unfocusItem() : focusOnItem(props.itemIndex);
+            dispatch(action);
+        },
+    };
+}
+
+export default connect(null, mapDispatch)(Tweet);
