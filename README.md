@@ -32,6 +32,10 @@ You can specify your favorite styling by putting `user.css` in the application d
 
 To look up class names, you can use Chrome DevTools.  You can open DevTools from menu or setting `NODE_ENV` environment variable to 'development'.
 
+## Drawer Timeline
+
+You can see temporary timeline (e.g. user specific tweets) in drawer.  When you click icon in tweets or screen name or icon in profile popup, the user information and the user's tweets are shown in drawer.  Keybind is switched from global keybinds to drawer timeline keybinds.
+
 ## Keyboard Shortcuts
 
 There are some keyboard shortcut contexts.  They can be customizable by action name (Please see below 'JSON Configuration File' section).
@@ -80,6 +84,23 @@ These shortcuts are applied when preview of pictures in tweet is opened.  Global
 | `k` or `h` or `left`  | Show previous picture in preview. | `previous-picture` |
 | `escape` or `x`       | Close preview.                    | `close-preview`    |
 
+### Drawner Timeline
+
+| Default         | Description                                | Action Name        |
+|-----------------|--------------------------------------------|--------------------|
+| `tab`           | Open tweet form.                           | `open-tweet-form`  |
+| `i`             | Move focus to top.                         | `focus-top`        |
+| `j`             | Move focus to next.                        | `focus-next`       |
+| `k`             | Move focus to previous.                    | `focus-previous`   |
+| `m`             | Move focus to bottom.                      | `focus-bottom`     |
+| `o`             | Open picture preview in focused tweet.     | `open-media`       |
+| `O`             | Open focused tweet page in browser.        | `open-status-page` |
+| `l`             | Open all links in focused tweet.           | `open-links`       |
+| `ctrl+r`        | Retweet focused tweet.                     | `retweet`          |
+| `ctrl+f`        | Like focused tweet.                        | `like`             |
+| `ctrl+D`        | Delete focused tweet.                      | `delete-status`    |
+| `enter`         | Open tweet form to reply to focused tweet. | `reply`            |
+| `escape` or `x` | Back to main timeline                      | `close`            |
 
 ## JSON Configuration File
 

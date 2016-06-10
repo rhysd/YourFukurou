@@ -1,4 +1,5 @@
 import * as I from 'immutable';
+import {Twitter} from 'twit';
 import KeyBinds from './keybinds';
 import Store from '../store';
 import {
@@ -8,10 +9,130 @@ import {
     focusSlaveTop,
     focusSlaveBottom,
     blurSlaveTimeline,
+    openEditor,
+    openEditorForReply,
+    openPicturePreview,
+    createLike,
+    destroyLike,
+    sendRetweet,
+    undoRetweet,
+    destroyStatus,
+    openUserTimeline,
 } from '../actions';
+import {UserTimeline} from '../states/slave_timeline';
 import log from '../log';
 
+function getFocusedStatus() {
+    'use strict';
+    const slave = Store.getState().slaveTimeline;
+    if (slave instanceof UserTimeline) {
+        return slave.getFocusedStatus();
+    } else {
+        return null;
+    }
+}
+
+function openMedia() {
+    'use strict';
+    let status = getFocusedStatus();
+    if (status === null) {
+        return;
+    }
+    status = status.getMainStatus();
+
+    let media = status.media;
+    if (media.length === 0 && status.hasQuote()) {
+        media = status.quoted_status.media;
+    }
+    if (media.length === 0) {
+        return;
+    }
+
+    Store.dispatch(
+        openPicturePreview(
+            media.map((m: Twitter.MediaEntity) => m.media_url)
+        )
+    );
+}
+
+function openLinks() {
+    'use strict';
+    const status = getFocusedStatus();
+    if (status !== null) {
+        status.openAllLinksInBrowser();
+    }
+}
+
+function openStatus() {
+    'use strict';
+    const status = getFocusedStatus();
+    if (status !== null) {
+        status.openStatusPageInBrowser();
+    }
+}
+
+function toggleRetweet() {
+    'use strict';
+    const status = getFocusedStatus();
+    if (status === null) {
+        return;
+    }
+    const s = status.getMainStatus();
+    const action = s.retweeted ? undoRetweet(s.id) : sendRetweet(s.id);
+    Store.dispatch(action);
+}
+
+function toggleLike() {
+    'use strict';
+    const status = getFocusedStatus();
+    if (status === null) {
+        return;
+    }
+    const s = status.getMainStatus();
+    const action = s.favorited ? destroyLike(s.id) : createLike(s.id);
+    Store.dispatch(action);
+}
+
+function reply() {
+    'use strict';
+    const owner = Store.getState().timeline.user;
+    const status = getFocusedStatus();
+    const action =
+        status === null ?
+            openEditor() :
+            openEditorForReply(status.getMainStatus(), owner);
+    Store.dispatch(action);
+}
+
+function deleteStatus() {
+    'use strict';
+    const status = getFocusedStatus();
+    if (status === null) {
+        return;
+    }
+    Store.dispatch(destroyStatus(status.id));
+}
+
+function showUser() {
+    'use strict';
+    const status = getFocusedStatus();
+    if (status === null) {
+        return;
+    }
+    const user = status.getMainStatus().user;
+    Store.dispatch(openUserTimeline(user));
+}
+
 export type SlaveTimelineAction =
+    'open-tweet-form' |
+    'open-media' |
+    'open-links' |
+    'retweet' |
+    'like' |
+    'reply' |
+    'delete-status' |
+    'open-status-page' |
+    'show-user' |
     'focus-top' |
     'focus-bottom' |
     'focus-next' |
@@ -20,6 +141,15 @@ export type SlaveTimelineAction =
     'close';
 
 const DefaultMap = I.Map<string, SlaveTimelineAction>({
+    'tab': 'open-tweet-form',
+    'o': 'open-media',
+    'l': 'open-links',
+    'ctrl+r': 'retweet',
+    'ctrl+f': 'like',
+    'enter': 'reply',
+    'ctrl+D': 'delete-status',
+    'O': 'open-status-page',
+    'u': 'show-user',
     'j': 'focus-next',
     'k': 'focus-prev',
     'i': 'focus-top',
@@ -35,6 +165,15 @@ const ActionHandlers = I.Map<SlaveTimelineAction, () => void>({
     'focus-top': () => Store.dispatch(focusSlaveTop()),
     'focus-bottom': () => Store.dispatch(focusSlaveBottom()),
     'blur': () => Store.dispatch(blurSlaveTimeline()),
+    'open-tweet-form': () => Store.dispatch(openEditor()),
+    'open-media': openMedia,
+    'open-links': openLinks,
+    'retweet': toggleRetweet,
+    'like': toggleLike,
+    'reply': reply,
+    'delete-status': deleteStatus,
+    'open-status-page': openStatus,
+    'show-user': showUser,
 });
 
 interface Listenable {

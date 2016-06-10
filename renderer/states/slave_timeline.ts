@@ -31,6 +31,18 @@ export class UserTimeline implements SlaveTimeline {
         public keybinds: SlaveTimelineKeymaps = newKeybinds()
     ) {}
 
+    getFocusedStatus() {
+        if (this.focus_index === null) {
+            return null;
+        }
+        const item = this.items.get(this.focus_index);
+        if (item instanceof Tweet) {
+            return item;
+        } else {
+            return null;
+        }
+    }
+
     addTweets(statuses: Tweet[]) {
         const next_items = this.items.unshift.apply(this.items, statuses);
         const focus_idx = this.focus_index === null ? null : (this.focus_index + statuses.length);
