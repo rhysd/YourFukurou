@@ -214,11 +214,14 @@ class Timeline extends React.Component<TimelineProps, {}> {
     // When 'expand_tweet' == 'never' or 'expand_tweet' == 'focused' and focus == null,
     // we can know all elements' height.  Scrolling can be optimized.
     render() {
-        const {message, dispatch, items, focus_index} = this.props;
+        const {message, dispatch, items, focus_index, overlay} = this.props;
         const related_ids = this.getRelatedStatusIds();
         const focused_user_id = this.getFocusedUserId();
+        const style = {
+            overflowY: overlay ? 'visible' : undefined
+        };
         return (
-            <div className="timeline">
+            <div className="timeline" style={style}>
                 {message === null ?
                     undefined :
                     <Message
