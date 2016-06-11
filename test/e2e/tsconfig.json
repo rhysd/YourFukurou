@@ -18,7 +18,6 @@
     "story/send_and_delete_tweet.ts",
     "story/switch_timeline.ts",
     "story/actions.ts",
-    "story/modern_webapp_lt_demo.ts",
     "typings/spectron.d.ts"
   ]
 }
