@@ -1,5 +1,11 @@
 import {join} from 'path';
-import {app, BrowserWindow, powerMonitor, globalShortcut} from 'electron';
+import {
+    app,
+    BrowserWindow,
+    powerMonitor,
+    globalShortcut,
+    powerSaveBlocker,
+} from 'electron';
 import windowState = require('electron-window-state');
 import * as Twit from 'twit';
 import {authenticate, load_cached_tokens} from './authenticator';
@@ -203,12 +209,18 @@ function openWindow(access: AccessToken) {
         }
 
         if (!!global.config.sticky_window) {
+            log.debug('Sticky mode: On');
             win.setVisibleOnAllWorkspaces(true);
             win.on('blur', () => {
                 if (!win.webContents.isDevToolsFocused()) {
                     win.hide();
                 }
             });
+        }
+
+        if (!!global.config.caffeinated) {
+            log.debug('Caffeinated: App suspension will be blocked.');
+            powerSaveBlocker.start('prevent-app-suspension')
         }
     });
 }

@@ -153,6 +153,10 @@ For example `CmrOrCtrl+.` represents 'Ctrl' (in OS X, 'Command') modifier and do
 
 When the hot key is pressed, app window is toggled.  When window is not focused, app will be focused.  Otherwise, app will be hidden.
 
+### `sticky_mode`
+
+If this value is set to `true`, window will be in 'sticky' mode.  Window will be shown in **every** workspace and hidden on other window focused.  This mode is intended to be used with `hotkey_accelerator` configuration.  You can toggle YourFukurou window with global shortcut like Alfred app.
+
 ### `keymaps`
 
 Coming soon.
@@ -161,9 +165,9 @@ Coming soon.
 
 host + port number joined with ':' such as 'example.com:80080'.  When `null` is set, `$https_proxy` environment variable will be used.
 
-### `sticky_mode`
+### `caffeinated`
 
-If this value is set to `true`, window will be in 'sticky' mode.  Window will be shown in **every** workspace and hidden on other window focused.  This mode is intended to be used with `hotkey_accelerator` configuration.  You can toggle YourFukurou window with global shortcut like Alfred app.
+If this value is set to `true`, app will never be in suspension mode.  OS usually suspends application on PC sleeping.  However, it makes YourFukurou stop subscribing user stream.  When `caffeineted` is `true`, app can continue to connect to user stream even if PC goes to sleep.  Note that this will take more buttery while PC sleeping.
 
 ### `max_timeline_items`
 
@@ -187,6 +191,7 @@ If some number value is specified, number of items in timeline is limited to the
   },
   "proxy": "example.com:80080",
   "sticky_mode": true,
+  "caffeinated": true,
   "plugin": [
     "my-plugin.js"
   ]

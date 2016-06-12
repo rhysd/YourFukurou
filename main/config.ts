@@ -16,6 +16,7 @@ export const DefaultConfig = {
     max_timeline_items: null,
     proxy: null,
     sticky_window: false,
+    caffeinated: false,
 } as Config;
 
 export default function loadConfig() {
