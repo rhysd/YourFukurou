@@ -399,11 +399,16 @@ body {
 }
 
 .tweet__quoted-header {
+  display: flex;
   color: #777777;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   margin-bottom: 4px;
+}
+
+.tweet__quoted-screenname {
+  margin-left: 4px;
 }
 
 .tweet__quoted-text {
