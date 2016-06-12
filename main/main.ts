@@ -34,7 +34,7 @@ const consumer_key = process.env.YOURFUKUROU_CONSUMER_KEY || 'H4fJ2rgNuH2UiOXuPB
 const consumer_secret = process.env.YOURFUKUROU_CONSUMER_KEY_SECRET || 'azYRjJn6emdsOIUhepy0Wygmaq9PltEnpsx4P4BfU1HMp5Unmm';
 const should_use_dummy_data = process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS;
 
-const prepare_app = loadConfig()
+const load_config_and_authenticate = loadConfig()
         .then(c => {
             global.config_path = c[0];
             global.config = c[1];
@@ -81,7 +81,7 @@ function resumeStreamOnPowerOn(stream: TwitterUserStream | DummyUserStream) {
     });
 }
 
-function startApp([access]: [AccessToken]) {
+function startApp(access: AccessToken) {
     'use strict';
 
     if (!access.token || !access.token_secret) {
@@ -153,7 +153,7 @@ function startApp([access]: [AccessToken]) {
         });
 }
 
-function openWindow() {
+function openWindow(access: AccessToken) {
     'use strict';
     return new Promise<AccessToken>((resolve, reject) => {
         log.debug('Starting to open window');
@@ -186,7 +186,7 @@ function openWindow() {
 
         win.webContents.on('dom-ready', () => {
             setupHotkey();
-            resolve();
+            resolve(access);
         });
 
         win.loadURL(index_html);
@@ -201,15 +201,22 @@ function openWindow() {
             win.webContents.on('devtools-opened', () => setImmediate(() => win.focus()));
             win.webContents.openDevTools({mode: 'detach'});
         }
+
+        if (!!global.config.sticky_window) {
+            win.setVisibleOnAllWorkspaces(true);
+            win.on('blur', () => {
+                if (!win.webContents.isDevToolsFocused()) {
+                    win.hide();
+                }
+            });
+        }
     });
 }
 
 app.once(
     'ready',
-    () => Promise.all([
-            prepare_app,
-            openWindow(),
-        ])
+    () => load_config_and_authenticate
+        .then(openWindow)
         .then(startApp)
         .catch(e => log.error('Unexpected error on "ready" callback:', e))
 );

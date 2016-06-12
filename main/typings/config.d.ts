@@ -19,4 +19,5 @@ interface Config {
     mute: boolean | MuteConfig;
     max_timeline_items: number;
     proxy: string;
+    sticky_window: boolean;
 }

@@ -161,6 +161,10 @@ Coming soon.
 
 host + port number joined with ':' such as 'example.com:80080'.  When `null` is set, `$https_proxy` environment variable will be used.
 
+### `sticky_mode`
+
+If this value is set to `true`, window will be in 'sticky' mode.  Window will be shown in **every** workspace and hidden on other window focused.  This mode is intended to be used with `hotkey_accelerator` configuration.  You can toggle YourFukurou window with global shortcut like Alfred app.
+
 ### `max_timeline_items`
 
 If some number value is specified, number of items in timeline is limited to the number.  If you follow so many users and you feel updating timeline consumes too much CPU power, please limit the number of items in timeline.  In most cases, you need not to specify this value and can leave this value as `null`.
@@ -182,6 +186,7 @@ If some number value is specified, number of items in timeline is limited to the
     "mention": true
   },
   "proxy": "example.com:80080",
+  "sticky_mode": true,
   "plugin": [
     "my-plugin.js"
   ]
