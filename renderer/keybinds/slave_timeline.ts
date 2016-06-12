@@ -22,6 +22,32 @@ import {
 import {UserTimeline} from '../states/slave_timeline';
 import log from '../log';
 
+function getCurrentUser() {
+    'use strict';
+    const slave = Store.getState().slaveTimeline;
+    if (slave instanceof UserTimeline) {
+        return slave.user;
+    } else {
+        return null;
+    }
+}
+
+function openUserPage() {
+    'use strict';
+    const user = getCurrentUser();
+    if (user !== null) {
+        user.openUserPageInBrowser();
+    }
+}
+
+function openUserWebsite() {
+    'use strict';
+    const user = getCurrentUser();
+    if (user !== null) {
+        user.openWebsiteInBrowser();
+    }
+}
+
 function getFocusedStatus() {
     'use strict';
     const slave = Store.getState().slaveTimeline;
@@ -138,6 +164,8 @@ export type SlaveTimelineAction =
     'focus-next' |
     'focus-prev' |
     'blur' |
+    'open-user-page' |
+    'open-user-website' |
     'close';
 
 const DefaultMap = I.Map<string, SlaveTimelineAction>({
@@ -155,6 +183,8 @@ const DefaultMap = I.Map<string, SlaveTimelineAction>({
     'i': 'focus-top',
     'm': 'focus-bottom',
     'escape': 'blur',
+    'ctrl+u': 'open-user-page',
+    'ctrl+w': 'open-user-website',
     'x': 'close',
 });
 
@@ -174,6 +204,8 @@ const ActionHandlers = I.Map<SlaveTimelineAction, () => void>({
     'delete-status': deleteStatus,
     'open-status-page': openStatus,
     'show-user': showUser,
+    'open-user-page': openUserPage,
+    'open-user-website': openUserWebsite,
 });
 
 interface Listenable {

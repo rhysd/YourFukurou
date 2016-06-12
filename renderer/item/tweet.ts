@@ -153,6 +153,18 @@ export class TwitterUser {
         return `https://twitter.com/${this.json.screen_name}`;
     }
 
+    openUserPageInBrowser() {
+        shell.openExternal(this.userPageUrl());
+    }
+
+    openWebsiteInBrowser() {
+        const url = this.user_site_url;
+        if (url === null) {
+            return;
+        }
+        shell.openExternal(url.expanded_url);
+    }
+
     private getBannerUrl(label: string) {
         if (!this.json.profile_banner_url) {
             return null;
