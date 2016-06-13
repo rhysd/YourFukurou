@@ -8,8 +8,14 @@ import Store from '../store';
 import PM from '../plugin_manager';
 import AppConfig from '../config';
 
+const {remote} = global.require('electron');
+
 function editReply(in_reply_to: Tweet) {
     'use strict';
+    const win = remote.getCurrentWindow();
+    if (!win.isFocused()) {
+        win.show();
+    }
     Store.dispatch(openEditorForReply(
         in_reply_to,
         Store.getState().timeline.user
