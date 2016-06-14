@@ -34,12 +34,8 @@ function onLikeClicked(status: Tweet, dispatch: Redux.Dispatch) {
     }
 }
 
-function onRetweetClicked(status: Tweet, owner: TwitterUser, dispatch: Redux.Dispatch) {
+function onRetweetClicked(status: Tweet, dispatch: Redux.Dispatch) {
     'use strict';
-    if (status.user.id === owner.id) {
-        dispatch(showMessage('You cannot retweet your tweet', 'error'));
-        return;
-    }
     if (status.user.protected) {
         dispatch(showMessage("Cannot retweet protected user's tweet", 'error'));
         return;
@@ -65,25 +61,9 @@ function getIcon(k: TweetActionKind) {
 function getColor(props: TweetActionButtonProps) {
     'use strict';
     switch (props.kind) {
-        case 'retweet': {
-            if (props.status.retweeted) {
-                return '#19cf86';
-            } else if (props.status.user.id === props.owner.id) {
-                // Note:
-                // Disable retweet button for my tweets.
-                return '#cccccc';
-            } else {
-                return undefined;
-            }
-        }
-        case 'like': {
-            if (props.status.favorited) {
-                return '#ff4f44';
-            } else {
-                return undefined;
-            }
-        }
-        default: return undefined;
+        case 'retweet': return props.status.retweeted ? '#19cf86' : undefined;
+        case 'like':    return props.status.favorited ? '#ff4f44' : undefined;
+        default:        return undefined;
     }
 }
 
@@ -132,7 +112,7 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
             e.stopPropagation();
             switch (props.kind) {
                 case 'reply':   dispatch(openEditorForReply(props.status, props.owner)); break;
-                case 'retweet': onRetweetClicked(props.status, props.owner, dispatch); break;
+                case 'retweet': onRetweetClicked(props.status, dispatch); break;
                 case 'like':    onLikeClicked(props.status, dispatch); break;
                 default:        break;
             }
