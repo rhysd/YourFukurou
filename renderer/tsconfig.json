@@ -72,6 +72,7 @@
     "typings/react-images.d.ts",
     "typings/react-list.d.ts",
     "typings/rc-tooltip.d.ts",
+    "typings/timing.d.ts",
     "../main/typings/twit.d.ts",
     "../main/typings/channel.d.ts",
     "../main/typings/config.d.ts"
