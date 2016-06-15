@@ -28,21 +28,18 @@ interface DispatchProps {
 type OtherActionsButtonProps = ConnectedProps & DispatchProps & React.Props<any>;
 
 function statusUrlToClipboard(status: Tweet, dispatch: Redux.Dispatch) {
-    'use strict';
     const url = status.getMainStatus().statusPageUrl();
     electron.clipboard.write({ text: url });
     dispatch(showMessage('Copied status URL to clipboard.', 'info'));
 }
 
 function copyJson(status: Tweet, dispatch: Redux.Dispatch) {
-    'use strict';
     const json = JSON.stringify(status.json, null, 2);
     electron.clipboard.write({ text: json });
     dispatch(showMessage('Copied status JSON to clipboard.', 'info'));
 }
 
 function renderDeleteThisTweet(props: OtherActionsButtonProps) {
-    'use strict';
     const isMyTweet = props.status.user.id === props.owner.id;
     if (!isMyTweet) {
         return undefined;
@@ -59,7 +56,6 @@ function renderDeleteThisTweet(props: OtherActionsButtonProps) {
 }
 
 function correctThisTweet(status: Tweet, owner: TwitterUser, dispatch: Redux.Dispatch) {
-    'use strict';
     dispatch(destroyStatus(status.id));
     if (status.in_reply_to_status !== null) {
         dispatch(openEditorForReply(status.in_reply_to_status, owner, status.text));
@@ -73,7 +69,6 @@ function correctThisTweet(status: Tweet, owner: TwitterUser, dispatch: Redux.Dis
 }
 
 function renderCorrectThisTweet(props: OtherActionsButtonProps) {
-    'use strict';
     const isMyTweet = props.status.user.id === props.owner.id;
     if (!isMyTweet) {
         return undefined;
@@ -90,7 +85,6 @@ function renderCorrectThisTweet(props: OtherActionsButtonProps) {
 }
 
 function doNotPropagateEvent(e: React.MouseEvent) {
-    'use strict';
     e.stopPropagation();
 }
 
@@ -136,7 +130,6 @@ const OtherActionsButton = (props: OtherActionsButtonProps) => {
 };
 
 function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
-    'use strict';
     return {
         onDeleteTweet: e => {
             e.stopPropagation();

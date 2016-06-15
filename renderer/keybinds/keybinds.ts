@@ -51,7 +51,6 @@ const SpecialChars = {
 } as {[c: string]: string};
 
 function getCharFrom(e: KeyEvent) {
-    'use strict';
     if (e.code in SpecialChars) {
         return SpecialChars[e.code];
     }

@@ -31,7 +31,6 @@ const FollowButton: React.StatelessComponent<FollowButtonProps> = props => {
 };
 
 function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
-    'use strict';
     return {
         onClick: e => {
             e.stopPropagation();

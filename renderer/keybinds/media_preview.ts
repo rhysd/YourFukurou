@@ -5,7 +5,6 @@ import {moveToNthPicturePreview, closeTweetMedia} from '../actions';
 import log from '../log';
 
 function nextPic() {
-    'use strict';
     const media = Store.getState().tweetMedia;
     if (!media.is_open) {
         return;
@@ -20,7 +19,6 @@ function nextPic() {
 }
 
 function prevPic() {
-    'use strict';
     const media = Store.getState().tweetMedia;
     if (!media.is_open) {
         return;

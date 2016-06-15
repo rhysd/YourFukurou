@@ -37,6 +37,9 @@
     "url": "https://github.com/rhysd/YourFukurou/issues"
   },
   "homepage": "https://github.com/rhysd/YourFukurou#readme",
+  "engines": {
+    "node": ">=6.0"
+  },
   "devDependencies": {
     "ava": "github:avajs/ava",
     "browserify": "^13.0.1",

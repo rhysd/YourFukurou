@@ -5,7 +5,6 @@ import {TweetTextToken, isHashtag, isMention, isUrl} from '../../tweet_parser';
 import log from '../../log';
 
 function mapTokenToElement(class_prefix: string, focused: boolean, token: TweetTextToken, key: number) {
-    'use strict';
 
     const class_for =
         (suffix: string) =>

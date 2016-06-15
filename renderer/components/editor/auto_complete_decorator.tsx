@@ -6,7 +6,6 @@ import {updateAutoCompletion, stopAutoCompletion} from '../../actions';
 export type AutoCompleteLabel = 'EMOJI' | 'SCREENNAME' | 'HASHTAG';
 
 function createAutoCompleteStrategy(re: RegExp) {
-    'use strict';
     return function autoCompleteStrategy(contentBlock: ContentBlock, callback: (s: number, e: number) => void) {
         const text = contentBlock.getText();
         while (true) {
@@ -29,7 +28,6 @@ export interface AutoCompleteProps extends React.Props<any> {
 }
 
 function createAutoCompleteComponent(label: AutoCompleteLabel) {
-    'use strict';
     class AutoComplete extends React.Component<AutoCompleteProps, {}> {
         node: HTMLElement;
         label: AutoCompleteLabel;
@@ -70,7 +68,6 @@ function createAutoCompleteComponent(label: AutoCompleteLabel) {
 }
 
 export default function autoCompleteFactory(re: RegExp, label: AutoCompleteLabel) {
-    'use strict';
     return {
         strategy: createAutoCompleteStrategy(re),
         component: createAutoCompleteComponent(label),

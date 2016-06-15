@@ -57,7 +57,6 @@ interface Props extends React.Props<any> {
 }
 
 function openConfigWithEditor() {
-    'use strict';
     const electron = global.require('electron');
     const config_path = electron.remote.getGlobal('config_path');
     const open = electron.shell.openItem;
@@ -66,12 +65,10 @@ function openConfigWithEditor() {
 }
 
 function openDirectMessagePage() {
-    'use strict';
     shell.openExternal('https://mobile.twitter.com/messages');
 }
 
 function openSearchPage() {
-    'use strict';
     shell.openExternal('https://twitter.com/search-home');
 }
 
@@ -126,7 +123,6 @@ const SideMenu = (props: Props) => {
 };
 
 function select(state: State) {
-    'use strict';
     return {
         user: state.timeline.user,
         kind: state.timeline.kind,
@@ -136,7 +132,6 @@ function select(state: State) {
 }
 
 function mapDispatch(dispatch: Redux.Dispatch) {
-    'use strict';
     return {
         onEdit: () => dispatch(toggleEditor()),
         onHome: () => dispatch(changeCurrentTimeline('home')),

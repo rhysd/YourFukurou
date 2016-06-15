@@ -4,6 +4,9 @@ import {TwitterUser} from '../item/tweet';
 import {Twitter} from 'twit';
 import {SuggestionItem, MaxSuggestions} from '../components/editor/suggestions';
 
+// https://github.com/dfahlander/Dexie.js#hello-world-typescript
+const Promise = Dexie.Promise;
+
 interface AccountsScheme {
     id: number;
     screenname: string;
@@ -15,7 +18,6 @@ interface AccountsScheme {
 export type AccountsTable = Dexie.Table<AccountsScheme, number>;
 
 function userToEntry(json: Twitter.User): AccountsScheme {
-    'use strict';
     return {
         id: json.id,
         screenname: json.screen_name,

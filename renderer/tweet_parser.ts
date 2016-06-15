@@ -19,17 +19,14 @@ export interface TweetTextUrl {
 export type TweetTextToken = string | TweetTextHashtag | TweetTextMention | TweetTextUrl;
 
 export function isHashtag(t: TweetTextToken): t is TweetTextHashtag {
-    'use strict';
     return t.hasOwnProperty('text');
 }
 
 export function isMention(t: TweetTextToken): t is TweetTextMention {
-    'use strict';
     return t.hasOwnProperty('screen_name');
 }
 
 export function isUrl(t: TweetTextToken): t is TweetTextUrl {
-    'use strict';
     return t.hasOwnProperty('url');
 }
 
@@ -41,14 +38,12 @@ const UNESCAPE_TABLE = {
     '&#x27;': "'",
 } as {[s: string]: string};
 function htmlUnescapeReplacer(s: string) {
-    'use strict';
     return UNESCAPE_TABLE[s];
 }
 
 const RE_UNESCAPE = /(?:&amp;|&gt;|&lt;|&quot;|&#x27;)/g;
 
 function htmlUnescape(text: string) {
-    'use strict';
     return text.replace(RE_UNESCAPE, htmlUnescapeReplacer);
 }
 

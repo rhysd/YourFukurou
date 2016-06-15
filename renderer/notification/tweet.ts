@@ -11,7 +11,6 @@ import AppConfig from '../config';
 const {remote} = global.require('electron');
 
 function editReply(in_reply_to: Tweet) {
-    'use strict';
     const win = remote.getCurrentWindow();
     if (!win.isFocused()) {
         win.show();
@@ -23,7 +22,6 @@ function editReply(in_reply_to: Tweet) {
 }
 
 function createNotification(tw: Tweet, title: string, onClick: () => void) {
-    'use strict';
     const n = new Notification(title, {
         icon: tw.user.icon_url,
         body: tw.text,
@@ -36,22 +34,18 @@ function createNotification(tw: Tweet, title: string, onClick: () => void) {
 }
 
 export function notifyReply(tw: Tweet) {
-    'use strict';
     return createNotification(tw, `Reply from @${tw.user.screen_name}`, () => editReply(tw));
 }
 
 export function notifyRetweet(rt: Tweet) {
-    'use strict';
     return createNotification(rt, `Retweeted by @${rt.user.screen_name}`, () => Store.dispatch(changeCurrentTimeline('mention')));
 }
 
 export function notifyQuoted(qt: Tweet) {
-    'use strict';
     return createNotification(qt, `Quoted by @${qt.user.screen_name}`, () => editReply(qt));
 }
 
 export default function notifyTweet(tw: Tweet, owner: TwitterUser) {
-    'use strict';
 
     if (PM.shouldRejectTweetNotification(tw)) {
         return null;

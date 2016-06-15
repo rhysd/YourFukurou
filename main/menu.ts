@@ -3,7 +3,6 @@ import {Menu, shell, app} from 'electron';
 import openAboutWindow from 'about-window';
 
 export function createMenuTemplate(main: Electron.BrowserWindow) {
-    'use strict';
     let help_submenu = [
         {
             label: 'About YourFukurou',
@@ -168,6 +167,5 @@ export function createMenuTemplate(main: Electron.BrowserWindow) {
 }
 
 export default function setApplicationMenu(main: Electron.BrowserWindow) {
-    'use strict';
     Menu.setApplicationMenu(createMenuTemplate(main));
 }

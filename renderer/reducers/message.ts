@@ -7,7 +7,6 @@ export interface MessageState {
 }
 
 export default function message(state: MessageState = null, action: Action) {
-    'use strict';
     switch (action.type) {
         case Kind.ShowMessage:
             return {

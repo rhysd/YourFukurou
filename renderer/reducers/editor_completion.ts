@@ -2,7 +2,6 @@ import {Action, Kind} from '../actions';
 import EditorCompletionState, {DefaultEditorCompletionState} from '../states/editor_completion';
 
 export default function editorCompletion(state: EditorCompletionState = DefaultEditorCompletionState, action: Action) {
-    'use strict';
     switch (action.type) {
         case Kind.UpdateAutoCompletion:
             return state.searchSuggestions(

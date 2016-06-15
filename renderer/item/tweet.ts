@@ -8,7 +8,6 @@ const re_normal_size = /normal(?=\.\w+$)/i;
 const re_size_part = /_normal(?=\.\w+$)/i;
 
 function truncateCount(count: number) {
-    'use strict';
     if (count >= 1000000) {
         return (Math.floor(count / 100000) / 10) + 'M';
     } else if (count >= 1000) {

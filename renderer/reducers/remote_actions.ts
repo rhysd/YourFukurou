@@ -4,12 +4,10 @@ const electron = global.require('electron');
 const ipc = electron.ipcRenderer;
 
 function sendToMain(ch: ChannelFromRenderer, ...args: any[]) {
-    'use strict';
     ipc.send(ch, ...args);
 }
 
 export default function remoteActions(state: {} = null, action: Action) {
-    'use strict';
     switch (action.type) {
         case Kind.SendRetweet:
             // Note:

@@ -20,7 +20,6 @@ export const DefaultConfig = {
 } as Config;
 
 export default function loadConfig() {
-    'use strict';
     return new Promise<[string, Config]>((resolve, reject) => {
         const config_path =
             process.env.YOURFUKUROU_CONFIG_JSON_PATH ||

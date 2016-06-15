@@ -30,7 +30,6 @@ interface DispatchProps {
 type MiniTweetProps = ConnectedProps & DispatchProps;
 
 function getClass(tw: Tweet, props: MiniTweetProps) {
-    'use strict';
     if (props.focused) {
         return 'mini-tweet mini-tweet_focused';
     }
@@ -51,7 +50,6 @@ function getClass(tw: Tweet, props: MiniTweetProps) {
 }
 
 export function renderPicIcon(tw: Tweet, onClick: (e: React.MouseEvent) => void) {
-    'use strict';
     const media = tw.media;
     if (media.length === 0) {
         return undefined;
@@ -78,7 +76,6 @@ const MiniTweet: React.StatelessComponent<MiniTweetProps> = props => {
 };
 
 function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
-    'use strict';
     return {
         onPicClicked: e => {
             e.stopPropagation();

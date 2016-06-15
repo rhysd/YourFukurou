@@ -37,14 +37,12 @@ interface TimelineProps extends React.Props<any> {
 }
 
 function nop() {
-    'use strict';
     // Note: No OPeration
 }
 
 const NoImage: string[] = [];
 
 function getStatusIdsRelatedTo(status: TweetItem): string[] {
-    'use strict';
     if (status.related_statuses.length === 0) {
         return [];
     }
@@ -245,7 +243,6 @@ class Timeline extends React.Component<TimelineProps, {}> {
 }
 
 function select(state: State): TimelineProps {
-    'use strict';
     return {
         message: state.message,
         items: state.timeline.getCurrentTimeline(),

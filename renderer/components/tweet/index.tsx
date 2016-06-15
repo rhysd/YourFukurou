@@ -36,7 +36,6 @@ interface DispatchProps {
 type TweetProps = ConnectedProps & DispatchProps;
 
 function getClass(tw: TweetItem, props: TweetProps) {
-    'use strict';
     if (props.focused) {
         return 'tweet__body tweet__body_focused';
     }
@@ -72,7 +71,6 @@ const Tweet: React.StatelessComponent<TweetProps> = props => {
 };
 
 function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
-    'use strict';
     return {
         onClick: e => {
             e.stopPropagation();

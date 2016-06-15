@@ -5,7 +5,6 @@ interface ZigZagSeparatorProps extends React.Props<any> {
 }
 
 function focusedClass(base: string, focused: boolean) {
-    'use strict';
     return focused ?  `${base} ${base}_focused` : base;
 }
 

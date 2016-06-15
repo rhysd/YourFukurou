@@ -2,6 +2,9 @@ import Dexie from 'dexie';
 import {Twitter} from 'twit';
 import log from '../log';
 
+// https://github.com/dfahlander/Dexie.js#hello-world-typescript
+const Promise = Dexie.Promise;
+
 export interface HashtagsScheme {
     text: string;
     timestamp: number;

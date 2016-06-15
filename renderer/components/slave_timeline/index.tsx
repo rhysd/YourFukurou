@@ -15,7 +15,6 @@ interface SlaveTimelineProps extends React.Props<any> {
 }
 
 function renderSlave(props: SlaveTimelineProps) {
-    'use strict';
     const slave = props.slave;
     if (slave instanceof UserTimeline) {
         return <UserSlave
@@ -41,7 +40,6 @@ const SlaveTimelineComponent: React.StatelessComponent<SlaveTimelineProps> = pro
 };
 
 function select(state: State): SlaveTimelineProps {
-    'use strict';
     return {
         slave: state.slaveTimeline,
         friends: state.timeline.friend_ids,

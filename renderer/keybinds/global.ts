@@ -23,7 +23,6 @@ import {
 } from '../actions';
 
 function getCurrentStatus(): Tweet {
-    'use strict';
     const timeline = Store.getState().timeline;
     const idx = timeline.focus_index;
     if (idx === null) {
@@ -44,7 +43,6 @@ function getCurrentStatus(): Tweet {
 }
 
 function openMedia() {
-    'use strict';
     let status = getCurrentStatus();
     if (status === null) {
         return;
@@ -67,7 +65,6 @@ function openMedia() {
 }
 
 function openLinks() {
-    'use strict';
     const status = getCurrentStatus();
     if (status !== null) {
         status.openAllLinksInBrowser();
@@ -75,7 +72,6 @@ function openLinks() {
 }
 
 function openStatus() {
-    'use strict';
     const status = getCurrentStatus();
     if (status !== null) {
         status.openStatusPageInBrowser();
@@ -83,7 +79,6 @@ function openStatus() {
 }
 
 function toggleRetweet() {
-    'use strict';
     const status = getCurrentStatus();
     if (status === null) {
         return;
@@ -94,7 +89,6 @@ function toggleRetweet() {
 }
 
 function toggleLike() {
-    'use strict';
     const status = getCurrentStatus();
     if (status === null) {
         return;
@@ -105,7 +99,6 @@ function toggleLike() {
 }
 
 function reply() {
-    'use strict';
     const owner = Store.getState().timeline.user;
     const status = getCurrentStatus();
     const action =
@@ -116,7 +109,6 @@ function reply() {
 }
 
 function deleteStatus() {
-    'use strict';
     const status = getCurrentStatus();
     if (status === null) {
         return;
@@ -125,7 +117,6 @@ function deleteStatus() {
 }
 
 function showUser() {
-    'use strict';
     const status = getCurrentStatus();
     if (status === null) {
         return;

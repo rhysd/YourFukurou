@@ -17,7 +17,6 @@ export type TimelineKind = 'home' | 'mention';
 export type Notified = {home: boolean; mention: boolean};
 
 function containsStatusInTimeline(is: List<Item>, t: Tweet) {
-    'use strict';
     return is.find(i => {
         if (i instanceof Tweet) {
             return i.id === t.id;
@@ -28,7 +27,6 @@ function containsStatusInTimeline(is: List<Item>, t: Tweet) {
 }
 
 function updateStatusIn(items: List<Item>, status: Tweet) {
-    'use strict';
     const status_id = status.id;
     const index = items.findIndex(item => {
         if (item instanceof Tweet) {

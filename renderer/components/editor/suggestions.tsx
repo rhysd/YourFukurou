@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {emoji} from 'node-emoji';
+import Dexie from 'dexie';
 import {AutoCompleteLabel} from './auto_complete_decorator';
 import {selectAutoCompleteSuggestion} from '../../actions';
 import EditorCompletionState from '../../states/editor_completion';
@@ -8,6 +9,7 @@ import {TwitterUser} from '../../item/tweet';
 import DB from '../../database/db';
 import log from '../../log';
 
+const Promise = Dexie.Promise;
 export const MaxSuggestions = 5;
 
 export interface SuggestionItem {
@@ -180,7 +182,6 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
 }
 
 function searchEmojiSuggestionItems(query: string) {
-    'use strict';
     if (query.endsWith(':')) {
         return Promise.resolve([]);
     }
@@ -210,7 +211,6 @@ function searchEmojiSuggestionItems(query: string) {
 
 const RE_QUERY_END = /\s$/;
 function searchScreenNameSuggestionItems(query: string) {
-    'use strict';
     if (RE_QUERY_END.test(query)) {
         return Promise.resolve([]);
     }
@@ -224,14 +224,12 @@ function searchScreenNameSuggestionItems(query: string) {
 }
 
 function hashtagTextToSuggestion(text: string) {
-    'use strict';
     return {description: '#' + text} as SuggestionItem;
 }
 
-function searchHashtagSuggestionItems(query: string): Promise<SuggestionItem[]> {
-    'use strict';
+function searchHashtagSuggestionItems(query: string): Dexie.Promise<SuggestionItem[]> {
     if (RE_QUERY_END.test(query)) {
-        return Promise.resolve([]);
+        return Promise.resolve([] as SuggestionItem[]);
     }
 
     // TODO:
@@ -260,8 +258,7 @@ function searchHashtagSuggestionItems(query: string): Promise<SuggestionItem[]> 
 // TODO:
 // Check previous query. If previous one and this one are the same,
 // simply returns previous suggestions.
-export function searchSuggestionItems(query: string, label: AutoCompleteLabel) {
-    'use strict';
+export function searchSuggestionItems(query: string, label: AutoCompleteLabel): Dexie.Promise<SuggestionItem[]> {
     switch (label) {
         case 'EMOJI': return searchEmojiSuggestionItems(query);
         case 'SCREENNAME': return searchScreenNameSuggestionItems(query);

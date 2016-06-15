@@ -11,11 +11,9 @@ import {
     stopAutoCompletion,
 } from '../actions';
 
-const {
-    hasCommandModifier,
-    isCtrlKeyCommand,
-    isOptionKeyCommand,
-} = KeyBindingUtil;
+const hasCommandModifier = KeyBindingUtil.hasCommandModifier;
+const isCtrlKeyCommand = KeyBindingUtil.isCtrlKeyCommand;
+const isOptionKeyCommand = KeyBindingUtil.isOptionKeyCommand;
 
 export type EditorAction = 'send-tweet'
                             | 'choose-suggestion'
@@ -32,7 +30,6 @@ const DefaultMap = I.Map<string, EditorAction>({
 });
 
 function isEditorAction(s: string): s is EditorAction {
-    'use strict';
     return s === 'send-tweet' ||
            s === 'cancel-suggestion' ||
            s === 'choose-suggestion' ||
@@ -42,7 +39,6 @@ function isEditorAction(s: string): s is EditorAction {
 }
 
 function getCodeWorkaround(e: React.KeyboardEvent) {
-    'use strict';
     switch (e.keyCode) {
         case 8:   return 'Backspace';
         case 9:   return 'Tab';

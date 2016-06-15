@@ -104,7 +104,6 @@ export interface Action {
 }
 
 export function addTweetToTimeline(status: Tweet) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.AddTweetToTimeline,
@@ -114,7 +113,6 @@ export function addTweetToTimeline(status: Tweet) {
 }
 
 export function addTweetsToTimeline(statuses: Tweet[]) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.AddTweetsToTimeline,
@@ -124,7 +122,6 @@ export function addTweetsToTimeline(statuses: Tweet[]) {
 }
 
 export function addMentions(mentions: Tweet[]) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.AddMentions,
@@ -134,7 +131,6 @@ export function addMentions(mentions: Tweet[]) {
 }
 
 export function addRejectedUserIds(ids: number[]) {
-    'use strict';
     return {
         type: Kind.AddRejectedUserIds,
         ids,
@@ -142,7 +138,6 @@ export function addRejectedUserIds(ids: number[]) {
 }
 
 export function removeRejectedUserIds(ids: number[]) {
-    'use strict';
     return {
         type: Kind.RemoveRejectedUserIds,
         ids,
@@ -150,7 +145,6 @@ export function removeRejectedUserIds(ids: number[]) {
 }
 
 export function addNoRetweetUserIds(ids: number[]) {
-    'use strict';
     return {
         type: Kind.AddNoRetweetUserIds,
         ids,
@@ -158,7 +152,6 @@ export function addNoRetweetUserIds(ids: number[]) {
 }
 
 export function showMessage(text: string, msg_kind: MessageKind) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.ShowMessage,
@@ -169,7 +162,6 @@ export function showMessage(text: string, msg_kind: MessageKind) {
 }
 
 export function dismissMessage() {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.DismissMessage,
@@ -178,7 +170,6 @@ export function dismissMessage() {
 }
 
 export function notImplementedYet() {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.NotImplementedYet,
@@ -187,7 +178,6 @@ export function notImplementedYet() {
 }
 
 export function addSeparator() {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.AddSeparator,
@@ -197,7 +187,6 @@ export function addSeparator() {
 }
 
 export function sendRetweet(tweet_id: string) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.SendRetweet,
@@ -207,7 +196,6 @@ export function sendRetweet(tweet_id: string) {
 }
 
 export function undoRetweet(tweet_id: string) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.UndoRetweet,
@@ -217,7 +205,6 @@ export function undoRetweet(tweet_id: string) {
 }
 
 export function destroyStatus(tweet_id: string) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.DestroyStatus,
@@ -227,7 +214,6 @@ export function destroyStatus(tweet_id: string) {
 }
 
 export function retweetSucceeded(status: Tweet) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.RetweetSucceeded,
@@ -237,7 +223,6 @@ export function retweetSucceeded(status: Tweet) {
 }
 
 export function unretweetSucceeded(status: Tweet) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.UnretweetSucceeded,
@@ -247,7 +232,6 @@ export function unretweetSucceeded(status: Tweet) {
 }
 
 export function createLike(tweet_id: string) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.CreateLike,
@@ -257,7 +241,6 @@ export function createLike(tweet_id: string) {
 }
 
 export function destroyLike(tweet_id: string) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.DestroyLike,
@@ -267,7 +250,6 @@ export function destroyLike(tweet_id: string) {
 }
 
 export function likeSucceeded(status: Tweet) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.LikeSucceeded,
@@ -277,7 +259,6 @@ export function likeSucceeded(status: Tweet) {
 }
 
 export function unlikeSucceeded(status: Tweet) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.UnlikeSucceeded,
@@ -287,7 +268,6 @@ export function unlikeSucceeded(status: Tweet) {
 }
 
 export function statusLiked(status: Tweet, from: TwitterUser) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.StatusLiked,
@@ -298,7 +278,6 @@ export function statusLiked(status: Tweet, from: TwitterUser) {
 }
 
 export function follow(user_id: number) {
-    'use strict';
     return {
         type: Kind.Follow,
         user_id,
@@ -306,7 +285,6 @@ export function follow(user_id: number) {
 }
 
 export function unfollow(user_id: number) {
-    'use strict';
     return {
         type: Kind.Unfollow,
         user_id,
@@ -314,7 +292,6 @@ export function unfollow(user_id: number) {
 }
 
 export function setCurrentUser(user: TwitterUser) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.SetCurrentUser,
@@ -324,7 +301,6 @@ export function setCurrentUser(user: TwitterUser) {
 }
 
 export function updateCurrentUser(user_json: Twitter.User) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.UpdateCurrentUser,
@@ -334,7 +310,6 @@ export function updateCurrentUser(user_json: Twitter.User) {
 }
 
 export function deleteStatusInTimeline(tweet_id: string) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.DeleteStatusInTimeline,
@@ -344,7 +319,6 @@ export function deleteStatusInTimeline(tweet_id: string) {
 }
 
 export function changeEditorState(editor: EditorState) {
-    'use strict';
     return {
         type: Kind.ChangeEditorState,
         editor,
@@ -352,7 +326,6 @@ export function changeEditorState(editor: EditorState) {
 }
 
 export function openEditor(text?: string) {
-    'use strict';
     return {
         type: Kind.OpenEditor,
         text,
@@ -360,7 +333,6 @@ export function openEditor(text?: string) {
 }
 
 export function openEditorForReply(in_reply_to: Tweet, owner: TwitterUser, text?: string) {
-    'use strict';
     return {
         type: Kind.OpenEditorForReply,
         status: in_reply_to,
@@ -370,14 +342,12 @@ export function openEditorForReply(in_reply_to: Tweet, owner: TwitterUser, text?
 }
 
 export function closeEditor() {
-    'use strict';
     return {
         type: Kind.CloseEditor,
     };
 }
 
 export function toggleEditor() {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.ToggleEditor,
@@ -386,7 +356,6 @@ export function toggleEditor() {
 }
 
 export function updateStatus(text: string, in_reply_to_id?: string) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.UpdateStatus,
@@ -397,7 +366,6 @@ export function updateStatus(text: string, in_reply_to_id?: string) {
 }
 
 export function selectAutoCompleteSuggestion(text: string, query: string) {
-    'use strict';
     return {
         type: Kind.SelectAutoCompleteSuggestion,
         text,
@@ -406,7 +374,6 @@ export function selectAutoCompleteSuggestion(text: string, query: string) {
 }
 
 export function updateAutoCompletion(left: number, top: number, query: string, label: AutoCompleteLabel) {
-    'use strict';
     return (dispatch: Redux.Dispatch) => {
         searchSuggestionItems(query, label)
             .then(suggestions => dispatch({
@@ -417,33 +384,29 @@ export function updateAutoCompletion(left: number, top: number, query: string, l
                 suggestions,
                 completion_label: label,
             }))
-            .catch(e => log.error('updateAutoCompletion():', e));
+            .catch((e: Error) => log.error('updateAutoCompletion():', e));
     };
 }
 
 export function stopAutoCompletion() {
-    'use strict';
     return {
         type: Kind.StopAutoCompletion,
     };
 }
 
 export function downAutoCompletionFocus() {
-    'use strict';
     return {
         type: Kind.DownAutoCompletionFocus,
     };
 }
 
 export function upAutoCompletionFocus() {
-    'use strict';
     return {
         type: Kind.UpAutoCompletionFocus,
     };
 }
 
 export function changeCurrentTimeline(timeline: TimelineKind) {
-    'use strict';
     return {
         type: Kind.ChangeCurrentTimeline,
         timeline,
@@ -451,7 +414,6 @@ export function changeCurrentTimeline(timeline: TimelineKind) {
 }
 
 export function openPicturePreview(media_urls: string[], index?: number) {
-    'use strict';
     return {
         type: Kind.OpenPicturePreview,
         media_urls,
@@ -460,14 +422,12 @@ export function openPicturePreview(media_urls: string[], index?: number) {
 }
 
 export function closeTweetMedia() {
-    'use strict';
     return {
         type: Kind.CloseTweetMedia,
     };
 }
 
 export function moveToNthPicturePreview(index: number) {
-    'use strict';
     return {
         type: Kind.MoveToNthPicturePreview,
         index,
@@ -475,7 +435,6 @@ export function moveToNthPicturePreview(index: number) {
 }
 
 export function focusOnItem(index: number) {
-    'use strict';
     return {
         type: Kind.FocusOnItem,
         index,
@@ -483,42 +442,36 @@ export function focusOnItem(index: number) {
 }
 
 export function unfocusItem() {
-    'use strict';
     return {
         type: Kind.UnfocusItem,
     };
 }
 
 export function focusNextItem() {
-    'use strict';
     return {
         type: Kind.FocusNextItem,
     };
 }
 
 export function focusPrevItem() {
-    'use strict';
     return {
         type: Kind.FocusPrevItem,
     };
 }
 
 export function focusTopItem() {
-    'use strict';
     return {
         type: Kind.FocusTopItem,
     };
 }
 
 export function focusBottomItem() {
-    'use strict';
     return {
         type: Kind.FocusBottomItem,
     };
 }
 
 export function addFriends(ids: number[]) {
-    'use strict';
     return {
         type: Kind.AddFriends,
         ids,
@@ -526,7 +479,6 @@ export function addFriends(ids: number[]) {
 }
 
 export function removeFriends(ids: number[]) {
-    'use strict';
     return {
         type: Kind.RemoveFriends,
         ids,
@@ -534,7 +486,6 @@ export function removeFriends(ids: number[]) {
 }
 
 export function openUserTimeline(user: TwitterUser) {
-    'use strict';
     return {
         type: Kind.OpenUserTimeline,
         user,
@@ -542,14 +493,12 @@ export function openUserTimeline(user: TwitterUser) {
 }
 
 export function closeSlaveTimeline() {
-    'use strict';
     return {
         type: Kind.CloseSlaveTimeline,
     };
 }
 
 export function addUserTweets(user_id: number, statuses: Tweet[]) {
-    'use strict';
     return {
         type: Kind.AddUserTweets,
         user_id,
@@ -558,35 +507,30 @@ export function addUserTweets(user_id: number, statuses: Tweet[]) {
 }
 
 export function focusSlaveNext() {
-    'use strict';
     return {
         type: Kind.FocusSlaveNext,
     };
 }
 
 export function focusSlavePrev() {
-    'use strict';
     return {
         type: Kind.FocusSlavePrev,
     };
 }
 
 export function focusSlaveTop() {
-    'use strict';
     return {
         type: Kind.FocusSlaveTop,
     };
 }
 
 export function focusSlaveBottom() {
-    'use strict';
     return {
         type: Kind.FocusSlaveBottom,
     };
 }
 
 export function focusSlaveOn(index: number) {
-    'use strict';
     return {
         type: Kind.FocusSlaveOn,
         index,
@@ -594,7 +538,6 @@ export function focusSlaveOn(index: number) {
 }
 
 export function blurSlaveTimeline() {
-    'use strict';
     return {
         type: Kind.BlurSlaveTimeline,
     };

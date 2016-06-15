@@ -26,7 +26,6 @@ interface DispatchProps {
 type TweetActionButtonProps = ConnectedProps & DispatchProps;
 
 function onLikeClicked(status: Tweet, dispatch: Redux.Dispatch) {
-    'use strict';
     if (status.favorited) {
         dispatch(destroyLike(status.id));
     } else {
@@ -35,7 +34,6 @@ function onLikeClicked(status: Tweet, dispatch: Redux.Dispatch) {
 }
 
 function onRetweetClicked(status: Tweet, dispatch: Redux.Dispatch) {
-    'use strict';
     if (status.user.protected) {
         dispatch(showMessage("Cannot retweet protected user's tweet", 'error'));
         return;
@@ -49,7 +47,6 @@ function onRetweetClicked(status: Tweet, dispatch: Redux.Dispatch) {
 }
 
 function getIcon(k: TweetActionKind) {
-    'use strict';
     switch (k) {
         case 'reply': return 'reply';
         case 'retweet': return 'retweet';
@@ -59,7 +56,6 @@ function getIcon(k: TweetActionKind) {
 }
 
 function getColor(props: TweetActionButtonProps) {
-    'use strict';
     switch (props.kind) {
         case 'retweet': return props.status.retweeted ? '#19cf86' : undefined;
         case 'like':    return props.status.favorited ? '#ff4f44' : undefined;
@@ -68,7 +64,6 @@ function getColor(props: TweetActionButtonProps) {
 }
 
 function makeCount(count: number) {
-    'use strict';
     if (count >= 1000000) {
         return (Math.floor(count / 100000) / 10) + 'M';
     } else if (count >= 1000) {
@@ -81,7 +76,6 @@ function makeCount(count: number) {
 }
 
 function getCount(props: TweetActionButtonProps) {
-    'use strict';
     switch (props.kind) {
         case 'retweet': return makeCount(props.status.retweet_count);
         case 'like':    return makeCount(props.status.favorite_count);
@@ -106,7 +100,6 @@ const TweetActionButton = (props: TweetActionButtonProps) => {
 };
 
 function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
-    'use strict';
     return {
         onClick: e => {
             e.stopPropagation();

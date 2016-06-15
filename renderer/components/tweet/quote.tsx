@@ -11,7 +11,6 @@ interface QuotedTweetProps extends React.Props<any> {
 }
 
 function renderMedia(media: Twitter.MediaEntity[]) {
-    'use strict';
     if (media.length === 0) {
         return undefined;
     }
@@ -19,7 +18,6 @@ function renderMedia(media: Twitter.MediaEntity[]) {
 }
 
 function renderHeader(s: TweetItem) {
-    'use strict';
     return (
         <div className="tweet__quoted-header">
             <span

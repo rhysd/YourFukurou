@@ -25,7 +25,6 @@ interface DispatchProps {
 type TwitterActivityProps = ConnectedProps & DispatchProps;
 
 function renderBadge(kind: TimelineActivityKind) {
-    'use strict';
     switch (kind) {
         case 'liked':
             return <span className="activity__icon activity__icon_liked">
@@ -42,7 +41,6 @@ function renderBadge(kind: TimelineActivityKind) {
 }
 
 function renderUserIcons(users: TwitterUser[]) {
-    'use strict';
 
     const icons =
         users.map((u, i) =>
@@ -59,7 +57,6 @@ function renderUserIcons(users: TwitterUser[]) {
 }
 
 function renderRestUsers(activity: TimelineActivity) {
-    'use strict';
 
     const activity_count =
         activity.kind === 'liked' ? activity.status.favorite_count :
@@ -76,7 +73,6 @@ function renderRestUsers(activity: TimelineActivity) {
 }
 
 function renderCreatedAt(status: Tweet, focused: boolean) {
-    'use strict';
     return (
         <ExternalLink
             className={focused ?
@@ -88,7 +84,6 @@ function renderCreatedAt(status: Tweet, focused: boolean) {
 }
 
 function renderExpanded(props: TwitterActivityProps) {
-    'use strict';
     const {focused, onClick, activity} = props;
     const kind = activity.kind;
     const behaved =
@@ -113,7 +108,6 @@ function renderExpanded(props: TwitterActivityProps) {
 }
 
 function renderCollapsed(props: TwitterActivityProps) {
-    'use strict';
     const {focused, onClick, activity} = props;
     return (
         <div
@@ -136,7 +130,6 @@ const TwitterActivity: React.StatelessComponent<TwitterActivityProps> =
     props => props.collapsed ?  renderCollapsed(props) : renderExpanded(props);
 
 function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
-    'use strict';
     return {
         onClick: e => {
             e.stopPropagation();

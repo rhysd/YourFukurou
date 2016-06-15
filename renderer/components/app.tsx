@@ -24,7 +24,6 @@ const App: React.StatelessComponent<AppProps> = props => (
 );
 
 function select(state: State): AppProps {
-    'use strict';
     return {
         editorOpen: state.editor.is_open,
     };

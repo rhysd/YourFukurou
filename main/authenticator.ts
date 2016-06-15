@@ -15,7 +15,6 @@ function authenticate_with_request_tokens(
         oauth: OAuth,
         request_token: string,
         request_token_secret: string): Promise<AccessToken> {
-    'use strict';
 
     return new Promise((resolve, reject) => {
         let login_window = new BrowserWindow({
@@ -72,7 +71,6 @@ function authenticate_with_request_tokens(
 }
 
 export function authenticate(consumer_key: string, consumer_secret: string): Promise<AccessToken> {
-    'use strict';
 
     return new Promise((resolve, reject) => {
         const oauth = new OAuth(
@@ -96,7 +94,6 @@ export function authenticate(consumer_key: string, consumer_secret: string): Pro
 }
 
 export function load_cached_tokens(): Promise<AccessToken> {
-    'use strict';
 
     if (process.env.YOURFUKUROU_ACCESS_TOKEN &&
         process.env.YOURFUKUROU_ACCESS_TOKEN_SECRET) {

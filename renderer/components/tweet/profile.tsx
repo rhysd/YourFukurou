@@ -24,7 +24,6 @@ interface DispatchProps {
 type TwitterProfileProps = ConnectedProps & DispatchProps;
 
 function renderBannar(props: TwitterProfileProps) {
-    'use strict';
     const {user, onIconClick, size} = props;
     const bg_color_style = {
         backgroundColor: '#' + user.bg_color,
@@ -104,7 +103,6 @@ const renderCounts = (user: TwitterUser) => (
 );
 
 function renderWebsiteUrl(user: TwitterUser) {
-    'use strict';
     const url = user.user_site_url;
     if (!url) {
         return undefined;
@@ -116,7 +114,6 @@ function renderWebsiteUrl(user: TwitterUser) {
 }
 
 function renderLocation(user: TwitterUser) {
-    'use strict';
     const loc = user.location;
     if (!loc) {
         return undefined;
@@ -127,7 +124,6 @@ function renderLocation(user: TwitterUser) {
 }
 
 function renderFooter(user: TwitterUser) {
-    'use strict';
     const website_url = renderWebsiteUrl(user);
     const location = renderLocation(user);
     if (!website_url && !location) {
@@ -160,7 +156,6 @@ const TwitterProfile: React.StatelessComponent<TwitterProfileProps> = props => {
 };
 
 function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
-    'use strict';
     return {
         onBannerClick: e => {
             e.stopPropagation();

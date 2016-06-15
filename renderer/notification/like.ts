@@ -6,7 +6,6 @@ import {changeCurrentTimeline} from '../actions';
 import Store from '../store';
 
 export default function notifyLiked(tw: Tweet, by: TwitterUser) {
-    'use strict';
 
     if (!AppConfig.notification.like || PM.shouldRejectLikeNotification(tw, by)) {
         return null;

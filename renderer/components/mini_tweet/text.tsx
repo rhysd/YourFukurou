@@ -19,7 +19,6 @@ interface DispatchProps {
 type MiniTweetTextProps = ConnectedProps & DispatchProps;
 
 function renderQuoted(s: Tweet, focused: boolean, onClick: (e: React.MouseEvent) => void) {
-    'use strict';
     const q = s.quoted_status;
     if (q === null) {
         return undefined;
@@ -54,7 +53,6 @@ const MiniTweetText: React.StatelessComponent<MiniTweetTextProps> = props => {
 };
 
 function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
-    'use strict';
     return {
         onClick: e => {
             e.stopPropagation();

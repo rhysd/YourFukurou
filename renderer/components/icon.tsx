@@ -67,7 +67,6 @@ class Icon extends React.Component<IconProps, {}> {
 }
 
 function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
-    'use strict';
     return {
         onClick: e => {
             e.stopPropagation();

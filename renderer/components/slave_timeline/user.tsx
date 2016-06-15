@@ -17,7 +17,6 @@ interface UserSlaveProps extends React.Props<any> {
 }
 
 function renderTweets(props: UserSlaveProps) {
-    'use strict';
 
     const {timeline, owner, friends, dispatch} = props;
     const focus_idx = timeline.focus_index;

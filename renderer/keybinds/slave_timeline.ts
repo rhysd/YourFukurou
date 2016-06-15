@@ -23,7 +23,6 @@ import {UserTimeline} from '../states/slave_timeline';
 import log from '../log';
 
 function getCurrentUser() {
-    'use strict';
     const slave = Store.getState().slaveTimeline;
     if (slave instanceof UserTimeline) {
         return slave.user;
@@ -33,7 +32,6 @@ function getCurrentUser() {
 }
 
 function openUserPage() {
-    'use strict';
     const user = getCurrentUser();
     if (user !== null) {
         user.openUserPageInBrowser();
@@ -41,7 +39,6 @@ function openUserPage() {
 }
 
 function openUserWebsite() {
-    'use strict';
     const user = getCurrentUser();
     if (user !== null) {
         user.openWebsiteInBrowser();
@@ -49,7 +46,6 @@ function openUserWebsite() {
 }
 
 function getFocusedStatus() {
-    'use strict';
     const slave = Store.getState().slaveTimeline;
     if (slave instanceof UserTimeline) {
         return slave.getFocusedStatus();
@@ -59,7 +55,6 @@ function getFocusedStatus() {
 }
 
 function openMedia() {
-    'use strict';
     let status = getFocusedStatus();
     if (status === null) {
         return;
@@ -82,7 +77,6 @@ function openMedia() {
 }
 
 function openLinks() {
-    'use strict';
     const status = getFocusedStatus();
     if (status !== null) {
         status.openAllLinksInBrowser();
@@ -90,7 +84,6 @@ function openLinks() {
 }
 
 function openStatus() {
-    'use strict';
     const status = getFocusedStatus();
     if (status !== null) {
         status.openStatusPageInBrowser();
@@ -98,7 +91,6 @@ function openStatus() {
 }
 
 function toggleRetweet() {
-    'use strict';
     const status = getFocusedStatus();
     if (status === null) {
         return;
@@ -109,7 +101,6 @@ function toggleRetweet() {
 }
 
 function toggleLike() {
-    'use strict';
     const status = getFocusedStatus();
     if (status === null) {
         return;
@@ -120,7 +111,6 @@ function toggleLike() {
 }
 
 function reply() {
-    'use strict';
     const owner = Store.getState().timeline.user;
     const status = getFocusedStatus();
     const action =
@@ -131,7 +121,6 @@ function reply() {
 }
 
 function deleteStatus() {
-    'use strict';
     const status = getFocusedStatus();
     if (status === null) {
         return;
@@ -140,7 +129,6 @@ function deleteStatus() {
 }
 
 function showUser() {
-    'use strict';
     const status = getFocusedStatus();
     if (status === null) {
         return;

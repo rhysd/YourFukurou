@@ -229,7 +229,6 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
 }
 
 function select(state: State): TweetEditorProps {
-    'use strict';
     return {
         editor: state.editor.core,
         keybinds: state.editor.keymaps,

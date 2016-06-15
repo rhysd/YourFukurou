@@ -16,7 +16,6 @@ interface SlaveTimeline {
 export default SlaveTimeline;
 
 function newKeybinds() {
-    'use strict';
     const keybinds = new SlaveTimelineKeymaps();
     GlobalKeymaps.disable();
     keybinds.enable(window);

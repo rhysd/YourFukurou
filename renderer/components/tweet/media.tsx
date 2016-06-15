@@ -9,7 +9,6 @@ interface TweetMediaProps extends React.Props<any> {
 }
 
 function renderThumb(entity: Twitter.MediaEntity, nth: number, props: TweetMediaProps) {
-    'use strict';
 
     const high_dpi = window.devicePixelRatio >= 1.5;
 

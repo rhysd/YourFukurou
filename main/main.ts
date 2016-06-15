@@ -59,12 +59,10 @@ const load_config_and_authenticate = loadConfig()
 app.once('window-all-closed', () => app.quit());
 
 function isRunFromNpmPackageOnDarwin() {
-    'use strict';
     return process.platform === 'darwin' && app.getAppPath().indexOf('/YourFukurou.app/') === -1;
 }
 
 function setupHotkey() {
-    'use strict';
     if (global.config.hotkey_accelerator) {
         const hotkey = global.config.hotkey_accelerator;
         globalShortcut.register(hotkey, () => win.isFocused() ? win.hide() : win.show());
@@ -73,7 +71,6 @@ function setupHotkey() {
 }
 
 function resumeStreamOnPowerOn(stream: TwitterUserStream | DummyUserStream) {
-    'use strict';
     powerMonitor.on('suspend', () => {
         log.debug("PC's going to suspend, stop streaming");
         stream.stopStreaming();
@@ -88,7 +85,6 @@ function resumeStreamOnPowerOn(stream: TwitterUserStream | DummyUserStream) {
 }
 
 function startApp(access: AccessToken) {
-    'use strict';
 
     if (!access.token || !access.token_secret) {
         log.error('Failed to get access tokens');
@@ -102,7 +98,6 @@ function startApp(access: AccessToken) {
       , rest: TwitterRestAPI | DummyRestAPI;
 
     function verifyAccount() {
-        'use strict';
         twit = new Twit({
             consumer_key,
             consumer_secret,
@@ -160,7 +155,6 @@ function startApp(access: AccessToken) {
 }
 
 function openWindow(access: AccessToken) {
-    'use strict';
     return new Promise<AccessToken>((resolve, reject) => {
         log.debug('Starting to open window');
 

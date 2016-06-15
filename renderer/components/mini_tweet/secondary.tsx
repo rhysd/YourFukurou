@@ -8,7 +8,6 @@ interface MiniTweetSecondaryProps extends React.Props<any> {
 }
 
 function renderRetweeted(props: MiniTweetSecondaryProps) {
-    'use strict';
     if (!props.status.isRetweet()) {
         return undefined;
     }

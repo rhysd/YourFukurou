@@ -2,7 +2,6 @@ import {Action, Kind} from '../actions';
 import TimelineState, {DefaultTimelineState} from '../states/timeline';
 
 export default function timeline(state: TimelineState = DefaultTimelineState, action: Action) {
-    'use strict';
     switch (action.type) {
         case Kind.AddTweetToTimeline:     return state.addNewTweet(action.status);
         case Kind.AddTweetsToTimeline:     return state.addNewTweets(action.statuses);
