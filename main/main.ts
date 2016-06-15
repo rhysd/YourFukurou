@@ -38,7 +38,7 @@ if (already_running) {
 
 const consumer_key = process.env.YOURFUKUROU_CONSUMER_KEY || 'H4fJ2rgNuH2UiOXuPBjHpl9zL';
 const consumer_secret = process.env.YOURFUKUROU_CONSUMER_KEY_SECRET || 'azYRjJn6emdsOIUhepy0Wygmaq9PltEnpsx4P4BfU1HMp5Unmm';
-const should_use_dummy_data = process.env.NODE_ENV === 'development' && process.env.YOURFUKUROU_DUMMY_TWEETS;
+const should_use_dummy_data = !!process.env.YOURFUKUROU_USE_FIXTURE;
 
 const load_config_and_authenticate = loadConfig()
         .then(c => {
@@ -220,7 +220,7 @@ function openWindow(access: AccessToken) {
 
         if (!!global.config.caffeinated) {
             log.debug('Caffeinated: App suspension will be blocked.');
-            powerSaveBlocker.start('prevent-app-suspension')
+            powerSaveBlocker.start('prevent-app-suspension');
         }
     });
 }
