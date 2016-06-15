@@ -14,12 +14,14 @@ import DB from './database/db';
 import PM from './plugin_manager';
 import GlobalKeyMaps from './keybinds/global';
 import log from './log';
+import * as timing from 'timing.js';
 
 const fs = global.require('fs');
 const electron = global.require('electron');
 const app = electron.remote.app;
+const Env = global.process.env;
 
-if (global.process.env.YOURFUKUROU_WHY_DID_YOU_UPDATE) {
+if (Env.YOURFUKUROU_WHY_DID_YOU_UPDATE) {
     whyDidYouUpdate(React);
 }
 
@@ -72,4 +74,10 @@ global.PM = PM;
 window.onunload = () => {
     proxy.terminate();
     GlobalKeyMaps.disable();
+};
+
+window.onload = () => {
+    if (Env.NODE_ENV = 'development') {
+        setTimeout(() => timing.printSimpleTable(), 0);
+    }
 };

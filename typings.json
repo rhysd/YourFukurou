@@ -9,6 +9,7 @@
     "loglevel": "registry:dt/loglevel#1.4.0+20160412141402",
     "node": "registry:dt/node#6.0.0+20160514165920",
     "react": "registry:dt/react#0.14.0+20160423065914",
+    "react-addons-perf": "registry:dt/react-addons-perf#0.14.0+20160316155526",
     "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
     "react-redux": "registry:dt/react-redux#4.4.0+20160501125835",
     "redux": "registry:dt/redux#3.3.1+20160326112656",
