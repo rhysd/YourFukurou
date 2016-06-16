@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "noImplicitAny": true,
+    "target": "es2015",
+    "outDir": "./js",
+    "jsx": "react"
+  },
+  "files": [
+    "components/message_test.tsx",
+    "../../../main/typings/twit.d.ts",
+    "../../../main/typings/config.d.ts",
+    "../../../main/typings/channel.d.ts",
+    "../../../renderer/typings/lib.d.ts",
+    "../../../renderer/typings/draft-js.d.ts",
+    "../../../renderer/typings/html5-notification.d.ts",
+    "../../../renderer/typings/node-emoji.d.ts",
+    "../../../renderer/typings/rc-tooltip.d.ts",
+    "../../../renderer/typings/react-images.d.ts",
+    "../../../renderer/typings/react-list.d.ts",
+    "../../../renderer/typings/timing.d.ts",
+    "../../../renderer/components/message.tsx"
+  ]
+}

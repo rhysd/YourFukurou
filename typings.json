@@ -2,6 +2,7 @@
   "name": "yourfukurou",
   "dependencies": {},
   "globalDependencies": {
+    "enzyme": "registry:dt/enzyme#2.3.0+20160525083955",
     "geojson": "registry:dt/geojson#0.0.0+20160514174238",
     "github-electron": "registry:dt/github-electron#0.37.8+20160509083739",
     "loglevel": "registry:dt/loglevel#1.4.0+20160412141402",
@@ -12,6 +13,7 @@
     "react-redux": "registry:dt/react-redux#4.4.0+20160501125835",
     "redux": "registry:dt/redux#3.3.1+20160326112656",
     "redux-thunk": "registry:dt/redux-thunk#2.0.1+20160317120654",
+    "sinon": "registry:dt/sinon#1.16.0+20160517064723",
     "twitter-text": "registry:dt/twitter-text#1.13.4+20160412151713"
   },
   "globalDevDependencies": {

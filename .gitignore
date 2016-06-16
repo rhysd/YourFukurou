@@ -6,6 +6,7 @@ npm-debug.log
 /renderer/js
 /test/e2e/**/*.js
 /test/e2e/**/config.json
+/test/unit/renderer/js/**/*.js
 sub_account_tokens.sh
 screenshot_*.png
 *_log.json

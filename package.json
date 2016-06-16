@@ -16,8 +16,11 @@
     "dummy": "NODE_ENV=development YOURFUKUROU_USE_FIXTURE=true ./bin/cli.js",
     "watch": "guard --watchdir main renderer test",
     "lint": "tslint $(git ls-files | grep -E \".tsx?$\") && stylelint styles/style.css",
-    "build-test": "tsc --pretty -p test/e2e",
-    "test": "npm run build-test && ava"
+    "build-e2e-test": "tsc --pretty -p test/e2e",
+    "test-e2e": "npm run build-e2e-test && ava --serial --verbose ./test/e2e/story",
+    "build-unit-test": "tsc --pretty -p test/unit/renderer",
+    "test-unit": "npm run build-unit-test && ava ./test/unit/renderer/js/test --verbose",
+    "test": "npm run test-unit && npm run test-e2e"
   },
   "repository": {
     "type": "git",
@@ -83,10 +86,8 @@
   },
   "ava": {
     "files": [
-      "test/e2e/story/initial_timeline.js",
-      "test/e2e/story/send_and_delete_tweet.js",
-      "test/e2e/story/switch_timeline.js",
-      "test/e2e/story/actions.js"
+      "test/e2e/story/*.js",
+      "test/unit/renderer/js/test/**/*.js"
     ],
     "timeout": "60s",
     "serial": true

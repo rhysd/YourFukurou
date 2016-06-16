@@ -30,6 +30,6 @@ guard :shell do
 
   watch %r[^test/e2e/.+\.ts$] do |m|
     timestamp m[0]
-    npm_run 'build-test'
+    npm_run 'build-e2e-test'
   end
 end
