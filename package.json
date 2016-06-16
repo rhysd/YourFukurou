@@ -10,7 +10,6 @@
     "build-main": "tsc --pretty -p main",
     "build-renderer": "tsc --pretty -p renderer && browserify renderer/js -o build/renderer.js",
     "build": "npm run build-main && npm run build-renderer",
-    "build-production": "npm run build-main && tsc --pretty -p renderer && browserify -t babelify renderer/js -o build/renderer.js",
     "app": "NODE_ENV=production ./bin/cli.js",
     "debug": "NODE_ENV=development ./bin/cli.js",
     "perf": "NODE_ENV=production YOURFUKUROU_PERF=true YOURFUKUROU_USE_FIXTURE=true ./bin/cli.js",
@@ -43,9 +42,6 @@
   },
   "devDependencies": {
     "ava": "github:avajs/ava",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-preset-react-optimize": "^1.0.1",
-    "babelify": "^7.3.0",
     "browserify": "^13.0.1",
     "electron-packager": "^7.0.3",
     "react-addons-perf": "^15.1.0",
@@ -94,11 +90,5 @@
     ],
     "timeout": "60s",
     "serial": true
-  },
-  "babel": {
-    "presets": [
-      "es2015",
-      "react-optimize"
-    ]
   }
 }
