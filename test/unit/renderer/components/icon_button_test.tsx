@@ -7,12 +7,15 @@ import IconButton from '../../../../renderer/components/icon_button';
 
 test('shows button with named button', t => {
     const c = shallow(<IconButton name="foo"/>);
-    t.truthy(c.find('.fa.fa-foo'));
+    t.is(c.find('.fa.fa-foo').length, 1);
 });
 
 test('shows tip on button', t => {
-    const c = shallow(<IconButton tip="this is tip" name="foo"/>);
-    t.truthy(c.find('[title="this is tip"]'));
+    const c = shallow(<IconButton tip="this is tip" name="foo" color="blue"/>);
+    const p = c.props();
+    t.is(p.title, "this is tip");
+    t.is(p.style.color, 'blue');
+    t.is(c.find('.fa.fa-foo').length, 1);
 });
 
 test('fires onClick callback', t => {
