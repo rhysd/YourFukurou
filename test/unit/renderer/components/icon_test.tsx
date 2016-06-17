@@ -5,7 +5,9 @@ import test from 'ava';
 import {spy} from 'sinon';
 import {Icon} from '../../../../renderer/components/icon';
 
-function onClick() {}
+function onClick() {
+    // Do nothing
+}
 
 test.beforeEach(t => {
     t.context.user = fixture.user();

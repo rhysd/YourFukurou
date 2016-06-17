@@ -3,7 +3,6 @@
     "align": [
       true,
       "parameters",
-      "arguments",
       "statements"
     ],
     "ban": false,
@@ -105,11 +104,7 @@
         "variable-declaration": "nospace"
       }
     ],
-    "use-strict": [
-      true,
-      "check-module",
-      "check-function"
-    ],
+    "use-strict": false,
     "variable-name": [
       false,
       "check-format",

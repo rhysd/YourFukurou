@@ -54,7 +54,7 @@
     "spectron": "^3.2.2",
     "stylelint": "^6.5.1",
     "stylelint-config-standard": "^8.0.0",
-    "tslint": "^3.9.0",
+    "tslint": "^3.11.0",
     "typescript": "^1.8.10",
     "typings": "^1.0.4",
     "why-did-you-update": "0.0.8"

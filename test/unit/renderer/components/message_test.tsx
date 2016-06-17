@@ -5,7 +5,9 @@ import test from 'ava';
 import Message from '../../../../renderer/components/message';
 import IconButton from '../../../../renderer/components/icon_button';
 
-function dispatch(a: any) {}
+function dispatch(a: any) {
+    // Do nothing
+}
 
 test('show/dismiss message', t => {
     const c = shallow(<Message kind="info" text="This is information message." dispatch={dispatch}/>);

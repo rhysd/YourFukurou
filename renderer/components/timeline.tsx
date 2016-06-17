@@ -216,7 +216,7 @@ class Timeline extends React.Component<TimelineProps, {}> {
         const related_ids = this.getRelatedStatusIds();
         const focused_user_id = this.getFocusedUserId();
         const style = {
-            overflowY: overlay ? 'visible' : undefined
+            overflowY: overlay ? 'visible' : undefined,
         };
         return (
             <div className="timeline" style={style}>
