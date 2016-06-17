@@ -72,7 +72,7 @@ function openSearchPage() {
     shell.openExternal('https://twitter.com/search-home');
 }
 
-const SideMenu = (props: Props) => {
+export const SideMenu = (props: Props) => {
     const {kind, user, notified, editor_open, onEdit, onHome, onMention} = props;
     return (
         <div className="side-menu">

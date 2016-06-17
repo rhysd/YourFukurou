@@ -19,7 +19,7 @@
     "build-e2e-test": "tsc --pretty -p test/e2e",
     "test-e2e": "npm run build-e2e-test && ava --serial --verbose ./test/e2e/story",
     "build-unit-test": "tsc --pretty -p test/unit/renderer",
-    "test-unit": "npm run build-unit-test && ava ./test/unit/renderer/js/test --verbose",
+    "test-unit": "npm run build-unit-test && ava ./test/unit/renderer/js/test/unit/renderer/ --verbose",
     "test": "npm run test-unit && npm run test-e2e"
   },
   "repository": {
@@ -90,7 +90,7 @@
   "ava": {
     "files": [
       "test/e2e/story/*.js",
-      "test/unit/renderer/js/test/**/*.js"
+      "test/unit/renderer/js/test/unit/renderer/**/*.js"
     ],
     "timeout": "60s",
     "serial": true

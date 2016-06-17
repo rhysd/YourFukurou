@@ -9,10 +9,10 @@
     "jsx": "react"
   },
   "files": [
-    "helper.tsx",
     "components/message_test.tsx",
     "components/icon_button_test.tsx",
     "components/icon_test.tsx",
+    "../helper.tsx",
     "../fixture/fixture.ts",
     "../../../main/typings/twit.d.ts",
     "../../../main/typings/config.d.ts",

@@ -1,4 +1,4 @@
-import '../helper';
+import '../../helper';
 import * as React from 'react';
 import {shallow} from 'enzyme';
 import test from 'ava';

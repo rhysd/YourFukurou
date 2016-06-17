@@ -1,3 +1,4 @@
+global.require = require;
 import {readFileSync, lstatSync} from 'fs';
 import * as path from 'path';
 import {Twitter} from 'twit';

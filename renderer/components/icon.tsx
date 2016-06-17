@@ -15,7 +15,7 @@ interface DispatchProps {
 
 type IconProps = ConnectedProps & DispatchProps & React.Props<any>;
 
-class Icon extends React.Component<IconProps, {}> {
+export class Icon extends React.Component<IconProps, {}> {
     constructor(props: IconProps) {
         super(props);
     }
