@@ -227,3 +227,8 @@ app.once(
         .catch(e => log.error('Unexpected error on "ready" callback:', e))
 );
 
+app.on('activate', () => {
+    if (win) {
+        win.show();
+    }
+});

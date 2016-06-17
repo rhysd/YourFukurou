@@ -39,7 +39,11 @@ guard :shell do
     timestamp f
     return unless npm_run 'build-unit-test'
     t = "test/unit/renderer/js/#{File.dirname f}/#{File.basename(f, File.extname(f))}.js"
-    puts "ava #{t}"
-    system "./node_modules/.bin/ava", t
+    if File.exist? t
+      puts "ava #{t}"
+      system "./node_modules/.bin/ava", t
+    else
+      puts "Not found, ava skipped: #{t}"
+    end
   end
 end
