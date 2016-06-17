@@ -15,6 +15,7 @@ def npm_run(task)
       "\033[91mFAIL\033[0m\n\n"
     end
   )
+  success
 end
 
 guard :shell do
@@ -31,5 +32,14 @@ guard :shell do
   watch %r[^test/e2e/.+\.ts$] do |m|
     timestamp m[0]
     npm_run 'build-e2e-test'
+  end
+
+  watch %r[^test/unit/renderer/.+\.tsx?$] do |m|
+    f = m[0]
+    timestamp f
+    return unless npm_run 'build-unit-test'
+    t = "test/unit/renderer/js/#{File.dirname f}/#{File.basename(f, File.extname(f))}.js"
+    puts "ava #{t}"
+    system "./node_modules/.bin/ava", t
   end
 end
