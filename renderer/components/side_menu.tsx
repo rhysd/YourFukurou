@@ -65,7 +65,7 @@ function openConfigWithEditor() {
 }
 
 function openDirectMessagePage() {
-    shell.openExternal('https://mobile.twitter.com/messages');
+    shell.openExternal('https://twitter.com/messages');
 }
 
 function openSearchPage() {

@@ -24,7 +24,7 @@ interface DispatchProps {
 type TwitterProfileProps = ConnectedProps & DispatchProps;
 
 function renderBannar(props: TwitterProfileProps) {
-    const {user, onIconClick, size} = props;
+    const {user, onBannerClick, size} = props;
     const bg_color_style = {
         backgroundColor: '#' + user.bg_color,
     };
@@ -34,7 +34,7 @@ function renderBannar(props: TwitterProfileProps) {
             <div
                 className="user-popup__background"
                 style={{cursor: 'pointer'}}
-                onClick={onIconClick}
+                onClick={onBannerClick}
             >
                 <img src={url} style={bg_color_style}/>
             </div>
