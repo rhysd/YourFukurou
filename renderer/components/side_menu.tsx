@@ -23,7 +23,7 @@ interface SideMenuButtonProps extends React.Props<any> {
     onClick: (event: React.MouseEvent) => void;
 }
 
-const SideMenuButton = (props: SideMenuButtonProps) => {
+export const SideMenuButton = (props: SideMenuButtonProps) => {
     const indicator_props =
         props.notified ? {
                 className: 'side-menu__button-indicator animated slideInRight',
