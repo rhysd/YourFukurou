@@ -83,3 +83,43 @@ test('edit button will be activated when editing tweet', t => {
     buttons.at(0).simulate('click');
     t.true(cb.called);
 });
+
+test('notify updated timeline', t => {
+    const menu = shallow(
+        <SideMenu
+            user={fixture.user()}
+            kind="home"
+            notified={{
+                home: false,
+                mention: true,
+            }}
+            editor_open={true}
+            onEdit={doNothing}
+            onHome={doNothing}
+            onMention={doNothing}
+        />
+    );
+
+    const buttons = menu.find(SideMenuButton);
+    t.false(buttons.at(1).props().notified);
+    t.true(buttons.at(2).props().notified);
+
+    const menu2 = shallow(
+        <SideMenu
+            user={fixture.user()}
+            kind="mention"
+            notified={{
+                home: true,
+                mention: false,
+            }}
+            editor_open={true}
+            onEdit={doNothing}
+            onHome={doNothing}
+            onMention={doNothing}
+        />
+    );
+
+    const buttons2 = menu2.find(SideMenuButton);
+    t.true(buttons2.at(1).props().notified);
+    t.false(buttons2.at(2).props().notified);
+});

@@ -37,13 +37,14 @@ guard :shell do
   watch %r[^test/unit/renderer/.+\.tsx?$] do |m|
     f = m[0]
     timestamp f
-    return unless npm_run 'build-unit-test'
-    t = "test/unit/renderer/js/#{File.dirname f}/#{File.basename(f, File.extname(f))}.js"
-    if File.exist? t
-      puts "ava #{t}"
-      system "./node_modules/.bin/ava", t
-    else
-      puts "Not found, ava skipped: #{t}"
+    if npm_run 'build-unit-test'
+      t = "test/unit/renderer/js/#{File.dirname f}/#{File.basename(f, File.extname(f))}.js"
+      if File.exist? t
+        puts "ava #{t}"
+        system "./node_modules/.bin/ava", t
+      else
+        puts "Not found, ava skipped: #{t}"
+      end
     end
   end
 end

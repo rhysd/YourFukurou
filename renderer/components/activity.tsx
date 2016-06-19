@@ -126,7 +126,7 @@ function renderCollapsed(props: TwitterActivityProps) {
     );
 }
 
-const TwitterActivity: React.StatelessComponent<TwitterActivityProps> =
+export const TwitterActivity: React.StatelessComponent<TwitterActivityProps> =
     props => props.collapsed ?  renderCollapsed(props) : renderExpanded(props);
 
 function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
