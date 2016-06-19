@@ -2,23 +2,23 @@
   "name": "yourfukurou",
   "dependencies": {},
   "globalDependencies": {
-    "enzyme": "registry:dt/enzyme#2.3.0+20160525083955",
-    "geojson": "registry:dt/geojson#0.0.0+20160514174238",
-    "github-electron": "registry:dt/github-electron#0.37.8+20160509083739",
+    "geojson": "registry:dt/geojson#0.0.0+20160619034323",
+    "github-electron": "registry:dt/github-electron#1.2.3+20160619034813",
     "loglevel": "registry:dt/loglevel#1.4.0+20160412141402",
-    "node": "registry:dt/node#6.0.0+20160514165920",
-    "react": "registry:dt/react#0.14.0+20160423065914",
-    "react-addons-perf": "registry:dt/react-addons-perf#0.14.0+20160316155526",
+    "node": "registry:dt/node#6.0.0+20160613154055",
+    "react": "registry:dt/react#0.14.0+20160602151522",
+    "react-addons-perf": "registry:dt/react-addons-perf#15.1.0+20160619031933",
     "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
     "react-redux": "registry:dt/react-redux#4.4.0+20160501125835",
     "redux": "registry:dt/redux#3.3.1+20160326112656",
     "redux-thunk": "registry:dt/redux-thunk#2.0.1+20160317120654",
-    "sinon": "registry:dt/sinon#1.16.0+20160517064723",
     "twitter-text": "registry:dt/twitter-text#1.13.4+20160412151713"
   },
   "globalDevDependencies": {
+    "enzyme": "registry:dt/enzyme#2.3.0+20160525083955",
     "github-electron/electron-prebuilt": "registry:dt/github-electron/electron-prebuilt#0.30.1+20160316155526",
-    "q": "registry:dt/q#0.0.0+20160417152954",
+    "q": "registry:dt/q#0.0.0+20160613154756",
+    "sinon": "registry:dt/sinon#1.16.0+20160517064723",
     "webdriverio": "registry:dt/webdriverio#3.3.0+20160316155526"
   }
 }

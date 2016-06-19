@@ -20,7 +20,8 @@
     "test-e2e": "npm run build-e2e-test && ava --serial --verbose ./test/e2e/story",
     "build-unit-test": "tsc --pretty -p test/unit/renderer",
     "test-unit": "npm run build-unit-test && ava ./test/unit/renderer/js/test/unit/renderer/ --verbose",
-    "test": "npm run test-unit && npm run test-e2e"
+    "test": "npm run test-unit && npm run test-e2e",
+    "clean": "rm -r ./typings ./node_modules ./test/unit/renderer/js ./test/e2e/story/*.js"
   },
   "repository": {
     "type": "git",
