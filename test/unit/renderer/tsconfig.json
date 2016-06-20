@@ -16,6 +16,7 @@
     "components/activity_test.tsx",
     "components/tweet/secondary_test.tsx",
     "components/tweet/screen_name_test.tsx",
+    "components/tweet/media_test.tsx",
     "../helper.tsx",
     "../fixture/fixture.ts",
     "../../../main/typings/twit.d.ts",

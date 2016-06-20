@@ -44,7 +44,7 @@ function renderThumb(entity: Twitter.MediaEntity, nth: number, props: TweetMedia
     );
 }
 
-const TweetMedia = (props: TweetMediaProps) => (
+export const TweetMedia = (props: TweetMediaProps) => (
     <div className="tweet__media">
         {props.entities.map((e, i) => renderThumb(e, i, props))}
     </div>
