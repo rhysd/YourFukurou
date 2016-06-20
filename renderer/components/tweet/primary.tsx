@@ -78,33 +78,29 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
     }
 
     render() {
-        const s = this.props.status.getMainStatus();
-        const action_props = {
-            status: s,
-            owner: this.props.owner,
-        };
-
+        const {status, owner, focused} = this.props;
+        const s = status.getMainStatus();
         return (
             <div
                 className="tweet__primary"
                 onMouseEnter={this.showActions}
                 onMouseLeave={this.hideActions}
             >
-                <TweetText status={s} focused={this.props.focused}/>
+                <TweetText status={s} focused={focused}/>
                 {this.renderQuotedStatus(s)}
                 {this.renderMedia(s.media)}
                 <div className="tweet__primary-footer" >
                     <div
-                        className={this.props.focused ?
+                        className={focused ?
                                     'tweet-actions tweet-actions_focused' :
                                     'tweet-actions'}
-                        style={{display: this.props.focused ? 'flex' : 'none'}}
+                        style={{display: focused ? 'flex' : 'none'}}
                         ref={r => {this.actions_elem = r; }}
                     >
-                        <TweetActionButton kind="reply" {...action_props}/>
-                        <TweetActionButton kind="retweet" {...action_props}/>
-                        <TweetActionButton kind="like" {...action_props}/>
-                        <OtherActionsButton {...action_props}/>
+                        <TweetActionButton kind="reply" owner={owner} status={s}/>
+                        <TweetActionButton kind="retweet" owner={owner} status={s}/>
+                        <TweetActionButton kind="like" owner={owner} status={s}/>
+                        <OtherActionsButton owner={owner} status={status}/>
                     </div>
                     <div className="spacer"/>
                     {this.renderConversation(s)}
