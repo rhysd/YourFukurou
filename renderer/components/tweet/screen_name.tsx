@@ -12,7 +12,7 @@ type Props = ConnectedProps & {
     onClick: (e: React.MouseEvent) => void;
 }
 
-const ScreenName = (props: Props) => {
+export const ScreenName = (props: Props) => {
     const screen_name = '@' + props.user.screen_name;
     return (
         <span className="screenname__body">

@@ -17,10 +17,10 @@
     "watch": "guard --watchdir main renderer test",
     "lint": "tslint $(git ls-files | grep -E \".tsx?$\") && stylelint styles/style.css",
     "build-e2e-test": "tsc --pretty -p test/e2e",
-    "test-e2e": "npm run build-e2e-test && ava --serial --verbose ./test/e2e/story",
+    "e2e-test": "npm run build-e2e-test && ava --serial --verbose ./test/e2e/story",
     "build-unit-test": "tsc --pretty -p test/unit/renderer",
-    "test-unit": "npm run build-unit-test && ava ./test/unit/renderer/js/test/unit/renderer/ --verbose",
-    "test": "npm run test-unit && npm run test-e2e",
+    "unit-test": "npm run build-unit-test && ava ./test/unit/renderer/js/test/unit/renderer/ --verbose",
+    "test": "npm run unit-test && npm run e2e-test",
     "clean": "rm -r ./typings ./node_modules ./test/unit/renderer/js ./test/e2e/story/*.js"
   },
   "repository": {
