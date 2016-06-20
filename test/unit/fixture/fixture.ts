@@ -47,6 +47,10 @@ export default class Fixture {
     }
 
     media() {
+        return new Tweet(this.readJson<Twitter.Status>('media'));
+    }
+
+    retweet_media() {
         return new Tweet(this.readJson<Twitter.Status>('retweet_media'));
     }
 
