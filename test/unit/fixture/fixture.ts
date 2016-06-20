@@ -55,11 +55,15 @@ export default class Fixture {
     }
 
     quote() {
-        return new Tweet(this.readJson<Twitter.Status>('retweet_media'));
+        return new Tweet(this.readJson<Twitter.Status>('quote_media'));
     }
 
     quote_media() {
         return new Tweet(this.readJson<Twitter.Status>('quote_media'));
+    }
+
+    in_reply_to() {
+        return new Tweet(this.readJson<Twitter.Status>('in_reply_to'));
     }
 
     user() {
