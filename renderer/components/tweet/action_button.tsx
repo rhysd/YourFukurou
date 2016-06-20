@@ -83,7 +83,7 @@ function getCount(props: TweetActionButtonProps) {
     }
 }
 
-const TweetActionButton = (props: TweetActionButtonProps) => {
+export const TweetActionButton = (props: TweetActionButtonProps) => {
     const icon = getIcon(props.kind);
     const color = getColor(props);
     return <div className="tweet-actions__with-count" style={{color}}>
