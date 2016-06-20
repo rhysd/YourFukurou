@@ -15,7 +15,7 @@ interface DispatchProps {
 
 type FollowButtonProps = ConnectedProps & DispatchProps;
 
-const FollowButton: React.StatelessComponent<FollowButtonProps> = props => {
+export const FollowButton: React.StatelessComponent<FollowButtonProps> = props => {
     const following = props.friends.includes(props.user.id);
     const name =
         following ?
