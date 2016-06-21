@@ -20,6 +20,7 @@
     "components/tweet/media_test.tsx",
     "components/tweet/follow_button_test.tsx",
     "components/tweet/action_button_test.tsx",
+    "components/tweet/text_test.tsx",
     "../helper.tsx",
     "../fixture/fixture.ts",
     "../../../main/typings/twit.d.ts",
