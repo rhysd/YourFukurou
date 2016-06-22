@@ -58,6 +58,7 @@
     "item/timeline_activity.ts",
     "item/tweet.ts",
     "keybinds/keybinds.ts",
+    "keybinds/keymap_transition.ts",
     "keybinds/global.ts",
     "keybinds/editor.ts",
     "keybinds/media_preview.ts",
