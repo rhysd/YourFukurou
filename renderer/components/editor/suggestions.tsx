@@ -26,7 +26,7 @@ interface EmojiEntryProps extends React.Props<any> {
     dispatch?: Redux.Dispatch;
 }
 
-const EmojiEntry = connect()(
+export const EmojiEntry = connect()(
     (props: EmojiEntryProps) => {
         function onClick(e: React.MouseEvent) {
             e.preventDefault();
@@ -54,7 +54,7 @@ interface ScreenNameEntryProps extends React.Props<any> {
     dispatch?: Redux.Dispatch;
 }
 
-const ScreenNameEntry = connect()(
+export const ScreenNameEntry = connect()(
     (props: ScreenNameEntryProps) => {
         function onClick(e: React.MouseEvent) {
             e.preventDefault();
@@ -85,7 +85,7 @@ interface HashtagEntryProps extends React.Props<any> {
     dispatch?: Redux.Dispatch;
 }
 
-const HashtagEntry = connect()(
+export const HashtagEntry = connect()(
     (props: HashtagEntryProps) => {
         function onClick(e: React.MouseEvent) {
             e.preventDefault();

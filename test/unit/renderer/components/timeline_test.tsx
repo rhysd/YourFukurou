@@ -44,7 +44,7 @@ test('render infinite list with <ReactList/>', t => {
 });
 
 test('render <Message/> when message is set', t => {
-    const c = renderTimeline({kind: 'info', text: 'This is text'})
+    const c = renderTimeline({kind: 'info', text: 'This is text'});
     const msg = c.find(Message);
     t.is(msg.length, 1);
     t.is(msg.props().kind, 'info');
