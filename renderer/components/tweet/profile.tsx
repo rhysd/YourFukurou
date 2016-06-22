@@ -137,7 +137,7 @@ function renderFooter(user: TwitterUser) {
     );
 }
 
-const TwitterProfile: React.StatelessComponent<TwitterProfileProps> = props => {
+export const TwitterProfile: React.StatelessComponent<TwitterProfileProps> = props => {
     const u = props.user;
     const style = {
         width: props.size && props.size === 'big' ? undefined : '300px',

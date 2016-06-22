@@ -22,6 +22,7 @@
     "components/tweet/action_button_test.tsx",
     "components/tweet/text_test.tsx",
     "components/tweet/quote_test.tsx",
+    "components/tweet/profile_test.tsx",
     "../helper.tsx",
     "../fixture/fixture.ts",
     "../../../main/typings/twit.d.ts",
