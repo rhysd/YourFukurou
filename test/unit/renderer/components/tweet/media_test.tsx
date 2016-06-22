@@ -32,7 +32,7 @@ test('clicking picture dispatches corresponding action', t => {
     const e = {
         stopPropagation() {
             // Do nothing
-        }
+        },
     };
     c.find('.tweet__media-wrapper').at(0).simulate('click', e);
     t.true(cb.called);

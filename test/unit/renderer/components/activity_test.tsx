@@ -63,7 +63,7 @@ test('show focused activity', t => {
         <TwitterActivity activity={retweetedActivity()} onClick={doNothing} focused collapsed/>
     );
     t.true(a2.find('.activity_focused').length > 0);
-})
+});
 
 test('show collapsed activity', t => {
     const a = shallow(

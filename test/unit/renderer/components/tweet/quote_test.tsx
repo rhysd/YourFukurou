@@ -29,7 +29,7 @@ test('opens quoted status in browser on quote icon clicked', t => {
     const q = c.find('.tweet__quoted-icon');
     t.is(q.length, 1);
     q.simulate('click', {
-        stopPropagation() {},
+        stopPropagation() { /* do nothing */ },
     });
     t.true(openExternal.called);
     t.is(openExternal.args[openExternal.args.length - 1][0], `https://twitter.com/${tw.user.screen_name}/status/${tw.id}`);
