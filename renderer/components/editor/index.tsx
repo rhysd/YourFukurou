@@ -13,7 +13,7 @@ import {
     selectAutoCompleteSuggestion,
 } from '../../actions';
 import IconButton from '../icon_button';
-import EditorKeybinds from '../../keybinds/editor';
+import KeymapTransition from '../../keybinds/keymap_transition';
 import Tweet, {TwitterUser} from '../../item/tweet';
 import log from '../../log';
 import State from '../../states/root';
@@ -26,7 +26,6 @@ import PopupIcon from '../tweet/popup_icon';
 
 interface TweetEditorProps extends React.Props<any> {
     editor: EditorState;
-    keybinds: EditorKeybinds;
     inReplyTo: Tweet;
     completion: EditorCompletionState;
     user: TwitterUser;
@@ -64,7 +63,7 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
                 return getDefaultKeyBinding(e);
             }
 
-            const action = this.props.keybinds.resolveEvent(e);
+            const action = KeymapTransition.editor.resolveEvent(e);
             if (action !== null) {
                 log.debug('Handling custom keymap:', action);
                 return action;
@@ -73,10 +72,10 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
             return getDefaultKeyBinding(e);
         };
         this.keyCommandHandler =
-            cmd => this.props.keybinds.handleAction(cmd);
+            cmd => KeymapTransition.editor.handleAction(cmd);
         this.returnHandler =
             e => {
-                const a = this.props.keybinds.resolveReturnAction(e);
+                const a = KeymapTransition.editor.resolveReturnAction(e);
                 log.debug('Handling return key:', a);
                 switch (a) {
                     case 'send-tweet': {
@@ -97,12 +96,12 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
         this.tabHandler =
             e => {
                 e.preventDefault();
-                const action = this.props.keybinds.resolveEvent(e);
+                const action = KeymapTransition.editor.resolveEvent(e);
                 if (action === null) {
                     return false;
                 }
                 log.debug('Handling tab key:', action);
-                this.props.keybinds.handleAction(action);
+                KeymapTransition.editor.handleAction(action);
                 return true;
             };
     }
@@ -231,7 +230,6 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
 function select(state: State): TweetEditorProps {
     return {
         editor: state.editor.core,
-        keybinds: state.editor.keymaps,
         inReplyTo: state.editor.in_reply_to_status,
         completion: state.editorCompletion,
         user: state.timeline.user,

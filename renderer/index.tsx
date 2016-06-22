@@ -12,7 +12,7 @@ import App from './components/app';
 import {setCurrentUser} from './actions';
 import DB from './database/db';
 import PM from './plugin_manager';
-import GlobalKeyMaps from './keybinds/global';
+import KeymapTransition from './keybinds/keymap_transition';
 import log from './log';
 import * as timing from 'timing.js';
 import * as ReactPerf from 'react-addons-perf';
@@ -85,10 +85,6 @@ fs.lstat(user_css_path, (err: NodeJS.ErrnoException, stats: Stats) => {
 
 PM.loadPlugins();
 
-// TODO:
-// Look config and register user-defined keymaps
-GlobalKeyMaps.listen(window);
-
 // Note: Debug purpose
 global.DB = DB;
 global.PM = PM;
@@ -96,7 +92,7 @@ global.PM = PM;
 // Note: Post process of application
 window.onunload = () => {
     proxy.terminate();
-    GlobalKeyMaps.disable();
+    KeymapTransition.disableAll();
 };
 
 window.onload = () => {

@@ -191,23 +191,22 @@ interface Listenable {
     removeEventListener(e: string, cb: (e: Event) => any): void;
 }
 
-export class GlobalKeyMaps {
+export default class GlobalKeyMaps {
     private keybinds: KeyBinds<GlobalAction>;
-    private listening: Listenable;
     private handler: (e: KeyboardEvent) => void;
 
-    constructor() {
+    constructor(private listening: Listenable) {
         this.keybinds = new KeyBinds<GlobalAction>(
             DefaultMap,
             ActionHandlers
         );
-        this.listening = null;
         this.handler = e => {
             const handled = this.handle(e);
             if (handled) {
                 e.preventDefault();
             }
         };
+        this.listening.addEventListener('keydown', this.handler);
     }
 
     enable() {
@@ -252,5 +251,3 @@ export class GlobalKeyMaps {
         l.addEventListener('keydown', this.handler);
     }
 }
-
-export default new GlobalKeyMaps();

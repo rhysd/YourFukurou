@@ -1,4 +1,4 @@
-import {GlobalKeyMaps} from './global';
+import GlobalKeyMaps from './global';
 import EditorKeyMaps from './editor';
 import MediaPreviewKeyMaps from './media_preview';
 import SlaveTimelineKeyMaps from './slave_timeline';
@@ -16,7 +16,7 @@ export class KeymapTransition {
     slave_timeline: SlaveTimelineKeyMaps;
 
     constructor() {
-        this.global = new GlobalKeyMaps();
+        this.global = new GlobalKeyMaps(window);
         this.editor = new EditorKeyMaps();
         this.media_preview = new MediaPreviewKeyMaps();
         this.slave_timeline = new SlaveTimelineKeyMaps();
@@ -61,9 +61,16 @@ export class KeymapTransition {
         }
     }
 
+    disableAll() {
+        this.global.disable();
+        this.editor.disable();
+        this.media_preview.disable();
+        this.slave_timeline.disable();
+    }
+
     private doTransition(to: AnyKeymaps) {
         const prev = this.current;
-        this.current.disable();
+        prev.disable();
         to.enable(window);
         this.current = to;
         log.debug(`Keymap state changed: Escape: ${prev.constructor.name} -> ${this.current.constructor.name}`);
