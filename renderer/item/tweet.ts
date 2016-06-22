@@ -374,7 +374,7 @@ export default class Tweet implements Item {
     }
 
     statusPageUrl() {
-        return `https://twitter.com/hadakadenkyu/status/${this.getMainStatus().json.id_str}`;
+        return `https://twitter.com/${this.json.user.screen_name}/status/${this.getMainStatus().json.id_str}`;
     }
 
     openStatusPageInBrowser() {
