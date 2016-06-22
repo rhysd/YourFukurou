@@ -1,7 +1,6 @@
 import {EditorState, Modifier, CompositeDecorator, SelectionState, ContentState} from 'draft-js';
 import Tweet, {TwitterUser} from '../item/tweet';
-import EditorKeymaps from '../keybinds/editor';
-import GlobalKeyMaps from '../keybinds/global';
+import KeymapTransition from '../keybinds/keymap_transition';
 import autoCompleteFactory from '../components/editor/auto_complete_decorator';
 import log from '../log';
 
@@ -18,7 +17,6 @@ export default class TweetEditorState {
     constructor(
         public core: EditorState,
         public is_open: boolean,
-        public keymaps: EditorKeymaps,
         public in_reply_to_status: Tweet
     ) {}
 
@@ -26,7 +24,6 @@ export default class TweetEditorState {
         return new TweetEditorState(
             new_core,
             this.is_open,
-            this.keymaps,
             this.in_reply_to_status
         );
     }
@@ -35,7 +32,6 @@ export default class TweetEditorState {
         return new TweetEditorState(
             EditorState.createEmpty(editorDecolator),
             this.is_open,
-            this.keymaps,
             null
         );
     }
@@ -69,7 +65,6 @@ export default class TweetEditorState {
         return new TweetEditorState(
             next_editor,
             this.is_open,
-            this.keymaps,
             this.in_reply_to_status
         );
     }
@@ -111,7 +106,7 @@ export default class TweetEditorState {
     }
 
     openEditorWithInReplyTo(status: Tweet, owner: TwitterUser, preset_text?: string) {
-        GlobalKeyMaps.disable();
+        KeymapTransition.enterEditor();
         const in_reply_to = status.getMainStatus();
         const next_core = preset_text ?
                 this.setTextToEditor(preset_text) :
@@ -119,23 +114,21 @@ export default class TweetEditorState {
         return new TweetEditorState(
             next_core,
             true,
-            this.keymaps,
             in_reply_to
         );
     }
 
     openEditor(preset_text?: string) {
-        GlobalKeyMaps.disable();
+        KeymapTransition.enterEditor();
         return new TweetEditorState(
             preset_text ? this.setTextToEditor(preset_text) : this.core,
             true,
-            this.keymaps,
             null
         );
     }
 
     closeEditor() {
-        GlobalKeyMaps.enable();
+        KeymapTransition.escapeFromCurrentKeymaps();
         return new TweetEditorState(
             EditorState.push(
                 this.core,
@@ -143,7 +136,6 @@ export default class TweetEditorState {
                 'remove-range'
             ),
             false,
-            this.keymaps,
             null
         );
     }
@@ -157,6 +149,5 @@ export const DefaultTweetEditorState =
     new TweetEditorState(
         EditorState.createEmpty(editorDecolator),
         false,
-        new EditorKeymaps(),
         null
     );

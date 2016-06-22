@@ -1,8 +1,7 @@
 import {List} from 'immutable';
 import Item from '../item/item';
 import Tweet, {TwitterUser} from '../item/tweet';
-import SlaveTimelineKeymaps from '../keybinds/slave_timeline';
-import GlobalKeymaps from '../keybinds/global';
+import KeymapTransition from '../keybinds/keymap_transition';
 
 interface SlaveTimeline {
     close(): SlaveTimeline;
@@ -15,20 +14,14 @@ interface SlaveTimeline {
 }
 export default SlaveTimeline;
 
-function newKeybinds() {
-    const keybinds = new SlaveTimelineKeymaps();
-    GlobalKeymaps.disable();
-    keybinds.enable(window);
-    return keybinds;
-}
-
 export class UserTimeline implements SlaveTimeline {
     constructor(
         public user: TwitterUser,
         public items: List<Item> = List<Item>(),
-        public focus_index: number = null,
-        public keybinds: SlaveTimelineKeymaps = newKeybinds()
-    ) {}
+        public focus_index: number = null
+    ) {
+        KeymapTransition.enterSlaveTimeline();
+    }
 
     getFocusedStatus() {
         if (this.focus_index === null) {
@@ -48,14 +41,12 @@ export class UserTimeline implements SlaveTimeline {
         return new UserTimeline(
             this.user,
             next_items,
-            focus_idx,
-            this.keybinds
+            focus_idx
         );
     }
 
     close(): UserTimeline {
-        this.keybinds.disable();
-        GlobalKeymaps.enable();
+        KeymapTransition.escapeFromCurrentKeymaps();
         return null;
     }
 
@@ -98,8 +89,7 @@ export class UserTimeline implements SlaveTimeline {
         return new UserTimeline(
             this.user,
             this.items,
-            idx,
-            this.keybinds
+            idx
         );
     }
 }

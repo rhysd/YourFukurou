@@ -1,33 +1,27 @@
-import MediaPreviewKeyMaps from '../keybinds/media_preview';
-import GlobalKeymaps from '../keybinds/global';
+import KeymapTransition from '../keybinds/keymap_transition';
 
 export default class TweetMediaState {
     constructor(
         public is_open: boolean,
         public index: number,
-        public picture_urls: string[],
-        public keybinds: MediaPreviewKeyMaps
+        public picture_urls: string[]
     ) {}
 
     openMedia(urls: string[], start_idx: number) {
-        GlobalKeymaps.disable();
-        this.keybinds.enable(window);
+        KeymapTransition.enterMediaPreview();
         return new TweetMediaState(
             true,
             start_idx || 0,
-            urls,
-            this.keybinds
+            urls
         );
     }
 
     closeMedia() {
-        this.keybinds.disable();
-        GlobalKeymaps.enable();
+        KeymapTransition.escapeFromCurrentKeymaps();
         return new TweetMediaState(
             false,
             this.index,
-            this.picture_urls,
-            this.keybinds
+            this.picture_urls
         );
     }
 
@@ -38,10 +32,9 @@ export default class TweetMediaState {
         return new TweetMediaState(
             this.is_open,
             nth,
-            this.picture_urls,
-            this.keybinds
+            this.picture_urls
         );
     }
 }
 
-export const DefaultTweetMediaState = new TweetMediaState(false, 0, [], new MediaPreviewKeyMaps);
+export const DefaultTweetMediaState = new TweetMediaState(false, 0, []);
