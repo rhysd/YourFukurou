@@ -64,7 +64,7 @@ function getStatusIdsRelatedTo(status: TweetItem): string[] {
     return ret;
 }
 
-class Timeline extends React.Component<TimelineProps, {}> {
+export class Timeline extends React.Component<TimelineProps, {}> {
     refs: {
         list: ReactList.Node;
         [key: string]: React.Component<any, any> | Element;
