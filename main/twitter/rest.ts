@@ -1,7 +1,4 @@
-import {join} from 'path';
-import {readFile} from 'fs';
 import {IncomingMessage} from 'http';
-import {app} from 'electron';
 import * as Twit from 'twit';
 import * as Ipc from '../ipc';
 import log from '../log';
