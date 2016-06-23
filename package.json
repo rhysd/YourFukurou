@@ -21,7 +21,8 @@
     "build-unit-test": "tsc --pretty -p test/unit/renderer",
     "unit-test": "npm run build-unit-test && ava ./test/unit/renderer/js/test/unit/renderer/ --verbose",
     "test": "npm run unit-test && npm run e2e-test",
-    "clean": "rm -r ./typings ./node_modules ./test/unit/renderer/js ./test/e2e/story/*.js"
+    "clean": "rm -rf ./typings ./node_modules ./test/unit/renderer/js ./test/e2e/story/*.js",
+    "start" : "npm run dep && npm run build && npm run app"
   },
   "repository": {
     "type": "git",

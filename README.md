@@ -282,9 +282,13 @@ exports.plugin = {
 
 ## For Development
 
+Node.js v6.0 or later is required to use browserify for ES2015 source code.  If you want to reset the repository, please use `npm run clean`.
+
 ```sh
 $ git clone https://github.com/rhysd/YourFukurou.git
 $ cd YourFukurou
+
+# Build application
 $ npm run dep
 $ npm run build
 
@@ -294,7 +298,13 @@ $ npm run app
 # Run app with debug log and DevTools
 $ npm run debug
 
-# Run app with dummy tweets.  {data dir}/tweets.json should exist.
+# Run app with dummy tweets.  {data dir}/dummy.json (or `dummy/` directory) should exist.
 $ npm run dummy
+
+# Run unit tests
+$ npm run unit-test
+
+# Run unit tests and E2E tests
+$ npm run test
 ```
 
