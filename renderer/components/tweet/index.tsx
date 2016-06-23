@@ -35,32 +35,32 @@ interface DispatchProps {
 
 type TweetProps = ConnectedProps & DispatchProps;
 
-function getClass(tw: TweetItem, props: TweetProps) {
+function getModifier(tw: TweetItem, props: TweetProps) {
     if (props.focused) {
-        return 'tweet__body tweet__body_focused';
+        return 'tweet__body_focused';
     }
 
     const timeline = props.timeline || 'home';
     if (tw.mentionsTo(props.owner) && timeline !== 'mention') {
-        return 'tweet__body tweet__body_mention';
+        return 'tweet__body_mention';
     }
 
     if (props.related) {
-        return 'tweet__body tweet__body_related';
+        return 'tweet__body_related';
     }
 
     if (props.focused_user) {
-        return 'tweet__body tweet__body_user-related';
+        return 'tweet__body_user-related';
     }
 
-    return 'tweet__body';
+    return '';
 }
 
 const Tweet: React.StatelessComponent<TweetProps> = props => {
     const tw = props.status.getMainStatus();
     return (
         <UndraggableClickable
-            className={getClass(tw, props)}
+            className={'tweet__body ' + getModifier(tw, props)}
             onClick={props.onClick}
         >
             <PopupIcon user={tw.user} friends={props.friends}/>

@@ -2,6 +2,7 @@
   "name": "yourfukurou",
   "dependencies": {},
   "globalDependencies": {
+    "classnames": "registry:dt/classnames#0.0.0+20160316155526",
     "geojson": "registry:dt/geojson#0.0.0+20160619034323",
     "github-electron": "registry:dt/github-electron#1.2.3+20160619034813",
     "loglevel": "registry:dt/loglevel#1.4.0+20160412141402",

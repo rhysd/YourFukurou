@@ -2,6 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {emoji} from 'node-emoji';
 import Dexie from 'dexie';
+import * as classNames from 'classnames';
 import {AutoCompleteLabel} from './auto_complete_decorator';
 import {selectAutoCompleteSuggestion} from '../../actions';
 import EditorCompletionState from '../../states/editor_completion';
@@ -33,12 +34,14 @@ export const EmojiEntry = connect()(
             props.dispatch(selectAutoCompleteSuggestion(props.code, props.text));
         }
 
-        const n = props.focused ?
-            'autocomplete__suggestion-item autocomplete__suggestion-item_focused' :
-            'autocomplete__suggestion-item';
-
         return (
-            <div className={n} onClick={onClick}>
+            <div
+                className={classNames(
+                    'autocomplete__suggestion-item',
+                    {'autocomplete__suggestion-item_focused': props.focused}
+                )}
+                onClick={onClick}
+            >
                 <span className="autocomplete__emoji-code">{props.code}</span>
                 <span className="autocomplete__emoji-text">{`:${props.name}:`}</span>
             </div>
@@ -61,12 +64,14 @@ export const ScreenNameEntry = connect()(
             props.dispatch(selectAutoCompleteSuggestion(props.name + ' ', props.query));
         }
 
-        const n = props.focused ?
-            'autocomplete__suggestion-item autocomplete__suggestion-item_focused' :
-            'autocomplete__suggestion-item';
-
         return (
-            <div className={n} onClick={onClick}>
+            <div
+                className={classNames(
+                    'autocomplete__suggestion-item',
+                    {'autocomplete__suggestion-item_focused': props.focused}
+                )}
+                onClick={onClick}
+            >
                 <img
                     className="autocomplete__screenname-icon"
                     src={props.icon_url}
@@ -92,12 +97,14 @@ export const HashtagEntry = connect()(
             props.dispatch(selectAutoCompleteSuggestion(props.text + ' ', props.query));
         }
 
-        const n = props.focused ?
-            'autocomplete__suggestion-item autocomplete__suggestion-item_focused' :
-            'autocomplete__suggestion-item';
-
         return (
-            <div className={n} onClick={onClick}>
+            <div
+                className={classNames(
+                    'autocomplete__suggestion-item',
+                    {'autocomplete__suggestion-item_focused': props.focused}
+                )}
+                onClick={onClick}
+            >
                 <span>{props.text}</span>
             </div>
         );

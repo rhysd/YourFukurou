@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as classNames from 'classnames';
 import {TwitterUser} from '../../item/tweet';
 
 interface MiniTweetIconProps extends React.Props<any> {
@@ -16,11 +17,10 @@ const MiniTweetIcon: React.StatelessComponent<MiniTweetIconProps> = props => {
             title={u.name}
         >
             <img
-                className={
-                    props.quoted ?
-                        'mini-tweet__icon-image mini-tweet__icon-image_2cols' :
-                        'mini-tweet__icon-image'
-                }
+                className={classNames(
+                    'mini-tweet__icon-image',
+                    {'mini-tweet__icon-image_2cols': props.quoted}
+                )}
                 src={u.icon_url_73x73}
                 alt={s}
                 width={48}

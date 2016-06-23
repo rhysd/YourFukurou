@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as classNames from 'classnames';
 import ScreenName from '../tweet/screen_name';
 import Tweet from '../../item/tweet';
 
@@ -16,11 +17,12 @@ function renderRetweeted(props: MiniTweetSecondaryProps) {
     const screen_name = '@' + user.screen_name;
 
     return (
-        <div className={
-            props.focused ?
-                'mini-tweet__secondary-retweeted mini-tweet__secondary-retweeted_focused' :
-                'mini-tweet__secondary-retweeted'
-            }>
+        <div
+            className={classNames(
+                'mini-tweet__secondary-retweeted',
+                {'mini-tweet__secondary-retweeted_focused': props.focused}
+            )}
+        >
             <i className="fa fa-retweet"/>
             <div className="mini-tweet__secondary-rt-icon" title={screen_name}>
                 <img
@@ -38,15 +40,17 @@ function renderRetweeted(props: MiniTweetSecondaryProps) {
 const MiniTweetSecondary: React.StatelessComponent<MiniTweetSecondaryProps> = props => {
     const s = props.status.getMainStatus();
     return (
-        <div className={
-            s.isQuotedTweet() ?
-                'mini-tweet__secondary mini-tweet__secondary_2cols' :
-                'mini-tweet__secondary'
-        }>
+        <div
+            className={classNames(
+                'mini-tweet__secondary',
+                {'mini-tweet__secondary_2cols': s.isQuotedTweet()}
+            )}
+        >
             <ScreenName
-                className={props.focused ?
-                            'mini-tweet__secondary-screenname mini-tweet__secondary-screenname_focused' :
-                            'mini-tweet__secondary-screenname'}
+                className={classNames(
+                    'mini-tweet__secondary-screenname',
+                    {'mini-tweet__secondary-screenname_focused': props.focused}
+                )}
                 user={s.user}
             />
             {renderRetweeted(props)}

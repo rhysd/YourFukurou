@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Twitter} from 'twit';
+import * as classNames from 'classnames';
 import Tweet from '../../item/tweet';
 import TweetText from '../tweet/text';
 import ScreenName from '../tweet/screen_name';
@@ -23,13 +24,13 @@ function renderQuoted(s: Tweet, focused: boolean, onClick: (e: React.MouseEvent)
     if (q === null) {
         return undefined;
     }
+
     return (
         <div
-            className={
-                focused ?
-                    'mini-tweet__quoted mini-tweet__quote_focused' :
-                    'mini-tweet__quoted'
-            }
+            className={classNames(
+                'mini-tweet__quoted',
+                {'mini-tweet__quote_focused': focused}
+            )}
             title={q.text}
         >
             <span className="mini-tweet__quoted-icon">

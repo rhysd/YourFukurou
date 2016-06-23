@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Twitter} from 'twit';
+import * as classNames from 'classnames';
 import log from '../../log';
 import Tweet, {TwitterUser} from '../../item/tweet';
 import TweetActionButton from './action_button';
@@ -37,12 +38,12 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
     }
 
     renderCreatedAt() {
-        const class_name = this.props.focused ?
-            'tweet__primary-created-at tweet__primary-created-at_focused' :
-            'tweet__primary-created-at';
         return (
             <span
-                className={class_name}
+                className={classNames(
+                    'tweet__primary-created-at',
+                    {'tweet__primary-created-at_focused': this.props.focused}
+                )}
                 onClick={this.openStatus}
             >
                 {this.props.status.getCreatedAtString()}
@@ -54,12 +55,14 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         if (!s.hasInReplyTo()) {
             return undefined;
         }
-        const class_name = this.props.focused ?
-            'tweet__primary-conversation tweet__primary-conversation_focused' :
-            'tweet__primary-conversation';
-        return <div className={class_name}>
-            <i className="fa fa-comments" style={{marginRight: '4px'}}/>
-        </div>;
+        return (
+            <div className={classNames(
+                'tweet__primary-conversation',
+                {'tweet__primary-conversation_focused': this.props.focused}
+            )}>
+                <i className="fa fa-comments" style={{marginRight: '4px'}}/>
+            </div>
+        );
     }
 
     renderQuotedStatus(s: Tweet): JSX.Element {
@@ -91,9 +94,10 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                 {this.renderMedia(s.media)}
                 <div className="tweet__primary-footer" >
                     <div
-                        className={focused ?
-                                    'tweet-actions tweet-actions_focused' :
-                                    'tweet-actions'}
+                        className={classNames(
+                            'tweet-actions',
+                            {'tweet-actions_focused': focused}
+                        )}
                         style={{display: focused ? 'flex' : 'none'}}
                         ref={r => {this.actions_elem = r; }}
                     >

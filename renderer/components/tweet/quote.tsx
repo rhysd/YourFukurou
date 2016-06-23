@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Twitter} from 'twit';
+import * as classNames from 'classnames';
 import TweetItem from '../../item/tweet';
 import ScreenName from './screen_name';
 import TweetText from './text';
@@ -38,15 +39,16 @@ function renderHeader(s: TweetItem) {
 
 const QuotedTweet = (props: QuotedTweetProps) => {
     const s = props.status.getMainStatus();
-    const class_name =
-        props.focused ?
-            'tweet__quoted tweet__quoted_focused' :
-            'tweet__quoted';
-    return <div className={class_name}>
-        {renderHeader(s)}
-        <TweetText className="tweet__quoted-text" status={s}/>
-        {renderMedia(s.media)}
-    </div>;
+    return (
+        <div className={classNames(
+            'tweet__quoted',
+            {'tweet__quoted_focused': props.focused}
+        )}>
+            {renderHeader(s)}
+            <TweetText className="tweet__quoted-text" status={s}/>
+            {renderMedia(s.media)}
+        </div>
+    );
 };
 
 export default QuotedTweet;

@@ -17,14 +17,14 @@ type FollowButtonProps = ConnectedProps & DispatchProps;
 
 export const FollowButton: React.StatelessComponent<FollowButtonProps> = props => {
     const following = props.friends.includes(props.user.id);
-    const name =
+    const modifier =
         following ?
-            'follow-button follow-button_will-unfollow' :
+            'follow-button_will-unfollow' :
         props.user.protected ?
-            'follow-button follow-button_cannot-follow' :
-            'follow-button follow-button_will-follow';
+            'follow-button_cannot-follow' :
+            'follow-button_will-follow';
     return (
-        <div className={name} onClick={props.onClick}>
+        <div className={'follow-button ' + modifier} onClick={props.onClick}>
             {following ? 'Unfollow' : 'Follow'}
         </div>
     );

@@ -22,7 +22,7 @@
     "unit-test": "npm run build-unit-test && ava ./test/unit/renderer/js/test/unit/renderer/ --verbose",
     "test": "npm run unit-test && npm run e2e-test",
     "clean": "rm -rf ./typings ./node_modules ./test/unit/renderer/js ./test/e2e/story/*.js",
-    "start" : "npm run dep && npm run build && npm run app"
+    "start": "npm run dep && npm run build && npm run app"
   },
   "repository": {
     "type": "git",
@@ -64,6 +64,7 @@
   "dependencies": {
     "about-window": "^1.3.1",
     "animate.css": "^3.5.1",
+    "classnames": "^2.2.5",
     "dexie": "^1.3.6",
     "draft-js": "^0.7.0",
     "electron-prebuilt": "^1.2.1",

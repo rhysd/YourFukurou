@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
+import * as classNames from 'classnames';
 import State from '../states/root';
 import IconButton from './icon_button';
 import Icon from './icon';
@@ -34,9 +35,10 @@ export const SideMenuButton = (props: SideMenuButtonProps) => {
     return (
         <div className="side-menu__button-wrapper">
             <IconButton
-                className={props.active ?
-                            'side-menu__button side-menu__button_active' :
-                            'side-menu__button'}
+                className={classNames(
+                    'side-menu__button',
+                    {'side-menu__button_active': props.active}
+                )}
                 name={props.name}
                 tip={props.tip}
                 onClick={props.onClick}

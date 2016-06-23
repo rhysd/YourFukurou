@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
+import * as classNames from 'classnames';
 import TimelineActivity, {TimelineActivityKind} from '../item/timeline_activity';
 import Tweet, {TwitterUser} from '../item/tweet';
 import Icon from './icon';
@@ -75,9 +76,10 @@ function renderRestUsers(activity: TimelineActivity) {
 function renderCreatedAt(status: Tweet, focused: boolean) {
     return (
         <ExternalLink
-            className={focused ?
-                'activity__created-at activity__created-at_focused' :
-                'activity__created-at'}
+            className={classNames(
+                'activity__created-at',
+                {'activity__created-at_focused': true}
+            )}
             url={status.statusPageUrl()}
         >{status.getCreatedAtString()}</ExternalLink>
     );
@@ -93,7 +95,7 @@ function renderExpanded(props: TwitterActivityProps) {
 
     return (
         <div
-            className={focused ? 'activity activity_focused' : 'activity'}
+            className={classNames('activity', {activity_focused: focused})}
             onClick={onClick}
         >
             <div className="activity__header">
@@ -111,9 +113,10 @@ function renderCollapsed(props: TwitterActivityProps) {
     const {focused, onClick, activity} = props;
     return (
         <div
-            className={focused ?
-                    'activity activity_mini activity_focused' :
-                    'activity activity_mini'}
+            className={classNames(
+                'activity activity_mini',
+                {'activity_focused': focused}
+            )}
             onClick={onClick}
         >
             <div className="activity__header activity__header_mini">

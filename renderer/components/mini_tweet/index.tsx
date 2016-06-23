@@ -29,24 +29,24 @@ interface DispatchProps {
 
 type MiniTweetProps = ConnectedProps & DispatchProps;
 
-function getClass(tw: Tweet, props: MiniTweetProps) {
+function getModifier(tw: Tweet, props: MiniTweetProps) {
     if (props.focused) {
-        return 'mini-tweet mini-tweet_focused';
+        return 'mini-tweet_focused';
     }
 
     if (tw.mentionsTo(props.owner) && props.timeline !== 'mention') {
-        return 'mini-tweet mini-tweet_mention';
+        return 'mini-tweet_mention';
     }
 
     if (props.related) {
-        return 'mini-tweet mini-tweet_related';
+        return 'mini-tweet_related';
     }
 
     if (props.focused_user) {
-        return 'mini-tweet mini-tweet_user-related';
+        return 'mini-tweet_user-related';
     }
 
-    return 'mini-tweet';
+    return '';
 }
 
 export function renderPicIcon(tw: Tweet, onClick: (e: React.MouseEvent) => void) {
@@ -66,7 +66,7 @@ const MiniTweet: React.StatelessComponent<MiniTweetProps> = props => {
     const {status, onClick, focused, onPicClicked} = props;
     const tw = status.getMainStatus();
     return (
-        <UndraggableClickable className={getClass(tw, props)} onClick={onClick}>
+        <UndraggableClickable className={'mini-tweet ' + getModifier(tw, props)} onClick={onClick}>
             <MiniTweetIcon user={tw.user} quoted={tw.isQuotedTweet()}/>
             <MiniTweetSecondary status={status} focused={focused}/>
             <MiniTweetText status={status} focused={focused}/>
