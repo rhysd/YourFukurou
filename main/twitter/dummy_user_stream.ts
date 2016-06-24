@@ -1,16 +1,32 @@
 import * as Twit from 'twit';
 import log from '../log';
 import {Sender} from '../ipc';
-import Fixture from './fixture';
+import {readFile} from 'fs';
+import {app} from 'electron';
+import {join} from 'path';
 
 export default class DummyUserStream {
     running: boolean;
-    fixture: Fixture;
+    dummy_file_path: string;
+    cache: Object[];
 
     constructor(
         private sender: Sender
     ) {
         this.running = false;
+        this.dummy_file_path = join(process.env.YOURFUKUROU_FIXTURE_DIR || app.getPath('userData'), 'dummy_stream.json');
+    }
+
+    read() {
+        return new Promise<Object[]>((resolve, reject) => {
+            readFile(this.dummy_file_path, 'utf8', (err, data) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(JSON.parse(data) as Object[]);
+            });
+        });
     }
 
     connectToStream(params: Object = {}) {
@@ -18,7 +34,7 @@ export default class DummyUserStream {
         this.running = true;
 
         log.debug('Starting to send dummy stream');
-        this.fixture.read('stream_tweets').then((tweets: Object[]) => {
+        this.read().then((tweets: Object[]) => {
             let idx = 0;
 
             const random_range =
