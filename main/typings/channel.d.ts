@@ -19,6 +19,7 @@ type ChannelFromMain
     | 'yf:unrejected-ids'
     | 'yf:no-retweet-ids'
     | 'yf:friends'
+    | 'yf:auth-tokens'
     | 'yf:api-failure'
 ;
 
@@ -32,4 +33,5 @@ type ChannelFromRenderer
     | 'yf:request-follow'
     | 'yf:request-unfollow'
     | 'yf:request-user-timeline'
+    | 'yf:start-user-stream'
 ;

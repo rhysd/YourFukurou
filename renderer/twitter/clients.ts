@@ -7,7 +7,7 @@ const {app} = global.require('electron');
 const {readFile} = global.require('fs');
 
 export interface UnderlyingClient {
-    setCredentials(options: Twit.Options): void;
+    setupClient(options: Twit.Options): void;
     post<T>(name: string, params?: Object): Promise<T>;
     get<T>(name: string, params?: Object): Promise<T>;
 }
@@ -19,7 +19,7 @@ export class TwitClient implements UnderlyingClient {
         this.client = null;
     }
 
-    setCredentials(options: Twit.Options) {
+    setupClient(options: Twit.Options) {
         this.client = new Twit(options);
     }
 
@@ -64,10 +64,10 @@ export class DummyClient implements UnderlyingClient {
 
     constructor() {
         this.fixture_dir = global.process.env.YOURFUKUROU_FIXTURE_DIR || app.getPath('userData');
-        this.fixture_data = this.readJson('dummy.json');
+        this.fixture_data = this.readJson('dummy_rest_responses.json');
     }
 
-    setCredentials(_: any) {
+    setupClient(_: any) {
         // Nothing to do for setup
     }
 

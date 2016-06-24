@@ -10,7 +10,7 @@ export class TwitterRestApi {
     }
 
     setupClient(options: Twit.Options) {
-        this.client.setCredentials(options);
+        this.client.setupClient(options);
     }
 
     updateStatus(text: string, in_reply_to?: string) {
@@ -64,7 +64,7 @@ export class TwitterRestApi {
         return this.client.post<User>('friendships/destroy', {user_id});
     }
 
-    verifyAccount() {
+    verifyCredentials() {
         const params = {
             include_entities: true,
         };

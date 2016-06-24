@@ -24,7 +24,8 @@ import Store from './store';
 import log from './log';
 import Tweet, {TwitterUser} from './item/tweet';
 import DB from './database/db';
-import {Twitter} from 'twit';
+import {Twitter, Options} from 'twit';
+import TwitterRestApi from './twitter/rest_api';
 
 interface Listeners {
     [c: string]: Electron.IpcRendererEventListener;
@@ -48,6 +49,34 @@ export default class IpcChannelProxy {
     }
 
     start() {
+        this.subscribe('yf:auth-tokens', (options: Options) => {
+            TwitterRestApi.setupClient(options);
+            return Promise.all([
+                TwitterRestApi.verifyCredentials(),
+                TwitterRestApi.rejectedIds(),
+                TwitterRestApi.noRetweetIds(),
+                TwitterRestApi.homeTimeline({
+                    include_entities: true,
+                    count: 20,  // TODO: fetch 40 tweets on expand_tweet == 'always'
+                }),
+                TwitterRestApi.mentionTimeline(),
+            ])
+            .then(([my_account, rejected_ids, no_retweet_ids, tweets, mentions]) => {
+                Store.dispatch(setCurrentUser(new TwitterUser(my_account)));
+
+                Store.dispatch(addRejectedUserIds(rejected_ids));
+                Store.dispatch(addNoRetweetUserIds(no_retweet_ids));
+
+                Store.dispatch(addTweetsToTimeline(tweets.reverse().map(tw => new Tweet(tw))));
+                DB.accounts.storeAccountsInTweets(tweets);
+                DB.hashtags.storeHashtagsInTweets(tweets);
+
+                Store.dispatch(addMentions(mentions.map(j => new Tweet(j))));
+                DB.accounts.storeAccountsInTweets(mentions);
+                DB.hashtags.storeHashtagsInTweets(mentions);
+            });
+        });
+
         this.subscribe('yf:tweet', (json: Twitter.Status) => {
             const tw = new Tweet(json);
             Store.dispatch(addTweetToTimeline(tw));
