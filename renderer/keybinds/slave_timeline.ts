@@ -14,13 +14,14 @@ import {
     openPicturePreview,
     createLike,
     destroyLike,
-    sendRetweet,
-    undoRetweet,
+    retweetSucceeded,
+    unretweetSucceeded,
     destroyStatus,
     openUserTimeline,
 } from '../actions';
 import {UserTimeline} from '../states/slave_timeline';
 import log from '../log';
+import TwitterRestApi from '../twitter/rest_api';
 
 function getCurrentUser() {
     const slave = Store.getState().slaveTimeline;
@@ -96,8 +97,13 @@ function toggleRetweet() {
         return;
     }
     const s = status.getMainStatus();
-    const action = s.retweeted ? undoRetweet(s.id) : sendRetweet(s.id);
-    Store.dispatch(action);
+    if (s.retweeted) {
+        TwitterRestApi.unretweet(s.id)
+            .then(res => Store.dispatch(unretweetSucceeded(res)));
+    } else {
+        TwitterRestApi.retweet(s.id)
+            .then(res => Store.dispatch(retweetSucceeded(res)));
+    }
 }
 
 function toggleLike() {

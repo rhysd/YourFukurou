@@ -9,14 +9,6 @@ function sendToMain(ch: ChannelFromRenderer, ...args: any[]) {
 
 export default function remoteActions(state: {} = null, action: Action) {
     switch (action.type) {
-        case Kind.SendRetweet:
-            // Note:
-            // The retweeted status will be sent on stream
-            sendToMain('yf:request-retweet', action.tweet_id);
-            break;
-        case Kind.UndoRetweet:
-            sendToMain('yf:undo-retweet', action.tweet_id);
-            break;
         case Kind.CreateLike:
             // Note:
             // The likeed status will be sent on stream

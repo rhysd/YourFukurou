@@ -1,6 +1,7 @@
 import * as Twit from 'twit';
 import log from '../log';
 import {UnderlyingClient, DummyClient, TwitClient} from './clients';
+import Tweet, {TwitterUser} from '../item/tweet';
 
 type Status = Twit.Twitter.Status;
 type User = Twit.Twitter.User;
@@ -42,11 +43,33 @@ export class TwitterRestApi {
     }
 
     retweet(tweet_id: string) {
-        return this.client.post<Status>('statuses/retweet/' + tweet_id);
+        return this.client.post<Status>('statuses/retweet/' + tweet_id)
+            .then(json => {
+                if (!json.retweeted_status) {
+                    log.error('Received status is not an retweet status: ', json);
+                    return new Tweet(json);
+                }
+                if (!json.retweeted_status.retweeted) {
+                    log.warn('Retweeted tweet is NOT marked as "retweeted", workaround.', json);
+                    json.retweeted_status.retweeted = true;
+                    json.retweeted_status.retweet_count += 1;
+                }
+                return new Tweet(json);
+            });
     }
 
     unretweet(tweet_id: string) {
-        return this.client.post<Status>('statuses/unretweet/' + tweet_id);
+        return this.client.post<Status>('statuses/unretweet/' + tweet_id)
+            .then(json => {
+                // Note:
+                // The JSON is an original retweeted tweet
+                if (json.retweeted) {
+                    log.warn('Unretweeted tweet is marked as "retweeted", workaround', json);
+                    json.retweeted = false;
+                    json.retweet_count -= 1;
+                }
+                return new Tweet(json);
+            });
     }
 
     destroyStatus(tweet_id: string) {
@@ -80,15 +103,15 @@ export class TwitterRestApi {
     }
 
     muteIds(params: Object = {}) {
-        return this.client.get<number[]>('mutes/users/ids', params);
+        return this.client.get<any>('mutes/users/ids', params).then(res => res.ids as number[]);
+    }
+
+    blockIds(params: Object = {}) {
+        return this.client.get<any>('blocks/ids', params).then(res => res.ids as number[]);
     }
 
     noRetweetIds(params: Object = {}) {
         return this.client.get<number[]>('friendships/no_retweets/ids', params);
-    }
-
-    blockIds(params: Object = {}) {
-        return this.client.get<number[]>('blocks/ids', params);
     }
 
     rejectedIds() {

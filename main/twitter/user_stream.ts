@@ -97,12 +97,8 @@ export default class TwitterUserStream {
 
         // Note: Should watch more events
         //
-        // this.stream.on('favorite')
-        // this.stream.on('unfavorite')
         // this.stream.on('blocked')
         // this.stream.on('unblocked')
-        // this.stream.on('follow')
-        // this.stream.on('unfollow')
         // ...
 
         this.stream.on('error', err => {

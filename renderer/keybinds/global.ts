@@ -16,11 +16,12 @@ import {
     openPicturePreview,
     createLike,
     destroyLike,
-    sendRetweet,
-    undoRetweet,
+    retweetSucceeded,
+    unretweetSucceeded,
     destroyStatus,
     openUserTimeline,
 } from '../actions';
+import TwitterRestApi from '../twitter/rest_api';
 
 function getCurrentStatus(): Tweet {
     const timeline = Store.getState().timeline;
@@ -84,8 +85,13 @@ function toggleRetweet() {
         return;
     }
     const s = status.getMainStatus();
-    const action = s.retweeted ? undoRetweet(s.id) : sendRetweet(s.id);
-    Store.dispatch(action);
+    if (s.retweeted) {
+        TwitterRestApi.unretweet(s.id)
+            .then(res => Store.dispatch(unretweetSucceeded(res)));
+    } else {
+        TwitterRestApi.retweet(s.id)
+            .then(res => Store.dispatch(retweetSucceeded(res)));
+    }
 }
 
 function toggleLike() {

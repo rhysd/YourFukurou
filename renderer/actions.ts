@@ -27,8 +27,6 @@ export enum Kind {
     RemoveRejectedUserIds,
     AddNoRetweetUserIds,
 
-    SendRetweet,
-    UndoRetweet,
     RetweetSucceeded,
     UnretweetSucceeded,
     UpdateStatus,
@@ -182,24 +180,6 @@ export function addSeparator() {
         setImmediate(() => dispatch({
             type: Kind.AddSeparator,
             item: new Separator(),
-        }));
-    };
-}
-
-export function sendRetweet(tweet_id: string) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.SendRetweet,
-            tweet_id,
-        }));
-    };
-}
-
-export function undoRetweet(tweet_id: string) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.UndoRetweet,
-            tweet_id,
         }));
     };
 }
