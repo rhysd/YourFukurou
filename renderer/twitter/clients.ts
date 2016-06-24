@@ -2,6 +2,8 @@ import * as Twit from 'twit';
 import {IncomingMessage} from 'http';
 import {join} from 'path';
 import log from '../log';
+import {showMessage} from '../actions';
+import Store from '../store';
 
 const {app} = global.require('electron');
 const {readFile} = global.require('fs');
@@ -25,8 +27,7 @@ export class TwitClient implements UnderlyingClient {
 
     showApiFailure(name: string, err: Error, res: IncomingMessage) {
         log.error('API failure: ', name, err, res);
-        // TODO:
-        // Show message using <Message>
+        Store.dispatch(showMessage(err.message, 'error'));
     }
 
     post<T>(name: string, params: Object = {}): Promise<T> {

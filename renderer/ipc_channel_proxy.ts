@@ -10,7 +10,6 @@ import {
     removeRejectedUserIds,
     addNoRetweetUserIds,
     addSeparator,
-    unretweetSucceeded,
     showMessage,
     likeSucceeded,
     unlikeSucceeded,
@@ -81,6 +80,23 @@ export default class IpcChannelProxy {
         });
 
         this.subscribe('yf:tweet', (json: Twitter.Status) => {
+            if (json.retweeted_status &&
+                !json.retweeted_status.retweeted &&
+                Store.getState().timeline.user.id === json.user.id) {
+
+                // XXX:
+                // When user retweets a tweet, the response of statuses/retweet is correct.
+                // But the retweeted status via user stream is not correct; retweeted is incorrectly
+                // 'false' and retweet_count is not updated.
+                // Unfortunately, response of statuses/retweet arrives earlier than user stream.
+                // Therefore the correct response is overwritten by latter incorrect status via
+                // user stream.  So we need to detect the incorrect status and correct it in our side.
+
+                log.warn('Incorrect response of retweeted status via user stream. Will correct "retweeted"', json);
+                json.retweeted = true;
+                json.retweeted_status.retweeted = true;
+            }
+
             const tw = new Tweet(json);
             Store.dispatch(addTweetToTimeline(tw));
             DB.accounts.storeAccountsInTweet(json);
