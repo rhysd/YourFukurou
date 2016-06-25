@@ -9,14 +9,6 @@ function sendToMain(ch: ChannelFromRenderer, ...args: any[]) {
 
 export default function remoteActions(state: {} = null, action: Action) {
     switch (action.type) {
-        case Kind.CreateLike:
-            // Note:
-            // The likeed status will be sent on stream
-            sendToMain('yf:request-like', action.tweet_id);
-            break;
-        case Kind.DestroyLike:
-            sendToMain('yf:destroy-like', action.tweet_id);
-            break;
         case Kind.DestroyStatus:
             sendToMain('yf:destroy-status', action.tweet_id);
             break;

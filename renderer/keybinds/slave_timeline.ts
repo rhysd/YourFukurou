@@ -12,8 +12,8 @@ import {
     openEditor,
     openEditorForReply,
     openPicturePreview,
-    createLike,
-    destroyLike,
+    likeSucceeded,
+    unlikeSucceeded,
     retweetSucceeded,
     unretweetSucceeded,
     destroyStatus,
@@ -113,8 +113,13 @@ function toggleLike() {
         return;
     }
     const s = status.getMainStatus();
-    const action = s.favorited ? destroyLike(s.id) : createLike(s.id);
-    Store.dispatch(action);
+    if (s.favorited) {
+        TwitterRestApi.unlike(s.id)
+            .then(json => Store.dispatch(unlikeSucceeded(new Tweet(json))));
+    } else {
+        TwitterRestApi.like(s.id)
+            .then(json => Store.dispatch(likeSucceeded(new Tweet(json))));
+    }
 }
 
 function reply() {

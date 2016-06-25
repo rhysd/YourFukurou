@@ -11,8 +11,6 @@ import {
     addNoRetweetUserIds,
     addSeparator,
     showMessage,
-    likeSucceeded,
-    unlikeSucceeded,
     statusLiked,
     setCurrentUser,
     updateCurrentUser,
@@ -115,16 +113,6 @@ export default class IpcChannelProxy {
             Store.dispatch(addFriends(ids));
         });
 
-        /*
-        this.subscribe('yf:like-success', (json: Twitter.Status) => {
-            Store.dispatch(likeSucceeded(new Tweet(json)));
-        });
-
-        this.subscribe('yf:unlike-success', (json: Twitter.Status) => {
-            Store.dispatch(unlikeSucceeded(new Tweet(json)));
-        });
-        */
-
         this.subscribe('yf:my-account-update', (json: Twitter.User) => {
             Store.dispatch(updateCurrentUser(json));
         });
@@ -133,21 +121,11 @@ export default class IpcChannelProxy {
             Store.dispatch(deleteStatusInTimeline(status.id_str));
         });
 
+        // Note:
+        // User stream sends faovited event and this channel receives them.
         this.subscribe('yf:liked-status', (status: Twitter.Status, from_user: Twitter.User) => {
             Store.dispatch(statusLiked(new Tweet(status), new TwitterUser(from_user)));
         });
-
-        /*
-        this.subscribe('yf:mentions', (json: Twitter.Status[]) => {
-            Store.dispatch(addMentions(json.map(j => new Tweet(j))));
-            DB.accounts.storeAccountsInTweets(json);
-            DB.hashtags.storeHashtagsInTweets(json);
-            // Note:
-            // Do not notify mentions because this IPC message is sent from main
-            // process at app starting.  If we were to notify mentions here, so many
-            // notifications are sent to a user.
-        });
-        */
 
         /*
         this.subscribe('yf:user-timeline', (user_id: number, json: Twitter.Status[]) => {
@@ -165,12 +143,6 @@ export default class IpcChannelProxy {
         this.subscribe('yf:unrejected-ids', (ids: number[]) => {
             Store.dispatch(removeRejectedUserIds(ids));
         });
-
-        /*
-        this.subscribe('yf:no-retweet-ids', (ids: number[]) => {
-            Store.dispatch(addNoRetweetUserIds(ids));
-        });
-        */
 
         this.subscribe('yf:follow', (source: Twitter.User, target: Twitter.User) => {
             if (Store.getState().timeline.user.id === source.id) {

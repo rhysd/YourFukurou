@@ -30,8 +30,6 @@ export enum Kind {
     RetweetSucceeded,
     UnretweetSucceeded,
     DestroyStatus,
-    CreateLike,
-    DestroyLike,
     LikeSucceeded,
     UnlikeSucceeded,
     StatusLiked,
@@ -206,24 +204,6 @@ export function unretweetSucceeded(status: Tweet) {
         setImmediate(() => dispatch({
             type: Kind.UnretweetSucceeded,
             status,
-        }));
-    };
-}
-
-export function createLike(tweet_id: string) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.CreateLike,
-            tweet_id,
-        }));
-    };
-}
-
-export function destroyLike(tweet_id: string) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.DestroyLike,
-            tweet_id,
         }));
     };
 }
