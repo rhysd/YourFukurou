@@ -11,9 +11,7 @@ import * as Twit from 'twit';
 import {authenticate, load_cached_tokens} from './authenticator';
 import log from './log';
 import * as Ipc from './ipc';
-import TwitterRestAPI from './twitter/rest';
 import TwitterUserStream from './twitter/user_stream';
-import DummyRestAPI from './twitter/dummy_rest';
 import DummyUserStream from './twitter/dummy_user_stream';
 import setApplicationMenu from './menu';
 import loadConfig from './config';
@@ -93,65 +91,24 @@ function startApp(access: AccessToken) {
 
     log.debug('dom-ready: Ready to connect to Twitter API');
 
-    let twit: Twit
-      , sender: Ipc.Sender
-      , rest: TwitterRestAPI | DummyRestAPI;
+    const options = {
+        consumer_key,
+        consumer_secret,
+        access_token: access.token,
+        access_token_secret: access.token_secret,
+    };
+    const twit = new Twit(options);
+    const sender = new Ipc.Sender(win.webContents);
+    const subscriber = new Ipc.Subscriber();
 
-    function verifyAccount() {
-        twit = new Twit({
-            consumer_key,
-            consumer_secret,
-            access_token: access.token,
-            access_token_secret: access.token_secret,
-        });
-        sender = new Ipc.Sender(win.webContents);
-        if (should_use_dummy_data) {
-            rest = new DummyRestAPI(sender);
-        } else {
-            rest = new TwitterRestAPI(sender, twit);
-        }
+    subscriber.subscribe('yf:start-user-stream', () => {
+        const stream = should_use_dummy_data ?
+            new DummyUserStream(sender) : new TwitterUserStream(sender, twit);
+        stream.connectToStream();
+        resumeStreamOnPowerOn(stream);
+    });
 
-        return rest.sendAuthenticatedAccount();
-    }
-
-    verifyAccount()
-        .catch(err => {
-            if (!err || (err instanceof Error) || err[0].code !== 32) {
-                log.error('Unexpected error on verifying account:', err);
-                app.quit();
-            }
-
-            log.debug('Account verification failed.  Retry authentication flow');
-
-            return authenticate(consumer_key, consumer_secret)
-                .then(verifyAccount);
-        })
-        .then(() => Promise.all([
-            rest.fetchMuteIds(),
-            rest.fetchNoRetweets(),
-            rest.fetchBlockIds(),
-            rest.fetchHomeTimeline({
-                include_entities: true,
-                count: global.config.expand_tweet === 'always' ? 20 : 40,
-            }),
-            rest.fetchMentionTimeline(),
-        ]))
-        .then(([mute_ids, no_retweet_ids, block_ids, tweets, mentions]) => {
-            // Note: Merge mute list with block list
-            for (const m of mute_ids) {
-                if (block_ids.indexOf(m) === -1) {
-                    block_ids.push(m);
-                }
-            }
-            log.debug('Total rejected ids: ', block_ids.length);
-            sender.send('yf:initialization', tweets, mentions, block_ids, no_retweet_ids);
-        })
-        .then(() => {
-            const stream = should_use_dummy_data ?
-                new DummyUserStream(sender) : new TwitterUserStream(sender, twit);
-            stream.connectToStream();
-            resumeStreamOnPowerOn(stream);
-        });
+    sender.send('yf:auth-tokens', options);
 }
 
 function openWindow(access: AccessToken) {

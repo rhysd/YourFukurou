@@ -12,15 +12,18 @@ import {
     openEditor,
     openEditorForReply,
     openPicturePreview,
-    createLike,
-    destroyLike,
-    sendRetweet,
-    undoRetweet,
-    destroyStatus,
+    likeSucceeded,
+    unlikeSucceeded,
+    retweetSucceeded,
+    unretweetSucceeded,
     openUserTimeline,
+    addUserTweets,
+    showMessage,
 } from '../actions';
 import {UserTimeline} from '../states/slave_timeline';
 import log from '../log';
+import TwitterRestApi from '../twitter/rest_api';
+import Tweet from '../item/tweet';
 
 function getCurrentUser() {
     const slave = Store.getState().slaveTimeline;
@@ -96,8 +99,13 @@ function toggleRetweet() {
         return;
     }
     const s = status.getMainStatus();
-    const action = s.retweeted ? undoRetweet(s.id) : sendRetweet(s.id);
-    Store.dispatch(action);
+    if (s.retweeted) {
+        TwitterRestApi.unretweet(s.id)
+            .then(res => Store.dispatch(unretweetSucceeded(new Tweet(res))));
+    } else {
+        TwitterRestApi.retweet(s.id)
+            .then(res => Store.dispatch(retweetSucceeded(new Tweet(res))));
+    }
 }
 
 function toggleLike() {
@@ -106,8 +114,13 @@ function toggleLike() {
         return;
     }
     const s = status.getMainStatus();
-    const action = s.favorited ? destroyLike(s.id) : createLike(s.id);
-    Store.dispatch(action);
+    if (s.favorited) {
+        TwitterRestApi.unlike(s.id)
+            .then(json => Store.dispatch(unlikeSucceeded(new Tweet(json))));
+    } else {
+        TwitterRestApi.like(s.id)
+            .then(json => Store.dispatch(likeSucceeded(new Tweet(json))));
+    }
 }
 
 function reply() {
@@ -125,7 +138,8 @@ function deleteStatus() {
     if (status === null) {
         return;
     }
-    Store.dispatch(destroyStatus(status.id));
+    TwitterRestApi.destroyStatus(status.id)
+        .then(() => Store.dispatch(showMessage('Deleted tweet.', 'info')));
 }
 
 function showUser() {
@@ -135,6 +149,10 @@ function showUser() {
     }
     const user = status.getMainStatus().user;
     Store.dispatch(openUserTimeline(user));
+    TwitterRestApi.userTimeline(user.id).then(res => {
+        const action = addUserTweets(user.id, res.map(json => new Tweet(json)));
+        window.requestIdleCallback(() => Store.dispatch(action));
+    });
 }
 
 export type SlaveTimelineAction =

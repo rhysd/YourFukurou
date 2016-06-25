@@ -9,7 +9,6 @@ export default function editor(state: TweetEditorState = DefaultTweetEditorState
         case Kind.OpenEditorForReply:           return state.openEditorWithInReplyTo(action.status, action.user, action.text);
         case Kind.CloseEditor:                  return state.closeEditor();
         case Kind.ToggleEditor:                 return state.toggleEditor();
-        case Kind.UpdateStatus:                 return state.clearEditor();
         default:                                return state;
     }
 }

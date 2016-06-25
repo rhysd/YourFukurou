@@ -1,7 +1,11 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {TwitterUser} from '../item/tweet';
-import {openUserTimeline} from '../actions';
+import Tweet, {TwitterUser} from '../item/tweet';
+import {
+    openUserTimeline,
+    addUserTweets,
+} from '../actions';
+import TwitterRestApi from '../twitter/rest_api';
 
 interface ConnectedProps {
     user: TwitterUser;
@@ -71,6 +75,10 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
         onClick: e => {
             e.stopPropagation();
             dispatch(openUserTimeline(props.user));
+            TwitterRestApi.userTimeline(props.user.id).then(res => {
+                const action = addUserTweets(props.user.id, res.map(json => new Tweet(json)));
+                window.requestIdleCallback(() => dispatch(action));
+            });
         },
     };
 }

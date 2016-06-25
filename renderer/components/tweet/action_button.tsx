@@ -4,12 +4,13 @@ import Tweet, {TwitterUser} from '../../item/tweet';
 import IconButton from '../icon_button';
 import {
     showMessage,
-    sendRetweet,
-    undoRetweet,
-    createLike,
-    destroyLike,
     openEditorForReply,
+    retweetSucceeded,
+    unretweetSucceeded,
+    likeSucceeded,
+    unlikeSucceeded,
 } from '../../actions';
+import TwitterRestApi from '../../twitter/rest_api';
 
 type TweetActionKind = 'reply' | 'like' | 'retweet';
 
@@ -27,9 +28,13 @@ type TweetActionButtonProps = ConnectedProps & DispatchProps;
 
 function onLikeClicked(status: Tweet, dispatch: Redux.Dispatch) {
     if (status.favorited) {
-        dispatch(destroyLike(status.id));
+        TwitterRestApi.unlike(status.id).then(json => {
+            dispatch(unlikeSucceeded(new Tweet(json)));
+        });
     } else {
-        dispatch(createLike(status.id));
+        TwitterRestApi.like(status.id).then(json => {
+            dispatch(likeSucceeded(new Tweet(json)));
+        });
     }
 }
 
@@ -40,9 +45,11 @@ function onRetweetClicked(status: Tweet, dispatch: Redux.Dispatch) {
     }
 
     if (status.retweeted) {
-        dispatch(undoRetweet(status.id));
+        TwitterRestApi.unretweet(status.id)
+            .then(json => dispatch(unretweetSucceeded(new Tweet(json))));
     } else {
-        dispatch(sendRetweet(status.id));
+        TwitterRestApi.retweet(status.id)
+            .then(json => dispatch(retweetSucceeded(new Tweet(json))));
     }
 }
 

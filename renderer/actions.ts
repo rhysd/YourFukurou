@@ -27,19 +27,11 @@ export enum Kind {
     RemoveRejectedUserIds,
     AddNoRetweetUserIds,
 
-    SendRetweet,
-    UndoRetweet,
     RetweetSucceeded,
     UnretweetSucceeded,
-    UpdateStatus,
-    DestroyStatus,
-    CreateLike,
-    DestroyLike,
     LikeSucceeded,
     UnlikeSucceeded,
     StatusLiked,
-    Follow,
-    Unfollow,
 
     ChangeEditorState,
     OpenEditor,
@@ -186,33 +178,6 @@ export function addSeparator() {
     };
 }
 
-export function sendRetweet(tweet_id: string) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.SendRetweet,
-            tweet_id,
-        }));
-    };
-}
-
-export function undoRetweet(tweet_id: string) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.UndoRetweet,
-            tweet_id,
-        }));
-    };
-}
-
-export function destroyStatus(tweet_id: string) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.DestroyStatus,
-            tweet_id,
-        }));
-    };
-}
-
 export function retweetSucceeded(status: Tweet) {
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
@@ -227,24 +192,6 @@ export function unretweetSucceeded(status: Tweet) {
         setImmediate(() => dispatch({
             type: Kind.UnretweetSucceeded,
             status,
-        }));
-    };
-}
-
-export function createLike(tweet_id: string) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.CreateLike,
-            tweet_id,
-        }));
-    };
-}
-
-export function destroyLike(tweet_id: string) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.DestroyLike,
-            tweet_id,
         }));
     };
 }
@@ -274,20 +221,6 @@ export function statusLiked(status: Tweet, from: TwitterUser) {
             user: from,
             status,
         }));
-    };
-}
-
-export function follow(user_id: number) {
-    return {
-        type: Kind.Follow,
-        user_id,
-    };
-}
-
-export function unfollow(user_id: number) {
-    return {
-        type: Kind.Unfollow,
-        user_id,
     };
 }
 
@@ -351,16 +284,6 @@ export function toggleEditor() {
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.ToggleEditor,
-        }));
-    };
-}
-
-export function updateStatus(text: string, in_reply_to_id?: string) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.UpdateStatus,
-            text,
-            in_reply_to_id,
         }));
     };
 }

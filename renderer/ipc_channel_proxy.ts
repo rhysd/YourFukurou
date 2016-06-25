@@ -10,11 +10,7 @@ import {
     removeRejectedUserIds,
     addNoRetweetUserIds,
     addSeparator,
-    retweetSucceeded,
-    unretweetSucceeded,
     showMessage,
-    likeSucceeded,
-    unlikeSucceeded,
     statusLiked,
     setCurrentUser,
     updateCurrentUser,
@@ -24,7 +20,8 @@ import Store from './store';
 import log from './log';
 import Tweet, {TwitterUser} from './item/tweet';
 import DB from './database/db';
-import {Twitter} from 'twit';
+import {Twitter, Options} from 'twit';
+import TwitterRestApi from './twitter/rest_api';
 
 interface Listeners {
     [c: string]: Electron.IpcRendererEventListener;
@@ -48,7 +45,56 @@ export default class IpcChannelProxy {
     }
 
     start() {
+        this.subscribe('yf:auth-tokens', (options: Options) => {
+            TwitterRestApi.setupClient(options);
+            // TODO:
+            // Move bootstrapping to actions or dispatch actions in TwitterRestApi directly?
+            return Promise.all([
+                TwitterRestApi.verifyCredentials(),
+                TwitterRestApi.rejectedIds(),
+                TwitterRestApi.noRetweetIds(),
+                TwitterRestApi.homeTimeline({
+                    include_entities: true,
+                    count: 20,  // TODO: fetch 40 tweets on expand_tweet == 'always'
+                }),
+                TwitterRestApi.mentionTimeline(),
+            ])
+            .then(([my_account, rejected_ids, no_retweet_ids, tweets, mentions]) => {
+                Store.dispatch(setCurrentUser(new TwitterUser(my_account)));
+
+                Store.dispatch(addRejectedUserIds(rejected_ids));
+                Store.dispatch(addNoRetweetUserIds(no_retweet_ids));
+
+                Store.dispatch(addTweetsToTimeline(tweets.reverse().map(tw => new Tweet(tw))));
+                DB.accounts.storeAccountsInTweets(tweets);
+                DB.hashtags.storeHashtagsInTweets(tweets);
+
+                Store.dispatch(addMentions(mentions.map(j => new Tweet(j))));
+                DB.accounts.storeAccountsInTweets(mentions);
+                DB.hashtags.storeHashtagsInTweets(mentions);
+
+                ipc.send('yf:start-user-stream' as ChannelFromRenderer);
+            });
+        });
+
         this.subscribe('yf:tweet', (json: Twitter.Status) => {
+            if (json.retweeted_status &&
+                !json.retweeted_status.retweeted &&
+                Store.getState().timeline.user.id === json.user.id) {
+
+                // XXX:
+                // When user retweets a tweet, the response of statuses/retweet is correct.
+                // But the retweeted status via user stream is not correct; retweeted is incorrectly
+                // 'false' and retweet_count is not updated.
+                // Unfortunately, response of statuses/retweet arrives earlier than user stream.
+                // Therefore the correct response is overwritten by latter incorrect status via
+                // user stream.  So we need to detect the incorrect status and correct it in our side.
+
+                log.warn('Incorrect response of retweeted status via user stream. Will correct "retweeted"', json);
+                json.retweeted = true;
+                json.retweeted_status.retweeted = true;
+            }
+
             const tw = new Tweet(json);
             Store.dispatch(addTweetToTimeline(tw));
             DB.accounts.storeAccountsInTweet(json);
@@ -67,42 +113,6 @@ export default class IpcChannelProxy {
             Store.dispatch(addFriends(ids));
         });
 
-        this.subscribe('yf:retweet-success', (json: Twitter.Status) => {
-            if (!json.retweeted_status) {
-                log.error('yf:retweet-success: Received status is not an retweet status: ', json);
-                return;
-            }
-            if (!json.retweeted_status.retweeted) {
-                log.error('yf:retweet-success: Retweeted tweet is NOT marked as "retweeted"', json);
-                json.retweeted_status.retweeted = true;
-                json.retweeted_status.retweet_count += 1;
-            }
-            Store.dispatch(retweetSucceeded(new Tweet(json)));
-        });
-
-        this.subscribe('yf:unretweet-success', (json: Twitter.Status) => {
-            // Note:
-            // The JSON is an original retweeted tweet
-            if (json.retweeted) {
-                log.error('yf:unretweet-success: Unretweeted tweet is marked as "retweeted"', json);
-                json.retweeted = false;
-                json.retweet_count -= 1;
-            }
-            Store.dispatch(unretweetSucceeded(new Tweet(json)));
-        });
-
-        this.subscribe('yf:like-success', (json: Twitter.Status) => {
-            Store.dispatch(likeSucceeded(new Tweet(json)));
-        });
-
-        this.subscribe('yf:unlike-success', (json: Twitter.Status) => {
-            Store.dispatch(unlikeSucceeded(new Tweet(json)));
-        });
-
-        this.subscribe('yf:my-account', (json: Twitter.User) => {
-            Store.dispatch(setCurrentUser(new TwitterUser(json)));
-        });
-
         this.subscribe('yf:my-account-update', (json: Twitter.User) => {
             Store.dispatch(updateCurrentUser(json));
         });
@@ -111,31 +121,10 @@ export default class IpcChannelProxy {
             Store.dispatch(deleteStatusInTimeline(status.id_str));
         });
 
+        // Note:
+        // User stream sends faovited event and this channel receives them.
         this.subscribe('yf:liked-status', (status: Twitter.Status, from_user: Twitter.User) => {
             Store.dispatch(statusLiked(new Tweet(status), new TwitterUser(from_user)));
-        });
-
-        this.subscribe('yf:update-status-success', (json: Twitter.Status) => {
-            Store.dispatch(showMessage('Tweeted!', 'info'));
-            DB.hashtag_completion_history.storeHashtagsInTweet(json);
-            DB.accounts.upCompletionCountOfMentions(json);
-        });
-
-        this.subscribe('yf:mentions', (json: Twitter.Status[]) => {
-            Store.dispatch(addMentions(json.map(j => new Tweet(j))));
-            DB.accounts.storeAccountsInTweets(json);
-            DB.hashtags.storeHashtagsInTweets(json);
-            // Note:
-            // Do not notify mentions because this IPC message is sent from main
-            // process at app starting.  If we were to notify mentions here, so many
-            // notifications are sent to a user.
-        });
-
-        this.subscribe('yf:user-timeline', (user_id: number, json: Twitter.Status[]) => {
-            window.requestIdleCallback(() => Store.dispatch(addUserTweets(user_id, json.map(j => new Tweet(j)))));
-            // Note:
-            // This is user specific timeline.  So we need not to store hashtags and accounts
-            // in the tweet texts.
         });
 
         this.subscribe('yf:rejected-ids', (ids: number[]) => {
@@ -144,10 +133,6 @@ export default class IpcChannelProxy {
 
         this.subscribe('yf:unrejected-ids', (ids: number[]) => {
             Store.dispatch(removeRejectedUserIds(ids));
-        });
-
-        this.subscribe('yf:no-retweet-ids', (ids: number[]) => {
-            Store.dispatch(addNoRetweetUserIds(ids));
         });
 
         this.subscribe('yf:follow', (source: Twitter.User, target: Twitter.User) => {
@@ -163,19 +148,6 @@ export default class IpcChannelProxy {
 
         this.subscribe('yf:unfollow', (target: Twitter.User) => {
             Store.dispatch(removeFriends([target.id]));
-        });
-
-        this.subscribe('yf:initialization', (tweets: Twitter.Status[], mentions: Twitter.Status[], rejected_ids: number[], no_retweet_ids: number[]) => {
-            Store.dispatch(addRejectedUserIds(rejected_ids));
-            Store.dispatch(addNoRetweetUserIds(no_retweet_ids));
-
-            Store.dispatch(addTweetsToTimeline(tweets.map(tw => new Tweet(tw))));
-            DB.accounts.storeAccountsInTweets(tweets);
-            DB.hashtags.storeHashtagsInTweets(tweets);
-
-            Store.dispatch(addMentions(mentions.map(j => new Tweet(j))));
-            DB.accounts.storeAccountsInTweets(mentions);
-            DB.hashtags.storeHashtagsInTweets(mentions);
         });
 
         log.debug('Started to receive messages');

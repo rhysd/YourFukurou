@@ -28,19 +28,32 @@ function containsStatusInTimeline(is: List<Item>, t: Tweet) {
 
 function updateStatusIn(items: List<Item>, status: Tweet) {
     const status_id = status.id;
-    const index = items.findIndex(item => {
+    const predicate = (item: Item) => {
         if (item instanceof Tweet) {
             return item.getMainStatus().id === status_id;
         } else {
             return false;
         }
-    });
+    };
 
-    if (index === -1) {
+    // Note:
+    // One status may appear in timeline twice. (the status itself and RT for it).
+    // So we need to search 2 indices for the status in timeline.
+
+    const indices = items.reduce((acc, item, idx) => {
+        if (item instanceof Tweet) {
+            if (item.getMainStatus().id === status_id) {
+                acc.push(idx);
+            }
+        }
+        return acc;
+    }, [] as number[]);
+
+    if (indices.length === 0) {
         return items;
     }
 
-    return items.update(index, item => {
+    const updater = (item: Item) => {
         if (item instanceof Tweet) {
             if (item.isRetweet()) {
                 const cloned = item.clone();
@@ -52,6 +65,12 @@ function updateStatusIn(items: List<Item>, status: Tweet) {
         } else {
             log.error('Never reaches here');
             return item;
+        }
+    };
+
+    return items.withMutations(items_ => {
+        for (const i of indices) {
+            items_.update(i, updater);
         }
     });
 }

@@ -7,7 +7,6 @@ import {
     changeEditorState,
     closeEditor,
     showMessage,
-    updateStatus,
     downAutoCompletionFocus,
     upAutoCompletionFocus,
     selectAutoCompleteSuggestion,
@@ -23,6 +22,8 @@ import {AutoCompleteLabel} from './auto_complete_decorator';
 import TweetText from '../tweet/text';
 import TweetSecondary from '../tweet/secondary';
 import PopupIcon from '../tweet/popup_icon';
+import TwitterRestApi from '../../twitter/rest_api';
+import DB from '../../database/db';
 
 interface TweetEditorProps extends React.Props<any> {
     editor: EditorState;
@@ -150,10 +151,20 @@ class TweetEditor extends React.Component<TweetEditorProps, {}> {
     }
 
     sendTweet() {
-        const content = this.props.editor.getCurrentContent();
+        const {editor, inReplyTo, dispatch} = this.props;
+        const content = editor.getCurrentContent();
         if (content.hasText()) {
-            const irt = this.props.inReplyTo ? this.props.inReplyTo.getMainStatus().id : null;
-            this.props.dispatch(updateStatus(content.getPlainText(), irt));
+            const irt = inReplyTo ? inReplyTo.getMainStatus().id : null;
+            TwitterRestApi.updateStatus(content.getPlainText(), irt)
+                .then(json => {
+                    dispatch(showMessage('Tweeted!', 'info'));
+                    DB.hashtag_completion_history.storeHashtagsInTweet(json);
+                    DB.accounts.upCompletionCountOfMentions(json);
+
+                    // TODO:
+                    // Only close the editor.  When the response is 'success', then we
+                    // should clear the text of editor content.
+                });
             this.close();
         }
     }

@@ -5,10 +5,10 @@ import Tweet, {TwitterUser} from '../../item/tweet';
 import IconButton from '../icon_button';
 import {
     showMessage,
-    destroyStatus,
     openEditor,
     openEditorForReply,
 } from '../../actions';
+import TwitterRestApi from '../../twitter/rest_api';
 
 const electron = global.require('electron');
 
@@ -56,16 +56,21 @@ function renderDeleteThisTweet(props: OtherActionsButtonProps) {
 }
 
 function correctThisTweet(status: Tweet, owner: TwitterUser, dispatch: Redux.Dispatch) {
-    dispatch(destroyStatus(status.id));
-    if (status.in_reply_to_status !== null) {
-        dispatch(openEditorForReply(status.in_reply_to_status, owner, status.text));
-    } else {
-        dispatch(openEditor(status.text));
-        if (status.hasInReplyTo()) {
-            // XXX
-            log.warn('Corrected status has in_reply_to_status_id but does not have in_reply_to_status.  Fallback into normal tweet:', status);
+    TwitterRestApi.destroyStatus(status.id).then(() => {
+        // Note:
+        // No need to send response to renderer process because
+        // 'delete_status' event was already sent from streaming API.
+
+        if (status.in_reply_to_status !== null) {
+            dispatch(openEditorForReply(status.in_reply_to_status, owner, status.text));
+        } else {
+            dispatch(openEditor(status.text));
+            if (status.hasInReplyTo()) {
+                // XXX
+                log.warn('Corrected status has in_reply_to_status_id but does not have in_reply_to_status.  Fallback into normal tweet:', status);
+            }
         }
-    }
+    });
 }
 
 function renderCorrectThisTweet(props: OtherActionsButtonProps) {
@@ -133,7 +138,8 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
     return {
         onDeleteTweet: e => {
             e.stopPropagation();
-            dispatch(destroyStatus(props.status.id));
+            TwitterRestApi.destroyStatus(props.status.id)
+                .then(() => dispatch(showMessage('Deleted tweet.', 'info')));
         },
         onUrlOpen: e => {
             e.stopPropagation();

@@ -2,7 +2,8 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {List} from 'immutable';
 import {TwitterUser} from '../../item/tweet';
-import {follow, unfollow} from '../../actions';
+import {showMessage} from '../../actions';
+import TwitterRestApi from '../../twitter/rest_api';
 
 interface ConnectedProps extends React.Props<any> {
     user: TwitterUser;
@@ -35,8 +36,13 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
         onClick: e => {
             e.stopPropagation();
             const following = props.friends.includes(props.user.id);
-            const action = following ? unfollow(props.user.id) : follow(props.user.id);
-            dispatch(action);
+            if (following) {
+                TwitterRestApi.unfollow(props.user.id)
+                    .then(u => dispatch(showMessage(`Unfollowed @${u.screen_name}`, 'info')));
+            } else {
+                TwitterRestApi.follow(props.user.id)
+                    .then(u => dispatch(showMessage(`Followed @${u.screen_name}`, 'info')));
+            }
         },
     };
 }
