@@ -8,4 +8,5 @@ export const fixture = new Fixture();
 (global as any).window = {
     innerWidth: 1000,
     devicePixelRatio: 1.0,
+    addEventListener(event: string, listener: Function) { /* do nothing */ },
 };
