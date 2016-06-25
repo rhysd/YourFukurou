@@ -127,15 +127,6 @@ export default class IpcChannelProxy {
             Store.dispatch(statusLiked(new Tweet(status), new TwitterUser(from_user)));
         });
 
-        /*
-        this.subscribe('yf:user-timeline', (user_id: number, json: Twitter.Status[]) => {
-            window.requestIdleCallback(() => Store.dispatch(addUserTweets(user_id, json.map(j => new Tweet(j)))));
-            // Note:
-            // This is user specific timeline.  So we need not to store hashtags and accounts
-            // in the tweet texts.
-        });
-        */
-
         this.subscribe('yf:rejected-ids', (ids: number[]) => {
             Store.dispatch(addRejectedUserIds(ids));
         });

@@ -20,6 +20,7 @@ import {
     unretweetSucceeded,
     destroyStatus,
     openUserTimeline,
+    addUserTweets,
 } from '../actions';
 import TwitterRestApi from '../twitter/rest_api';
 
@@ -134,6 +135,10 @@ function showUser() {
     }
     const user = status.getMainStatus().user;
     Store.dispatch(openUserTimeline(user));
+    TwitterRestApi.userTimeline(user.id).then(res => {
+        const action = addUserTweets(user.id, res.map(json => new Tweet(json)));
+        window.requestIdleCallback(() => Store.dispatch(action));
+    });
 }
 
 export type GlobalAction =

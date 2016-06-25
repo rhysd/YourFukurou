@@ -19,6 +19,5 @@ type ChannelFromRenderer
     | 'yf:destroy-status'
     | 'yf:request-follow'
     | 'yf:request-unfollow'
-    | 'yf:request-user-timeline'
     | 'yf:start-user-stream'
 ;

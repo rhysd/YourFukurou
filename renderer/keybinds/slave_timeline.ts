@@ -18,6 +18,7 @@ import {
     unretweetSucceeded,
     destroyStatus,
     openUserTimeline,
+    addUserTweets,
 } from '../actions';
 import {UserTimeline} from '../states/slave_timeline';
 import log from '../log';
@@ -147,6 +148,10 @@ function showUser() {
     }
     const user = status.getMainStatus().user;
     Store.dispatch(openUserTimeline(user));
+    TwitterRestApi.userTimeline(user.id).then(res => {
+        const action = addUserTweets(user.id, res.map(json => new Tweet(json)));
+        window.requestIdleCallback(() => Store.dispatch(action));
+    });
 }
 
 export type SlaveTimelineAction =
