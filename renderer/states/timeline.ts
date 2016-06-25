@@ -36,15 +36,22 @@ function updateStatusIn(items: List<Item>, status: Tweet) {
         }
     };
 
-    const index = items.findIndex(predicate);
-    if (index === -1) {
-        return items;
-    }
-
     // Note:
     // One status may appear in timeline twice. (the status itself and RT for it).
     // So we need to search 2 indices for the status in timeline.
-    const second_index = items.skip(index + 1).findIndex(predicate);
+
+    const indices = items.reduce((acc, item, idx) => {
+        if (item instanceof Tweet) {
+            if (item.getMainStatus().id === status_id) {
+                acc.push(idx);
+            }
+        }
+        return acc;
+    }, [] as number[]);
+
+    if (indices.length === 0) {
+        return items;
+    }
 
     const updater = (item: Item) => {
         if (item instanceof Tweet) {
@@ -59,12 +66,11 @@ function updateStatusIn(items: List<Item>, status: Tweet) {
             log.error('Never reaches here');
             return item;
         }
-    }
+    };
 
     return items.withMutations(items_ => {
-        items_.update(index, updater);
-        if (second_index !== -1) {
-            items_.update(second_index, updater);
+        for (const i of indices) {
+            items_.update(i, updater);
         }
     });
 }
