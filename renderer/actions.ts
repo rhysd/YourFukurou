@@ -29,12 +29,9 @@ export enum Kind {
 
     RetweetSucceeded,
     UnretweetSucceeded,
-    DestroyStatus,
     LikeSucceeded,
     UnlikeSucceeded,
     StatusLiked,
-    Follow,
-    Unfollow,
 
     ChangeEditorState,
     OpenEditor,
@@ -181,15 +178,6 @@ export function addSeparator() {
     };
 }
 
-export function destroyStatus(tweet_id: string) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.DestroyStatus,
-            tweet_id,
-        }));
-    };
-}
-
 export function retweetSucceeded(status: Tweet) {
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
@@ -233,20 +221,6 @@ export function statusLiked(status: Tweet, from: TwitterUser) {
             user: from,
             status,
         }));
-    };
-}
-
-export function follow(user_id: number) {
-    return {
-        type: Kind.Follow,
-        user_id,
-    };
-}
-
-export function unfollow(user_id: number) {
-    return {
-        type: Kind.Unfollow,
-        user_id,
     };
 }
 

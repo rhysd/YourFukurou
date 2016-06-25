@@ -9,15 +9,6 @@ function sendToMain(ch: ChannelFromRenderer, ...args: any[]) {
 
 export default function remoteActions(state: {} = null, action: Action) {
     switch (action.type) {
-        case Kind.DestroyStatus:
-            sendToMain('yf:destroy-status', action.tweet_id);
-            break;
-        case Kind.Follow:
-            sendToMain('yf:request-follow', action.user_id);
-            break;
-        case Kind.Unfollow:
-            sendToMain('yf:request-unfollow', action.user_id);
-            break;
         default:
             break;
     }

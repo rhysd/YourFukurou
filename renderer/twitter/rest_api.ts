@@ -72,9 +72,6 @@ export class TwitterRestApi {
     }
 
     destroyStatus(tweet_id: string) {
-        // TODO:
-        // No need to send response to renderer process because
-        // 'delete_status' event was already sent from streaming API.
         return this.client.post<Status>('statuses/destroy/' + tweet_id);
     }
 

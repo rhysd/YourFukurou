@@ -18,9 +18,9 @@ import {
     unlikeSucceeded,
     retweetSucceeded,
     unretweetSucceeded,
-    destroyStatus,
     openUserTimeline,
     addUserTweets,
+    showMessage,
 } from '../actions';
 import TwitterRestApi from '../twitter/rest_api';
 
@@ -125,7 +125,8 @@ function deleteStatus() {
     if (status === null) {
         return;
     }
-    Store.dispatch(destroyStatus(status.id));
+    TwitterRestApi.destroyStatus(status.id)
+        .then(() => Store.dispatch(showMessage('Deleted tweet.', 'info')));
 }
 
 function showUser() {

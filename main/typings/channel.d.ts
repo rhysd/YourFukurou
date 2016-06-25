@@ -13,11 +13,4 @@ type ChannelFromMain
     | 'yf:api-failure'
 ;
 
-type ChannelFromRenderer
-    = 'yf:request-like'
-    | 'yf:destroy-like'
-    | 'yf:destroy-status'
-    | 'yf:request-follow'
-    | 'yf:request-unfollow'
-    | 'yf:start-user-stream'
-;
+type ChannelFromRenderer = 'yf:start-user-stream';
