@@ -43,7 +43,6 @@
     "reducers/editor.ts",
     "reducers/editor_completion.ts",
     "reducers/message.ts",
-    "reducers/remote_actions.ts",
     "reducers/timeline.ts",
     "states/root.ts",
     "states/slave_timeline.ts",

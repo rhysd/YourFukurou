@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import Tweet, {TwitterUser} from '../../item/tweet';
 import {
-    openUserTimeline, 
+    openUserTimeline,
     addUserTweets,
 } from '../../actions';
 import TwitterRestApi from '../../twitter/rest_api';
