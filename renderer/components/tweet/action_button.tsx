@@ -42,10 +42,10 @@ function onRetweetClicked(status: Tweet, dispatch: Redux.Dispatch) {
 
     if (status.retweeted) {
         TwitterRestApi.unretweet(status.id)
-            .then(res => dispatch(unretweetSucceeded(res)))
+            .then(json => dispatch(unretweetSucceeded(new Tweet(json))));
     } else {
         TwitterRestApi.retweet(status.id)
-            .then(res => dispatch(retweetSucceeded(res)));
+            .then(json => dispatch(retweetSucceeded(new Tweet(json))));
     }
 }
 

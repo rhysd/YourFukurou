@@ -22,6 +22,7 @@ import {
 import {UserTimeline} from '../states/slave_timeline';
 import log from '../log';
 import TwitterRestApi from '../twitter/rest_api';
+import Tweet from '../item/tweet';
 
 function getCurrentUser() {
     const slave = Store.getState().slaveTimeline;
@@ -99,10 +100,10 @@ function toggleRetweet() {
     const s = status.getMainStatus();
     if (s.retweeted) {
         TwitterRestApi.unretweet(s.id)
-            .then(res => Store.dispatch(unretweetSucceeded(res)));
+            .then(res => Store.dispatch(unretweetSucceeded(new Tweet(res))));
     } else {
         TwitterRestApi.retweet(s.id)
-            .then(res => Store.dispatch(retweetSucceeded(res)));
+            .then(res => Store.dispatch(retweetSucceeded(new Tweet(res))));
     }
 }
 

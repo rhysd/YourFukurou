@@ -87,10 +87,10 @@ function toggleRetweet() {
     const s = status.getMainStatus();
     if (s.retweeted) {
         TwitterRestApi.unretweet(s.id)
-            .then(res => Store.dispatch(unretweetSucceeded(res)));
+            .then(res => Store.dispatch(unretweetSucceeded(new Tweet(res))));
     } else {
         TwitterRestApi.retweet(s.id)
-            .then(res => Store.dispatch(retweetSucceeded(res)));
+            .then(res => Store.dispatch(retweetSucceeded(new Tweet(res))));
     }
 }
 

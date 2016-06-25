@@ -1,7 +1,6 @@
 import * as Twit from 'twit';
 import log from '../log';
 import {UnderlyingClient, DummyClient, TwitClient} from './clients';
-import Tweet, {TwitterUser} from '../item/tweet';
 
 type Status = Twit.Twitter.Status;
 type User = Twit.Twitter.User;
@@ -47,14 +46,14 @@ export class TwitterRestApi {
             .then(json => {
                 if (!json.retweeted_status) {
                     log.error('Received status is not an retweet status: ', json);
-                    return new Tweet(json);
+                    return json;
                 }
                 if (!json.retweeted_status.retweeted) {
                     log.warn('Retweeted tweet is NOT marked as "retweeted", workaround.', json);
                     json.retweeted_status.retweeted = true;
                     json.retweeted_status.retweet_count += 1;
                 }
-                return new Tweet(json);
+                return json;
             });
     }
 
@@ -68,7 +67,7 @@ export class TwitterRestApi {
                     json.retweeted = false;
                     json.retweet_count -= 1;
                 }
-                return new Tweet(json);
+                return json;
             });
     }
 
