@@ -29,7 +29,6 @@ export enum Kind {
 
     RetweetSucceeded,
     UnretweetSucceeded,
-    UpdateStatus,
     DestroyStatus,
     CreateLike,
     DestroyLike,
@@ -331,16 +330,6 @@ export function toggleEditor() {
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.ToggleEditor,
-        }));
-    };
-}
-
-export function updateStatus(text: string, in_reply_to_id?: string) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.UpdateStatus,
-            text,
-            in_reply_to_id,
         }));
     };
 }

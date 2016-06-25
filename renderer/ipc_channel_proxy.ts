@@ -138,14 +138,6 @@ export default class IpcChannelProxy {
         });
 
         /*
-        this.subscribe('yf:update-status-success', (json: Twitter.Status) => {
-            Store.dispatch(showMessage('Tweeted!', 'info'));
-            DB.hashtag_completion_history.storeHashtagsInTweet(json);
-            DB.accounts.upCompletionCountOfMentions(json);
-        });
-        */
-
-        /*
         this.subscribe('yf:mentions', (json: Twitter.Status[]) => {
             Store.dispatch(addMentions(json.map(j => new Tweet(j))));
             DB.accounts.storeAccountsInTweets(json);

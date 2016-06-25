@@ -94,10 +94,12 @@ export class TwitterRestApi {
         return this.client.get<User>('account/verify_credentials', params);
     }
 
+    // TODO: Return array of Tweet objects
     homeTimeline(params: Object = {include_entities: true}) {
         return this.client.get<Status[]>('statuses/home_timeline', params);
     }
 
+    // TODO: Return array of Tweet objects
     mentionTimeline(params: Object = {include_entities: true}) {
         return this.client.get<Status[]>('statuses/mentions_timeline', params);
     }
