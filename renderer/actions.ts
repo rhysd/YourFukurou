@@ -58,6 +58,7 @@ export enum Kind {
 
     AddFriends,
     RemoveFriends,
+    ResetFriends,
 
     OpenUserTimeline,
     CloseSlaveTimeline,
@@ -404,6 +405,13 @@ export function addFriends(ids: number[]) {
 export function removeFriends(ids: number[]) {
     return {
         type: Kind.RemoveFriends,
+        ids,
+    };
+}
+
+export function resetFriends(ids: number[]) {
+    return {
+        type: Kind.ResetFriends,
         ids,
     };
 }

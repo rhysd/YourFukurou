@@ -7,6 +7,7 @@ import {
     addRejectedUserIds,
     addFriends,
     removeFriends,
+    resetFriends,
     removeRejectedUserIds,
     addNoRetweetUserIds,
     addSeparator,
@@ -109,8 +110,12 @@ export default class IpcChannelProxy {
             Store.dispatch(showMessage('API error: ' + msg, 'error'));
         });
 
-        this.subscribe('yf:friends', (ids: number[]) => {
-            Store.dispatch(addFriends(ids));
+        this.subscribe('yf:all-friend-ids', (ids: number[]) => {
+            // Note:
+            // When reconnecting to stream (e.g. because of PC resuming), 'friends' event
+            // is sent at the first.  We can update friend id list with it rather than.
+            // adding IDs.
+            Store.dispatch(resetFriends(ids));
         });
 
         this.subscribe('yf:my-account-update', (json: Twitter.User) => {

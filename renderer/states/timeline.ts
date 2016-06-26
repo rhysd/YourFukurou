@@ -595,6 +595,11 @@ export default class TimelineState {
         return this.update({friend_ids});
     }
 
+    resetFriends(ids: number[]) {
+        const friend_ids = List<number>(ids);
+        return this.update({friend_ids});
+    }
+
     update(next: {
         kind?: TimelineKind;
         home?: List<Item>;

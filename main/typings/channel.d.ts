@@ -8,7 +8,7 @@ type ChannelFromMain
     | 'yf:connection-failure'
     | 'yf:rejected-ids'
     | 'yf:unrejected-ids'
-    | 'yf:friends'
+    | 'yf:all-friend-ids'
     | 'yf:auth-tokens'
     | 'yf:api-failure'
 ;
