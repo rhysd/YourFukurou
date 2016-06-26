@@ -23,7 +23,7 @@ export default class TwitterUserStream {
 
         this.stream.on('friends', msg => {
             log.debug('FRIENDS: length: ', msg.friends.length);
-            this.sender.send('yf:friends', msg.friends);
+            this.sender.send('yf:all-friend-ids', msg.friends);
         });
 
         this.stream.on('tweet', tw => {

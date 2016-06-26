@@ -4,10 +4,10 @@
   "globalDependencies": {
     "classnames": "registry:dt/classnames#0.0.0+20160316155526",
     "geojson": "registry:dt/geojson#0.0.0+20160619034323",
-    "github-electron": "registry:dt/github-electron#1.2.3+20160619034813",
+    "github-electron": "registry:dt/github-electron#1.2.5+20160624085047",
     "loglevel": "registry:dt/loglevel#1.4.0+20160412141402",
-    "node": "registry:dt/node#6.0.0+20160613154055",
-    "react": "registry:dt/react#0.14.0+20160602151522",
+    "node": "registry:dt/node#6.0.0+20160621231320",
+    "react": "registry:dt/react#0.14.0+20160621225615",
     "react-addons-perf": "registry:dt/react-addons-perf#15.1.0+20160619031933",
     "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
     "react-redux": "registry:dt/react-redux#4.4.0+20160501125835",
