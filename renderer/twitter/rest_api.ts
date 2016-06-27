@@ -134,6 +134,32 @@ export class TwitterRestApi {
         };
         return this.client.get<Status[]>('statuses/user_timeline', params);
     }
+
+    missingHomeTimeline(max_id: string, since_id: string) {
+        if (!max_id && !since_id) {
+            return Promise.resolve([] as Status[]);
+        }
+
+        const params = {
+            include_entities: true,
+            max_id,
+            since_id,
+        };
+        return this.client.get<Status[]>('statuses/home_timeline', params);
+    }
+
+    missingMentionTimeline(max_id: string, since_id: string) {
+        if (!max_id && !since_id) {
+            return Promise.resolve([] as Status[]);
+        }
+
+        const params = {
+            include_entities: true,
+            max_id,
+            since_id,
+        };
+        return this.client.get<Status[]>('statuses/mention_timeline', params);
+    }
 }
 
 export default new TwitterRestApi(
