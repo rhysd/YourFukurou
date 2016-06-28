@@ -81,7 +81,7 @@ function replaceSeparatorWithItemsIn(tl: List<Item>, sep_index: number, items: I
         return tl;
     }
 
-    return tl.splice(sep_index, sep_index, 1, ...items).toList();
+    return tl.splice(sep_index, 1, ...items).toList();
 }
 
 // Note:

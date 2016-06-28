@@ -115,9 +115,8 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
             e.stopPropagation();
             if (props.itemIndex !== undefined && props.timelineKind !== undefined) {
                 getMissingItems(props.itemIndex, props.timelineKind).then(items => {
-                    if (items.length === 0) {
-                        return;
-                    }
+                    // Note:
+                    // Dispatch action even if no status was returned because of removing the separator.
                     log.debug('Missing statuses will be completed:', items);
                     dispatch(completeMissingStatuses(props.timelineKind, props.itemIndex, items));
                 });
