@@ -138,7 +138,6 @@ export class Timeline extends React.Component<TimelineProps, {}> {
         } else if (i instanceof Separator) {
             return <ZigZagSeparator
                 itemIndex={idx}
-                timelineKind={kind}
                 focused={focused}
                 key={key}
             />;
