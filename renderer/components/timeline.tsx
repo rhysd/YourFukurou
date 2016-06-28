@@ -136,7 +136,11 @@ export class Timeline extends React.Component<TimelineProps, {}> {
                 key={key}
             />;
         } else if (i instanceof Separator) {
-            return <ZigZagSeparator focused={focused} key={key}/>;
+            return <ZigZagSeparator
+                itemIndex={idx}
+                focused={focused}
+                key={key}
+            />;
         } else {
             log.error('Invalid item', key, i);
             return undefined;

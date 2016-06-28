@@ -67,6 +67,7 @@ export default class IpcChannelProxy {
                 Store.dispatch(addNoRetweetUserIds(no_retweet_ids));
 
                 Store.dispatch(addTweetsToTimeline(tweets.reverse().map(tw => new Tweet(tw))));
+
                 DB.accounts.storeAccountsInTweets(tweets);
                 DB.hashtags.storeHashtagsInTweets(tweets);
 

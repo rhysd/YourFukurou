@@ -3,6 +3,7 @@ import {Twitter} from 'twit';
 import KeyBinds from './keybinds';
 import Store from '../store';
 import Tweet from '../item/tweet';
+import Separator from '../item/separator';
 import TimelineActivity from '../item/timeline_activity';
 import {
     focusNextItem,
@@ -110,6 +111,19 @@ function toggleLike() {
     }
 }
 
+function getFocusedSeparatorIndex() {
+    const timeline = Store.getState().timeline;
+    const idx = timeline.focus_index;
+    if (idx === null) {
+        return null;
+    }
+    if (timeline.getCurrentTimeline().get(idx) instanceof Separator) {
+        return idx;
+    } else {
+        return null;
+    }
+}
+
 function reply() {
     const owner = Store.getState().timeline.user;
     const status = getCurrentStatus();
@@ -118,6 +132,15 @@ function reply() {
             openEditor() :
             openEditorForReply(status.getMainStatus(), owner);
     Store.dispatch(action);
+}
+
+function replyOrCompleteMissingStatuses() {
+    const sep_idx = getFocusedSeparatorIndex();
+    if (sep_idx !== null) {
+        Separator.dispatchMissingStatusesAt(sep_idx);
+    } else {
+        reply();
+    }
 }
 
 function deleteStatus() {
@@ -195,7 +218,7 @@ const ActionHandlers = I.Map<GlobalAction, () => void>({
     'show-user': showUser,
     'retweet': toggleRetweet,
     'like': toggleLike,
-    'reply': reply,
+    'reply': replyOrCompleteMissingStatuses,
     'delete-status': deleteStatus,
     'unfocus': () => Store.dispatch(unfocusItem()),
 });

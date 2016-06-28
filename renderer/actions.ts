@@ -26,6 +26,7 @@ export enum Kind {
     AddRejectedUserIds,
     RemoveRejectedUserIds,
     AddNoRetweetUserIds,
+    CompleteMissingStatuses,
 
     RetweetSucceeded,
     UnretweetSucceeded,
@@ -74,6 +75,7 @@ export enum Kind {
 export interface Action {
     type: Kind;
     item?: Item;
+    items?: Item[];
     text?: string;
     msg_kind?: MessageKind;
     tweet_id?: string;
@@ -141,6 +143,15 @@ export function addNoRetweetUserIds(ids: number[]) {
     return {
         type: Kind.AddNoRetweetUserIds,
         ids,
+    };
+}
+
+export function completeMissingStatuses(timeline: TimelineKind, index: number, items: Item[]) {
+    return {
+        type: Kind.CompleteMissingStatuses,
+        timeline,
+        index,
+        items,
     };
 }
 

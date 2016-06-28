@@ -75,6 +75,15 @@ function updateStatusIn(items: List<Item>, status: Tweet) {
     });
 }
 
+function replaceSeparatorWithItemsIn(tl: List<Item>, sep_index: number, items: Item[]) {
+    if (!(tl.get(sep_index) instanceof Separator)) {
+        log.debug('Replace target item is not a separator:', tl.get(sep_index));
+        return tl;
+    }
+
+    return tl.splice(sep_index, 1, ...items).toList();
+}
+
 // Note:
 // This must be an immutable class because it is a part of state in a reducer
 export default class TimelineState {
@@ -598,6 +607,22 @@ export default class TimelineState {
     resetFriends(ids: number[]) {
         const friend_ids = List<number>(ids);
         return this.update({friend_ids});
+    }
+
+    replaceSeparatorWithItems(kind: TimelineKind, sep_index: number, items: Item[]) {
+        switch (kind) {
+            case 'home':
+                return this.update({
+                    home: replaceSeparatorWithItemsIn(this.home, sep_index, items),
+                });
+            case 'mention':
+                return this.update({
+                    mention: replaceSeparatorWithItemsIn(this.mention, sep_index, items),
+                });
+            default:
+                log.debug('Invalid timeline for replacing separator with statuses');
+                return this;
+        }
     }
 
     update(next: {
