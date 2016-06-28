@@ -144,17 +144,19 @@ export class TwitterRestApi {
     //   |                         |
     //   V                         V
     // [Tweet, Tweet, Tweet, ..., Tweet]
+    //
+    // Both max_id and since_id can be undefined.
     private missingTimeline(path: string, max_id: string, since_id: string) {
-        if (!max_id && !since_id) {
-            return Promise.resolve([] as Status[]);
-        }
-
         const params = {
             include_entities: true,
             max_id,
             since_id,
+            count: 40,
         };
-        return this.client.get<Status[]>(path, params);
+        return this.client.get<Status[]>(path, params).then(ss => {
+            console.log('MISSING_TIMELINE: ' + path, params, ss);
+            return ss;
+        });
     }
 }
 

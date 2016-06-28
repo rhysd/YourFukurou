@@ -74,13 +74,8 @@ function getMissingItems(sep_index: number, timelineKind: TimelineKind) {
         ++idx;
     }
 
-    if (!after) {
-        log.error("'since_id' cannot be detected.  Is a separator at the bottom of timeline?");
-        return;
-    }
-
     const max_id = before ? before.id : undefined;
-    const since_id = after.id;
+    const since_id = after ? after.id : undefined;
 
     log.debug('Will obtain missing statuses in timeline:', max_id, since_id);
 
@@ -93,20 +88,21 @@ function getMissingItems(sep_index: number, timelineKind: TimelineKind) {
 
         if (tweets[0].id_str === max_id) {
             // Note:
-            // When all upper statuses are completed.
-            // No need to insert separator at first of inserted sequence.
-            // 'max_id' id status duplicates in timeline.  So we should remove
-            // the duplicate.
+            // 'max_id' status duplicates because it is included in response.
             items.shift();
+            if (items.length === 0) {
+                return [] as Item[];
+            }
         } else {
-            // Note:
-            // We could not complete timeline
-            items.unshift(new Separator());
+            log.error('First status of missing statuses sequence is not a max_id status', items);
         }
+
+        // Note:
+        // When all missing statuses are not completed.
+        items.push(new Separator());
 
         return items;
     });
-
 }
 
 function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
