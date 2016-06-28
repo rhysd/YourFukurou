@@ -638,6 +638,10 @@ body {
 
 /* zigzag-separator {{{ */
 
+.zigzag-separator {
+  cursor: pointer;
+}
+
 .zigzag-separator .zigzag-separator__jagged {
   position: relative;
 }

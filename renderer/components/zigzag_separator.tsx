@@ -1,10 +1,15 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import * as classNames from 'classnames';
+import {Twitter} from 'twit';
 import {TimelineKind} from '../states/timeline';
 import Tweet from '../item/tweet';
+import Item from '../item/item';
+import Separator from '../item/separator';
 import Store from '../store';
 import TwitterRestApi from '../twitter/rest_api';
+import {completeMissingStatuses} from '../actions';
+import log from '../log';
 
 interface ConnectedProps extends React.Props<any> {
     itemIndex?: number;
@@ -34,15 +39,15 @@ export const ZigZagSeparator = (props: ZigZagSeparatorProps) => (
 function getMissingTweets(timelineKind: TimelineKind, max_id: string, since_id: string) {
     switch (timelineKind) {
         case 'home':
-            return TwitterRestApi.missingHomeTimeline(max_id, since_id).then(json => json.map(j => new Tweet(j)));
+            return TwitterRestApi.missingHomeTimeline(max_id, since_id);
         case 'mention':
-            return TwitterRestApi.missingMentionTimeline(max_id, since_id).then(json => json.map(j => new Tweet(j)));
+            return TwitterRestApi.missingMentionTimeline(max_id, since_id);
         default:
-            return Promise.resolve([] as Tweet[]);
+            return Promise.resolve([] as Twitter.Status[]);
     }
 }
 
-function dispatchCompleteTimeline(sep_index: number, timelineKind: TimelineKind, dispatch: Redux.Dispatch) {
+function getMissingItems(sep_index: number, timelineKind: TimelineKind) {
     const tl = Store.getState().timeline.getCurrentTimeline();
     const size = tl.size();
 
@@ -69,19 +74,45 @@ function dispatchCompleteTimeline(sep_index: number, timelineKind: TimelineKind,
         ++idx;
     }
 
-    getMissingTweets(
-        timelineKind,
-        before ? before.id : undefined,
-        after ? after.id : undefined
-    ).then(statuses => {
-        if (statuses.length === 0) {
-            return;
-        }
-        // TODO:
-        // Trim statuses whose id matches to 'max_id' and 'since_id'.
+    const max_id = before ? before.id : undefined;
+    const since_id = after ? after.id : undefined;
 
-        // TODO:
-        // dispatch(completeMissingStatuses(...));
+    return getMissingTweets(timelineKind, max_id, since_id).then(tweets => {
+        if (tweets.length === 0) {
+            return [] as Item[];
+        }
+
+        const items = tweets.map(json => new Tweet(json) as Item);
+
+        if (tweets[0].id_str === max_id) {
+            // Note:
+            // When all upper statuses are completed.
+            // No need to insert separator at first of inserted sequence.
+            // 'max_id' id status duplicates in timeline.  So we should remove
+            // the duplicate.
+            items.shift();
+        } else {
+            // Note:
+            // We could not complete timeline
+            items.unshift(new Separator());
+        }
+
+        if (items.length === 0) {
+            return [] as Item[];
+        }
+
+        if (tweets[tweets.length - 1].id_str === since_id) {
+            // Note:
+            // When all lower statuses are completed.
+            // No need to insert separator at last of inserted sequence
+            // 'since_id' id status duplicates in timeline.  We should
+            // remove the duplicate.
+            items.pop();
+        } else {
+            items.push(new Separator());
+        }
+
+        return items;
     });
 
 }
@@ -91,7 +122,13 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
         onClick: e => {
             e.stopPropagation();
             if (props.itemIndex !== undefined && props.timelineKind !== undefined) {
-                dispatchCompleteTimeline(props.itemIndex, props.timelineKind, dispatch);
+                getMissingItems(props.itemIndex, props.timelineKind).then(items => {
+                    if (items.length === 0) {
+                        return;
+                    }
+                    log.debug('Missing statuses will be completed:', items);
+                    dispatch(completeMissingStatuses(props.timelineKind, props.itemIndex, items));
+                });
             }
         },
     };
