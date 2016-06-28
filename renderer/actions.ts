@@ -146,10 +146,10 @@ export function addNoRetweetUserIds(ids: number[]) {
     };
 }
 
-export function completeMissingStatuses(kind: TimelineKind, index: number, items: Item[]) {
+export function completeMissingStatuses(timeline: TimelineKind, index: number, items: Item[]) {
     return {
         type: Kind.CompleteMissingStatuses,
-        kind,
+        timeline,
         index,
         items,
     };

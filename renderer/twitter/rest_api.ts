@@ -119,36 +119,32 @@ export class TwitterRestApi {
         });
     }
 
-    userTimeline(
-        user_id: number,
-        include_rts = true,
-        exclude_replies = false,
-        count = 40
-    ) {
-        const params = {
+    userTimeline(user_id: number, params: Object = {}) {
+        params = Object.assign({
             user_id,
-            trim_user: false,
-            include_rts,
-            exclude_replies,
-            count,
-        };
+            include_rts: true,
+            exclude_replies: false,
+            count: 40,
+        }, params);
         return this.client.get<Status[]>('statuses/user_timeline', params);
     }
 
     missingHomeTimeline(max_id: string, since_id: string) {
-        if (!max_id && !since_id) {
-            return Promise.resolve([] as Status[]);
-        }
-
-        const params = {
-            include_entities: true,
-            max_id,
-            since_id,
-        };
-        return this.client.get<Status[]>('statuses/home_timeline', params);
+        return this.missingTimeline('statuses/home_timeline', max_id, since_id);
     }
 
     missingMentionTimeline(max_id: string, since_id: string) {
+        return this.missingTimeline('statuses/mention_timeline', max_id, since_id);
+    }
+
+    // Note:
+    // This will return statuses with the range [max_id..since_id).
+    //
+    // 'max_id' status            A status just after 'since_id' status
+    //   |                         |
+    //   V                         V
+    // [Tweet, Tweet, Tweet, ..., Tweet]
+    private missingTimeline(path: string, max_id: string, since_id: string) {
         if (!max_id && !since_id) {
             return Promise.resolve([] as Status[]);
         }
@@ -158,7 +154,7 @@ export class TwitterRestApi {
             max_id,
             since_id,
         };
-        return this.client.get<Status[]>('statuses/mention_timeline', params);
+        return this.client.get<Status[]>(path, params);
     }
 }
 

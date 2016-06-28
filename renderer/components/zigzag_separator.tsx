@@ -49,7 +49,7 @@ function getMissingTweets(timelineKind: TimelineKind, max_id: string, since_id: 
 
 function getMissingItems(sep_index: number, timelineKind: TimelineKind) {
     const tl = Store.getState().timeline.getCurrentTimeline();
-    const size = tl.size();
+    const size = tl.size;
 
     let before: Tweet = null;
     let after: Tweet = null;
@@ -74,8 +74,15 @@ function getMissingItems(sep_index: number, timelineKind: TimelineKind) {
         ++idx;
     }
 
+    if (!after) {
+        log.error("'since_id' cannot be detected.  Is a separator at the bottom of timeline?");
+        return;
+    }
+
     const max_id = before ? before.id : undefined;
-    const since_id = after ? after.id : undefined;
+    const since_id = after.id;
+
+    log.debug('Will obtain missing statuses in timeline:', max_id, since_id);
 
     return getMissingTweets(timelineKind, max_id, since_id).then(tweets => {
         if (tweets.length === 0) {
@@ -95,21 +102,6 @@ function getMissingItems(sep_index: number, timelineKind: TimelineKind) {
             // Note:
             // We could not complete timeline
             items.unshift(new Separator());
-        }
-
-        if (items.length === 0) {
-            return [] as Item[];
-        }
-
-        if (tweets[tweets.length - 1].id_str === since_id) {
-            // Note:
-            // When all lower statuses are completed.
-            // No need to insert separator at last of inserted sequence
-            // 'since_id' id status duplicates in timeline.  We should
-            // remove the duplicate.
-            items.pop();
-        } else {
-            items.push(new Separator());
         }
 
         return items;
