@@ -13,12 +13,11 @@ interface UserSlaveProps extends React.Props<any> {
     timeline: UserTimeline;
     owner: TwitterUser;
     friends: List<number>;
-    dispatch: Redux.Dispatch;
 }
 
 function renderTweets(props: UserSlaveProps) {
 
-    const {timeline, owner, friends, dispatch} = props;
+    const {timeline, owner, friends} = props;
     const focus_idx = timeline.focus_index;
 
     // TODO:

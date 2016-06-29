@@ -69,7 +69,7 @@ test('fire onClick event', t => {
     const pic = c.find('.mini-tweet__has-pic');
     t.true(pic.length > 0);
     pic.simulate('click', {
-        stopPropagation() { /* do nothing */ }
+        stopPropagation() { /* do nothing */ },
     });
     t.true(cb.called);
 });

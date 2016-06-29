@@ -9,4 +9,5 @@ export const fixture = new Fixture();
     innerWidth: 1000,
     devicePixelRatio: 1.0,
     addEventListener(event: string, listener: Function) { /* do nothing */ },
+    removeEventListener(event: string, listener: Function) { /* do nothing */ },
 };
