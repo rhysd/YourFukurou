@@ -26,6 +26,7 @@
     "components/tweet/profile_test.tsx",
     "components/mini_tweet/icon_test.tsx",
     "components/mini_tweet/secondary_test.tsx",
+    "components/mini_tweet/text_test.tsx",
     "components/editor/suggestions_test.tsx",
     "../helper.ts",
     "../fixture/fixture.ts",
