@@ -328,7 +328,9 @@ export default class TimelineState {
         return this.update({home, mention, notified, focus_index});
     }
 
-    addSeparator(sep: Separator) {
+    addSeparator() {
+        const sep = new Separator();
+
         const home =
             this.home.first() instanceof Separator ?
                 this.home :

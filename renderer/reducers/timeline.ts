@@ -25,7 +25,7 @@ export default function timeline(state: TimelineState = DefaultTimelineState, ac
         case Kind.AddRejectedUserIds:      return state.addRejectedIds(action.ids);
         case Kind.AddNoRetweetUserIds:     return state.addNoRetweetUserIds(action.ids);
         case Kind.RemoveRejectedUserIds:   return state.removeRejectedIds(action.ids);
-        case Kind.AddSeparator:            return state.addSeparator(action.item);
+        case Kind.AddSeparator:            return state.addSeparator();
         case Kind.AddFriends:              return state.addFriends(action.ids);
         case Kind.ResetFriends:            return state.resetFriends(action.ids);
         case Kind.RemoveFriends:           return state.removeFriends(action.ids);

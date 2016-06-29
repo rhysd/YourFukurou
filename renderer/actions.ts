@@ -2,7 +2,6 @@ import {EditorState} from 'draft-js';
 import {Twitter} from 'twit';
 import Tweet, {TwitterUser} from './item/tweet';
 import Item from './item/item';
-import Separator from './item/separator';
 import {AutoCompleteLabel} from './components/editor/auto_complete_decorator';
 import {TimelineKind} from './states/timeline';
 import {MessageKind} from './reducers/message';
@@ -185,7 +184,6 @@ export function addSeparator() {
     return (dispatch: Redux.Dispatch) => {
         setImmediate(() => dispatch({
             type: Kind.AddSeparator,
-            item: new Separator(),
         }));
     };
 }
