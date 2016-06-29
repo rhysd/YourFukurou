@@ -155,7 +155,7 @@ When the hot key is pressed, app window is toggled.  When window is not focused,
 
 ### `sticky_mode`
 
-If this value is set to `true`, window will be in 'sticky' mode.  Window will be shown in **every** workspace and hidden on other window focused.  This mode is intended to be used with `hotkey_accelerator` configuration.  You can toggle YourFukurou window with global shortcut like Alfred app.
+If this value is set to `true`, window will be in 'sticky' mode.  Window will be shown in **every** workspace and hidden on other window focused.  This mode is intended to be used with `hotkey_accelerator` configuration.  You can toggle YourFukurou window with global shortcut like Alfred app.  Note that when app is in fullscreen mode, the app will not be hidden.
 
 ### `keymaps`
 

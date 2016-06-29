@@ -163,7 +163,7 @@ function openWindow(access: AccessToken) {
             log.debug('Sticky mode: On');
             win.setVisibleOnAllWorkspaces(true);
             win.on('blur', () => {
-                if (!win.webContents.isDevToolsFocused()) {
+                if (!win.isFullScreen() && !win.webContents.isDevToolsFocused()) {
                     win.hide();
                 }
             });
