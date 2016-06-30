@@ -12,6 +12,9 @@ import {
     unfocusItem,
 } from '../actions';
 
+const MaxIconsExpanded = 10;
+const MaxIconsCollapsed = 4;
+
 interface ConnectedProps extends React.Props<any> {
     activity: TimelineActivity;
     focused?: boolean;
@@ -41,7 +44,10 @@ function renderBadge(kind: TimelineActivityKind) {
     }
 }
 
-function renderUserIcons(users: TwitterUser[]) {
+function renderUserIcons(users: TwitterUser[], max_icons: number) {
+    if (users.length > max_icons) {
+        users = users.slice(0, max_icons);
+    }
 
     const icons =
         users.map((u, i) =>
@@ -57,19 +63,33 @@ function renderUserIcons(users: TwitterUser[]) {
     </div>;
 }
 
-function renderRestUsers(activity: TimelineActivity) {
-
+function renderExpandedRestUsers(activity: TimelineActivity) {
     const activity_count =
         activity.kind === 'liked' ? activity.status.favorite_count :
         activity.kind === 'retweeted' ? activity.status.retweet_count :
         0;
-    const num_rest_users = activity_count - activity.by.length;
+    const num_rest_users = activity_count - Math.min(activity.by.length, MaxIconsExpanded);
     if (num_rest_users <= 0) {
         return undefined;
     }
 
     return (
         <span className="activity__rest"> and {num_rest_users} {num_rest_users === 1 ? 'user' : 'users'}</span>
+    );
+}
+
+function renderCollapsedRestUsers(activity: TimelineActivity) {
+    const activity_count =
+        activity.kind === 'liked' ? activity.status.favorite_count :
+        activity.kind === 'retweeted' ? activity.status.retweet_count :
+        0;
+    const num_rest_users = activity_count - Math.min(activity.by.length, MaxIconsCollapsed);
+    if (num_rest_users <= 0) {
+        return undefined;
+    }
+
+    return (
+        <span className="activity__rest">+{num_rest_users}</span>
     );
 }
 
@@ -99,7 +119,7 @@ function renderExpanded(props: TwitterActivityProps) {
             onClick={onClick}
         >
             <div className="activity__header">
-                {renderBadge(kind)} {behaved} by {renderUserIcons(activity.by)} {renderRestUsers(activity)}
+                {renderBadge(kind)} {behaved} by {renderUserIcons(activity.by, MaxIconsExpanded)} {renderExpandedRestUsers(activity)}
                 {renderCreatedAt(activity.status, focused)}
             </div>
             <div className="activity__text" title={activity.status.text}>
@@ -120,7 +140,7 @@ function renderCollapsed(props: TwitterActivityProps) {
             onClick={onClick}
         >
             <div className="activity__header activity__header_mini">
-                {renderBadge(activity.kind)} {renderUserIcons(activity.by)}
+                {renderBadge(activity.kind)} {renderUserIcons(activity.by, MaxIconsCollapsed)} {renderCollapsedRestUsers(activity)}
             </div>
             <div className="activity__text activity__text_mini" title={activity.status.text}>
                 <TweetText status={activity.status} focused={focused}/>
