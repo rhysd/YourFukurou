@@ -37,7 +37,7 @@ interface TweetEditorProps extends React.Props<any> {
 // TODO:
 // We need to use CSSTransitionGroup to add open/close animation
 //   https://facebook.github.io/react/docs/animation.html
-class TweetEditor extends React.Component<TweetEditorProps, {}> {
+export class TweetEditor extends React.Component<TweetEditorProps, {}> {
     keyBindingHandler: (e: React.KeyboardEvent) => string;
     keyCommandHandler: (cmd: string) => boolean;
     returnHandler: (e: React.KeyboardEvent) => boolean;
