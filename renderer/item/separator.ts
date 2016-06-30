@@ -73,7 +73,11 @@ export default class Separator implements Item {
 
             // Note:
             // When all missing statuses are not completed.
-            items.push(new Separator());
+            // We'll fetch 200 statuses at most.  So 199 statuses is max length of 'tweets'.
+            // If max length, there may remain more tweets to fetch.  We need to leave a separator then.
+            if (tweets.length === 200 - 1) {
+                items.push(new Separator());
+            }
 
             return items;
         });

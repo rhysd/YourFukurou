@@ -124,7 +124,7 @@ export class TwitterRestApi {
             user_id,
             include_rts: true,
             exclude_replies: false,
-            count: 40,
+            count: 100,
         }, params);
         return this.client.get<Status[]>('statuses/user_timeline', params);
     }
@@ -151,7 +151,7 @@ export class TwitterRestApi {
             include_entities: true,
             max_id,
             since_id,
-            count: 40,
+            count: 200,
         };
         return this.client.get<Status[]>(path, params);
     }

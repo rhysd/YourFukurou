@@ -4,39 +4,54 @@ import * as classNames from 'classnames';
 import Separator from '../item/separator';
 import log from '../log';
 
-interface ConnectedProps extends React.Props<any> {
+interface Props extends React.Props<ZigZagSeparator> {
     itemIndex?: number;
     focused?: boolean;
+    onClick?: (e: React.MouseEvent) => void;
 }
 
-interface DispatchProps {
-    onClick: (e: React.MouseEvent) => void;
+interface State {
+    loading: boolean;
 }
 
-type ZigZagSeparatorProps = ConnectedProps & DispatchProps;
+export default class ZigZagSeparator extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.onClick = props.onClick || this.onClick.bind(this);
+        this.state = {loading: false};
+    }
 
-export const ZigZagSeparator = (props: ZigZagSeparatorProps) => (
-    <div className="zigzag-separator" onClick={props.onClick}>
-        <div className="zigzag-separator__top"/>
-        <div
-            className={classNames({
-                'zigzag-separator__focused-middle': props.focused,
-                'zigzag-separator__middle': !props.focused,
-            }, 'zigzag-separator__jagged')}
-        />
-        <div className="zigzag-separator__bottom zigzag-separator__jagged"/>
-    </div>
-);
+    onClick(e: React.MouseEvent) {
+        e.stopPropagation();
+        if (this.props.itemIndex !== undefined) {
+            Separator.dispatchMissingStatusesAt(this.props.itemIndex);
+            this.setState({loading: true});
+        }
+    }
 
-function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
-    return {
-        onClick: e => {
-            e.stopPropagation();
-            if (props.itemIndex !== undefined) {
-                Separator.dispatchMissingStatusesAt(props.itemIndex);
-            }
-        },
-    };
+    render() {
+        if (this.state.loading) {
+            return (
+                <div className="zigzag-separator_loading">
+                    <div className="zigzag-separator_loading-icon">
+                        <i className="fa fa-spinner fa-pulse fa-lg fa-fw"></i>
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                </div>
+            );
+        }
+
+        return (
+            <div className="zigzag-separator" onClick={this.onClick}>
+                <div className="zigzag-separator__top"/>
+                <div
+                    className={classNames({
+                        'zigzag-separator__focused-middle': this.props.focused,
+                        'zigzag-separator__middle': !this.props.focused,
+                    }, 'zigzag-separator__jagged')}
+                />
+                <div className="zigzag-separator__bottom zigzag-separator__jagged"/>
+            </div>
+        );
+    }
 }
-
-export default connect(null, mapDispatch)(ZigZagSeparator);

@@ -640,6 +640,7 @@ body {
 
 .zigzag-separator {
   cursor: pointer;
+  height: 24px;
 }
 
 .zigzag-separator .zigzag-separator__jagged {
@@ -694,6 +695,18 @@ body {
 .zigzag-separator__bottom::before {
   background: linear-gradient(45deg, transparent 33.333%, white 33.333%, white 66.667%, transparent 66.667%), linear-gradient(-45deg, transparent 33.333%, white 33.333%, white 66.667%, transparent 66.667%);
   background-size: 20px 40px;
+}
+
+.zigzag-separator_loading {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  border-bottom: solid 1px var(--color-timeline-border);
+}
+
+.zigzag-separator_loading-icon {
+  margin: 0 auto;
+  color: var(--color-weak-text-link);
 }
 
 /* }}} */
