@@ -1,5 +1,6 @@
 <img src="images/icon.png" width="70"/>Hackable [YoruFukurou](https://sites.google.com/site/yorufukurou/home-en) Alternative
 =====================================================================================
+[![Build Status](https://travis-ci.org/rhysd/YourFukurou.svg?branch=master)](https://travis-ci.org/rhysd/YourFukurou)
 
 This is a Twitter client to aim to replace YoruFukurou with high pluggablity.  Under construction.
 
