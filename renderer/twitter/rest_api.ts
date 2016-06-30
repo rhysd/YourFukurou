@@ -134,7 +134,7 @@ export class TwitterRestApi {
     }
 
     missingMentionTimeline(max_id: string, since_id: string) {
-        return this.missingTimeline('statuses/mention_timeline', max_id, since_id);
+        return this.missingTimeline('statuses/mentions_timeline', max_id, since_id);
     }
 
     // Note:
@@ -153,10 +153,7 @@ export class TwitterRestApi {
             since_id,
             count: 40,
         };
-        return this.client.get<Status[]>(path, params).then(ss => {
-            console.log('MISSING_TIMELINE: ' + path, params, ss);
-            return ss;
-        });
+        return this.client.get<Status[]>(path, params);
     }
 }
 
