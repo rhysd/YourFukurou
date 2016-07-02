@@ -66,13 +66,7 @@ export default class IpcChannelProxy {
                 Store.dispatch(addRejectedUserIds(rejected_ids));
                 Store.dispatch(addNoRetweetUserIds(no_retweet_ids));
 
-                // Store.dispatch(addTweetsToTimeline(tweets.reverse().map(tw => new Tweet(tw))));
-                {
-                    const tws = tweets.reverse().map(tw => new Tweet(tw));
-                    Store.dispatch(addTweetsToTimeline(tws.slice(0, 5)));
-                    Store.dispatch(addSeparator());
-                    Store.dispatch(addTweetsToTimeline(tws.slice(15)));
-                }
+                Store.dispatch(addTweetsToTimeline(tweets.reverse().map(tw => new Tweet(tw))));
 
                 DB.accounts.storeAccountsInTweets(tweets);
                 DB.hashtags.storeHashtagsInTweets(tweets);

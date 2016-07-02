@@ -655,8 +655,8 @@ export default class TimelineState {
 export const DefaultTimelineState =
     new TimelineState(
         'home',
-        List<Item>(),
-        List<Item>(),
+        List<Item>([new Separator()]),
+        List<Item>([new Separator()]),
         null,
         {home: false, mention: false},
         List<number>(),
