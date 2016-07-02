@@ -78,6 +78,16 @@ function renderExpandedRestUsers(activity: TimelineActivity) {
     );
 }
 
+function getAbbrCount(count: number) {
+    if (count >= 1000000) {
+        return (Math.floor(count / 100000) / 10) + 'M';
+    } else if (count >= 1000) {
+        return (Math.floor(count / 100) / 10) + 'K';
+    } else {
+        return count.toString();
+    }
+}
+
 function renderCollapsedRestUsers(activity: TimelineActivity) {
     const activity_count =
         activity.kind === 'liked' ? activity.status.favorite_count :
@@ -89,7 +99,7 @@ function renderCollapsedRestUsers(activity: TimelineActivity) {
     }
 
     return (
-        <span className="activity__rest">+{num_rest_users}</span>
+        <span className="activity__rest">+{getAbbrCount(num_rest_users)}</span>
     );
 }
 
