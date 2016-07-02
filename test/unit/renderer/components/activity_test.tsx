@@ -6,6 +6,7 @@ import {spy} from 'sinon';
 import {TwitterActivity} from '../../../../renderer/components/activity';
 import Icon from '../../../../renderer/components/icon';
 import TimelineActivity from '../../../../renderer/item/timeline_activity';
+import Tweet from '../../../../renderer/item/tweet';
 
 function doNothing() {
     // Do nothing
@@ -91,3 +92,30 @@ test('fire onClick', t => {
     a2.simulate('click');
     t.true(cb.called);
 });
+
+test("show max 10 users' icons in expanded activity", t => {
+    const tw = new Tweet(Object.assign({}, fixture.tweet().json));
+    tw.json.favorite_count = 20;
+    const activity = new TimelineActivity('liked', tw, Array(11).fill(fixture.user()));
+    const a = shallow(
+        <TwitterActivity activity={activity} onClick={doNothing}/>
+    );
+    const icons = a.find(Icon);
+    t.is(icons.length, 10);
+    const rest = a.find('.activity__rest');
+    t.true(rest.text().indexOf('and 10 users') !== -1);
+});
+
+test("show max 4 users' icons in collapsed activity", t => {
+    const tw = new Tweet(Object.assign({}, fixture.tweet().json));
+    tw.json.favorite_count = 20;
+    const activity = new TimelineActivity('liked', tw, Array(11).fill(fixture.user()));
+    const a = shallow(
+        <TwitterActivity activity={activity} onClick={doNothing} collapsed/>
+    );
+    const icons = a.find(Icon);
+    t.is(icons.length, 4);
+    const rest = a.find('.activity__rest');
+    t.true(rest.text().indexOf('+16') !== -1);
+});
+
