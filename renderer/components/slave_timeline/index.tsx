@@ -11,6 +11,7 @@ interface SlaveTimelineProps extends React.Props<any> {
     slave: SlaveTimeline;
     friends: List<number>;
     owner: TwitterUser;
+    dispatch?: Redux.Dispatch;
 }
 
 function renderSlave(props: SlaveTimelineProps) {
@@ -20,6 +21,7 @@ function renderSlave(props: SlaveTimelineProps) {
             timeline={slave}
             friends={props.friends}
             owner={props.owner}
+            dispatch={props.dispatch}
         />;
     } else {
         log.error('Trying rendering invalid slave timeline:', props.slave);

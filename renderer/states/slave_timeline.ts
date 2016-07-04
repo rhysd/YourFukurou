@@ -1,6 +1,7 @@
 import {List} from 'immutable';
 import Item from '../item/item';
 import Tweet, {TwitterUser} from '../item/tweet';
+import Separator from '../item/separator';
 import KeymapTransition from '../keybinds/keymap_transition';
 
 interface SlaveTimeline {
@@ -17,7 +18,7 @@ export default SlaveTimeline;
 export class UserTimeline implements SlaveTimeline {
     constructor(
         public user: TwitterUser,
-        public items: List<Item> = List<Item>(),
+        public items: List<Item> = List<Item>([new Separator()]),
         public focus_index: number = null
     ) {
         KeymapTransition.enterSlaveTimeline();
@@ -42,6 +43,15 @@ export class UserTimeline implements SlaveTimeline {
             this.user,
             next_items,
             focus_idx
+        );
+    }
+
+    appendPastItems(items: Item[]) {
+        const next_items = this.items.splice(this.items.size - 1, 1, ...items).toList();
+        return new UserTimeline(
+            this.user,
+            next_items,
+            this.focus_index
         );
     }
 

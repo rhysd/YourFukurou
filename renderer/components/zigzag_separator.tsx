@@ -17,16 +17,18 @@ interface State {
 export default class ZigZagSeparator extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.onClick = props.onClick || this.onClick.bind(this);
+        this.onClick = this.onClick.bind(this);
         this.state = {loading: false};
     }
 
     onClick(e: React.MouseEvent) {
-        e.stopPropagation();
-        if (this.props.itemIndex !== undefined) {
+        if (this.props.onClick) {
+            this.props.onClick(e);
+        } else if (this.props.itemIndex !== undefined) {
+            e.stopPropagation();
             Separator.dispatchMissingStatusesAt(this.props.itemIndex);
-            this.setState({loading: true});
         }
+        this.setState({loading: true});
     }
 
     render() {

@@ -63,6 +63,7 @@ export enum Kind {
     OpenUserTimeline,
     CloseSlaveTimeline,
     AddUserTweets,
+    AppendPastItems,
     BlurSlaveTimeline,
     FocusSlaveNext,
     FocusSlavePrev,
@@ -443,6 +444,14 @@ export function addUserTweets(user_id: number, statuses: Tweet[]) {
         type: Kind.AddUserTweets,
         user_id,
         statuses,
+    };
+}
+
+export function appendPastItems(user_id: number, items: Item[]) {
+    return {
+        type: Kind.AppendPastItems,
+        user_id,
+        items,
     };
 }
 
