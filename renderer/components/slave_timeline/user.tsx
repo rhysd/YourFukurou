@@ -46,10 +46,10 @@ export default class UserSlave extends React.Component<UserSlaveProps, {}> {
                 if (statuses[0].id_str === last_item.id) {
                     statuses = statuses.slice(1);
                 }
-                const items: Item[] = statuses.map(s => new TweetItem(s));
-                items.push(new Separator());
-                return items;
-            }).then(items => this.props.dispatch(appendPastItems(user_id, items)));
+                const ret: Item[] = statuses.map(s => new TweetItem(s));
+                ret.push(new Separator());
+                return ret;
+            }).then(older_items => this.props.dispatch(appendPastItems(user_id, older_items)));
         } else {
             log.error('Last item of user timeline must be tweet but actually:', last_item);
         }

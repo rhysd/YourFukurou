@@ -22,6 +22,9 @@ import TwitterRestApi from '../../twitter/rest_api';
 // 3. Can't take statuses from third person in conversation.  For example, @A talks with @B starting
 //    from @A's tweet.  Then @C replies to @B tweet in the conversation.  But search/tweets doesn't
 //    include @C's tweets in the situation.
+//
+// TODO:
+// We can also use timeline cache on memory to find out related statuses to the conversation.
 export function showConversation(status: TweetItem, dispatch: Redux.Dispatch) {
     TwitterRestApi.conversationStatuses(status.id, status.user.screen_name)
         .then(json => {
@@ -104,7 +107,7 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
         onClickConversation: e => {
             e.stopPropagation();
             showConversation(props.status.getMainStatus(), dispatch);
-        }
+        },
     };
 }
 
