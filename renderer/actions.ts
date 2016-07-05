@@ -61,6 +61,7 @@ export enum Kind {
     ResetFriends,
 
     OpenUserTimeline,
+    OpenConversationTimeline,
     CloseSlaveTimeline,
     AddUserTweets,
     AppendPastItems,
@@ -430,6 +431,13 @@ export function openUserTimeline(user: TwitterUser) {
     return {
         type: Kind.OpenUserTimeline,
         user,
+    };
+}
+
+export function openConversationTimeline(statuses: Tweet[]) {
+    return {
+        type: Kind.OpenConversationTimeline,
+        statuses,
     };
 }
 

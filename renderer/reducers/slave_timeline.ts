@@ -1,9 +1,17 @@
 import {Action, Kind} from '../actions';
-import SlaveTimeline, {UserTimeline} from '../states/slave_timeline';
+import {List} from 'immutable';
+import SlaveTimeline, {
+    UserTimeline,
+    ConversationTimeline,
+} from '../states/slave_timeline';
 
 export default function slaveTimeline(state: SlaveTimeline = null, action: Action) {
     if (action.type === Kind.OpenUserTimeline) {
         return new UserTimeline(action.user);
+    }
+
+    if (action.type === Kind.OpenConversationTimeline) {
+        return ConversationTimeline.fromArray(action.statuses);
     }
 
     if (state === null) {

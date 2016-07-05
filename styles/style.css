@@ -347,6 +347,7 @@ body {
 .tweet__primary-conversation {
   flex: none;
   color: var(--color-weak-text-link);
+  cursor: pointer;
 }
 
 .tweet__primary-conversation.tweet__primary-conversation_focused {
@@ -1198,6 +1199,12 @@ body {
   height: auto;
   flex: auto;
   overflow: auto;
+}
+
+.conversation-timeline__tweets {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 /* }}} */

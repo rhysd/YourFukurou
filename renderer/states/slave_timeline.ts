@@ -104,5 +104,63 @@ export class UserTimeline implements SlaveTimeline {
     }
 }
 
-// TODO:
-// export class ConversationTimeline
+export class ConversationTimeline implements SlaveTimeline {
+    static fromArray(statuses: Tweet[]) {
+        return new ConversationTimeline(List<Tweet>(statuses));
+    }
+
+    constructor(
+        public items: List<Tweet>,
+        public focus_index: number = null
+    ) {
+        KeymapTransition.enterSlaveTimeline();
+    }
+
+    close(): ConversationTimeline {
+        KeymapTransition.escapeFromCurrentKeymaps();
+        return null;
+    }
+
+    blur() {
+        return this.focusOn(null);
+    }
+
+    focusNext() {
+        if (this.focus_index === null) {
+            return this.focusOn(0);
+        }
+        if (this.focus_index === this.items.size - 1) {
+            return this;
+        }
+        return this.focusOn(this.focus_index + 1);
+    }
+
+    focusPrev() {
+        if (this.focus_index === null) {
+            return this;
+        }
+        if (this.focus_index === 0) {
+            return this;
+        }
+        return this.focusOn(this.focus_index - 1);
+    }
+
+    focusTop() {
+        return this.focusOn(0);
+    }
+
+    focusBottom() {
+        return this.focusOn(this.items.size - 1);
+    }
+
+    focusOn(idx: number) {
+        if (idx === this.focus_index) {
+            return this;
+        }
+        return new ConversationTimeline(
+            this.items,
+            idx
+        );
+    }
+}
+

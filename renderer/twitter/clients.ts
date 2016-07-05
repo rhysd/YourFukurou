@@ -38,7 +38,7 @@ export class TwitClient implements UnderlyingClient {
                     reject(err);
                     return;
                 }
-                log.debug('POST:', name, data);
+                log.debug('POST:', name, params, data);
                 resolve(data);
             });
         });
@@ -52,7 +52,7 @@ export class TwitClient implements UnderlyingClient {
                     reject(err);
                     return;
                 }
-                log.debug('GET:', name, data);
+                log.debug('GET:', name, params, data);
                 resolve(data);
             });
         });
