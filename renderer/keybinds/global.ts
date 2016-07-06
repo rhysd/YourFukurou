@@ -24,6 +24,7 @@ import {
     showMessage,
 } from '../actions';
 import TwitterRestApi from '../twitter/rest_api';
+import {showConversation} from '../components/tweet/index';
 
 function getCurrentStatus(): Tweet {
     const timeline = Store.getState().timeline;
@@ -165,6 +166,14 @@ function showUser() {
     });
 }
 
+function conversation() {
+    const status = getCurrentStatus();
+    if (status === null) {
+        return;
+    }
+    showConversation(status.getMainStatus(), Store.dispatch);
+}
+
 export type GlobalAction =
     'open-tweet-form'
   | 'home-timeline'
@@ -174,6 +183,7 @@ export type GlobalAction =
   | 'retweet'
   | 'like'
   | 'reply'
+  | 'conversation'
   | 'delete-status'
   | 'open-status-page'
   | 'show-user'
@@ -185,6 +195,7 @@ export type GlobalAction =
 
 const DefaultMap = I.Map<string, GlobalAction>({
     'tab': 'open-tweet-form',
+    'c': 'conversation',
     'i': 'focus-top',
     'j': 'focus-next',
     'k': 'focus-previous',
@@ -219,6 +230,7 @@ const ActionHandlers = I.Map<GlobalAction, () => void>({
     'retweet': toggleRetweet,
     'like': toggleLike,
     'reply': replyOrCompleteMissingStatuses,
+    'conversation': conversation,
     'delete-status': deleteStatus,
     'unfocus': () => Store.dispatch(unfocusItem()),
 });

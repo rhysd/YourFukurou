@@ -21,6 +21,8 @@ export default class ZigZagSeparator extends React.Component<Props, State> {
         this.state = {loading: false};
     }
 
+    // XXX:
+    // This component owns its state.  We can't change the state via keymaps.
     onClick(e: React.MouseEvent) {
         if (this.props.onClick) {
             this.props.onClick(e);

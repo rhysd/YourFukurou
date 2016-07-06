@@ -13,28 +13,26 @@ interface TweetPrimaryProps extends React.Props<any> {
     owner: TwitterUser;
     status: Tweet;
     focused: boolean;
+    onClickConversation: (e: React.MouseEvent) => void;
 }
 
 export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}> {
     actions_elem: HTMLElement;
-    showActions: () => void;
-    hideActions: () => void;
-    openStatus: (e: React.MouseEvent) => void;
 
     constructor(props: TweetPrimaryProps) {
         super(props);
-        this.showActions = () => {
-            this.actions_elem.style.display = 'flex';
-        };
-        this.hideActions = () => {
-            if (!this.props.focused) {
-                this.actions_elem.style.display = 'none';
-            }
-        };
-        this.openStatus = e => {
-            e.stopPropagation();
-            this.props.status.openStatusPageInBrowser();
-        };
+        this.showActions = this.showActions.bind(this);
+        this.hideActions = this.hideActions.bind(this);
+    }
+
+    showActions() {
+        this.actions_elem.style.display = 'flex';
+    }
+
+    hideActions() {
+        if (!this.props.focused) {
+            this.actions_elem.style.display = 'none';
+        }
     }
 
     renderCreatedAt() {
@@ -44,7 +42,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                     'tweet__primary-created-at',
                     {'tweet__primary-created-at_focused': this.props.focused}
                 )}
-                onClick={this.openStatus}
+                onClick={this.props.onClickConversation}
             >
                 {this.props.status.getCreatedAtString()}
             </span>
@@ -56,10 +54,13 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
             return undefined;
         }
         return (
-            <div className={classNames(
-                'tweet__primary-conversation',
-                {'tweet__primary-conversation_focused': this.props.focused}
-            )}>
+            <div
+                className={classNames(
+                    'tweet__primary-conversation',
+                    {'tweet__primary-conversation_focused': this.props.focused}
+                )}
+                onClick={this.props.onClickConversation}
+            >
                 <i className="fa fa-comments" style={{marginRight: '4px'}}/>
             </div>
         );

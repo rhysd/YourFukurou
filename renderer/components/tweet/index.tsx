@@ -11,16 +11,36 @@ import {TimelineKind} from '../../states/timeline';
 import {
     focusOnItem,
     unfocusItem,
+    focusSlaveOn,
+    blurSlaveTimeline,
+    openConversationTimeline,
 } from '../../actions';
+import TwitterRestApi from '../../twitter/rest_api';
 
+// Note:
+// This showConversation() function has some limitations.
+// 1. Can't take statuses from protected accounts.  This is because of spec of search/tweets.
+// 2. Can't take statuses older than a week.  This is because of the same as above.
+// 3. Can't take statuses from third person in conversation.  For example, @A talks with @B starting
+//    from @A's tweet.  Then @C replies to @B tweet in the conversation.  But search/tweets doesn't
+//    include @C's tweets in the situation.
+//
 // TODO:
-// Enable to expand/contract tweet panel like as YoruFukurou
-// TODO:
-// Enable to focus/unfocus tweet panel like as YoruFukurou
+// We can also use timeline cache on memory to find out related statuses to the conversation.
+export function showConversation(status: TweetItem, dispatch: Redux.Dispatch) {
+    TwitterRestApi.conversationStatuses(status.id, status.user.screen_name)
+        .then(json => {
+            const statuses = json.map(s => new TweetItem(s));
+            statuses.push(status);
+            Array.prototype.push.apply(statuses, status.related_statuses);
+            dispatch(openConversationTimeline(statuses));
+        });
+}
 
 interface ConnectedProps extends React.Props<any> {
     status: TweetItem;
     owner: TwitterUser;
+    inSlaveTimeline?: boolean;
     timeline?: TimelineKind;
     focused?: boolean;
     related?: boolean;
@@ -31,6 +51,7 @@ interface ConnectedProps extends React.Props<any> {
 
 interface DispatchProps {
     onClick: (e: React.MouseEvent) => void;
+    onClickConversation: (e: React.MouseEvent) => void;
 }
 
 type TweetProps = ConnectedProps & DispatchProps;
@@ -65,7 +86,12 @@ const Tweet: React.StatelessComponent<TweetProps> = props => {
         >
             <PopupIcon user={tw.user} friends={props.friends}/>
             <TweetSecondary status={props.status} focused={props.focused}/>
-            <TweetPrimary status={props.status} owner={props.owner} focused={props.focused}/>
+            <TweetPrimary
+                status={props.status}
+                owner={props.owner}
+                onClickConversation={props.onClickConversation}
+                focused={props.focused}
+            />
         </UndraggableClickable>
     );
 };
@@ -77,9 +103,19 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
             if (props.itemIndex === undefined) {
                 return;
             }
-            const action = props.focused ?
-                unfocusItem() : focusOnItem(props.itemIndex);
-            dispatch(action);
+            if (props.inSlaveTimeline) {
+                const action = props.focused ?
+                    blurSlaveTimeline() : focusSlaveOn(props.itemIndex);
+                dispatch(action);
+            } else {
+                const action = props.focused ?
+                    unfocusItem() : focusOnItem(props.itemIndex);
+                dispatch(action);
+            }
+        },
+        onClickConversation: e => {
+            e.stopPropagation();
+            showConversation(props.status.getMainStatus(), dispatch);
         },
     };
 }

@@ -2,9 +2,10 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {List} from 'immutable';
 import UserSlave from './user';
+import ConversationSlave from './conversation';
 import {TwitterUser} from '../../item/tweet';
 import State from '../../states/root';
-import SlaveTimeline, {UserTimeline} from '../../states/slave_timeline';
+import SlaveTimeline, {UserTimeline, ConversationTimeline} from '../../states/slave_timeline';
 import log from '../../log';
 
 interface SlaveTimelineProps extends React.Props<any> {
@@ -22,6 +23,12 @@ function renderSlave(props: SlaveTimelineProps) {
             friends={props.friends}
             owner={props.owner}
             dispatch={props.dispatch}
+        />;
+    } else if (slave instanceof ConversationTimeline) {
+        return <ConversationSlave
+            timeline={slave}
+            friends={props.friends}
+            owner={props.owner}
         />;
     } else {
         log.error('Trying rendering invalid slave timeline:', props.slave);

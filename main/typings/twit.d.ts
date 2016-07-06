@@ -201,7 +201,6 @@ declare module 'twit' {
                 withheld_in_countries?: string[];
                 withheld_scope?: string;
             }
-
             interface DirectMessage {
                 created_at: string;
                 entities: Entities;
@@ -215,7 +214,6 @@ declare module 'twit' {
                 sender_screen_name: string;
                 text: string;
             }
-
             export interface Metadata {
                 completed_in?: number;
                 count?: number;
@@ -226,6 +224,10 @@ declare module 'twit' {
                 refresh_url?: string;
                 since_id?: number;
                 since_id_str?: string;
+            }
+            export interface SearchResponse {
+                search_metadata: Metadata;
+                statuses: Status[];
             }
             export interface Error {
                 code: number;

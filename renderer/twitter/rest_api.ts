@@ -1,9 +1,11 @@
 import * as Twit from 'twit';
+import {escape} from 'querystring';
 import log from '../log';
 import {UnderlyingClient, DummyClient, TwitClient} from './clients';
 
 type Status = Twit.Twitter.Status;
 type User = Twit.Twitter.User;
+type SearchResponse = Twit.Twitter.SearchResponse;
 
 export class TwitterRestApi {
     constructor(public client: UnderlyingClient) {
@@ -127,6 +129,33 @@ export class TwitterRestApi {
             count: 100,
         }, params);
         return this.client.get<Status[]>('statuses/user_timeline', params);
+    }
+
+    searchStatuses(query: string, params: Object = {}) {
+        params = Object.assign({
+            q: query,
+            result_type: 'recent',
+            include_entities: true,
+            count: 100,
+        }, params);
+        return this.client.get<SearchResponse>('search/tweets', params);
+    }
+
+    conversationStatuses(status_id: string, screen_name: string) {
+        const query = `@${screen_name} OR from:${screen_name} filter:replies -filter:retweets`;
+        return this.searchStatuses(query, {since_id: status_id})
+            .then(res => {
+                const statuses = res.statuses;
+                const related_ids = [status_id];
+                return statuses.reverse().reduce((result, status) => {
+                    const in_reply_to = status.in_reply_to_status_id_str;
+                    if (related_ids.indexOf(in_reply_to) !== -1) {
+                        result.unshift(status);
+                        related_ids.push(status.id_str);
+                    }
+                    return result;
+                }, [] as Status[]);
+            });
     }
 
     missingHomeTimeline(max_id: string, since_id: string) {
