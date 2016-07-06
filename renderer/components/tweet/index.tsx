@@ -25,6 +25,10 @@ import TwitterRestApi from '../../twitter/rest_api';
 //
 // TODO:
 // We can also use timeline cache on memory to find out related statuses to the conversation.
+//
+// TODO:
+// We should also handle *non* in-reply-to statuses.  Conversation may start from a non in-reply-to
+// status.  We need to use some queries for the situations properly.
 export function showConversation(status: TweetItem, dispatch: Redux.Dispatch) {
     TwitterRestApi.conversationStatuses(status.id, status.user.screen_name)
         .then(json => {
