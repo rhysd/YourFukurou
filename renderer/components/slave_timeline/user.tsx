@@ -74,6 +74,7 @@ export default class UserSlave extends React.Component<UserSlaveProps, {}> {
                     focused={focused}
                     friends={friends}
                     itemIndex={idx}
+                    inSlaveTimeline
                     key={idx}
                 />;
             } else if (item instanceof Separator) {

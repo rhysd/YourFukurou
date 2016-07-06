@@ -11,6 +11,8 @@ import {TimelineKind} from '../../states/timeline';
 import {
     focusOnItem,
     unfocusItem,
+    focusSlaveOn,
+    blurSlaveTimeline,
     openConversationTimeline,
 } from '../../actions';
 import TwitterRestApi from '../../twitter/rest_api';
@@ -38,6 +40,7 @@ export function showConversation(status: TweetItem, dispatch: Redux.Dispatch) {
 interface ConnectedProps extends React.Props<any> {
     status: TweetItem;
     owner: TwitterUser;
+    inSlaveTimeline?: boolean;
     timeline?: TimelineKind;
     focused?: boolean;
     related?: boolean;
@@ -100,9 +103,15 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
             if (props.itemIndex === undefined) {
                 return;
             }
-            const action = props.focused ?
-                unfocusItem() : focusOnItem(props.itemIndex);
-            dispatch(action);
+            if (props.inSlaveTimeline) {
+                const action = props.focused ?
+                    blurSlaveTimeline() : focusSlaveOn(props.itemIndex);
+                dispatch(action);
+            } else {
+                const action = props.focused ?
+                    unfocusItem() : focusOnItem(props.itemIndex);
+                dispatch(action);
+            }
         },
         onClickConversation: e => {
             e.stopPropagation();

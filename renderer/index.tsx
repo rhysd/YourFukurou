@@ -6,6 +6,9 @@ import * as React from 'react';
 import {render} from 'react-dom';
 import {Provider} from 'react-redux';
 import {whyDidYouUpdate} from 'why-did-you-update';
+import * as timing from 'timing.js';
+import * as ReactPerf from 'react-addons-perf';
+import {Twitter} from 'twit';
 import Store from './store';
 import IpcChannelProxy from './ipc_channel_proxy';
 import App from './components/app';
@@ -13,21 +16,21 @@ import {setCurrentUser} from './actions';
 import DB from './database/db';
 import PM from './plugin_manager';
 import KeymapTransition from './keybinds/keymap_transition';
+import Tweet from './item/tweet';
+import Item from './item/item';
 import log from './log';
-import * as timing from 'timing.js';
-import * as ReactPerf from 'react-addons-perf';
 
 const fs = global.require('fs');
 const electron = global.require('electron');
 const app = electron.remote.app;
 const remote = electron.remote;
-const Env = global.process.env;
+const env = global.process.env;
 
-if (Env.YOURFUKUROU_WHY_DID_YOU_UPDATE) {
+if (env.YOURFUKUROU_WHY_DID_YOU_UPDATE) {
     whyDidYouUpdate(React);
 }
 
-if (Env.YOURFUKUROU_PERF) {
+if (env.YOURFUKUROU_PERF) {
     ReactPerf.start();
     setTimeout(() => {
         ReactPerf.stop();
@@ -89,6 +92,19 @@ PM.loadPlugins();
 global.DB = DB;
 global.PM = PM;
 
+// Note:
+// Debug function to correct statuses JSON for reproducing timeline
+if (env.NODE_ENV === 'development') {
+    global.emitHomeStatusesJson = () => {
+        const tweets = Store.getState().timeline.home
+                    .map((i: Item) => i instanceof Tweet ? i.json : null)
+                    .filter((s: Twitter.Status) => s !== null)
+                    .toArray();
+        const json = JSON.stringify({'statuses/home_timeline': tweets}, null, 2);
+        fs.writeFile('dummy_rest_responses.json', json);
+    };
+}
+
 // Note: Post process of application
 window.onunload = () => {
     proxy.terminate();
@@ -96,7 +112,7 @@ window.onunload = () => {
 };
 
 window.onload = () => {
-    if (Env.NODE_ENV === 'development' || Env.YOURFUKUROU_PERF) {
+    if (env.NODE_ENV === 'development' || env.YOURFUKUROU_PERF) {
         setTimeout(() => timing.printSimpleTable(), 0);
     }
 };

@@ -1204,7 +1204,8 @@ body {
 .conversation-timeline__tweets {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: auto;
+  overflow: auto;
 }
 
 /* }}} */

@@ -21,6 +21,7 @@ function renderTweets(props: ConversationSlaveProps) {
             friends={friends}
             focused={focused_idx === idx}
             itemIndex={idx}
+            inSlaveTimeline
             key={idx}
         />
     ));
