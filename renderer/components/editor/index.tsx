@@ -215,6 +215,7 @@ export class TweetEditor extends React.Component<TweetEditorProps, {}> {
                         handleKeyCommand={this.keyCommandHandler}
                         handleReturn={this.returnHandler}
                         keyBindingFn={this.keyBindingHandler}
+                        stripPastedStyles
                         onEscape={() => this.close()}
                         onTab={this.tabHandler}
                         onBlur={this.blurHandler}

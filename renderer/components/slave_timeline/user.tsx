@@ -12,6 +12,34 @@ import log from '../../log';
 import {appendPastItems} from '../../actions';
 import TwitterRestApi from '../../twitter/rest_api';
 
+export function dispatchOlderTweets(timeline: UserTimeline, dispatch: Redux.Dispatch) {
+    const items = timeline.items;
+    const size = items.size;
+    if (size <= 1) {
+        return;
+    }
+    const last_item = items.get(size - 2);
+    const user_id = timeline.user.id;
+    if (last_item instanceof TweetItem) {
+        TwitterRestApi.userTimeline(user_id, {
+            max_id: last_item.id,
+            count: 200,
+        }).then(statuses => {
+            if (statuses.length === 0) {
+                return [] as Item[];
+            }
+            if (statuses[0].id_str === last_item.id) {
+                statuses = statuses.slice(1);
+            }
+            const ret: Item[] = statuses.map(s => new TweetItem(s));
+            ret.push(new Separator());
+            return ret;
+        }).then(older_items => dispatch(appendPastItems(user_id, older_items)));
+    } else {
+        log.error('Last item of user timeline must be tweet but actually:', last_item);
+    }
+}
+
 interface UserSlaveProps extends React.Props<UserSlave> {
     timeline: UserTimeline;
     owner: TwitterUser;
@@ -27,32 +55,7 @@ export default class UserSlave extends React.Component<UserSlaveProps, {}> {
 
     onSeparatorClicked(e: React.MouseEvent) {
         e.stopPropagation();
-        const timeline = this.props.timeline;
-        const items = timeline.items;
-        const size = items.size;
-        if (size <= 1) {
-            return;
-        }
-        const last_item = items.get(size - 2);
-        const user_id = timeline.user.id;
-        if (last_item instanceof TweetItem) {
-            TwitterRestApi.userTimeline(user_id, {
-                max_id: last_item.id,
-                count: 200,
-            }).then(statuses => {
-                if (statuses.length === 0) {
-                    return [] as Item[];
-                }
-                if (statuses[0].id_str === last_item.id) {
-                    statuses = statuses.slice(1);
-                }
-                const ret: Item[] = statuses.map(s => new TweetItem(s));
-                ret.push(new Separator());
-                return ret;
-            }).then(older_items => this.props.dispatch(appendPastItems(user_id, older_items)));
-        } else {
-            log.error('Last item of user timeline must be tweet but actually:', last_item);
-        }
+        dispatchOlderTweets(this.props.timeline, this.props.dispatch);
     }
 
     renderTweets() {

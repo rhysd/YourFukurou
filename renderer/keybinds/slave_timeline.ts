@@ -24,7 +24,9 @@ import {UserTimeline} from '../states/slave_timeline';
 import log from '../log';
 import TwitterRestApi from '../twitter/rest_api';
 import Tweet from '../item/tweet';
+import Separator from '../item/separator';
 import {showConversation} from '../components/tweet/index';
+import {dispatchOlderTweets} from '../components/slave_timeline/user';
 
 function getCurrentUser() {
     const slave = Store.getState().slaveTimeline;
@@ -50,7 +52,12 @@ function openUserWebsite() {
 }
 
 function getFocusedStatus() {
-    return Store.getState().slaveTimeline.getFocusedStatus();
+    const item = Store.getState().slaveTimeline.getFocusedItem();
+    if (item instanceof Tweet) {
+        return item;
+    } else {
+        return null;
+    }
 }
 
 function openMedia() {
@@ -119,14 +126,23 @@ function toggleLike() {
     }
 }
 
-function reply() {
+function reply(status: Tweet) {
     const owner = Store.getState().timeline.user;
-    const status = getFocusedStatus();
-    const action =
-        status === null ?
-            openEditor() :
-            openEditorForReply(status.getMainStatus(), owner);
+    const action = openEditorForReply(status.getMainStatus(), owner);
     Store.dispatch(action);
+}
+
+function replyOrCompleteMissingStatuses() {
+    const tl = Store.getState().slaveTimeline;
+    const item = tl.getFocusedItem();
+    if (item instanceof Tweet) {
+        reply(item);
+    } else if (item instanceof Separator) {
+        const i = tl.focus_index;
+        if (i !== null && tl instanceof UserTimeline) {
+            dispatchOlderTweets(tl, Store.dispatch);
+        }
+    }
 }
 
 function deleteStatus() {
@@ -216,7 +232,7 @@ const ActionHandlers = I.Map<SlaveTimelineAction, () => void>({
     'open-links': openLinks,
     'retweet': toggleRetweet,
     'like': toggleLike,
-    'reply': reply,
+    'reply': replyOrCompleteMissingStatuses,
     'conversation': conversation,
     'delete-status': deleteStatus,
     'open-status-page': openStatus,

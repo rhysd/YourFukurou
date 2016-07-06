@@ -5,7 +5,7 @@ import Separator from '../item/separator';
 import KeymapTransition from '../keybinds/keymap_transition';
 
 interface SlaveTimeline {
-    getFocusedStatus(): Tweet;
+    getFocusedItem(): Item;
     close(): SlaveTimeline;
     focusNext(): SlaveTimeline;
     focusPrev(): SlaveTimeline;
@@ -25,16 +25,11 @@ export class UserTimeline implements SlaveTimeline {
         KeymapTransition.enterSlaveTimeline();
     }
 
-    getFocusedStatus() {
+    getFocusedItem() {
         if (this.focus_index === null) {
             return null;
         }
-        const item = this.items.get(this.focus_index);
-        if (item instanceof Tweet) {
-            return item;
-        } else {
-            return null;
-        }
+        return this.items.get(this.focus_index);
     }
 
     addTweets(statuses: Tweet[]) {
@@ -117,7 +112,7 @@ export class ConversationTimeline implements SlaveTimeline {
         KeymapTransition.enterSlaveTimeline();
     }
 
-    getFocusedStatus() {
+    getFocusedItem() {
         if (this.focus_index === null) {
             return null;
         }
