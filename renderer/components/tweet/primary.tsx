@@ -23,7 +23,6 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         super(props);
         this.showActions = this.showActions.bind(this);
         this.hideActions = this.hideActions.bind(this);
-        this.openStatus = this.openStatus.bind(this);
     }
 
     showActions() {
@@ -36,11 +35,6 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         }
     }
 
-    openStatus(e: React.MouseEvent) {
-        e.stopPropagation();
-        this.props.status.openStatusPageInBrowser();
-    }
-
     renderCreatedAt() {
         return (
             <span
@@ -48,7 +42,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                     'tweet__primary-created-at',
                     {'tweet__primary-created-at_focused': this.props.focused}
                 )}
-                onClick={this.openStatus}
+                onClick={this.props.onClickConversation}
             >
                 {this.props.status.getCreatedAtString()}
             </span>

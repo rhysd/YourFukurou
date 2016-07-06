@@ -171,11 +171,7 @@ function conversation() {
     if (status === null) {
         return;
     }
-    const s = status.getMainStatus();
-    if (!s.hasInReplyTo()) {
-        return;
-    }
-    showConversation(s, Store.dispatch);
+    showConversation(status.getMainStatus(), Store.dispatch);
 }
 
 export type GlobalAction =
