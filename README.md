@@ -48,6 +48,7 @@ These shortcuts are applied by default.  If no shortcut is matched to the input,
 | Default  | Description                                | Action Name        |
 |----------|--------------------------------------------|--------------------|
 | `tab`    | Open tweet form.                           | `open-tweet-form`  |
+| `c`      | Show conversation of focused tweeet.       | `conversation`     |
 | `i`      | Move focus to top.                         | `focus-top`        |
 | `j`      | Move focus to next.                        | `focus-next`       |
 | `k`      | Move focus to previous.                    | `focus-previous`   |
@@ -55,6 +56,7 @@ These shortcuts are applied by default.  If no shortcut is matched to the input,
 | `o`      | Open picture preview in focused tweet.     | `open-media`       |
 | `O`      | Open focused tweet page in browser.        | `open-status-page` |
 | `l`      | Open all links in focused tweet.           | `open-links`       |
+| `u`      | Show the author of focused tweet.          | `show-user`        |
 | `1`      | Switch to home timeline.                   | `home-timeline`    |
 | `2`      | Switch to mention timeline.                | `mention-timeline` |
 | `ctrl+r` | Retweet focused tweet.                     | `retweet`          |
@@ -90,6 +92,7 @@ These shortcuts are applied when preview of pictures in tweet is opened.  Global
 | Default         | Description                                | Action Name        |
 |-----------------|--------------------------------------------|--------------------|
 | `tab`           | Open tweet form.                           | `open-tweet-form`  |
+| `c`             | Show conversation of focused tweeet.       | `conversation`     |
 | `i`             | Move focus to top.                         | `focus-top`        |
 | `j`             | Move focus to next.                        | `focus-next`       |
 | `k`             | Move focus to previous.                    | `focus-previous`   |
@@ -97,6 +100,7 @@ These shortcuts are applied when preview of pictures in tweet is opened.  Global
 | `o`             | Open picture preview in focused tweet.     | `open-media`       |
 | `O`             | Open focused tweet page in browser.        | `open-status-page` |
 | `l`             | Open all links in focused tweet.           | `open-links`       |
+| `u`             | Show the author of focused tweet.          | `show-user`        |
 | `ctrl+r`        | Retweet focused tweet.                     | `retweet`          |
 | `ctrl+f`        | Like focused tweet.                        | `like`             |
 | `ctrl+D`        | Delete focused tweet.                      | `delete-status`    |

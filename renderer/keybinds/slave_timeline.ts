@@ -24,6 +24,7 @@ import {UserTimeline} from '../states/slave_timeline';
 import log from '../log';
 import TwitterRestApi from '../twitter/rest_api';
 import Tweet from '../item/tweet';
+import {showConversation} from '../components/tweet/index';
 
 function getCurrentUser() {
     const slave = Store.getState().slaveTimeline;
@@ -49,12 +50,7 @@ function openUserWebsite() {
 }
 
 function getFocusedStatus() {
-    const slave = Store.getState().slaveTimeline;
-    if (slave instanceof UserTimeline) {
-        return slave.getFocusedStatus();
-    } else {
-        return null;
-    }
+    return Store.getState().slaveTimeline.getFocusedStatus();
 }
 
 function openMedia() {
@@ -155,6 +151,18 @@ function showUser() {
     });
 }
 
+function conversation() {
+    const status = getFocusedStatus();
+    if (status === null) {
+        return;
+    }
+    const s = status.getMainStatus();
+    if (!s.hasInReplyTo()) {
+        return;
+    }
+    showConversation(s, Store.dispatch);
+}
+
 export type SlaveTimelineAction =
     'open-tweet-form' |
     'open-media' |
@@ -162,6 +170,7 @@ export type SlaveTimelineAction =
     'retweet' |
     'like' |
     'reply' |
+    'conversation' |
     'delete-status' |
     'open-status-page' |
     'show-user' |
@@ -176,6 +185,7 @@ export type SlaveTimelineAction =
 
 const DefaultMap = I.Map<string, SlaveTimelineAction>({
     'tab': 'open-tweet-form',
+    'c': 'conversation',
     'o': 'open-media',
     'l': 'open-links',
     'ctrl+r': 'retweet',
@@ -207,6 +217,7 @@ const ActionHandlers = I.Map<SlaveTimelineAction, () => void>({
     'retweet': toggleRetweet,
     'like': toggleLike,
     'reply': reply,
+    'conversation': conversation,
     'delete-status': deleteStatus,
     'open-status-page': openStatus,
     'show-user': showUser,

@@ -5,6 +5,7 @@ import Separator from '../item/separator';
 import KeymapTransition from '../keybinds/keymap_transition';
 
 interface SlaveTimeline {
+    getFocusedStatus(): Tweet;
     close(): SlaveTimeline;
     focusNext(): SlaveTimeline;
     focusPrev(): SlaveTimeline;
@@ -114,6 +115,13 @@ export class ConversationTimeline implements SlaveTimeline {
         public focus_index: number = null
     ) {
         KeymapTransition.enterSlaveTimeline();
+    }
+
+    getFocusedStatus() {
+        if (this.focus_index === null) {
+            return null;
+        }
+        return this.items.get(this.focus_index);
     }
 
     close(): ConversationTimeline {
