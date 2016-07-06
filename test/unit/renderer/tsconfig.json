@@ -30,6 +30,7 @@
     "components/editor/suggestions_test.tsx",
     "components/editor/index_test.tsx",
     "components/slave_timeline/user_test.tsx",
+    "components/slave_timeline/conversation_test.tsx",
     "../helper.ts",
     "../fixture/fixture.ts",
     "../../../main/typings/twit.d.ts",
