@@ -11,6 +11,7 @@ import {
 import TwitterRestApi from '../../twitter/rest_api';
 
 const electron = global.require('electron');
+const InDebugMode = global.process.env.NODE_ENV === 'development';
 
 interface ConnectedProps {
     status: Tweet;
@@ -20,6 +21,7 @@ interface ConnectedProps {
 interface DispatchProps {
     onDeleteTweet: (e: React.MouseEvent) => void;
     onUrlOpen: (e: React.MouseEvent) => void;
+    onStatusOpen: (e: React.MouseEvent) => void;
     onCopyUrl: (e: React.MouseEvent) => void;
     onCopyJson: (e: React.MouseEvent) => void;
     onCorrectTweet: (e: React.MouseEvent) => void;
@@ -89,6 +91,20 @@ function renderCorrectThisTweet(props: OtherActionsButtonProps) {
     );
 }
 
+function renderCopyJson(props: OtherActionsButtonProps) {
+    if (!InDebugMode) {
+        return undefined;
+    }
+    return (
+        <div
+            className="tweet-actions__others-menu-item"
+            onClick={props.onCopyJson}
+        >
+            Copy tweet JSON
+        </div>
+    );
+}
+
 function doNotPropagateEvent(e: React.MouseEvent) {
     e.stopPropagation();
 }
@@ -105,16 +121,17 @@ const OtherActionsButton = (props: OtherActionsButtonProps) => {
             </div>
             <div
                 className="tweet-actions__others-menu-item"
+                onClick={props.onStatusOpen}
+            >
+                Open tweet page
+            </div>
+            <div
+                className="tweet-actions__others-menu-item"
                 onClick={props.onCopyUrl}
             >
                 Copy tweet URL
             </div>
-            <div
-                className="tweet-actions__others-menu-item"
-                onClick={props.onCopyJson}
-            >
-                Copy tweet JSON
-            </div>
+            {renderCopyJson(props)}
             {renderCorrectThisTweet(props)}
         </div>;
 
@@ -142,6 +159,10 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
                 .then(() => dispatch(showMessage('Deleted tweet.', 'info')));
         },
         onUrlOpen: e => {
+            e.stopPropagation();
+            props.status.openAllLinksInBrowser();
+        },
+        onStatusOpen: e => {
             e.stopPropagation();
             props.status.openStatusPageInBrowser();
         },
