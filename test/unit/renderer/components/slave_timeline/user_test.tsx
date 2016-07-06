@@ -9,6 +9,10 @@ import TwitterProfile from '../../../../../renderer/components/tweet/profile';
 import Item from '../../../../../renderer/item/item';
 import Tweet from '../../../../../renderer/components/tweet/index';
 
+function doNothing() {
+    // Do nothing
+}
+
 test('show profile of the user', t => {
     const u = fixture.user();
     const tl = new UserTimeline(u);
@@ -17,6 +21,7 @@ test('show profile of the user', t => {
             timeline={tl}
             owner={u}
             friends={List<number>()}
+            dispatch={doNothing}
         />
     );
 
@@ -35,6 +40,7 @@ test('show tweets in user timeline', t => {
             timeline={tl}
             owner={u}
             friends={List<number>()}
+            dispatch={doNothing}
         />
     );
 
