@@ -145,12 +145,11 @@ export class TwitterRestApi {
         const query = `@${screen_name} OR from:${screen_name} filter:replies -filter:retweets`;
         return this.searchStatuses(query, {since_id: status_id})
             .then(res => {
-                const statuses = res.statuses;
                 const related_ids = [status_id];
-                return statuses.reverse().reduce((result, status) => {
+                return res.statuses.reduce((result, status) => {
                     const in_reply_to = status.in_reply_to_status_id_str;
                     if (related_ids.indexOf(in_reply_to) !== -1) {
-                        result.unshift(status);
+                        result.push(status);
                         related_ids.push(status.id_str);
                     }
                     return result;

@@ -387,6 +387,34 @@ export default class Tweet implements Item {
         }
     }
 
+    getChainedRelatedStatuses() {
+        const push = Array.prototype.push;
+        let ret = [] as Tweet[];
+        for (const s of this.related_statuses) {
+            push.apply(ret, s.getChainedRelatedStatuses());
+        }
+        push.apply(ret, this.related_statuses);
+        return ret.sort((l, r) => -l.compareId(r));
+    }
+
+    // -1: lhs.id < rhs.id
+    //  0: lhs.id == rhs.id
+    //  1: lhs.id > rhs.id
+    compareId(rhs: Tweet) {
+        const s = Math.floor(this.json.id_str.length / 2);
+        const lh = parseInt(this.json.id_str.slice(0, s), 10);
+        const rh = parseInt(rhs.json.id_str.slice(0, s), 10);
+
+        let v = lh - rh;
+        if (v === 0) {
+            const ll = parseInt(this.json.id_str.slice(s), 10);
+            const rl = parseInt(rhs.json.id_str.slice(s), 10);
+            v = ll - rl;
+        }
+
+        return v < 0 ? -1 : v > 0 ? 1 : 0;
+    }
+
     clone() {
         const cloned = new Tweet(this.json);
         cloned.related_statuses = this.related_statuses;

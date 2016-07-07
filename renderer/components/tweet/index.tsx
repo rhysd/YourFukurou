@@ -16,6 +16,35 @@ import {
     openConversationTimeline,
 } from '../../actions';
 import TwitterRestApi from '../../twitter/rest_api';
+import log from '../../log';
+
+function mergeHigherOrder(left: TweetItem[], right: TweetItem[]) {
+    const ret = [] as TweetItem[];
+    const push = Array.prototype.push;
+    while (true) {
+        if (left.length === 0) {
+            push.apply(ret, right);
+            return ret;
+        } else if (right.length === 0) {
+            push.apply(ret, left);
+            return ret;
+        }
+
+        const l = left[0];
+        const r = right[0];
+        const cmp = l.compareId(r);
+
+        if (cmp < 0) {
+            ret.push(right.shift());
+        } else if (cmp > 0) {
+            ret.push(left.shift());
+        } else {
+            // Note: Remove duplicates
+            ret.push(left.shift());
+            right.shift();
+        }
+    }
+}
 
 // Note:
 // This showConversation() function has some limitations.
@@ -28,42 +57,23 @@ import TwitterRestApi from '../../twitter/rest_api';
 // TODO:
 // We can also use timeline cache on memory to find out related statuses to the conversation.
 export function showConversation(status: TweetItem, dispatch: Redux.Dispatch) {
-    TwitterRestApi.conversationStatuses(status.id, status.user.screen_name)
-        .then(json => {
-            const statuses = json.map(s => new TweetItem(s));
-            statuses.push(status);
+    Promise.all([
+        TwitterRestApi.conversationStatuses(status.id, status.user.screen_name)
+            .then(json => json.map(j => new TweetItem(j))),
+        Promise.resolve(status.getChainedRelatedStatuses()),
+    ]).then(([from_search, from_related]) => {
+        const merged = mergeHigherOrder(from_search, from_related);
+        log.debug('Merged search/tweets with related tweets:', merged);
+        merged.push(status);
 
-            // TODO:
-            // Calculate related statuses of related statuses and
-            // related statuses of related statuses of related statuses of ...
-            // while fetching .conversationStatuses() method.
-            // Finally merge them into one status array.
+        // Note:  Add forwarded statuses in the conversation
+        while (status.in_reply_to_status !== null) {
+            merged.push(status.in_reply_to_status);
+            status = status.in_reply_to_status;
+        }
 
-            // Note: Merge statuses and related_statuses
-            for (const rs of status.related_statuses) {
-                // Note:
-                // Insert related status to proper place.
-                for (let index = 0; index < statuses.length; ++index) {
-                    const s = statuses[index];
-                    if (s.id < rs.id) {
-                        statuses.splice(index, 0, rs);
-                        break;
-                    } else if (s.id === rs.id) {
-                        // Note:
-                        // If already exists, ignore the related status.
-                        break;
-                    }
-                }
-            }
-
-            // Note:  Add forwarded statuses in the conversation
-            while (status.in_reply_to_status !== null) {
-                statuses.push(status.in_reply_to_status);
-                status = status.in_reply_to_status;
-            }
-
-            dispatch(openConversationTimeline(statuses));
-        });
+        dispatch(openConversationTimeline(merged));
+    });
 }
 
 interface ConnectedProps extends React.Props<any> {
