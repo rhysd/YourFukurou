@@ -614,9 +614,14 @@ export default class TimelineState {
     replaceSeparatorWithItems(kind: TimelineKind, sep_index: number, items: Item[]) {
         switch (kind) {
             case 'home':
-                return this.update({
-                    home: replaceSeparatorWithItemsIn(this.home, sep_index, items),
-                });
+                const home = replaceSeparatorWithItemsIn(this.home, sep_index, items);
+                let next = this.update({home});
+                for (const i of items.reverse()) {
+                    if (i instanceof Tweet) {
+                        next.home = next.updateRelatedStatuses(i);
+                    }
+                }
+                return next;
             case 'mention':
                 return this.update({
                     mention: replaceSeparatorWithItemsIn(this.mention, sep_index, items),
