@@ -32,7 +32,36 @@ export function showConversation(status: TweetItem, dispatch: Redux.Dispatch) {
         .then(json => {
             const statuses = json.map(s => new TweetItem(s));
             statuses.push(status);
-            Array.prototype.push.apply(statuses, status.related_statuses);
+
+            // TODO:
+            // Calculate related statuses of related statuses and
+            // related statuses of related statuses of related statuses of ...
+            // while fetching .conversationStatuses() method.
+            // Finally merge them into one status array.
+
+            // Note: Merge statuses and related_statuses
+            for (const rs of status.related_statuses) {
+                // Note:
+                // Insert related status to proper place.
+                for (let index = 0; index < statuses.length; ++index) {
+                    const s = statuses[index];
+                    if (s.id < rs.id) {
+                        statuses.splice(index, 0, rs);
+                        break;
+                    } else if (s.id === rs.id) {
+                        // Note:
+                        // If already exists, ignore the related status.
+                        break;
+                    }
+                }
+            }
+
+            // Note:  Add forwarded statuses in the conversation
+            while (status.in_reply_to_status !== null) {
+                statuses.push(status.in_reply_to_status);
+                status = status.in_reply_to_status;
+            }
+
             dispatch(openConversationTimeline(statuses));
         });
 }
