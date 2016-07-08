@@ -4,6 +4,20 @@
 /// <reference path="../../../typings/globals/github-electron/electron-prebuilt/index.d.ts" />
 
 declare namespace WebdriverIO {
+    export interface AuditOptions {
+        ignoreWarnings?: boolean;
+    }
+    export interface AuditResult {
+        message: string;
+        failed: boolean;
+        results: {
+            code: string;
+            elements: string[];
+            message: string;
+            severity: 'Warning' | 'Severe';
+            url: string;
+        };
+    }
     export interface ConsoleMessage {
         level: string;
         message: string;
@@ -18,6 +32,7 @@ declare namespace WebdriverIO {
         waitUntilTextExists(selector: string, text: string, timeout?: number): Promise<void>;
         waitUntilWindowLoaded(timeout?: number): Promise<void>;
         windowByIndex(index: number): any;
+        auditAccessibility(options: AuditOptions): AuditResult;
     }
 }
 declare module 'spectron' {
@@ -35,6 +50,8 @@ declare module 'spectron' {
         requireName?: string;
         startTimeout?: number;
         waitTimeout?: number;
+        debuggerAddress?: string;
+        chromeDriverLogPath?: string;
     }
     export class Application {
         client: WebdriverIO.Client<void>;
