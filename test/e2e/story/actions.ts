@@ -2,8 +2,6 @@ import test from 'ava';
 import YourFukurou from '../helper/yourfukurou';
 import Timeline from '../page/timeline';
 
-const API_RESPONSE_TIME = 2000;
-
 test.beforeEach(async (t) => {
     t.context.yf = new YourFukurou();
     return await t.context.yf.start();
@@ -30,16 +28,12 @@ test(async (t) => {
     await tw.click();
 
     await tw.like();
-    await client.pause(API_RESPONSE_TIME);
     await tw.like();
-    await client.pause(API_RESPONSE_TIME);
 
     await tw.retweet();
-    await client.pause(API_RESPONSE_TIME);
 
     const tw2 = await tl.secondTweet();
     await tw2.retweet();
-    await client.pause(API_RESPONSE_TIME);
 
     const tw1 = await tl.firstTweet();
     await tw1.click();

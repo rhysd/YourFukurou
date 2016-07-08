@@ -1,6 +1,8 @@
 import Editor from './editor';
 import {DefaultTimeout} from '../helper/timeouts';
 
+const API_RESPONSE_TIME = 2000;
+
 export default class Tweet {
     constructor(
         public client: WebdriverIO.Client<void>,
@@ -21,49 +23,42 @@ export default class Tweet {
         await this.client.pause(5000);  // Wait response of favorites/create
     }
 
-    async getActionButton(nth: number) {
-        if (nth === 0) {
-            throw new Error('Selector index is 1-based.');
-        }
-        const actions_elem = await this.client.elementIdElement(this.element_id, '.tweet-actions');
-        return await this.client.elementIdElement(actions_elem.value.ELEMENT, `.tweet-actions__with-count:nth-Child(${nth})`);
-    }
-
     async replyButton() {
-        return await this.getActionButton(1);
+        return await this.client.elementIdElement(this.element_id, '.tweet-actions__reply');
     }
 
     async retweetButton() {
-        return await this.getActionButton(2);
+        return await this.client.elementIdElement(this.element_id, '.tweet-actions__retweet');
     }
 
     async likeButton() {
-        return await this.getActionButton(3);
+        return await this.client.elementIdElement(this.element_id, '.tweet-actions__like');
     }
 
     async reply() {
-        const e = await this.getActionButton(1);
+        const e = await this.replyButton();
         await this.client.elementIdClick(e.value.ELEMENT);
         return new Editor(this.client);
     }
 
     async retweet() {
-        const e = await this.getActionButton(2);
+        const e = await this.retweetButton();
         await this.client.elementIdClick(e.value.ELEMENT);
+        await this.client.pause(API_RESPONSE_TIME);
         return this;
     }
 
     async like() {
-        const e = await this.getActionButton(3);
+        const e = await this.likeButton();
         await this.client.elementIdClick(e.value.ELEMENT);
+        await this.client.pause(API_RESPONSE_TIME);
         return this;
     }
 
     async textIs(text: string) {
         try {
-            // XXX:
-            await this.client.elementIdElement(this.element_id, 'span=' + text);
-            return true;
+            const elem = await this.client.elementIdElement(this.element_id, '*=' + text);
+            return elem.value !== null;
         } catch (e) {
             return false;
         }

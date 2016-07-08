@@ -272,14 +272,11 @@ export default class TimelineState {
             return this.notified;
         }
 
-        if ((!prev_home && home) ||
-            (!prev_mention && mention)) {
+        if (!prev_mention && mention) {
             setBadge(true);
-        } else if (!home && !mention) {
+        } else if (prev_mention && !mention) {
             setBadge(false);
         }
-
-        console.log('UPDATE', {home, mention});
 
         return {home, mention};
     }
