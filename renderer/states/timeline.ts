@@ -12,6 +12,7 @@ import DB from '../database/db';
 import AppConfig from '../config';
 
 const MaxTimelineLength = AppConfig.remote_config.max_timeline_items;
+const remote = global.require('electron').remote;
 
 export type TimelineKind = 'home' | 'mention';
 export type Notified = {home: boolean; mention: boolean};
@@ -82,6 +83,10 @@ function replaceSeparatorWithItemsIn(tl: List<Item>, sep_index: number, items: I
     }
 
     return tl.splice(sep_index, 1, ...items).toList();
+}
+
+function setBadge(visible: boolean) {
+    window.requestIdleCallback(() => remote.app.dock.setBadge(visible ? ' ' : ''));
 }
 
 // Note:
@@ -260,6 +265,25 @@ export default class TimelineState {
         return [home.delete(index).unshift(status), next_focus_index];
     }
 
+    updateNotified(home: boolean, mention: boolean) {
+        const prev_home = this.notified.home;
+        const prev_mention = this.notified.mention;
+        if (home === prev_home && mention === prev_mention) {
+            return this.notified;
+        }
+
+        if ((!prev_home && home) ||
+            (!prev_mention && mention)) {
+            setBadge(true);
+        } else if (!home && !mention) {
+            setBadge(false);
+        }
+
+        console.log('UPDATE', {home, mention});
+
+        return {home, mention};
+    }
+
     addNewTweets(statuses: Tweet[]) {
         let next: TimelineState = this;
         for (const s of statuses) {
@@ -320,10 +344,10 @@ export default class TimelineState {
 
         notifyTweet(status, this.user);
 
-        const notified = {
-            home:    should_add_to_home    && this.kind !== 'home'    || this.notified.home,
-            mention: should_add_to_mention && this.kind !== 'mention' || this.notified.mention,
-        };
+        const notified = this.updateNotified(
+            should_add_to_home    && this.kind !== 'home'    || this.notified.home,
+            should_add_to_mention && this.kind !== 'mention' || this.notified.mention
+        );
 
         return this.update({home, mention, notified, focus_index});
     }
@@ -385,10 +409,10 @@ export default class TimelineState {
         if (kind === this.kind) {
             return this;
         }
-        const notified = {
-            home: kind === 'home' ? false : this.notified.home,
-            mention: kind === 'mention' ? false : this.notified.mention,
-        };
+        const notified = this.updateNotified(
+            kind === 'home' ? false : this.notified.home,
+            kind === 'mention' ? false : this.notified.mention
+        );
         return this.update({kind, notified, focus_index: null});
     }
 
@@ -431,10 +455,7 @@ export default class TimelineState {
             )
         );
 
-        const notified = {
-            home: this.notified.home,
-            mention: this.kind !== 'mention',
-        };
+        const notified = this.updateNotified(this.notified.home, this.kind !== 'mention');
 
         const focus_index =
             this.kind !== 'mention' || this.focus_index === null ?
@@ -581,10 +602,7 @@ export default class TimelineState {
         }
 
         if (this.kind !== 'mention' && !this.notified.mention) {
-            next.notified = {
-                home: this.notified.home,
-                mention: true,
-            };
+            next.notified = this.updateNotified(this.notified.home, true);
         }
 
         return next;
