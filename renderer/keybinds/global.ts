@@ -15,10 +15,7 @@ import {
     openEditorForReply,
     changeCurrentTimeline,
     openPicturePreview,
-    likeSucceeded,
-    unlikeSucceeded,
-    retweetSucceeded,
-    unretweetSucceeded,
+    updateStatus,
     openUserTimeline,
     addUserTweets,
     showMessage,
@@ -90,10 +87,10 @@ function toggleRetweet() {
     const s = status.getMainStatus();
     if (s.retweeted) {
         TwitterRestApi.unretweet(s.id)
-            .then(res => Store.dispatch(unretweetSucceeded(new Tweet(res))));
+            .then(res => Store.dispatch(updateStatus(new Tweet(res))));
     } else {
         TwitterRestApi.retweet(s.id)
-            .then(res => Store.dispatch(retweetSucceeded(new Tweet(res))));
+            .then(res => Store.dispatch(updateStatus(new Tweet(res).getMainStatus())));
     }
 }
 
@@ -105,10 +102,10 @@ function toggleLike() {
     const s = status.getMainStatus();
     if (s.favorited) {
         TwitterRestApi.unlike(s.id)
-            .then(json => Store.dispatch(unlikeSucceeded(new Tweet(json))));
+            .then(json => Store.dispatch(updateStatus(new Tweet(json))));
     } else {
         TwitterRestApi.like(s.id)
-            .then(json => Store.dispatch(likeSucceeded(new Tweet(json))));
+            .then(json => Store.dispatch(updateStatus(new Tweet(json))));
     }
 }
 

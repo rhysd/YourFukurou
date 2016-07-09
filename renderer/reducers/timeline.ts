@@ -16,10 +16,7 @@ export default function timeline(state: TimelineState = DefaultTimelineState, ac
         case Kind.StatusLiked:             return action.next_timeline;
         case Kind.AddMentions:             return action.next_timeline;
         case Kind.CompleteMissingStatuses: return action.next_timeline;
-        case Kind.RetweetSucceeded:        return action.next_timeline;
-        case Kind.UnretweetSucceeded:      return action.next_timeline;
-        case Kind.LikeSucceeded:           return action.next_timeline;
-        case Kind.UnlikeSucceeded:         return action.next_timeline;
+        case Kind.UpdateStatus:            return action.next_timeline;
         case Kind.SetCurrentUser:          return action.next_timeline;
         case Kind.UpdateCurrentUser:       return action.next_timeline;
         case Kind.AddRejectedUserIds:      return action.next_timeline;

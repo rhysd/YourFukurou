@@ -5,10 +5,7 @@ import IconButton from '../icon_button';
 import {
     showMessage,
     openEditorForReply,
-    retweetSucceeded,
-    unretweetSucceeded,
-    likeSucceeded,
-    unlikeSucceeded,
+    updateStatus,
 } from '../../actions';
 import TwitterRestApi from '../../twitter/rest_api';
 
@@ -29,11 +26,11 @@ type TweetActionButtonProps = ConnectedProps & DispatchProps;
 function onLikeClicked(status: Tweet, dispatch: Redux.Dispatch) {
     if (status.favorited) {
         TwitterRestApi.unlike(status.id).then(json => {
-            dispatch(unlikeSucceeded(new Tweet(json)));
+            dispatch(updateStatus(new Tweet(json)));
         });
     } else {
         TwitterRestApi.like(status.id).then(json => {
-            dispatch(likeSucceeded(new Tweet(json)));
+            dispatch(updateStatus(new Tweet(json)));
         });
     }
 }
@@ -46,10 +43,10 @@ function onRetweetClicked(status: Tweet, dispatch: Redux.Dispatch) {
 
     if (status.retweeted) {
         TwitterRestApi.unretweet(status.id)
-            .then(json => dispatch(unretweetSucceeded(new Tweet(json))));
+            .then(json => dispatch(updateStatus(new Tweet(json))));
     } else {
         TwitterRestApi.retweet(status.id)
-            .then(json => dispatch(retweetSucceeded(new Tweet(json))));
+            .then(json => dispatch(updateStatus(new Tweet(json).getMainStatus())));
     }
 }
 

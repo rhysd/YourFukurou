@@ -28,10 +28,7 @@ export const Kind = {
     AddNoRetweetUserIds: Symbol('add-no-retweet-user-ids'),
     CompleteMissingStatuses: Symbol('complete-missing-statuses'),
 
-    RetweetSucceeded: Symbol('retweet-succeeded'),
-    UnretweetSucceeded: Symbol('unretweet-succeeded'),
-    LikeSucceeded: Symbol('like-succeeded'),
-    UnlikeSucceeded: Symbol('unlike-succeeded'),
+    UpdateStatus: Symbol('update-status'),
     StatusLiked: Symbol('status-liked'),
 
     ChangeEditorState: Symbol('change-editor-state'),
@@ -202,39 +199,10 @@ export function addSeparator(): ThunkAction {
     };
 }
 
-// TODO: gather retweet and like related actions to 'updateStatus()' action
-
-export function retweetSucceeded(status: Tweet): ThunkAction {
+export function updateStatus(status: Tweet): ThunkAction {
     return (dispatch, getState) => {
         dispatch({
-            type: Kind.RetweetSucceeded,
-            next_timeline: getState().timeline.updateStatus(status.getMainStatus()),
-        });
-    };
-}
-
-export function unretweetSucceeded(status: Tweet): ThunkAction {
-    return (dispatch, getState) => {
-        dispatch({
-            type: Kind.UnretweetSucceeded,
-            next_timeline: getState().timeline.updateStatus(status),
-        });
-    };
-}
-
-export function likeSucceeded(status: Tweet): ThunkAction {
-    return (dispatch, getState) => {
-        dispatch({
-            type: Kind.LikeSucceeded,
-            next_timeline: getState().timeline.updateStatus(status),
-        });
-    };
-}
-
-export function unlikeSucceeded(status: Tweet): ThunkAction {
-    return (dispatch, getState) => {
-        dispatch({
-            type: Kind.UnlikeSucceeded,
+            type: Kind.UpdateStatus,
             next_timeline: getState().timeline.updateStatus(status),
         });
     };
