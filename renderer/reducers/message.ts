@@ -8,18 +8,13 @@ export interface MessageState {
 
 export default function message(state: MessageState = null, action: Action) {
     switch (action.type) {
-        case Kind.ShowMessage:
+        case Kind.NewMessage:
             return {
                 text: action.text,
-                kind: action.msg_kind,
+                kind: action.message_kind,
             };
         case Kind.DismissMessage:
             return null;
-        case Kind.NotImplementedYet:
-            return {
-                text: 'Sorry, this feature is not implemented yet.',
-                kind: 'error',
-            };
         default:
             return state;
     }

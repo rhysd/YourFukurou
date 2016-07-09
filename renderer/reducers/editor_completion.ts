@@ -3,16 +3,9 @@ import EditorCompletionState, {DefaultEditorCompletionState} from '../states/edi
 
 export default function editorCompletion(state: EditorCompletionState = DefaultEditorCompletionState, action: Action) {
     switch (action.type) {
-        case Kind.UpdateAutoCompletion:
-            return state.searchSuggestions(
-                action.suggestions,
-                action.query,
-                action.top,
-                action.left,
-                action.completion_label
-            );
-        case Kind.DownAutoCompletionFocus:      return state.downFocus();
-        case Kind.UpAutoCompletionFocus:        return state.upFocus();
+        case Kind.UpdateAutoCompletion:         return action.next_completion;
+        case Kind.DownAutoCompletionFocus:      return action.next_completion;
+        case Kind.UpAutoCompletionFocus:        return action.next_completion;
         case Kind.StopAutoCompletion:           return DefaultEditorCompletionState;
         case Kind.SelectAutoCompleteSuggestion: return DefaultEditorCompletionState;
         default:                                return state;
