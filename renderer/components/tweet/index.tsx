@@ -9,12 +9,14 @@ import UndraggableClickable from '../undraggable_clickable';
 import State from '../../states/root';
 import {TimelineKind} from '../../states/timeline';
 import {
-    focusOnItem,
-    unfocusItem,
     focusSlaveOn,
     blurSlaveTimeline,
     openConversationTimeline,
 } from '../../actions';
+import {
+    focusOnItem,
+    unfocusItem,
+} from '../../actions/timeline';
 import TwitterRestApi from '../../twitter/rest_api';
 import log from '../../log';
 

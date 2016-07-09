@@ -1,22 +1,24 @@
 const {ipcRenderer: ipc} = global.require('electron');
 import {
+    addUserTweets,
+    addSeparator,
+    showMessage,
+} from './actions';
+import {
     addTweetToTimeline,
     addTweetsToTimeline,
     addMentions,
-    addUserTweets,
     addRejectedUserIds,
     addFriends,
     removeFriends,
     resetFriends,
     removeRejectedUserIds,
     addNoRetweetUserIds,
-    addSeparator,
-    showMessage,
-    statusLiked,
     setCurrentUser,
+    statusLiked,
     updateCurrentUser,
     deleteStatusInTimeline,
-} from './actions';
+} from './actions/timeline';
 import Store from './store';
 import log from './log';
 import Tweet, {TwitterUser} from './item/tweet';

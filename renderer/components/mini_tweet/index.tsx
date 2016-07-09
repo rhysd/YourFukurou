@@ -6,11 +6,11 @@ import MiniTweetSecondary from './secondary';
 import MiniTweetText from './text';
 import UndraggableClickable from '../undraggable_clickable';
 import {TimelineKind} from '../../states/timeline';
+import {openPicturePreview} from '../../actions';
 import {
-    openPicturePreview,
     focusOnItem,
     unfocusItem,
-} from '../../actions';
+} from '../../actions/timeline';
 
 interface ConnectedProps extends React.Props<any> {
     status: Tweet;

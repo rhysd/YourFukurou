@@ -2,8 +2,10 @@ import Tweet, {TwitterUser} from '../item/tweet';
 import log from '../log';
 import {
     openEditorForReply,
-    changeCurrentTimeline,
 } from '../actions';
+import {
+    changeCurrentTimeline,
+} from '../actions/timeline';
 import Store from '../store';
 import PM from '../plugin_manager';
 import AppConfig from '../config';

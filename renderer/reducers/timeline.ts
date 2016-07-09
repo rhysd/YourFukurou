@@ -1,4 +1,5 @@
-import {Action, Kind} from '../actions';
+import {Kind} from '../actions/common';
+import {Action} from '../actions/timeline';
 import TimelineState, {DefaultTimelineState} from '../states/timeline';
 
 export default function timeline(state: TimelineState = DefaultTimelineState, action: Action) {

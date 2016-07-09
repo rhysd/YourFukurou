@@ -12,11 +12,13 @@ import {
     openEditor,
     openEditorForReply,
     openPicturePreview,
-    updateStatus,
     openUserTimeline,
     addUserTweets,
     showMessage,
 } from '../actions';
+import {
+    updateStatus,
+} from '../actions/timeline';
 import {UserTimeline} from '../states/slave_timeline';
 import log from '../log';
 import TwitterRestApi from '../twitter/rest_api';

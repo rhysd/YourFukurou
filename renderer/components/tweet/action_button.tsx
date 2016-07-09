@@ -5,8 +5,8 @@ import IconButton from '../icon_button';
 import {
     showMessage,
     openEditorForReply,
-    updateStatus,
 } from '../../actions';
+import {updateStatus} from '../../actions/timeline';
 import TwitterRestApi from '../../twitter/rest_api';
 
 type TweetActionKind = 'reply' | 'like' | 'retweet';

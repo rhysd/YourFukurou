@@ -35,6 +35,8 @@
     "components/zigzag_separator.tsx",
     "components/activity.tsx",
     "components/undraggable_clickable.tsx",
+    "actions/common.ts",
+    "actions/timeline.ts",
     "database/db.ts",
     "database/accounts.ts",
     "database/hashtags.ts",

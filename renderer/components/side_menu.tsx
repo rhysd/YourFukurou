@@ -7,9 +7,11 @@ import Icon from './icon';
 import {
     showMessage,
     toggleEditor,
-    changeCurrentTimeline,
     notImplementedYet,
 } from '../actions';
+import {
+    changeCurrentTimeline,
+} from '../actions/timeline';
 import {TwitterUser} from '../item/tweet';
 import {TimelineKind, Notified} from '../states/timeline';
 import log from '../log';

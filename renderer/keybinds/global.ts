@@ -6,20 +6,22 @@ import Tweet from '../item/tweet';
 import Separator from '../item/separator';
 import TimelineActivity from '../item/timeline_activity';
 import {
+    openEditor,
+    openEditorForReply,
+    openPicturePreview,
+    openUserTimeline,
+    addUserTweets,
+    showMessage,
+} from '../actions';
+import {
+    changeCurrentTimeline,
     focusNextItem,
     focusPrevItem,
     focusTopItem,
     focusBottomItem,
     unfocusItem,
-    openEditor,
-    openEditorForReply,
-    changeCurrentTimeline,
-    openPicturePreview,
     updateStatus,
-    openUserTimeline,
-    addUserTweets,
-    showMessage,
-} from '../actions';
+} from '../actions/timeline';
 import TwitterRestApi from '../twitter/rest_api';
 import {showConversation} from '../components/tweet/index';
 

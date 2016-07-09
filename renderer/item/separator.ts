@@ -5,7 +5,7 @@ import Store from '../store';
 import {TimelineKind} from '../states/timeline';
 import Tweet from '../item/tweet';
 import TwitterRestApi from '../twitter/rest_api';
-import {completeMissingStatuses} from '../actions';
+import {completeMissingStatuses} from '../actions/timeline';
 import log from '../log';
 
 function getMissingTweets(kind: TimelineKind, max_id: string, since_id: string) {
