@@ -1,8 +1,38 @@
+import {List} from 'immutable';
 import {Kind} from '../actions/common';
 import {Action} from '../actions/timeline';
-import TimelineState, {DefaultTimelineState} from '../states/timeline';
+import {TwitterUser} from '../item/tweet';
+import Separator from '../item/separator';
+import Item from '../item/item';
 
-export default function timeline(state: TimelineState = DefaultTimelineState, action: Action) {
+export type TimelineKind = 'home' | 'mention';
+export type Notified = {home: boolean; mention: boolean};
+
+export interface TimelineState {
+    kind: TimelineKind;
+    home: List<Item>;
+    mention: List<Item>;
+    user: TwitterUser;
+    notified: Notified;
+    rejected_ids: List<number>;
+    no_retweet_ids: List<number>;
+    focus_index: number;
+    friend_ids: List<number>;
+}
+
+const DefaultTimelineState = {
+    kind: 'home',
+    home: List<Item>([new Separator()]),
+    mention: List<Item>([new Separator()]),
+    user: null,
+    notified: {home: false, mention: false},
+    rejected_ids:  List<number>(),
+    no_retweet_ids: List<number>(),
+    focus_index: null,
+    friend_ids: List<number>(),
+} as TimelineState;
+
+export default function timeline(state: TimelineState = DefaultTimelineState, action: Action): TimelineState {
     switch (action.type) {
         case Kind.AddTweetToTimeline:      return action.next_timeline;
         case Kind.AddTweetsToTimeline:     return action.next_timeline;

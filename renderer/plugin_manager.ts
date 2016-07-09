@@ -1,4 +1,4 @@
-import TimelineState from './states/timeline';
+import {TimelineState} from './reducers/timeline';
 import Tweet, {TwitterUser} from './item/tweet';
 import * as path from 'path';
 import AppConfig from './config';
