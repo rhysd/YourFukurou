@@ -46,7 +46,7 @@ type ThunkAction = (dispatch: Redux.Dispatch, getState: () => State) => void;
 export function addTweetToTimeline(status: Tweet): ThunkAction {
     return (dispatch, getState) => {
         const timeline = getState().timeline;
-        window.requestIdleCallback(() => {
+        setImmediate(() => {
             dispatch({
                 type: Kind.AddTweetToTimeline,
                 status,
@@ -69,7 +69,7 @@ export function addTweetsToTimeline(statuses: Tweet[]): Action {
 
 export function addMentions(mentions: Tweet[]): ThunkAction {
     return dispatch => {
-        window.requestIdleCallback(() => dispatch({
+        setImmediate(() => dispatch({
             type: Kind.AddMentions,
             mentions,
         }));
@@ -254,13 +254,13 @@ export function unlikeSucceeded(status: Tweet): ThunkAction {
 export function statusLiked(status: Tweet, from: TwitterUser): ThunkAction {
     return (dispatch, getState) => {
         const timeline = getState().timeline;
-        window.requestIdleCallback(() => {
-            dispatch({
-                type: Kind.StatusLiked,
-                user: from,
-                status,
-            });
+        dispatch({
+            type: Kind.StatusLiked,
+            user: from,
+            status,
+        });
 
+        setImmediate(() => {
             // Note:
             // We don't check the status is marked as 'rejected' because activities are related to
             // owner's tweet and it must not be rejected.
@@ -287,7 +287,7 @@ export function updateCurrentUser(user_json: Twitter.User): Action {
 
 export function deleteStatusInTimeline(tweet_id: string): ThunkAction {
     return dispatch => {
-        window.requestIdleCallback(() => dispatch({
+        setImmediate(() => dispatch({
             type: Kind.DeleteStatusInTimeline,
             tweet_id,
         }));
