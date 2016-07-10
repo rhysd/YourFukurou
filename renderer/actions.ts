@@ -3,10 +3,13 @@ import {Twitter} from 'twit';
 import Tweet, {TwitterUser} from './item/tweet';
 import Item from './item/item';
 import {AutoCompleteLabel} from './components/editor/auto_complete_decorator';
-import {TimelineKind} from './states/timeline';
+import State from './states/root';
+import TimelineState, {TimelineKind} from './states/timeline';
 import {MessageKind} from './reducers/message';
 import {searchSuggestionItems, SuggestionItem} from './components/editor/suggestions';
 import log from './log';
+import notifyTweet from './notification/tweet';
+import notifyLiked from './notification/like';
 
 export const Kind = {
     AddSeparator: Symbol('add-separator'),
@@ -99,12 +102,22 @@ export interface Action {
     user_id?: number;
 }
 
-export function addTweetToTimeline(status: Tweet) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.AddTweetToTimeline,
-            status,
-        }));
+type ThunkAction = (dispatch: Redux.Dispatch, getState: () => State) => void;
+
+export function addTweetToTimeline(status: Tweet): ThunkAction {
+    return (dispatch, getState) => {
+        const timeline = getState().timeline;
+        window.requestIdleCallback(() => {
+            dispatch({
+                type: Kind.AddTweetToTimeline,
+                status,
+            });
+
+            const should_add_to = timeline.shouldAddToTimeline(status);
+            if (should_add_to.home || should_add_to.mention) {
+                notifyTweet(status, timeline.user);
+            }
+        });
     };
 }
 
@@ -226,13 +239,23 @@ export function unlikeSucceeded(status: Tweet) {
     };
 }
 
-export function statusLiked(status: Tweet, from: TwitterUser) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.StatusLiked,
-            user: from,
-            status,
-        }));
+export function statusLiked(status: Tweet, from: TwitterUser): ThunkAction {
+    return (dispatch, getState) => {
+        const timeline = getState().timeline;
+        window.requestIdleCallback(() => {
+            dispatch({
+                type: Kind.StatusLiked,
+                user: from,
+                status,
+            });
+
+            // Note:
+            // We don't check the status is marked as 'rejected' because activities are related to
+            // owner's tweet and it must not be rejected.
+            if (from.id !== timeline.user.id) {
+                notifyLiked(status, from);
+            }
+        });
     };
 }
 

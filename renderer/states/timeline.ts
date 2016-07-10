@@ -5,8 +5,6 @@ import Tweet, {TwitterUser} from '../item/tweet';
 import TimelineActivity, {TimelineActivityKind} from '../item/timeline_activity';
 import Separator from '../item/separator';
 import log from '../log';
-import notifyTweet from '../notification/tweet';
-import notifyLiked from '../notification/like';
 import PM from '../plugin_manager';
 import DB from '../database/db';
 import AppConfig from '../config';
@@ -186,6 +184,25 @@ export default class TimelineState {
         return false;
     }
 
+    shouldAddToTimeline(status: Tweet) {
+        const muted_or_blocked = this.checkMutedOrBlocked(status);
+
+        const should_add_to_home =
+              !PM.shouldRejectTweetInHomeTimeline(status, this) &&
+                (!AppConfig.mute.home || !muted_or_blocked);
+
+        const should_add_to_mention =
+              this.user && status.mentionsTo(this.user) &&
+                (status.user.id !== this.user.id) &&
+                !PM.shouldRejectTweetInMentionTimeline(status, this) &&
+                (!AppConfig.mute.mention || !muted_or_blocked);
+
+        return {
+            home: should_add_to_home,
+            mention: should_add_to_mention,
+        };
+    }
+
     // Note:
     // Currently this method is only for home timeline.
     updateRelatedStatuses(status: Tweet) {
@@ -290,36 +307,23 @@ export default class TimelineState {
     }
 
     addNewTweet(status: Tweet) {
-        const muted_or_blocked = this.checkMutedOrBlocked(status);
-        if (muted_or_blocked) {
-            log.debug('Status was marked as rejected because of muted/blocked user:', status.user.screen_name, status.json);
+        const should_add_to = this.shouldAddToTimeline(status);
+
+        if (!should_add_to.home && !should_add_to.mention) {
+            // Note: Nothing was changed.
+            log.debug('Status was marked as rejected:', status.user.screen_name, status.json);
+            return this;
         }
 
         let home = this.home;
         let mention = this.mention;
-
-        const should_add_to_home
-            = !PM.shouldRejectTweetInHomeTimeline(status, this) &&
-                (!AppConfig.mute.home || !muted_or_blocked);
-
-        const should_add_to_mention
-            = this.user && status.mentionsTo(this.user) &&
-                (status.user.id !== this.user.id) &&
-                !PM.shouldRejectTweetInMentionTimeline(status, this) &&
-                (!AppConfig.mute.mention || !muted_or_blocked);
-
-        if (!should_add_to_home && !should_add_to_mention) {
-            // Note: Nothing was changed.
-            return this;
-        }
-
         let focus_index = this.focus_index;
 
-        if (should_add_to_home) {
+        if (should_add_to.home) {
             [home, focus_index] = this.putInHome(status);
         }
 
-        if (should_add_to_mention) {
+        if (should_add_to.mention) {
             if (status.isRetweet()) {
                 [mention, focus_index] = this.updateActivityInMention('retweeted', status.retweeted_status, status.user);
             } else {
@@ -339,11 +343,9 @@ export default class TimelineState {
             }
         }
 
-        notifyTweet(status, this.user);
-
         const notified = this.updateNotified(
-            should_add_to_home    && this.kind !== 'home'    || this.notified.home,
-            should_add_to_mention && this.kind !== 'mention' || this.notified.mention
+            should_add_to.home    && this.kind !== 'home'    || this.notified.home,
+            should_add_to.mention && this.kind !== 'mention' || this.notified.mention
         );
 
         return this.update({home, mention, notified, focus_index});
@@ -579,12 +581,6 @@ export default class TimelineState {
             // favorites created by owner is already handled by LikeSucceeded action.
             return this;
         }
-
-        if (this.checkMutedOrBlocked(status)) {
-            return this;
-        }
-
-        notifyLiked(status, from);
 
         const status_updated = this.updateStatus(status);
 
