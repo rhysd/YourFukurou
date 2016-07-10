@@ -60,39 +60,37 @@ export function addTweetToTimeline(status: Tweet): ThunkAction {
     };
 }
 
-export function addTweetsToTimeline(statuses: Tweet[]) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.AddTweetsToTimeline,
-            statuses,
-        }));
+export function addTweetsToTimeline(statuses: Tweet[]): Action {
+    return {
+        type: Kind.AddTweetsToTimeline,
+        statuses,
     };
 }
 
-export function addMentions(mentions: Tweet[]) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
+export function addMentions(mentions: Tweet[]): ThunkAction {
+    return dispatch => {
+        window.requestIdleCallback(() => dispatch({
             type: Kind.AddMentions,
             mentions,
         }));
     };
 }
 
-export function addRejectedUserIds(ids: number[]) {
+export function addRejectedUserIds(ids: number[]): Action {
     return {
         type: Kind.AddRejectedUserIds,
         ids,
     };
 }
 
-export function removeRejectedUserIds(ids: number[]) {
+export function removeRejectedUserIds(ids: number[]): Action {
     return {
         type: Kind.RemoveRejectedUserIds,
         ids,
     };
 }
 
-export function addNoRetweetUserIds(ids: number[]) {
+export function addNoRetweetUserIds(ids: number[]): Action {
     return {
         type: Kind.AddNoRetweetUserIds,
         ids,
@@ -187,9 +185,9 @@ export function completeMissingStatuses(sep_index: number, timeline_kind?: Timel
     };
 }
 
-export function showMessage(text: string, msg_kind: MessageKind) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
+export function showMessage(text: string, msg_kind: MessageKind): ThunkAction {
+    return dispatch => {
+        window.requestIdleCallback(() => dispatch({
             type: Kind.ShowMessage,
             text,
             msg_kind,
@@ -197,60 +195,56 @@ export function showMessage(text: string, msg_kind: MessageKind) {
     };
 }
 
-export function dismissMessage() {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.DismissMessage,
-        }));
+export function dismissMessage(): Action {
+    return {
+        type: Kind.DismissMessage,
     };
 }
 
-export function notImplementedYet() {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
+export function notImplementedYet(): ThunkAction {
+    return dispatch => {
+        window.requestIdleCallback(() => dispatch({
             type: Kind.NotImplementedYet,
         }));
     };
 }
 
-export function addSeparator() {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.AddSeparator,
-        }));
+export function addSeparator(): Action {
+    return {
+        type: Kind.AddSeparator,
     };
 }
 
-export function retweetSucceeded(status: Tweet) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
+export function retweetSucceeded(status: Tweet): ThunkAction {
+    return dispatch => {
+        window.requestIdleCallback(() => dispatch({
             type: Kind.RetweetSucceeded,
             status,
         }));
     };
 }
 
-export function unretweetSucceeded(status: Tweet) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
+export function unretweetSucceeded(status: Tweet): ThunkAction {
+    return dispatch => {
+        window.requestIdleCallback(() => dispatch({
             type: Kind.UnretweetSucceeded,
             status,
         }));
     };
 }
 
-export function likeSucceeded(status: Tweet) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
+export function likeSucceeded(status: Tweet): ThunkAction {
+    return dispatch => {
+        window.requestIdleCallback(() => dispatch({
             type: Kind.LikeSucceeded,
             status,
         }));
     };
 }
 
-export function unlikeSucceeded(status: Tweet) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
+export function unlikeSucceeded(status: Tweet): ThunkAction {
+    return dispatch => {
+        window.requestIdleCallback(() => dispatch({
             type: Kind.UnlikeSucceeded,
             status,
         }));
@@ -277,48 +271,44 @@ export function statusLiked(status: Tweet, from: TwitterUser): ThunkAction {
     };
 }
 
-export function setCurrentUser(user: TwitterUser) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.SetCurrentUser,
-            user,
-        }));
+export function setCurrentUser(user: TwitterUser): Action {
+    return {
+        type: Kind.SetCurrentUser,
+        user,
     };
 }
 
-export function updateCurrentUser(user_json: Twitter.User) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.UpdateCurrentUser,
-            user_json,
-        }));
+export function updateCurrentUser(user_json: Twitter.User): Action {
+    return {
+        type: Kind.UpdateCurrentUser,
+        user_json,
     };
 }
 
-export function deleteStatusInTimeline(tweet_id: string) {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
+export function deleteStatusInTimeline(tweet_id: string): ThunkAction {
+    return dispatch => {
+        window.requestIdleCallback(() => dispatch({
             type: Kind.DeleteStatusInTimeline,
             tweet_id,
         }));
     };
 }
 
-export function changeEditorState(editor: EditorState) {
+export function changeEditorState(editor: EditorState): Action {
     return {
         type: Kind.ChangeEditorState,
         editor,
     };
 }
 
-export function openEditor(text?: string) {
+export function openEditor(text?: string): Action {
     return {
         type: Kind.OpenEditor,
         text,
     };
 }
 
-export function openEditorForReply(in_reply_to: Tweet, owner: TwitterUser, text?: string) {
+export function openEditorForReply(in_reply_to: Tweet, owner: TwitterUser, text?: string): Action {
     return {
         type: Kind.OpenEditorForReply,
         status: in_reply_to,
@@ -327,21 +317,19 @@ export function openEditorForReply(in_reply_to: Tweet, owner: TwitterUser, text?
     };
 }
 
-export function closeEditor() {
+export function closeEditor(): Action {
     return {
         type: Kind.CloseEditor,
     };
 }
 
-export function toggleEditor() {
-    return (dispatch: Redux.Dispatch) => {
-        setImmediate(() => dispatch({
-            type: Kind.ToggleEditor,
-        }));
+export function toggleEditor(): Action {
+    return {
+        type: Kind.ToggleEditor,
     };
 }
 
-export function selectAutoCompleteSuggestion(text: string, query: string) {
+export function selectAutoCompleteSuggestion(text: string, query: string): Action {
     return {
         type: Kind.SelectAutoCompleteSuggestion,
         text,
@@ -349,8 +337,8 @@ export function selectAutoCompleteSuggestion(text: string, query: string) {
     };
 }
 
-export function updateAutoCompletion(left: number, top: number, query: string, label: AutoCompleteLabel) {
-    return (dispatch: Redux.Dispatch) => {
+export function updateAutoCompletion(left: number, top: number, query: string, label: AutoCompleteLabel): ThunkAction {
+    return dispatch => {
         searchSuggestionItems(query, label)
             .then(suggestions => dispatch({
                 type: Kind.UpdateAutoCompletion,
@@ -364,32 +352,32 @@ export function updateAutoCompletion(left: number, top: number, query: string, l
     };
 }
 
-export function stopAutoCompletion() {
+export function stopAutoCompletion(): Action {
     return {
         type: Kind.StopAutoCompletion,
     };
 }
 
-export function downAutoCompletionFocus() {
+export function downAutoCompletionFocus(): Action {
     return {
         type: Kind.DownAutoCompletionFocus,
     };
 }
 
-export function upAutoCompletionFocus() {
+export function upAutoCompletionFocus(): Action {
     return {
         type: Kind.UpAutoCompletionFocus,
     };
 }
 
-export function changeCurrentTimeline(timeline: TimelineKind) {
+export function changeCurrentTimeline(timeline: TimelineKind): Action {
     return {
         type: Kind.ChangeCurrentTimeline,
         timeline,
     };
 }
 
-export function openPicturePreview(media_urls: string[], index?: number) {
+export function openPicturePreview(media_urls: string[], index?: number): Action {
     return {
         type: Kind.OpenPicturePreview,
         media_urls,
@@ -397,78 +385,78 @@ export function openPicturePreview(media_urls: string[], index?: number) {
     };
 }
 
-export function closeTweetMedia() {
+export function closeTweetMedia(): Action {
     return {
         type: Kind.CloseTweetMedia,
     };
 }
 
-export function moveToNthPicturePreview(index: number) {
+export function moveToNthPicturePreview(index: number): Action {
     return {
         type: Kind.MoveToNthPicturePreview,
         index,
     };
 }
 
-export function focusOnItem(index: number) {
+export function focusOnItem(index: number): Action {
     return {
         type: Kind.FocusOnItem,
         index,
     };
 }
 
-export function unfocusItem() {
+export function unfocusItem(): Action {
     return {
         type: Kind.UnfocusItem,
     };
 }
 
-export function focusNextItem() {
+export function focusNextItem(): Action {
     return {
         type: Kind.FocusNextItem,
     };
 }
 
-export function focusPrevItem() {
+export function focusPrevItem(): Action {
     return {
         type: Kind.FocusPrevItem,
     };
 }
 
-export function focusTopItem() {
+export function focusTopItem(): Action {
     return {
         type: Kind.FocusTopItem,
     };
 }
 
-export function focusBottomItem() {
+export function focusBottomItem(): Action {
     return {
         type: Kind.FocusBottomItem,
     };
 }
 
-export function addFriends(ids: number[]) {
+export function addFriends(ids: number[]): Action {
     return {
         type: Kind.AddFriends,
         ids,
     };
 }
 
-export function removeFriends(ids: number[]) {
+export function removeFriends(ids: number[]): Action {
     return {
         type: Kind.RemoveFriends,
         ids,
     };
 }
 
-export function resetFriends(ids: number[]) {
+export function resetFriends(ids: number[]): Action {
     return {
         type: Kind.ResetFriends,
         ids,
     };
 }
 
-export function openUserTimeline(user: TwitterUser) {
+export function openUserTimeline(user: TwitterUser): Action {
     return {
         type: Kind.OpenUserTimeline,
         user,
@@ -543,13 +531,13 @@ export function openConversationTimeline(status: Tweet): ThunkAction {
     };
 }
 
-export function closeSlaveTimeline() {
+export function closeSlaveTimeline(): Action {
     return {
         type: Kind.CloseSlaveTimeline,
     };
 }
 
-export function addUserTweets(user_id: number, statuses: Tweet[]) {
+export function addUserTweets(user_id: number, statuses: Tweet[]): Action {
     return {
         type: Kind.AddUserTweets,
         user_id,
@@ -557,7 +545,7 @@ export function addUserTweets(user_id: number, statuses: Tweet[]) {
     };
 }
 
-export function appendPastItems(user_id: number, items: Item[]) {
+export function appendPastItems(user_id: number, items: Item[]): Action {
     return {
         type: Kind.AppendPastItems,
         user_id,
@@ -565,38 +553,38 @@ export function appendPastItems(user_id: number, items: Item[]) {
     };
 }
 
-export function focusSlaveNext() {
+export function focusSlaveNext(): Action {
     return {
         type: Kind.FocusSlaveNext,
     };
 }
 
-export function focusSlavePrev() {
+export function focusSlavePrev(): Action {
     return {
         type: Kind.FocusSlavePrev,
     };
 }
 
-export function focusSlaveTop() {
+export function focusSlaveTop(): Action {
     return {
         type: Kind.FocusSlaveTop,
     };
 }
 
-export function focusSlaveBottom() {
+export function focusSlaveBottom(): Action {
     return {
         type: Kind.FocusSlaveBottom,
     };
 }
 
-export function focusSlaveOn(index: number) {
+export function focusSlaveOn(index: number): Action {
     return {
         type: Kind.FocusSlaveOn,
         index,
     };
 }
 
-export function blurSlaveTimeline() {
+export function blurSlaveTimeline(): Action {
     return {
         type: Kind.BlurSlaveTimeline,
     };
