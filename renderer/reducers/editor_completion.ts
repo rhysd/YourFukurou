@@ -1,4 +1,5 @@
-import {Action, Kind} from '../actions';
+import Kind from '../action_kinds';
+import {Action} from '../actions';
 import EditorCompletionState, {DefaultEditorCompletionState} from '../states/editor_completion';
 
 export default function editorCompletion(state: EditorCompletionState = DefaultEditorCompletionState, action: Action) {

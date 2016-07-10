@@ -1,5 +1,6 @@
 import {Twitter} from 'twit';
-import {Action, Kind} from '../actions';
+import Kind from '../action_kinds';
+import {Action} from '../actions';
 import TweetMediaState, {DefaultTweetMediaState} from '../states/tweet_media';
 
 export default function tweetMedia(state: TweetMediaState = DefaultTweetMediaState, action: Action) {

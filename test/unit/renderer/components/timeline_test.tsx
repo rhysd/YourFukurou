@@ -10,7 +10,7 @@ import Item from '../../../../renderer/item/item';
 import {Timeline} from '../../../../renderer/components/timeline';
 import Message from '../../../../renderer/components/message';
 import {MessageState} from '../../../../renderer/reducers/message';
-import {Kind} from '../../../../renderer/actions';
+import Kind from '../../../../renderer/action_kinds';
 
 function doNothing(_: any) {
     // do nothing;

@@ -2,10 +2,14 @@ import Dexie from 'dexie';
 import log from '../log';
 import {TwitterUser} from '../item/tweet';
 import {Twitter} from 'twit';
-import {SuggestionItem, MaxSuggestions} from '../components/editor/suggestions';
+import {SuggestionItem} from '../components/editor/suggestions';
 
 // https://github.com/dfahlander/Dexie.js#hello-world-typescript
 const Promise = Dexie.Promise;
+// Note:
+// We can't use 'MaxSuggestions' in components/editor/suggestions.tsx
+// because of circular dependency.
+const MaxSuggestions = 5;
 
 interface AccountsScheme {
     id: number;

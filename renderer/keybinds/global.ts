@@ -22,9 +22,10 @@ import {
     openUserTimeline,
     addUserTweets,
     showMessage,
+    openConversationTimeline,
+    completeMissingStatuses,
 } from '../actions';
 import TwitterRestApi from '../twitter/rest_api';
-import {showConversation} from '../components/tweet/index';
 
 function getCurrentStatus(): Tweet {
     const timeline = Store.getState().timeline;
@@ -138,7 +139,7 @@ function reply() {
 function replyOrCompleteMissingStatuses() {
     const sep_idx = getFocusedSeparatorIndex();
     if (sep_idx !== null) {
-        Separator.dispatchMissingStatusesAt(sep_idx);
+        Store.dispatch(completeMissingStatuses(sep_idx));
     } else {
         reply();
     }
@@ -171,7 +172,7 @@ function conversation() {
     if (status === null) {
         return;
     }
-    showConversation(status.getMainStatus(), Store.dispatch);
+    Store.dispatch(openConversationTimeline(status.getMainStatus()));
 }
 
 export type GlobalAction =

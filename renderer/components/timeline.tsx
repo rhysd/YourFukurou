@@ -99,7 +99,7 @@ export class Timeline extends React.Component<TimelineProps, {}> {
     }
 
     renderItem(idx: number, key: string, related_ids: string[], focused_user_id: number) {
-        const {items, focus_index, kind, owner, friends} = this.props;
+        const {items, focus_index, kind, owner, friends, dispatch} = this.props;
         const i = items.get(idx);
         const focused = idx === focus_index;
         if (i instanceof TweetItem) {
@@ -139,6 +139,7 @@ export class Timeline extends React.Component<TimelineProps, {}> {
             return <ZigZagSeparator
                 itemIndex={idx}
                 focused={focused}
+                dispatch={dispatch}
                 key={key}
             />;
         } else {

@@ -1,4 +1,5 @@
-import {Action, Kind} from '../actions';
+import Kind from '../action_kinds';
+import {Action} from '../actions';
 import TweetEditorState, {DefaultTweetEditorState} from '../states/tweet_editor';
 
 export default function editor(state: TweetEditorState = DefaultTweetEditorState, action: Action) {

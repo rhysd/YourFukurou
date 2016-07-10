@@ -19,13 +19,13 @@ import {
     openUserTimeline,
     addUserTweets,
     showMessage,
+    openConversationTimeline,
 } from '../actions';
 import {UserTimeline} from '../states/slave_timeline';
 import log from '../log';
 import TwitterRestApi from '../twitter/rest_api';
 import Tweet from '../item/tweet';
 import Separator from '../item/separator';
-import {showConversation} from '../components/tweet/index';
 import {dispatchOlderTweets} from '../components/slave_timeline/user';
 
 function getCurrentUser() {
@@ -172,7 +172,7 @@ function conversation() {
     if (status === null) {
         return;
     }
-    showConversation(status.getMainStatus(), Store.dispatch);
+    Store.dispatch(openConversationTimeline(status.getMainStatus()));
 }
 
 export type SlaveTimelineAction =

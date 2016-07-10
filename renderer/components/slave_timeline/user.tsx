@@ -59,7 +59,7 @@ export default class UserSlave extends React.Component<UserSlaveProps, {}> {
     }
 
     renderTweets() {
-        const {timeline, owner, friends} = this.props;
+        const {timeline, owner, friends, dispatch} = this.props;
         const focus_idx = timeline.focus_index;
 
         // TODO:
@@ -81,6 +81,7 @@ export default class UserSlave extends React.Component<UserSlaveProps, {}> {
                 return <ZigZagSeparator
                     focused={focused}
                     onClick={this.onSeparatorClicked}
+                    dispatch={dispatch}
                     key={idx}
                 />;
             } else {

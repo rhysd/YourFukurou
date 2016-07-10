@@ -4,7 +4,8 @@ import {shallow} from 'enzyme';
 import test from 'ava';
 import {spy} from 'sinon';
 import {TweetMedia} from '../../../../../renderer/components/tweet/media';
-import {Kind, Action} from '../../../../../renderer/actions';
+import {Action} from '../../../../../renderer/actions';
+import Kind from '../../../../../renderer/action_kinds';
 
 function doNothing() {
     // Do nothing

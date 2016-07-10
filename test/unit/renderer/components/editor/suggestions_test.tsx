@@ -4,7 +4,8 @@ import {shallow} from 'enzyme';
 import test from 'ava';
 import Suggestions, {SuggestionItem, EmojiEntry, ScreenNameEntry, HashtagEntry} from '../../../../../renderer/components/editor/suggestions';
 import EditorCompletionState from '../../../../../renderer/states/editor_completion';
-import {Kind, Action} from '../../../../../renderer/actions';
+import Kind from '../../../../../renderer/action_kinds';
+import {Action} from '../../../../../renderer/actions';
 
 const Item = {
     code: ':code:',

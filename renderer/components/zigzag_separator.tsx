@@ -1,13 +1,14 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import * as classNames from 'classnames';
-import Separator from '../item/separator';
+import {completeMissingStatuses} from '../actions';
 import log from '../log';
 
 interface Props extends React.Props<ZigZagSeparator> {
     itemIndex?: number;
     focused?: boolean;
     onClick?: (e: React.MouseEvent) => void;
+    dispatch: Redux.Dispatch;
 }
 
 interface State {
@@ -24,11 +25,12 @@ export default class ZigZagSeparator extends React.Component<Props, State> {
     // XXX:
     // This component owns its state.  We can't change the state via keymaps.
     onClick(e: React.MouseEvent) {
-        if (this.props.onClick) {
-            this.props.onClick(e);
-        } else if (this.props.itemIndex !== undefined) {
+        const {onClick, itemIndex, dispatch} = this.props;
+        if (onClick) {
+            onClick(e);
+        } else if (itemIndex !== undefined) {
             e.stopPropagation();
-            Separator.dispatchMissingStatusesAt(this.props.itemIndex);
+            dispatch(completeMissingStatuses(itemIndex));
         }
         this.setState({loading: true});
     }

@@ -507,9 +507,15 @@ export default class TimelineState {
     }
 
     getCurrentTimeline() {
-        switch (this.kind) {
-            case 'home': return this.home;
-            case 'mention': return this.mention;
+        return this.getTimeline(this.kind);
+    }
+
+    getTimeline(kind: TimelineKind) {
+        switch (kind) {
+            case 'home':
+                return this.home;
+            case 'mention':
+                return this.mention;
             default:
                 log.error('Invalid timeline:', this.kind);
                 return null;

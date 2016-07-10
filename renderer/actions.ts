@@ -1,7 +1,10 @@
 import {EditorState} from 'draft-js';
 import {Twitter} from 'twit';
-import Tweet, {TwitterUser} from './item/tweet';
+import {List} from 'immutable';
+import Kind from './action_kinds';
 import Item from './item/item';
+import Tweet, {TwitterUser} from './item/tweet';
+import Separator from './item/separator';
 import {AutoCompleteLabel} from './components/editor/auto_complete_decorator';
 import State from './states/root';
 import TimelineState, {TimelineKind} from './states/timeline';
@@ -10,71 +13,7 @@ import {searchSuggestionItems, SuggestionItem} from './components/editor/suggest
 import log from './log';
 import notifyTweet from './notification/tweet';
 import notifyLiked from './notification/like';
-
-export const Kind = {
-    AddSeparator: Symbol('add-separator'),
-    ChangeCurrentTimeline: Symbol('change-current-timeline'),
-
-    ShowMessage: Symbol('show-message'),
-    DismissMessage: Symbol('dismiss-message'),
-    NotImplementedYet: Symbol('not-implemented-yet'),
-
-    AddTweetToTimeline: Symbol('add-tweet-to-timeline'),
-    AddTweetsToTimeline: Symbol('add-tweets-to-timeline'),
-    SetCurrentUser: Symbol('set-current-user'),
-    UpdateCurrentUser: Symbol('update-current-user'),
-    DeleteStatusInTimeline: Symbol('delete-status-in-timeline'),
-    AddMentions: Symbol('add-mentions'),
-    AddRejectedUserIds: Symbol('add-rejected-user-ids'),
-    RemoveRejectedUserIds: Symbol('remove-rejected-user-ids'),
-    AddNoRetweetUserIds: Symbol('add-no-retweet-user-ids'),
-    CompleteMissingStatuses: Symbol('complete-missing-statuses'),
-
-    RetweetSucceeded: Symbol('retweet-succeeded'),
-    UnretweetSucceeded: Symbol('unretweet-succeeded'),
-    LikeSucceeded: Symbol('like-succeeded'),
-    UnlikeSucceeded: Symbol('unlike-succeeded'),
-    StatusLiked: Symbol('status-liked'),
-
-    ChangeEditorState: Symbol('change-editor-state'),
-    OpenEditor: Symbol('open-editor'),
-    OpenEditorForReply: Symbol('open-editor-for-reply'),
-    CloseEditor: Symbol('close-editor'),
-    ToggleEditor: Symbol('toggle-editor'),
-
-    SelectAutoCompleteSuggestion: Symbol('select-auto-complete-suggestion'),
-    UpdateAutoCompletion: Symbol('update-auto-completion'),
-    StopAutoCompletion: Symbol('stop-auto-completion'),
-    DownAutoCompletionFocus: Symbol('down-auto-completion-focus'),
-    UpAutoCompletionFocus: Symbol('up-auto-completion-focus'),
-
-    OpenPicturePreview: Symbol('open-picture-preview'),
-    CloseTweetMedia: Symbol('close-tweet-media'),
-    MoveToNthPicturePreview: Symbol('move-to-nth-picture-preview'),
-
-    FocusOnItem: Symbol('focus-on-item'),
-    UnfocusItem: Symbol('unfocus-item'),
-    FocusNextItem: Symbol('focus-next-item'),
-    FocusPrevItem: Symbol('focus-prev-item'),
-    FocusTopItem: Symbol('focus-top-item'),
-    FocusBottomItem: Symbol('focus-bottom-item'),
-
-    AddFriends: Symbol('add-friends'),
-    RemoveFriends: Symbol('remove-friends'),
-    ResetFriends: Symbol('reset-friends'),
-
-    OpenUserTimeline: Symbol('open-user-timeline'),
-    OpenConversationTimeline: Symbol('open-conversation-timeline'),
-    CloseSlaveTimeline: Symbol('close-slave-timeline'),
-    AddUserTweets: Symbol('add-user-tweets'),
-    AppendPastItems: Symbol('append-past-items'),
-    BlurSlaveTimeline: Symbol('blur-slave-timeline'),
-    FocusSlaveNext: Symbol('focus-slave-next'),
-    FocusSlavePrev: Symbol('focus-slave-prev'),
-    FocusSlaveTop: Symbol('focus-slave-top'),
-    FocusSlaveBottom: Symbol('focus-slave-bottom'),
-    FocusSlaveOn: Symbol('focus-slave-on'),
-};
+import TwitterRestApi from './twitter/rest_api';
 
 export interface Action {
     type: symbol;
@@ -160,12 +99,91 @@ export function addNoRetweetUserIds(ids: number[]) {
     };
 }
 
-export function completeMissingStatuses(timeline: TimelineKind, index: number, items: Item[]) {
-    return {
-        type: Kind.CompleteMissingStatuses,
-        timeline,
-        index,
-        items,
+
+function getMissingTweets(kind: TimelineKind, max_id: string, since_id: string) {
+    switch (kind) {
+        case 'home':
+            return TwitterRestApi.missingHomeTimeline(max_id, since_id);
+        case 'mention':
+            return TwitterRestApi.missingMentionTimeline(max_id, since_id);
+        default:
+            return Promise.resolve([] as Twitter.Status[]);
+    }
+}
+
+// Note:
+// Should getting missing status at specific index of timeline be moved to TwitterRestApi class?
+function getMissingItemsAt(sep_index: number, kind: TimelineKind, current_items: List<Item>) {
+    const size = current_items.size;
+
+    let before: Tweet = null;
+    let after: Tweet = null;
+
+    let idx = sep_index - 1;
+    while (idx >= 0) {
+        const t = current_items.get(idx);
+        if (t instanceof Tweet) {
+            before = t;
+            break;
+        }
+        --idx;
+    }
+
+    idx = sep_index + 1;
+    while (idx < size) {
+        const t = current_items.get(idx);
+        if (t instanceof Tweet) {
+            after = t;
+            break;
+        }
+        ++idx;
+    }
+
+    const max_id = before ? before.id : undefined;
+    const since_id = after ? after.id : undefined;
+
+    log.debug('Will obtain missing statuses in timeline:', max_id, since_id);
+
+    return getMissingTweets(kind, max_id, since_id).then(tweets => {
+        if (tweets.length === 0) {
+            return [] as Item[];
+        }
+
+        const items = tweets.map(json => new Tweet(json) as Item);
+
+        if (tweets[0].id_str === max_id) {
+            // Note:
+            // 'max_id' status duplicates because it is included in response.
+            items.shift();
+            if (items.length === 0) {
+                return [] as Item[];
+            }
+        } else {
+            log.error('First status of missing statuses sequence is not a max_id status', items);
+        }
+
+        // Note:
+        // Even if all missing statuses are completed, we may enter into below 'if' clause.
+        // This is because there is no guarantee to fetch N statuses when specifying 'count: N'.
+        // When timeline including deleted or suspended statuses, they may be removed from fetching statuses.
+        items.push(new Separator());
+
+        return items;
+    });
+}
+
+export function completeMissingStatuses(sep_index: number, timeline_kind?: TimelineKind): ThunkAction {
+    return (dispatch, getState) => {
+        const timeline = getState().timeline;
+        const kind = timeline_kind || timeline.kind;
+        const items = timeline.getTimeline(kind);
+        getMissingItemsAt(sep_index, kind, items).then(missings => {
+            dispatch({
+                timeline: kind,
+                index: sep_index,
+                items: missings,
+            });
+        });
     };
 }
 
@@ -457,10 +475,71 @@ export function openUserTimeline(user: TwitterUser) {
     };
 }
 
-export function openConversationTimeline(statuses: Tweet[]) {
-    return {
-        type: Kind.OpenConversationTimeline,
-        statuses,
+function mergeHigherOrder(left: Tweet[], right: Tweet[]) {
+    const ret = [] as Tweet[];
+    const push = Array.prototype.push;
+    while (true) {
+        if (left.length === 0) {
+            push.apply(ret, right);
+            return ret;
+        } else if (right.length === 0) {
+            push.apply(ret, left);
+            return ret;
+        }
+
+        const l = left[0];
+        const r = right[0];
+        const cmp = l.compareId(r);
+
+        if (cmp < 0) {
+            ret.push(right.shift());
+        } else if (cmp > 0) {
+            ret.push(left.shift());
+        } else {
+            // Note: Remove duplicates
+            ret.push(left.shift());
+            right.shift();
+        }
+    }
+}
+
+// Note:
+// This showConversation() function has some limitations.
+// 1. Can't take statuses from protected accounts.  This is because of spec of search/tweets.
+// 2. Can't take statuses older than a week.  This is because of the same as above.
+// 3. Can't take statuses from third person in conversation.  For example, @A talks with @B starting
+//    from @A's tweet.  Then @C replies to @B tweet in the conversation.  But search/tweets doesn't
+//    include @C's tweets in the situation.
+//
+// TODO:
+// We can also use timeline cache on memory to find out related statuses to the conversation.
+export function gatherConversationStatuses(status: Tweet) {
+    return Promise.all([
+        TwitterRestApi.conversationStatuses(status.id, status.user.screen_name)
+            .then(json => json.map(j => new Tweet(j))),
+        Promise.resolve(status.getChainedRelatedStatuses()),
+    ]).then(([from_search, from_related]) => {
+        const merged = mergeHigherOrder(from_search, from_related);
+        log.debug('Merged search/tweets with related tweets:', merged);
+        merged.push(status);
+
+        // Note:  Add forwarded statuses in the conversation
+        while (status.in_reply_to_status !== null) {
+            merged.push(status.in_reply_to_status);
+            status = status.in_reply_to_status;
+        }
+
+        return merged;
+    });
+}
+
+export function openConversationTimeline(status: Tweet): ThunkAction {
+    return (dispatch, getState) => {
+        gatherConversationStatuses(status)
+            .then(statuses => dispatch({
+                type: Kind.OpenConversationTimeline,
+                statuses,
+            }));
     };
 }
 
