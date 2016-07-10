@@ -14,6 +14,7 @@ import log from './log';
 import notifyTweet from './notification/tweet';
 import notifyLiked from './notification/like';
 import TwitterRestApi from './twitter/rest_api';
+import DB from './database/db';
 
 export interface Action {
     type: symbol;
@@ -273,6 +274,8 @@ export function statusLiked(status: Tweet, from: TwitterUser): ThunkAction {
 }
 
 export function setCurrentUser(user: TwitterUser): Action {
+    DB.accounts.storeAccount(user.json);
+    DB.my_accounts.storeMyAccount(user.json.id);
     return {
         type: Kind.SetCurrentUser,
         user,
@@ -280,6 +283,8 @@ export function setCurrentUser(user: TwitterUser): Action {
 }
 
 export function updateCurrentUser(user_json: Twitter.User): Action {
+    DB.accounts.storeAccount(user_json);
+    DB.my_accounts.storeMyAccount(user_json.id);
     return {
         type: Kind.UpdateCurrentUser,
         user_json,

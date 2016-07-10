@@ -6,7 +6,6 @@ import TimelineActivity, {TimelineActivityKind} from '../item/timeline_activity'
 import Separator from '../item/separator';
 import log from '../log';
 import PM from '../plugin_manager';
-import DB from '../database/db';
 import AppConfig from '../config';
 
 const MaxTimelineLength = AppConfig.remote_config.max_timeline_items;
@@ -484,8 +483,6 @@ export default class TimelineState {
     }
 
     setUser(user: TwitterUser) {
-        DB.accounts.storeAccount(user.json);
-        DB.my_accounts.storeMyAccount(user.json.id);
         return this.update({user});
     }
 
@@ -497,9 +494,6 @@ export default class TimelineState {
                 (j as any)[prop] = v;
             }
         }
-
-        DB.accounts.storeAccount(j);
-        DB.my_accounts.storeMyAccount(j.id);
 
         return this.update({
             user: new TwitterUser(j),
