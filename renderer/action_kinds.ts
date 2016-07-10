@@ -61,5 +61,5 @@ export default {
     FocusSlaveTop: Symbol('focus-slave-top'),
     FocusSlaveBottom: Symbol('focus-slave-bottom'),
     FocusSlaveOn: Symbol('focus-slave-on'),
-}
+};
 
