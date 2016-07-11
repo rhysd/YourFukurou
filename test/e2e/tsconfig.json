@@ -4,6 +4,8 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noEmitOnError": true,
     "target": "es2015"
   },
   "files": [

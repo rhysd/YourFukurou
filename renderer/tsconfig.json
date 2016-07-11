@@ -6,6 +6,8 @@
     "preserveConstEnums": true,
     "outDir": "./js",
     "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noEmitOnError": true,
     "target": "es2015",
     "sourceMap": true,
     "jsx": "react"

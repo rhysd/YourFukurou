@@ -65,4 +65,5 @@ export default function notifyTweet(tw: Tweet, owner: TwitterUser) {
     } else if (AppConfig.notification.quoted && tw.isQuotedTweet() && tw.quoted_status.user.id === owner.id) {
         return notifyQuoted(tw);
     }
+    return null;
 }
