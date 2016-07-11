@@ -254,10 +254,11 @@ export default class TimelineState {
 
     putInHome(status: Tweet): [List<Item>, number] {
         const home = this.updateRelatedStatuses(status);
+        const in_home = this.kind === 'home';
         if (!status.isRetweet()) {
             return [
                 home.unshift(status),
-                this.kind === 'home' ? this.nextFocusIndex(home.size + 1) : this.focus_index,
+                in_home ? this.nextFocusIndex(home.size + 1) : this.focus_index,
             ];
         }
 
@@ -270,15 +271,18 @@ export default class TimelineState {
             }
         });
 
-        const next_focus_index =
-            this.kind === 'home' && (index === -1 || index < this.focus_index) ?
-                this.nextFocusIndex(home.size + 1) : this.focus_index;
-
         if (index === -1) {
-            return [home.unshift(status), next_focus_index];
+            return [
+                home.unshift(status),
+                in_home ? this.nextFocusIndex(home.size + 1) : this.focus_index,
+            ];
         }
 
-        return [home.delete(index).unshift(status), next_focus_index];
+        return [
+            home.delete(index).unshift(status),
+            in_home && (this.focus_index < index) ?
+                this.nextFocusIndex(home.size) : this.focus_index,
+        ];
     }
 
     updateNotified(home: boolean, mention: boolean) {

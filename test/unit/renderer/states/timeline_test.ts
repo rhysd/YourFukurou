@@ -261,6 +261,7 @@ test('focusTop() and focusBottom() moves focus to edges of timeline', t => {
 test('moveing focus randomly doesnot raise an error', t => {
     let s = getState(getRandomTweets(), 'home', getRandomTweets());
     for (let i = 0; i < 5000; ++i) {
+        const prev = s;
         const r = randN(6);
         switch (r) {
         case 0:
@@ -287,7 +288,57 @@ test('moveing focus randomly doesnot raise an error', t => {
         if (randN(20) === 0) {
             s = s.switchTimeline(s.kind === 'home' ? 'mention' : 'home');
         }
-        t.true(s.focus_index !== undefined);
+        t.true(
+            s.focus_index !== undefined,
+            `before: ${prev.focus_index}, after: ${s.focus_index}, r: ${r}`
+        );
     }
 });
+
+test('addNewTweet() adds tweet to timelines', t => {
+    const tw = fixture.tweet();
+    const s = getState();
+    const s1 = s.addNewTweet(tw).addNewTweet(tw).addNewTweet(tw);
+    t.is(s1.home.size, 3);
+    t.is((s1.home.get(0) as Tweet).id, tw.id);
+    t.is(s1.mention.size, 0);
+
+    const rp = fixture.in_reply_to_from_other();
+    const s2 = s.addNewTweet(rp).addNewTweet(tw).addNewTweet(rp);
+    t.is(s2.home.size, 3);
+    t.is(s2.mention.size, 2);
+    t.is((s2.mention.get(0) as Tweet).id, rp.id);
+});
+
+test('addNewTweet() updates retweets in home timeline', t => {
+    const tw = fixture.tweet();
+    const rt = fixture.retweet();
+    const s = getState([tw, rt, tw]);
+    const s1 = s.addNewTweet(rt);
+    t.is(s1.home.size, 3);
+    t.is((s1.home.first() as Tweet).id, rt.id);
+});
+
+test('addNewTweet() moves focus on adding tweet to home timeline', t => {
+    const tw = fixture.tweet();
+
+    for (let i = 0; i < 3; ++i) {
+        let s = getState([tw, tw, tw]);
+        s = s.focusOn(i);
+        s = s.addNewTweet(tw);
+        t.is(s.focus_index, i + 1);
+    }
+});
+
+test('addNewTweet() handle focus on retweet is updated', t => {
+    const tw = fixture.tweet();
+    const rt = fixture.retweet();
+    const s = getState([tw, rt, tw]);
+    t.is(s.focusOn(2).addNewTweet(rt).focus_index, 2);
+    t.is(s.focusOn(1).addNewTweet(rt).focus_index, 1);
+    t.is(s.focusOn(0).addNewTweet(rt).focus_index, 1); // Edge case
+});
+
+// TODO: Add tests for updating state.notified on addNewTweet()
+// TODO: Add tests for updating mention timeline on addNewTweet()
 

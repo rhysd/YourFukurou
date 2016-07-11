@@ -11,3 +11,5 @@ export const fixture = new Fixture();
     addEventListener(event: string, listener: Function) { /* do nothing */ },
     removeEventListener(event: string, listener: Function) { /* do nothing */ },
 };
+
+window.requestIdleCallback = (cb: Function) => cb();
