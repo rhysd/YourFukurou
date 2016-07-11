@@ -5,6 +5,7 @@ import TimelineState, {DefaultTimelineState, TimelineKind} from '../../../../ren
 import Item from '../../../../renderer/item/item';
 import Tweet from '../../../../renderer/item/tweet';
 import Activity from '../../../../renderer/item/timeline_activity';
+import Separator from '../../../../renderer/item/separator';
 import Config from '../../../../renderer/config';
 import PM from '../../../../renderer/plugin_manager';
 
@@ -412,4 +413,41 @@ test('addNewTweet() notifies behind timeline updates', t => {
     t.false(n4.mention);
 });
 
+test('addSeparator() adds one separator at once', t => {
+    const s1 = getState().addSeparator();
+    t.true(s1.home.first() instanceof Separator);
+    t.is(s1.home.size, 1);
+    t.true(s1.mention.first() instanceof Separator);
+    t.is(s1.mention.size, 1);
+
+    const s2 = s1.addSeparator();
+    t.is(s2.home.size, 1);
+    t.is(s2.mention.size, 1);
+
+    const s3 = s2.addNewTweet(fixture.tweet()).addSeparator();
+    t.is(s3.home.size, 3);
+    t.is(s3.mention.size, 1);
+});
+
+test('addTweets() and addMentions() adds multiple tweets', t => {
+    const tw = fixture.tweet();
+    const rp = fixture.in_reply_to_from_other();
+    const rt = fixture.retweeted();
+
+    const s1 = getState().addNewTweets([tw, rp, tw, rp, tw]);
+    t.is(s1.home.size, 5);
+    t.is(s1.mention.size, 2);
+    t.true(s1.notified.mention);
+
+    const s2 = getState().addMentions([rp, rp, rt]);
+    t.is(s2.home.size, 0);
+    t.is(s2.mention.size, 3);
+    t.true(s2.notified.mention);
+
+    const s3 = getState([], 'mention', [rp]).focusOn(0).addMentions([rt, rp, rt]);
+    t.is(s3.focus_index, 2);  // RT does not duplicate
+
+    const s4 = getState([tw], 'home', [rp]).focusOn(0).addMentions([rt, rp, rt]);
+    t.is(s4.focus_index, 0);
+});
 
