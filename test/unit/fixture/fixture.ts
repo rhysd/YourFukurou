@@ -51,11 +51,19 @@ export default class Fixture {
     }
 
     retweet() {
-        return new Tweet(this.readJson<Twitter.Status>('retweet_media'));
+        return new Tweet(this.readJson<Twitter.Status>('retweet'));
     }
 
     retweet_other() {
         return new Tweet(this.readJson<Twitter.Status>('retweet_other'));
+    }
+
+    retweeted() {
+        return new Tweet(this.readJson<Twitter.Status>('retweeted'));
+    }
+
+    retweeted2() {
+        return new Tweet(this.readJson<Twitter.Status>('retweeted2'));
     }
 
     media() {

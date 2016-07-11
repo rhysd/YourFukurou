@@ -2,8 +2,9 @@ import {fixture} from '../../helper';
 import test from 'ava';
 import {List} from 'immutable';
 import TimelineState, {DefaultTimelineState, TimelineKind} from '../../../../renderer/states/timeline';
-import Tweet from '../../../../renderer/item/tweet';
 import Item from '../../../../renderer/item/item';
+import Tweet from '../../../../renderer/item/tweet';
+import Activity from '../../../../renderer/item/timeline_activity';
 import Config from '../../../../renderer/config';
 import PM from '../../../../renderer/plugin_manager';
 
@@ -113,6 +114,9 @@ test('switchTimeline() changes current timeline kind', t => {
     t.is(s.switchTimeline('home').kind, 'home');
     t.is(s.switchTimeline('mention').switchTimeline('home').kind, 'home');
     t.is(s.switchTimeline('mention').switchTimeline('mention').kind, 'mention');
+
+    const n = s.addNewTweet(rp).switchTimeline('mention').notified;
+    t.false(n.mention);
 });
 
 test('shouldAddToTimeline() should reject muted or blocked tweets', t => {
@@ -238,6 +242,7 @@ test('focusOn() focuses on an item', t => {
     t.is(s.focusOn(1).focus_index, 1);
     t.is(s.focusOn(-1).focus_index, null);
     t.is(s.focusOn(3).focus_index, null);
+    t.is(getState().focusOn(0).focus_index, null);
 });
 
 test('focusNext() and focusPrevious() moves focus relatively', t => {
@@ -248,6 +253,8 @@ test('focusNext() and focusPrevious() moves focus relatively', t => {
     t.is(s.focusPrevious().focus_index, null);
     t.is(s.focusNext().focusPrevious().focus_index, 0);
     t.is(s.focusNext().focusNext().focusNext().focusNext().focus_index, 2);
+    t.is(getState().focusNext().focus_index, null);
+    t.is(getState().focusPrevious().focus_index, null);
 });
 
 test('focusTop() and focusBottom() moves focus to edges of timeline', t => {
@@ -256,6 +263,8 @@ test('focusTop() and focusBottom() moves focus to edges of timeline', t => {
     t.is(s.focusBottom().focus_index, 2);
     t.is(s.focusNext().focusTop().focus_index, 0);
     t.is(s.focusNext().focusBottom().focus_index, 2);
+    t.is(getState().focusTop().focus_index, null);
+    t.is(getState().focusBottom().focus_index, null);
 });
 
 test('moveing focus randomly doesnot raise an error', t => {
@@ -308,6 +317,17 @@ test('addNewTweet() adds tweet to timelines', t => {
     t.is(s2.home.size, 3);
     t.is(s2.mention.size, 2);
     t.is((s2.mention.get(0) as Tweet).id, rp.id);
+
+    const rt = fixture.retweeted();
+    const s3 = s2.addNewTweet(rt);
+    t.is(s3.mention.size, 3);
+    t.true(s3.mention.first() instanceof Activity);
+    t.is((s3.mention.first() as Activity).by[0].id, rt.user.id);
+
+    const rt2 = fixture.retweeted();
+    const s4 = s3.addNewTweet(rt2);
+    t.is(s3.mention.size, s4.mention.size);
+    t.true(s4.mention.first() instanceof Activity);
 });
 
 test('addNewTweet() updates retweets in home timeline', t => {
@@ -339,6 +359,57 @@ test('addNewTweet() handle focus on retweet is updated', t => {
     t.is(s.focusOn(0).addNewTweet(rt).focus_index, 1); // Edge case
 });
 
-// TODO: Add tests for updating state.notified on addNewTweet()
-// TODO: Add tests for updating mention timeline on addNewTweet()
+test('addNewTweet() moves focus on adding mentions to mention timeline', t => {
+    const rp = fixture.in_reply_to_from_other();
+
+    const state = getState([], 'mention', [rp, rp, rp]);
+    for (let i = 0; i < state.mention.size; ++i) {
+        const s = state.focusOn(i).addNewTweet(rp);
+        t.is(s.focus_index, i + 1);
+    }
+});
+
+test('addNewTweet() moves focus on adding retweet activity to mention timeline', t => {
+    const rt = fixture.retweeted();
+    const rp = fixture.in_reply_to_from_other();
+    const state = getState([], 'mention', [rp, rp, rp]);
+
+    for (let i = 0; i < 3; ++i) {
+        let s = state.focusOn(i).addNewTweet(rt);
+        t.is(s.focus_index, i + 1);
+        s = s.addNewTweet(rp);
+        t.is(s.focus_index, i + 2);
+    }
+
+    // TODO: Add tests of multiple users retweets your same tweet.
+});
+
+test('addNewTweet() notifies behind timeline updates', t => {
+    const tw = fixture.tweet();
+    const rt = fixture.retweeted();
+    const rp = fixture.in_reply_to_from_other();
+
+    const s1 = getState();
+    t.false(s1.notified.home);
+    t.false(s1.notified.mention);
+
+    const n1 = s1.addNewTweet(rt).notified;
+    t.false(n1.home);
+    t.true(n1.mention);
+
+    const n2 = s1.addNewTweet(rp).notified;
+    t.false(n1.home);
+    t.true(n1.mention);
+
+    const s2 = getState([], 'mention');
+
+    const n3 = s2.addNewTweet(tw).notified;
+    t.true(n3.home);
+    t.false(n3.mention);
+
+    const n4 = s2.addNewTweet(rt).notified;
+    t.true(n4.home);
+    t.false(n4.mention);
+});
+
 
