@@ -42,8 +42,20 @@ export default class Fixture {
         return new Tweet(this.readJson<Twitter.Status>('tweet'));
     }
 
+    tweet_other() {
+        return new Tweet(this.readJson<Twitter.Status>('tweet_other'));
+    }
+
+    reply_myself() {
+        return new Tweet(this.readJson<Twitter.Status>('reply_myself'));
+    }
+
     retweet() {
         return new Tweet(this.readJson<Twitter.Status>('retweet_media'));
+    }
+
+    retweet_other() {
+        return new Tweet(this.readJson<Twitter.Status>('retweet_other'));
     }
 
     media() {
@@ -64,6 +76,10 @@ export default class Fixture {
 
     in_reply_to() {
         return new Tweet(this.readJson<Twitter.Status>('in_reply_to'));
+    }
+
+    in_reply_to_from_other() {
+        return new Tweet(this.readJson<Twitter.Status>('in_reply_to_from_other'));
     }
 
     user() {

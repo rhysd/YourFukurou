@@ -197,8 +197,8 @@ export default class TimelineState {
                 (!AppConfig.mute.mention || !muted_or_blocked);
 
         return {
-            home: should_add_to_home,
-            mention: should_add_to_mention,
+            home: !!should_add_to_home,
+            mention: !!should_add_to_mention,
         };
     }
 

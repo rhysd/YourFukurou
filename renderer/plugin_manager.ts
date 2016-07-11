@@ -41,6 +41,13 @@ class PluginManager {
         return valid;
     }
 
+    addPluginDirectly(plugin: Plugin) {
+        if (!this.validatePlugin(plugin)) {
+            return;
+        }
+        this.plugins.push(plugin);
+    }
+
     loadPluginFromPath(p: string) {
         const mod = global.require(p) as {plugin?: Plugin};
         if (!mod.plugin) {
@@ -133,6 +140,11 @@ class PluginManager {
             }
         }
         return false;
+    }
+
+    reset() {
+        this.plugins = [];
+        this.loaded = false;
     }
 }
 
