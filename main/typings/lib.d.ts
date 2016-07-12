@@ -31,7 +31,7 @@ declare module 'electron-window-state' {
     export = windowStateKeeper;
 }
 
-declare module NodeJS {
+declare namespace NodeJS {
     interface Global {
         config?: Config;
         config_path?: string;

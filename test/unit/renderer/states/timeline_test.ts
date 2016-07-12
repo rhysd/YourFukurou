@@ -451,3 +451,51 @@ test('addTweets() and addMentions() adds multiple tweets', t => {
     t.is(s4.focus_index, 0);
 });
 
+test('deleteStatusWithId() deletes statuses in timelines', t => {
+    const tw = fixture.tweet();
+    const tw2 = fixture.tweet_other();
+    const rp = fixture.in_reply_to_from_other();
+    const rt = fixture.retweeted();
+    const tw3 = rt.retweeted_status;
+
+    const s = getState([rt.retweeted_status, rp, tw, tw2, rt], 'home', [rp, rt]);
+
+    const s1 = s.deleteStatusWithId(tw.id);
+    t.is(s1.home.size, 4);
+    t.is(s1.mention.size, 2);
+    t.deepEqual(
+        s1.home.map(i => (i as Tweet).id).toArray(),
+        [tw3.id, rp.id, tw2.id, rt.id]
+    );
+
+    const s2 = s.deleteStatusWithId(tw2.id);
+    t.is(s2.home.size, 4);
+    t.is(s2.mention.size, 2);
+    t.deepEqual(
+        s2.home.map(i => (i as Tweet).id).toArray(),
+        [tw3.id, rp.id, tw.id, rt.id]
+    );
+
+    const s3 = s.deleteStatusWithId(rt.retweeted_status.id);
+    t.is(s3.home.size, 3);
+    t.is(s3.mention.size, 1);
+    t.deepEqual(
+        s3.home.map(i => (i as Tweet).id).toArray(),
+        [rp.id, tw.id, tw2.id]
+    );
+    t.deepEqual(
+        s3.mention.map(i => (i as Tweet).id).toArray(),
+        [rp.id]
+    );
+
+    const s4 = s.deleteStatusWithId('123456');
+    t.deepEqual(
+        s4.home.map(i => (i as Tweet).id).toArray(),
+        s.home.map(i => (i as Tweet).id).toArray()
+    );
+    t.deepEqual(
+        s4.mention.map(i => (i as Tweet).id).toArray(),
+        s.mention.map(i => (i as Tweet).id).toArray()
+    );
+});
+
