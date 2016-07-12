@@ -29,6 +29,8 @@ function updateStatusIn(items: List<Item>, status: Tweet) {
     const predicate = (item: Item) => {
         if (item instanceof Tweet) {
             return item.getMainStatus().id === status_id;
+        } else if (item instanceof TimelineActivity) {
+            return item.status.id === status_id;
         } else {
             return false;
         }
@@ -41,6 +43,10 @@ function updateStatusIn(items: List<Item>, status: Tweet) {
     const indices = items.reduce((acc, item, idx) => {
         if (item instanceof Tweet) {
             if (item.getMainStatus().id === status_id) {
+                acc.push(idx);
+            }
+        } else if (item instanceof TimelineActivity) {
+            if (item.status.id === status_id) {
                 acc.push(idx);
             }
         }
@@ -60,6 +66,10 @@ function updateStatusIn(items: List<Item>, status: Tweet) {
             } else {
                 return status;
             }
+        } else if (item instanceof TimelineActivity) {
+            const cloned = item.clone();
+            item.status = status;
+            return cloned;
         } else {
             log.error('Never reaches here');
             return item;

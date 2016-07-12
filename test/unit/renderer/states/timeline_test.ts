@@ -499,3 +499,27 @@ test('deleteStatusWithId() deletes statuses in timelines', t => {
     );
 });
 
+test('updateStatus() replaces all status in home timelines', t => {
+    const rt = fixture.retweet();
+    const tw = rt.retweeted_status;
+    const tw2 = fixture.tweet();
+
+    const s = getState([tw, rt, tw2]);
+    const s2 = s.updateStatus(tw.clone());
+    t.not(s2.home.get(0), tw);
+    t.not(s2.home.get(1), rt);
+    t.is(s2.home.get(2), tw2);
+});
+
+test('updateStatus() replaces all status in mention timelines', t => {
+    const rp = fixture.in_reply_to_from_other();
+    const rt = fixture.retweeted();
+    const s = getState([], 'home', [rt, rp]);
+
+    const s2 = s.updateStatus(rp.clone());
+    t.not(s2.mention.get(1), rp);
+
+    const s3 = s.addNewTweet(rt);
+    const s4 = s3.updateStatus(rt.retweeted_status.clone());
+    t.not(s4.mention.get(0), s3.mention.get(0));
+});
