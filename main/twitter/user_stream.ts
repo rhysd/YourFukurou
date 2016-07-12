@@ -1,6 +1,3 @@
-import {readFile} from 'fs';
-import {join} from 'path';
-import {app} from 'electron';
 import * as Twit from 'twit';
 import log from '../log';
 import {Sender} from '../ipc';

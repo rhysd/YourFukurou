@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {Twitter} from 'twit';
 import * as classNames from 'classnames';
-import log from '../../log';
 import Tweet, {TwitterUser} from '../../item/tweet';
 import TweetActionButton from './action_button';
 import TweetText from './text';

@@ -7,7 +7,7 @@ import Tweet, {TwitterUser} from './item/tweet';
 import Separator from './item/separator';
 import {AutoCompleteLabel} from './components/editor/auto_complete_decorator';
 import State from './states/root';
-import TimelineState, {TimelineKind} from './states/timeline';
+import {TimelineKind} from './states/timeline';
 import {MessageKind} from './reducers/message';
 import {searchSuggestionItems, SuggestionItem} from './components/editor/suggestions';
 import log from './log';
@@ -528,7 +528,7 @@ export function gatherConversationStatuses(status: Tweet) {
 }
 
 export function openConversationTimeline(status: Tweet): ThunkAction {
-    return (dispatch, getState) => {
+    return dispatch => {
         gatherConversationStatuses(status)
             .then(statuses => dispatch({
                 type: Kind.OpenConversationTimeline,

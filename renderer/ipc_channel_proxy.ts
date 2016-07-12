@@ -3,7 +3,6 @@ import {
     addTweetToTimeline,
     addTweetsToTimeline,
     addMentions,
-    addUserTweets,
     addRejectedUserIds,
     addFriends,
     removeFriends,

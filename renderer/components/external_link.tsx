@@ -1,5 +1,4 @@
 import * as React from 'react';
-import log from '../log';
 
 const openExternal = global.require('electron').shell.openExternal;
 

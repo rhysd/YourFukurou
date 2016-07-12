@@ -1,4 +1,3 @@
-import {Twitter} from 'twit';
 import Kind from '../action_kinds';
 import {Action} from '../actions';
 import TweetMediaState, {DefaultTweetMediaState} from '../states/tweet_media';

@@ -1,9 +1,6 @@
 import Dexie from 'dexie';
 import log from '../log';
 
-// https://github.com/dfahlander/Dexie.js#hello-world-typescript
-const Promise = Dexie.Promise;
-
 export interface MyAccountsScheme {
     id: number;
 }

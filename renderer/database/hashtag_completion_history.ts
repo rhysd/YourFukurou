@@ -1,4 +1,3 @@
-import {MaxSuggestions} from '../components/editor/suggestions';
 import {Twitter} from 'twit';
 
 export const MaxHashtagHistories = 5;

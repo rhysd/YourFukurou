@@ -6,7 +6,6 @@ import TweetPrimary from './primary';
 import TweetSecondary from './secondary';
 import PopupIcon from './popup_icon';
 import UndraggableClickable from '../undraggable_clickable';
-import State from '../../states/root';
 import {TimelineKind} from '../../states/timeline';
 import {
     focusOnItem,
@@ -15,7 +14,6 @@ import {
     blurSlaveTimeline,
     openConversationTimeline,
 } from '../../actions';
-import log from '../../log';
 
 interface ConnectedProps extends React.Props<any> {
     status: TweetItem;

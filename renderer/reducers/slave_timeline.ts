@@ -1,6 +1,5 @@
 import Kind from '../action_kinds';
 import {Action} from '../actions';
-import {List} from 'immutable';
 import SlaveTimeline, {
     UserTimeline,
     ConversationTimeline,

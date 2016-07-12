@@ -5,10 +5,8 @@ import State from '../states/root';
 import IconButton from './icon_button';
 import Icon from './icon';
 import {
-    showMessage,
     toggleEditor,
     changeCurrentTimeline,
-    notImplementedYet,
 } from '../actions';
 import {TwitterUser} from '../item/tweet';
 import {TimelineKind, Notified} from '../states/timeline';

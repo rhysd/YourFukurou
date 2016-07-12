@@ -7,8 +7,6 @@ import {
     changeEditorState,
     closeEditor,
     showMessage,
-    downAutoCompletionFocus,
-    upAutoCompletionFocus,
     selectAutoCompleteSuggestion,
 } from '../../actions';
 import IconButton from '../icon_button';
@@ -18,7 +16,6 @@ import log from '../../log';
 import State from '../../states/root';
 import EditorCompletionState from '../../states/editor_completion';
 import AutoCompleteSuggestions, {SuggestionItem} from './suggestions';
-import {AutoCompleteLabel} from './auto_complete_decorator';
 import TweetText from '../tweet/text';
 import TweetSecondary from '../tweet/secondary';
 import PopupIcon from '../tweet/popup_icon';
@@ -132,7 +129,7 @@ export class TweetEditor extends React.Component<TweetEditorProps, {}> {
                     completion.query
                 );
             default:
-                log.error('Invalid completion label:', completion.label);
+                log.error('Invalid completion label on getSelectAction()');
                 return null;
         }
     }

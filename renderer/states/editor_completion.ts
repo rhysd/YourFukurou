@@ -1,5 +1,5 @@
 import {AutoCompleteLabel} from '../components/editor/auto_complete_decorator';
-import {searchSuggestionItems, SuggestionItem} from '../components/editor/suggestions';
+import {SuggestionItem} from '../components/editor/suggestions';
 
 export default class EditorCompletionState {
     constructor(

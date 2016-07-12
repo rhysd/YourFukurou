@@ -3,9 +3,6 @@ import {Twitter} from 'twit';
 import log from '../log';
 import Tweet from '../item/tweet';
 
-// https://github.com/dfahlander/Dexie.js#hello-world-typescript
-const Promise = Dexie.Promise;
-
 interface StatusesScheme {
     id: string;
     screen_name: string;

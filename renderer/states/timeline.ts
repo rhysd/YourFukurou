@@ -26,15 +26,6 @@ function containsStatusInTimeline(is: List<Item>, t: Tweet) {
 
 function updateStatusIn(items: List<Item>, status: Tweet) {
     const status_id = status.id;
-    const predicate = (item: Item) => {
-        if (item instanceof Tweet) {
-            return item.getMainStatus().id === status_id;
-        } else if (item instanceof TimelineActivity) {
-            return item.status.id === status_id;
-        } else {
-            return false;
-        }
-    };
 
     // Note:
     // One status may appear in timeline twice. (the status itself and RT for it).

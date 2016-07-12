@@ -1,5 +1,4 @@
 import * as Twit from 'twit';
-import {escape} from 'querystring';
 import log from '../log';
 import {UnderlyingClient, DummyClient, TwitClient} from './clients';
 

@@ -18,7 +18,7 @@ import loadConfig from './config';
 
 let win = null as Electron.BrowserWindow;
 
-const already_running = app.makeSingleInstance((cmdline, working_dir) => {
+const already_running = app.makeSingleInstance(() => {
     if (!win) {
         return;
     }
@@ -112,7 +112,7 @@ function startApp(access: AccessToken) {
 }
 
 function openWindow(access: AccessToken) {
-    return new Promise<AccessToken>((resolve, reject) => {
+    return new Promise<AccessToken>(resolve => {
         log.debug('Starting to open window');
 
         const win_state = windowState({
@@ -152,7 +152,7 @@ function openWindow(access: AccessToken) {
             app.dock.setIcon(icon_path);
         }
 
-        setApplicationMenu(win);
+        setApplicationMenu();
 
         if (process.env.NODE_ENV === 'development') {
             win.webContents.on('devtools-opened', () => setImmediate(() => win.focus()));

@@ -5,6 +5,8 @@
     "preserveConstEnums": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
     "noEmitOnError": true,
     "target": "es2015",
     "outDir": "./js",

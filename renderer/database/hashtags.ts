@@ -2,9 +2,6 @@ import Dexie from 'dexie';
 import {Twitter} from 'twit';
 import log from '../log';
 
-// https://github.com/dfahlander/Dexie.js#hello-world-typescript
-const Promise = Dexie.Promise;
-
 export interface HashtagsScheme {
     text: string;
     timestamp: number;
@@ -38,7 +35,7 @@ export default class Hashtags {
 
     storeHashtagsInTweet(json: Twitter.Status) {
         if (!json.entities || !json.entities.hashtags) {
-            return;
+            return undefined;
         }
 
         const hashtags = json.entities.hashtags
@@ -73,7 +70,7 @@ export default class Hashtags {
         }
 
         if (entries.length === 0) {
-            return Dexie.Promise.resolve<void>();
+            return undefined;
         }
 
         return this.table.bulkPut(entries)

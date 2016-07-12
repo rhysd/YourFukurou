@@ -59,7 +59,7 @@ export default class TweetTextParser {
     private mentions: TweetTextMention[];
     private result: TweetTextToken[];
 
-    constructor(private json: Twitter.Status) {
+    constructor(json: Twitter.Status) {
         this.pos = 0;
         this.input = htmlUnescape(json.text);
         this.text = this.input;

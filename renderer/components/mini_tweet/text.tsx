@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {Twitter} from 'twit';
 import * as classNames from 'classnames';
 import Tweet from '../../item/tweet';
 import TweetText from '../tweet/text';

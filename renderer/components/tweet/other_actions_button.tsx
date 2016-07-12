@@ -2,7 +2,6 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import Tooltip = require('rc-tooltip');
 import Tweet, {TwitterUser} from '../../item/tweet';
-import IconButton from '../icon_button';
 import {
     showMessage,
     openEditor,

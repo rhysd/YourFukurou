@@ -6,7 +6,6 @@ import * as classNames from 'classnames';
 import {AutoCompleteLabel} from './auto_complete_decorator';
 import {selectAutoCompleteSuggestion} from '../../actions';
 import EditorCompletionState from '../../states/editor_completion';
-import {TwitterUser} from '../../item/tweet';
 import DB from '../../database/db';
 import log from '../../log';
 
@@ -174,7 +173,7 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
             }
 
             default:
-                log.error('Invalid suggestion label: ' + this.props.label);
+                log.error('Invalid suggestion label on renderSuggestionItems()');
                 return undefined;
         }
     }

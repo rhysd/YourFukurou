@@ -80,7 +80,7 @@ export class DummyClient implements UnderlyingClient {
         return this.from_json<T>('GET:', name, params);
     }
 
-    private from_json<T>(method: string, name: string, params: Object = {}): Promise<T> {
+    private from_json<T>(method: string, name: string, _: Object = {}): Promise<T> {
         return this.fixture_data.then(data => {
             const res = data[name];
             if (!res) {

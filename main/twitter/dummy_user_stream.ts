@@ -1,4 +1,3 @@
-import * as Twit from 'twit';
 import log from '../log';
 import {Sender} from '../ipc';
 import {readFile} from 'fs';

@@ -39,10 +39,6 @@ function getRandomTweets() {
     return tweets;
 }
 
-function getRandomMentions() {
-    return Array(Math.random() * 100).fill(fixture.in_reply_to());
-}
-
 function getState(
     home: Item[] = [],
     kind: TimelineKind = 'home',
@@ -407,8 +403,8 @@ test('addNewTweet() notifies behind timeline updates', t => {
     t.true(n1.mention);
 
     const n2 = s1.addNewTweet(rp).notified;
-    t.false(n1.home);
-    t.true(n1.mention);
+    t.false(n2.home);
+    t.true(n2.mention);
 
     const s2 = getState([], 'mention');
 

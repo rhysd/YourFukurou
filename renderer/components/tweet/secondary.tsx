@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import Tweet, {TwitterUser} from '../../item/tweet';
+import Tweet from '../../item/tweet';
 import ScreenName from './screen_name';
 import Icon from '../icon';
 

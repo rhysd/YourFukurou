@@ -1,8 +1,6 @@
 import * as React from 'react';
-import {connect} from 'react-redux';
 import * as classNames from 'classnames';
 import {completeMissingStatuses} from '../actions';
-import log from '../log';
 
 interface Props extends React.Props<ZigZagSeparator> {
     itemIndex?: number;

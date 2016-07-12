@@ -103,7 +103,7 @@ function renderCollapsedRestUsers(activity: TimelineActivity) {
     );
 }
 
-function renderCreatedAt(status: Tweet, focused: boolean) {
+function renderCreatedAt(status: Tweet) {
     return (
         <ExternalLink
             className={classNames(
@@ -130,7 +130,7 @@ function renderExpanded(props: TwitterActivityProps) {
         >
             <div className="activity__header">
                 {renderBadge(kind)} {behaved} by {renderUserIcons(activity.by, MaxIconsExpanded)} {renderExpandedRestUsers(activity)}
-                {renderCreatedAt(activity.status, focused)}
+                {renderCreatedAt(activity.status)}
             </div>
             <div className="activity__text" title={activity.status.text}>
                 <TweetText status={activity.status} focused={focused}/>
