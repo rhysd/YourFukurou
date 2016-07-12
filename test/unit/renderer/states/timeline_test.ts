@@ -79,6 +79,14 @@ test.afterEach(() => {
     PM.reset();
 });
 
+test('getTimeline() returns corresponding timeline', t => {
+    const home = List<number>([]);
+    const mention = List<number>([]);
+    const s = DefaultTimelineState.update({home, mention});
+    t.is(s.getTimeline('home'), home);
+    t.is(s.getTimeline('mention'), mention);
+});
+
 test('getCurrentTimeline() selects current displayed timeline', t => {
     const tw = fixture.tweet();
     const rp = fixture.in_reply_to();
@@ -522,4 +530,39 @@ test('updateStatus() replaces all status in mention timelines', t => {
     const s3 = s.addNewTweet(rt);
     const s4 = s3.updateStatus(rt.retweeted_status.clone());
     t.not(s4.mention.get(0), s3.mention.get(0));
+});
+
+test('addRejectedIds() adds ids as "marked or blocked"', t => {
+    let s = getState();
+    t.is(s.rejected_ids.size, 0);
+
+    s = s.addRejectedIds([1111, 2222]);
+    t.is(s.rejected_ids.size, 2);
+    t.true(s.rejected_ids.contains(1111));
+    t.true(s.rejected_ids.contains(2222));
+
+    // Remove duplicate
+    s = s.addRejectedIds([3333, 1111, 4444]);
+    t.is(s.rejected_ids.size, 4);
+    t.is(s.rejected_ids.count(e => e === 1111), 1);
+});
+
+test('addRejectedIds() removes statuses having newly added IDs from timelines', t => {
+    const tw = fixture.tweet_other();
+    const rt = fixture.retweeted();
+    const tw2 = rt.retweeted_status;
+    const s = getState([tw, rt, tw2, tw], 'home', [rt]);
+
+    const s1 = s.addRejectedIds([tw.user.id]);
+    t.is(s1.home.size, 2);
+    t.is((s1.home.get(0) as Tweet).id, rt.id);
+    t.is((s1.home.get(1) as Tweet).id, tw2.id);
+
+    const s2 = s.addRejectedIds([rt.user.id]);
+    t.is(s2.home.size, 3);
+
+    const s3 = s.addRejectedIds([tw2.user.id]);
+    t.is(s3.home.size, 2);
+    t.is((s3.home.get(1) as Tweet).id, tw.id);
+    t.is(s3.mention.size, 0);
 });

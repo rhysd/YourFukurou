@@ -538,17 +538,20 @@ export default class TimelineState {
 
         const predicate = (i: Item) => {
             if (i instanceof Tweet) {
-                const id = i.getMainStatus().user.id;
-                return will_added.indexOf(id) === -1;
+                if (i.isRetweet() && will_added.indexOf(i.retweeted_status.user.id) !== -1) {
+                    return false;
+                }
+                return will_added.indexOf(i.user.id) === -1;
+            } else {
+                return true;
             }
-            return true;
         };
 
         const next_home = this.home.filter(predicate).toList();
         const next_mention = this.mention.filter(predicate).toList();
         const home_updated = next_home.size !== this.home.size;
         const mention_updated = next_mention.size !== this.mention.size;
-        const rejected_ids = this.rejected_ids.merge(will_added);
+        const rejected_ids = this.rejected_ids.concat(will_added).toList();
 
         // XXX:
         // Next focus index calculation is too complicated.  I skipped it.
