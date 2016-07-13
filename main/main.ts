@@ -16,7 +16,7 @@ import DummyUserStream from './twitter/dummy_user_stream';
 import setApplicationMenu from './menu';
 import loadConfig from './config';
 
-let win = null as Electron.BrowserWindow;
+let win = null as (Electron.BrowserWindow | null);
 
 const already_running = app.makeSingleInstance(() => {
     if (!win) {
@@ -61,9 +61,9 @@ function isRunFromNpmPackageOnDarwin() {
 }
 
 function setupHotkey() {
-    if (global.config.hotkey_accelerator) {
-        const hotkey = global.config.hotkey_accelerator;
-        globalShortcut.register(hotkey, () => win.isFocused() ? win.hide() : win.show());
+    const hotkey = global.config!.hotkey_accelerator;
+    if (hotkey) {
+        globalShortcut.register(hotkey, () => win && (win.isFocused() ? win.hide() : win.show()));
         log.debug('Hot key was set:' + hotkey);
     }
 }
@@ -86,6 +86,11 @@ function startApp(access: AccessToken) {
 
     if (!access.token || !access.token_secret) {
         log.error('Failed to get access tokens');
+        return;
+    }
+
+    if (!win) {
+        log.error('Window does not exist');
         return;
     }
 
@@ -155,21 +160,25 @@ function openWindow(access: AccessToken) {
         setApplicationMenu();
 
         if (process.env.NODE_ENV === 'development') {
-            win.webContents.on('devtools-opened', () => setImmediate(() => win.focus()));
+            win.webContents.on('devtools-opened', () => setImmediate(() => win && win.focus()));
             win.webContents.openDevTools({mode: 'detach'});
         }
 
-        if (!!global.config.sticky_window) {
+        if (!!global.config!.sticky_window) {
+            if (!win) {
+                log.error('Window is already destroyed!');
+                return;
+            }
             log.debug('Sticky mode: On');
             win.setVisibleOnAllWorkspaces(true);
             win.on('blur', () => {
-                if (!win.isFullScreen() && !win.webContents.isDevToolsFocused()) {
+                if (win && !win.isFullScreen() && !win.webContents.isDevToolsFocused()) {
                     win.hide();
                 }
             });
         }
 
-        if (!!global.config.caffeinated) {
+        if (!!global.config!.caffeinated) {
             log.debug('Caffeinated: App suspension will be blocked.');
             powerSaveBlocker.start('prevent-app-suspension');
         }

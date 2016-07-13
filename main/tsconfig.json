@@ -11,6 +11,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noEmitOnError": true,
+    "strictNullChecks": true,
     "target": "es2015",
     "sourceMap": true
   },
