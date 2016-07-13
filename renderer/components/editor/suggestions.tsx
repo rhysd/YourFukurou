@@ -9,6 +9,7 @@ import EditorCompletionState from '../../states/editor_completion';
 import {TwitterUser} from '../../item/tweet';
 import DB from '../../database/db';
 import log from '../../log';
+import {Dispatch} from '../../store';
 
 const Promise = Dexie.Promise;
 export const MaxSuggestions = 5;
@@ -24,7 +25,7 @@ interface EmojiEntryProps extends React.Props<any> {
     text: string;
     name: string;
     focused: boolean;
-    dispatch?: Redux.Dispatch;
+    dispatch?: Dispatch;
 }
 
 export const EmojiEntry = connect()(
@@ -54,7 +55,7 @@ interface ScreenNameEntryProps extends React.Props<any> {
     name: string;
     query: string;
     focused: boolean;
-    dispatch?: Redux.Dispatch;
+    dispatch?: Dispatch;
 }
 
 export const ScreenNameEntry = connect()(
@@ -87,7 +88,7 @@ interface HashtagEntryProps extends React.Props<any> {
     query: string;
     text: string;
     focused: boolean;
-    dispatch?: Redux.Dispatch;
+    dispatch?: Dispatch;
 }
 
 export const HashtagEntry = connect()(

@@ -11,8 +11,9 @@ import {UserTimeline} from '../../states/slave_timeline';
 import log from '../../log';
 import {appendPastItems} from '../../actions';
 import TwitterRestApi from '../../twitter/rest_api';
+import {Dispatch} from '../../store';
 
-export function dispatchOlderTweets(timeline: UserTimeline, dispatch: Redux.Dispatch) {
+export function dispatchOlderTweets(timeline: UserTimeline, dispatch: Dispatch) {
     const items = timeline.items;
     const size = items.size;
     if (size <= 1) {
@@ -44,7 +45,7 @@ interface UserSlaveProps extends React.Props<UserSlave> {
     timeline: UserTimeline;
     owner: TwitterUser;
     friends: List<number>;
-    dispatch: Redux.Dispatch;
+    dispatch: Dispatch;
 }
 
 export default class UserSlave extends React.Component<UserSlaveProps, {}> {

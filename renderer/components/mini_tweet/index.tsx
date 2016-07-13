@@ -11,6 +11,7 @@ import {
     focusOnItem,
     unfocusItem,
 } from '../../actions';
+import {Dispatch} from '../../store';
 
 interface ConnectedProps extends React.Props<any> {
     status: Tweet;
@@ -75,7 +76,7 @@ const MiniTweet: React.StatelessComponent<MiniTweetProps> = props => {
     );
 };
 
-function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+function mapDispatch(dispatch: Dispatch, props: ConnectedProps): DispatchProps {
     return {
         onPicClicked: e => {
             e.stopPropagation();

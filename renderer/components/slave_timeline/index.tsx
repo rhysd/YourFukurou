@@ -7,12 +7,13 @@ import {TwitterUser} from '../../item/tweet';
 import State from '../../states/root';
 import SlaveTimeline, {UserTimeline, ConversationTimeline} from '../../states/slave_timeline';
 import log from '../../log';
+import {Dispatch} from '../../store';
 
 interface SlaveTimelineProps extends React.Props<any> {
     slave: SlaveTimeline;
     friends: List<number>;
     owner: TwitterUser;
-    dispatch?: Redux.Dispatch;
+    dispatch?: Dispatch;
 }
 
 function renderSlave(props: SlaveTimelineProps) {

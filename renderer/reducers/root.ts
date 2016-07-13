@@ -5,8 +5,9 @@ import editorCompletion from './editor_completion';
 import message from './message';
 import tweetMedia from './tweet_media';
 import slaveTimeline from './slave_timeline';
+import State from '../states/root';
 
-const root = combineReducers({
+const root = combineReducers<State>({
     timeline,
     editor,
     editorCompletion,

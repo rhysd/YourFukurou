@@ -2,11 +2,12 @@ import * as React from 'react';
 import IconButton from './icon_button';
 import {dismissMessage} from '../actions';
 import {MessageKind} from '../reducers/message';
+import {Dispatch} from '../store';
 
 interface MessageProps extends React.Props<any> {
     text: string;
     kind: MessageKind;
-    dispatch: Redux.Dispatch;
+    dispatch: Dispatch;
     duration?: number;
 };
 

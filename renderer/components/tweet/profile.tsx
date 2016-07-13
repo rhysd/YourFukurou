@@ -7,6 +7,7 @@ import FollowButton from './follow_button';
 import ExternalLink from '../external_link';
 import {TwitterUser} from '../../item/tweet';
 import {openPicturePreview} from '../../actions';
+import {Dispatch} from '../../store';
 
 type Size = 'normal' | 'big';
 
@@ -155,7 +156,7 @@ export const TwitterProfile: React.StatelessComponent<TwitterProfileProps> = pro
     );
 };
 
-function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+function mapDispatch(dispatch: Dispatch, props: ConnectedProps): DispatchProps {
     return {
         onBannerClick: e => {
             e.stopPropagation();

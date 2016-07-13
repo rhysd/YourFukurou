@@ -8,6 +8,7 @@ import PopupIcon from './popup_icon';
 import UndraggableClickable from '../undraggable_clickable';
 import State from '../../states/root';
 import {TimelineKind} from '../../states/timeline';
+import {Dispatch} from '../../store';
 import {
     focusOnItem,
     unfocusItem,
@@ -76,7 +77,7 @@ const Tweet: React.StatelessComponent<TweetProps> = props => {
     );
 };
 
-function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+function mapDispatch(dispatch: Dispatch, props: ConnectedProps): DispatchProps {
     return {
         onClick: e => {
             e.stopPropagation();

@@ -7,6 +7,7 @@ import Icon from './icon';
 import TweetText from './tweet/text';
 import ExternalLink from './external_link';
 import log from '../log';
+import {Dispatch} from '../store';
 import {
     focusOnItem,
     unfocusItem,
@@ -162,7 +163,7 @@ function renderCollapsed(props: TwitterActivityProps) {
 export const TwitterActivity: React.StatelessComponent<TwitterActivityProps> =
     props => props.collapsed ?  renderCollapsed(props) : renderExpanded(props);
 
-function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+function mapDispatch(dispatch: Dispatch, props: ConnectedProps): DispatchProps {
     return {
         onClick: e => {
             e.stopPropagation();

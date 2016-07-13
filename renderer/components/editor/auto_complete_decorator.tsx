@@ -2,6 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {ContentBlock} from 'draft-js';
 import {updateAutoCompletion, stopAutoCompletion} from '../../actions';
+import {Dispatch} from '../../store';
 
 export type AutoCompleteLabel = 'EMOJI' | 'SCREENNAME' | 'HASHTAG';
 
@@ -24,7 +25,7 @@ export interface AutoCompleteProps extends React.Props<any> {
     dir: string;
     entityKey: string;
     offsetKey: string;
-    dispatch?: Redux.Dispatch;
+    dispatch?: Dispatch;
 }
 
 function createAutoCompleteComponent(label: AutoCompleteLabel) {

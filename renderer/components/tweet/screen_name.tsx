@@ -6,6 +6,7 @@ import {
     addUserTweets,
 } from '../../actions';
 import TwitterRestApi from '../../twitter/rest_api';
+import {Dispatch} from '../../store';
 
 interface ConnectedProps extends React.Props<any> {
     user: TwitterUser;
@@ -35,7 +36,7 @@ export const ScreenName = (props: Props) => {
 };
 
 const dispatchToProps =
-    (dispatch: Redux.Dispatch, props: ConnectedProps) =>
+    (dispatch: Dispatch, props: ConnectedProps) =>
         Object.assign(
             {
                 onClick: (e: React.MouseEvent) => {
