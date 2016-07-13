@@ -14,9 +14,10 @@ import log from './log';
 import notifyTweet from './notification/tweet';
 import notifyLiked from './notification/like';
 import TwitterRestApi from './twitter/rest_api';
+import {Dispatch} from './store';
 import DB from './database/db';
 
-type ThunkAction = (dispatch: Redux.Dispatch, getState: () => State) => void;
+type ThunkAction = (dispatch: Dispatch, getState: () => State) => void;
 
 export function addTweetToTimeline(status: Tweet): ThunkAction {
     return (dispatch, getState) => {

@@ -15,6 +15,7 @@ import KeymapTransition from '../../keybinds/keymap_transition';
 import Tweet from '../../item/tweet';
 import log from '../../log';
 import State from '../../states/root';
+import {Dispatch} from '../../store';
 import EditorCompletionState from '../../states/editor_completion';
 import AutoCompleteSuggestions, {SuggestionItem} from './suggestions';
 import TweetText from '../tweet/text';
@@ -28,7 +29,7 @@ interface TweetEditorProps extends React.Props<any> {
     inReplyTo: Tweet | null;
     completion: EditorCompletionState;
     friends: List<number>;
-    dispatch?: Redux.Dispatch;
+    dispatch?: Dispatch;
 }
 
 // TODO:
@@ -143,7 +144,7 @@ export class TweetEditor extends React.Component<TweetEditorProps, {}> {
         if (!s) {
             return false;
         }
-        this.props.dispatch!(this.getSelectAction(s, completion));
+        this.props.dispatch!(this.getSelectAction(s, completion)!);
         return true;
     }
 

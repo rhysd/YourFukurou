@@ -8,6 +8,7 @@ import {
     openEditorForReply,
 } from '../../actions';
 import TwitterRestApi from '../../twitter/rest_api';
+import {Dispatch} from '../../store';
 
 const electron = global.require('electron');
 const InDebugMode = global.process.env.NODE_ENV === 'development';
@@ -28,13 +29,13 @@ interface DispatchProps {
 
 type OtherActionsButtonProps = ConnectedProps & DispatchProps & React.Props<any>;
 
-function statusUrlToClipboard(status: Tweet, dispatch: Redux.Dispatch) {
+function statusUrlToClipboard(status: Tweet, dispatch: Dispatch) {
     const url = status.getMainStatus().statusPageUrl();
     electron.clipboard.write({ text: url });
     dispatch(showMessage('Copied status URL to clipboard.', 'info'));
 }
 
-function copyJson(status: Tweet, dispatch: Redux.Dispatch) {
+function copyJson(status: Tweet, dispatch: Dispatch) {
     const json = JSON.stringify(status.json, null, 2);
     electron.clipboard.write({ text: json });
     dispatch(showMessage('Copied status JSON to clipboard.', 'info'));
@@ -56,7 +57,7 @@ function renderDeleteThisTweet(props: OtherActionsButtonProps) {
     );
 }
 
-function correctThisTweet(status: Tweet, owner: TwitterUser, dispatch: Redux.Dispatch) {
+function correctThisTweet(status: Tweet, owner: TwitterUser, dispatch: Dispatch) {
     TwitterRestApi.destroyStatus(status.id).then(() => {
         // Note:
         // No need to send response to renderer process because
@@ -150,7 +151,7 @@ const OtherActionsButton = (props: OtherActionsButtonProps) => {
     );
 };
 
-function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+function mapDispatch(dispatch: Dispatch, props: ConnectedProps): DispatchProps {
     return {
         onDeleteTweet: e => {
             e.stopPropagation();

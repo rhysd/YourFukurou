@@ -6,6 +6,7 @@ import {
     addUserTweets,
 } from '../actions';
 import TwitterRestApi from '../twitter/rest_api';
+import {Dispatch} from '../store';
 
 interface ConnectedProps {
     user: TwitterUser;
@@ -70,7 +71,7 @@ export class Icon extends React.Component<IconProps, {}> {
     }
 }
 
-function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+function mapDispatch(dispatch: Dispatch, props: ConnectedProps): DispatchProps {
     return {
         onClick: e => {
             e.stopPropagation();

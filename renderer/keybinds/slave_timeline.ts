@@ -138,8 +138,7 @@ function replyOrCompleteMissingStatuses() {
     if (item instanceof Tweet) {
         reply(item);
     } else if (item instanceof Separator) {
-        const i = tl.focus_index;
-        if (i !== null && tl instanceof UserTimeline) {
+        if (tl instanceof UserTimeline && tl.focus_index !== null) {
             dispatchOlderTweets(tl, Store.dispatch);
         }
     }

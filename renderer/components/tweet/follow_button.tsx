@@ -4,6 +4,7 @@ import {List} from 'immutable';
 import {TwitterUser} from '../../item/tweet';
 import {showMessage} from '../../actions';
 import TwitterRestApi from '../../twitter/rest_api';
+import {Dispatch} from '../../store';
 
 interface ConnectedProps extends React.Props<any> {
     user: TwitterUser;
@@ -32,7 +33,7 @@ export const FollowButton = (props: FollowButtonProps) => {
     );
 };
 
-function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+function mapDispatch(dispatch: Dispatch, props: ConnectedProps): DispatchProps {
     return {
         onClick: e => {
             e.stopPropagation();

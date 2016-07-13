@@ -11,6 +11,7 @@ import {
     unlikeSucceeded,
 } from '../../actions';
 import TwitterRestApi from '../../twitter/rest_api';
+import {Dispatch} from '../../store';
 
 type TweetActionKind = 'reply' | 'like' | 'retweet';
 
@@ -26,7 +27,7 @@ interface DispatchProps {
 
 type TweetActionButtonProps = ConnectedProps & DispatchProps;
 
-function onLikeClicked(status: Tweet, dispatch: Redux.Dispatch) {
+function onLikeClicked(status: Tweet, dispatch: Dispatch) {
     if (status.favorited) {
         TwitterRestApi.unlike(status.id).then(json => {
             dispatch(unlikeSucceeded(new Tweet(json)));
@@ -38,7 +39,7 @@ function onLikeClicked(status: Tweet, dispatch: Redux.Dispatch) {
     }
 }
 
-function onRetweetClicked(status: Tweet, dispatch: Redux.Dispatch) {
+function onRetweetClicked(status: Tweet, dispatch: Dispatch) {
     if (status.user.protected) {
         dispatch(showMessage("Cannot retweet protected user's tweet", 'error'));
         return;
@@ -106,7 +107,7 @@ export const TweetActionButton = (props: TweetActionButtonProps) => {
     </div>;
 };
 
-function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+function mapDispatch(dispatch: Dispatch, props: ConnectedProps): DispatchProps {
     return {
         onClick: e => {
             e.stopPropagation();

@@ -6,6 +6,7 @@ import TweetText from '../tweet/text';
 import ScreenName from '../tweet/screen_name';
 import {renderPicIcon} from './index';
 import {openPicturePreview} from '../../actions';
+import {Dispatch} from '../../store';
 
 interface ConnectedProps extends React.Props<any> {
     status: Tweet;
@@ -52,7 +53,7 @@ export const MiniTweetText = (props: MiniTweetTextProps) => {
     );
 };
 
-function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
+function mapDispatch(dispatch: Dispatch, props: ConnectedProps): DispatchProps {
     return {
         onClick: e => {
             e.stopPropagation();

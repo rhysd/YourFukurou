@@ -23,6 +23,7 @@ import {
     closeSlaveTimeline,
 } from '../actions';
 import Config from '../config';
+import {Dispatch} from '../store';
 
 interface TimelineProps extends React.Props<any> {
     message: MessageState;
@@ -33,7 +34,7 @@ interface TimelineProps extends React.Props<any> {
     focus_index: number | null;
     friends: List<number>;
     overlay: boolean;
-    dispatch?: Redux.Dispatch;
+    dispatch?: Dispatch;
 }
 
 function nop() {

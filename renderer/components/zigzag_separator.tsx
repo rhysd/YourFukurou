@@ -1,12 +1,13 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 import {completeMissingStatuses} from '../actions';
+import {Dispatch} from '../store';
 
 interface Props extends React.Props<ZigZagSeparator> {
     itemIndex?: number;
     focused?: boolean;
     onClick?: (e: React.MouseEvent) => void;
-    dispatch: Redux.Dispatch;
+    dispatch: Dispatch;
 }
 
 interface State {

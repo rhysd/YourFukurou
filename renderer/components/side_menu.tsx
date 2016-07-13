@@ -11,6 +11,7 @@ import {
 import {TwitterUser} from '../item/tweet';
 import {TimelineKind, Notified} from '../states/timeline';
 import log from '../log';
+import {Dispatch} from '../store';
 
 const {shell} = global.require('electron');
 
@@ -131,7 +132,7 @@ function select(state: State) {
     };
 }
 
-function mapDispatch(dispatch: Redux.Dispatch) {
+function mapDispatch(dispatch: Dispatch) {
     return {
         onEdit: () => {
             dispatch(toggleEditor());

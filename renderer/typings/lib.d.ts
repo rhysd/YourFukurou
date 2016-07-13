@@ -19,12 +19,6 @@ declare module 'why-did-you-update' {
     export function whyDidYouUpdate(react: typeof __React, options?: Options): void;
 }
 
-declare namespace Redux {
-    interface DispatchProps {
-        dispatch: Redux.Dispatch;
-    }
-}
-
 /*
  * Shims for ES2015 APIs
  */
