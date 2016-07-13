@@ -8,7 +8,7 @@ export default class EditorCompletionState {
         public pos_top: number,
         public pos_left: number,
         public suggestions: SuggestionItem[],
-        public focus_idx: number | null
+        public focus_idx: number | null,
     ) {}
 
     searchSuggestions(suggestions: SuggestionItem[], query: string, top: number, left: number, label: AutoCompleteLabel) {
@@ -21,7 +21,7 @@ export default class EditorCompletionState {
                 top,
                 left,
                 suggestions,
-                null
+                null,
             );
         }
         return new EditorCompletionState(
@@ -41,7 +41,7 @@ export default class EditorCompletionState {
             this.pos_top,
             this.pos_left,
             this.suggestions,
-            new_id
+            new_id,
         );
     }
 

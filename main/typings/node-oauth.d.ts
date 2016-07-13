@@ -10,33 +10,33 @@ declare module 'oauth' {
             authorizeCallback: string,
             signatureMethod: string,
             nonceSize?: number,
-            customHeaders?: Object
+            customHeaders?: Object,
         );
         setClientOptions(options: Object): void;
         getOAuthAccessToken(
             oauthToken: string,
             oauthTokenSecret: string,
             oauthVerifier: string,
-            callback: RequestTokenCallback
+            callback: RequestTokenCallback,
         ): void;
         getProtectedResource(
             url: string,
             method: string,
             accessToken: string,
             accessTokenSecret: string,
-            callback: Function
+            callback: Function,
         ): void;
         delete(
             url: string,
             oauth_token: string,
             oauth_token_secret: string,
-            callback: Function
+            callback: Function,
         ): void;
         get(
             url: string,
             oauth_token: string,
             oauth_token_secret: string,
-            callback: Function
+            callback: Function,
         ): void;
         put(
             url: string,
@@ -44,26 +44,26 @@ declare module 'oauth' {
             oauth_token_secret: string,
             post_body: any,
             post_content_type: any,
-            callback: Function
+            callback: Function,
         ): void;
         getOAuthRequestToken(
             extraParams: Object,
-            callback: RequestTokenCallback
+            callback: RequestTokenCallback,
         ): void;
         getOAuthRequestToken(
-            callback: RequestTokenCallback
+            callback: RequestTokenCallback,
         ): void;
         signUrl(
             url: string,
             oauth_token: string,
             oauth_token_secret: string,
-            method: string
+            method: string,
         ): string;
         autoHeader(
             url: string,
             oauth_token: string,
             oauth_token_secret: string,
-            method: string
+            method: string,
         ): Object;
     }
 

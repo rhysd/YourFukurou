@@ -17,7 +17,7 @@ function editReply(in_reply_to: Tweet) {
     }
     Store.dispatch(openEditorForReply(
         in_reply_to,
-        Store.getState().timeline.user
+        Store.getState().timeline.user,
     ));
 }
 

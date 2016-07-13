@@ -39,7 +39,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
             <span
                 className={classNames(
                     'tweet__primary-created-at',
-                    {'tweet__primary-created-at_focused': this.props.focused}
+                    {'tweet__primary-created-at_focused': this.props.focused},
                 )}
                 onClick={this.props.onClickConversation}
             >
@@ -56,7 +56,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
             <div
                 className={classNames(
                     'tweet__primary-conversation',
-                    {'tweet__primary-conversation_focused': this.props.focused}
+                    {'tweet__primary-conversation_focused': this.props.focused},
                 )}
                 onClick={this.props.onClickConversation}
             >
@@ -96,7 +96,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                     <div
                         className={classNames(
                             'tweet-actions',
-                            {'tweet-actions_focused': focused}
+                            {'tweet-actions_focused': focused},
                         )}
                         style={{display: focused ? 'flex' : 'none'}}
                         ref={r => {this.actions_elem = r; }}

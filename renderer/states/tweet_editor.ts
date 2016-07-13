@@ -17,14 +17,14 @@ export default class TweetEditorState {
     constructor(
         public core: EditorState,
         public is_open: boolean,
-        public in_reply_to_status: Tweet | null
+        public in_reply_to_status: Tweet | null,
     ) {}
 
     onDraftEditorChange(new_core: EditorState) {
         return new TweetEditorState(
             new_core,
             this.is_open,
-            this.in_reply_to_status
+            this.in_reply_to_status,
         );
     }
 
@@ -32,7 +32,7 @@ export default class TweetEditorState {
         return new TweetEditorState(
             EditorState.createEmpty(editorDecolator),
             this.is_open,
-            null
+            null,
         );
     }
 
@@ -57,15 +57,15 @@ export default class TweetEditorState {
             EditorState.push(
                 this.core,
                 next_content,
-                'insert-characters'
+                'insert-characters',
             ),
-            next_content.getSelectionAfter()
+            next_content.getSelectionAfter(),
         );
 
         return new TweetEditorState(
             next_editor,
             this.is_open,
-            this.in_reply_to_status
+            this.in_reply_to_status,
         );
     }
 
@@ -74,7 +74,7 @@ export default class TweetEditorState {
             EditorState.push(
                 this.core,
                 ContentState.createFromText(text),
-                'insert-characters'
+                'insert-characters',
             )
         );
     }
@@ -114,7 +114,7 @@ export default class TweetEditorState {
         return new TweetEditorState(
             next_core,
             true,
-            in_reply_to
+            in_reply_to,
         );
     }
 
@@ -123,7 +123,7 @@ export default class TweetEditorState {
         return new TweetEditorState(
             preset_text ? this.setTextToEditor(preset_text) : this.core,
             true,
-            null
+            null,
         );
     }
 
@@ -133,7 +133,7 @@ export default class TweetEditorState {
             EditorState.push(
                 this.core,
                 ContentState.createFromText(''),
-                'remove-range'
+                'remove-range',
             ),
             false,
             null
@@ -149,5 +149,5 @@ export const DefaultTweetEditorState =
     new TweetEditorState(
         EditorState.createEmpty(editorDecolator),
         false,
-        null
+        null,
     );

@@ -28,7 +28,7 @@ function renderQuoted(s: Tweet, focused: boolean, onClick: (e: React.MouseEvent)
         <div
             className={classNames(
                 'mini-tweet__quoted',
-                {'mini-tweet__quote_focused': focused}
+                {'mini-tweet__quote_focused': focused},
             )}
             title={q.text}
         >

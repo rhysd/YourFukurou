@@ -9,7 +9,7 @@ export default function editorCompletion(state: EditorCompletionState = DefaultE
                 action.query,
                 action.top,
                 action.left,
-                action.completion_label
+                action.completion_label,
             );
         case 'DownAutoCompletionFocus':      return state.downFocus();
         case 'UpAutoCompletionFocus':        return state.upFocus();

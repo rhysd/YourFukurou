@@ -35,7 +35,7 @@ export const SideMenuButton = (props: SideMenuButtonProps) => {
             <IconButton
                 className={classNames(
                     'side-menu__button',
-                    {'side-menu__button_active': props.active}
+                    {'side-menu__button_active': props.active},
                 )}
                 name={props.name}
                 tip={props.tip}
@@ -148,5 +148,5 @@ function mapDispatch(dispatch: Redux.Dispatch) {
 export default connect(
     select,
     mapDispatch,
-    (s, d) => Object.assign({}, s, d)
+    (s, d) => Object.assign({}, s, d),
 )(SideMenu as React.StatelessComponent<Props>);

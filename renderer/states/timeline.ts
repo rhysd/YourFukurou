@@ -99,7 +99,7 @@ export default class TimelineState {
         public rejected_ids: List<number>,
         public no_retweet_ids: List<number>,
         public focus_index: number | null,
-        public friend_ids: List<number>
+        public friend_ids: List<number>,
     ) {}
 
     updateActivityInMention(kind: TimelineActivityKind, status: Tweet, from: TwitterUser): [List<Item>, number | null] {
@@ -350,7 +350,7 @@ export default class TimelineState {
 
         const notified = this.updateNotified(
             should_add_to.home    && this.kind !== 'home'    || this.notified.home,
-            should_add_to.mention && this.kind !== 'mention' || this.notified.mention
+            should_add_to.mention && this.kind !== 'mention' || this.notified.mention,
         );
 
         return this.update({home, mention, notified, focus_index});
@@ -420,7 +420,7 @@ export default class TimelineState {
         }
         const notified = this.updateNotified(
             kind === 'home' ? false : this.notified.home,
-            kind === 'mention' ? false : this.notified.mention
+            kind === 'mention' ? false : this.notified.mention,
         );
         return this.update({kind, notified, focus_index: null});
     }
@@ -687,7 +687,7 @@ export default class TimelineState {
             next.rejected_ids   === undefined ? this.rejected_ids : next.rejected_ids,
             next.no_retweet_ids === undefined ? this.no_retweet_ids : next.no_retweet_ids,
             next.focus_index    === undefined ? this.focus_index : next.focus_index,
-            next.friend_ids     === undefined ? this.friend_ids : next.friend_ids
+            next.friend_ids     === undefined ? this.friend_ids : next.friend_ids,
         );
     }
 }
@@ -702,6 +702,6 @@ export const DefaultTimelineState =
         List<number>(),
         List<number>(),
         null,
-        List<number>()
+        List<number>(),
     );
 

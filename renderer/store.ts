@@ -4,6 +4,6 @@ import {createStore, applyMiddleware} from 'redux';
 
 export default createStore(
     root,
-    applyMiddleware(thunk)
+    applyMiddleware(thunk),
 );
 // export default applyMiddleware(thunk)(createStore)(root);

@@ -18,7 +18,7 @@ function retweetedBy(tw: Tweet, focused: boolean) {
         <div
             className={classNames(
                 'tweet__secondary-retweetedby',
-                {'tweet__secondary-retweetedby_focused': focused}
+                {'tweet__secondary-retweetedby_focused': focused},
             )}
         >
             <i className="fa fa-retweet"/> <ScreenName user={tw.user}/> <Icon size={12} user={tw.user}/>
@@ -33,7 +33,7 @@ const TweetSecondary = (props: TweetSecondaryProps) => {
         <ScreenName
             className={classNames(
                 'tweet__secondary-screenname',
-                {'tweet__secondary-screenname_focused': focused}
+                {'tweet__secondary-screenname_focused': focused},
             )}
             user={user}
         />

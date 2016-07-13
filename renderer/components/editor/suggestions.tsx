@@ -37,7 +37,7 @@ export const EmojiEntry = connect()(
             <div
                 className={classNames(
                     'autocomplete__suggestion-item',
-                    {'autocomplete__suggestion-item_focused': props.focused}
+                    {'autocomplete__suggestion-item_focused': props.focused},
                 )}
                 onClick={onClick}
             >
@@ -67,7 +67,7 @@ export const ScreenNameEntry = connect()(
             <div
                 className={classNames(
                     'autocomplete__suggestion-item',
-                    {'autocomplete__suggestion-item_focused': props.focused}
+                    {'autocomplete__suggestion-item_focused': props.focused},
                 )}
                 onClick={onClick}
             >
@@ -100,7 +100,7 @@ export const HashtagEntry = connect()(
             <div
                 className={classNames(
                     'autocomplete__suggestion-item',
-                    {'autocomplete__suggestion-item_focused': props.focused}
+                    {'autocomplete__suggestion-item_focused': props.focused},
                 )}
                 onClick={onClick}
             >

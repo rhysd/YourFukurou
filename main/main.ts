@@ -190,7 +190,7 @@ app.once(
     () => load_config_and_authenticate
         .then(openWindow)
         .then(startApp)
-        .catch(e => log.error('Unexpected error on "ready" callback:', e))
+        .catch(e => log.error('Unexpected error on "ready" callback:', e)),
 );
 
 app.on('activate', () => {

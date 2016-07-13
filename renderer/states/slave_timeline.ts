@@ -20,7 +20,7 @@ export class UserTimeline implements SlaveTimeline {
     constructor(
         public user: TwitterUser,
         public items: List<Item> = List<Item>([new Separator()]),
-        public focus_index: number | null = null
+        public focus_index: number | null = null,
     ) {
         KeymapTransition.enterSlaveTimeline();
     }
@@ -38,7 +38,7 @@ export class UserTimeline implements SlaveTimeline {
         return new UserTimeline(
             this.user,
             next_items,
-            focus_idx
+            focus_idx,
         );
     }
 
@@ -47,7 +47,7 @@ export class UserTimeline implements SlaveTimeline {
         return new UserTimeline(
             this.user,
             next_items,
-            this.focus_index
+            this.focus_index,
         );
     }
 
@@ -95,7 +95,7 @@ export class UserTimeline implements SlaveTimeline {
         return new UserTimeline(
             this.user,
             this.items,
-            idx
+            idx,
         );
     }
 }
@@ -107,7 +107,7 @@ export class ConversationTimeline implements SlaveTimeline {
 
     constructor(
         public items: List<Tweet>,
-        public focus_index: number | null = null
+        public focus_index: number | null = null,
     ) {
         KeymapTransition.enterSlaveTimeline();
     }
@@ -162,7 +162,7 @@ export class ConversationTimeline implements SlaveTimeline {
         }
         return new ConversationTimeline(
             this.items,
-            idx
+            idx,
         );
     }
 }

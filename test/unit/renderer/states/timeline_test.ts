@@ -42,7 +42,7 @@ function getRandomTweets() {
 function getState(
     home: Item[] = [],
     kind: TimelineKind = 'home',
-    mention: Item[] = []
+    mention: Item[] = [],
 ) {
     return DefaultTimelineState.update({
         kind,
@@ -90,7 +90,7 @@ test('getCurrentTimeline() selects current displayed timeline', t => {
     const s = getState(
         [tw, tw, tw],
         'home',
-        [rp, rp]
+        [rp, rp],
     );
     t.is(s.getCurrentTimeline().size, 3);
     t.is((s.getCurrentTimeline().get(0) as Tweet).id, tw.id);
@@ -98,7 +98,7 @@ test('getCurrentTimeline() selects current displayed timeline', t => {
     const s2 = getState(
         [tw, tw, tw],
         'mention',
-        [rp, rp]
+        [rp, rp],
     );
     t.is(s2.getCurrentTimeline().size, 2);
     t.is((s2.getCurrentTimeline().get(0) as Tweet).id, rp.id);
@@ -111,7 +111,7 @@ test('switchTimeline() changes current timeline kind', t => {
     const s = getState(
         [tw, tw, tw],
         'home',
-        [rp, rp]
+        [rp, rp],
     );
 
     t.is(s.kind, 'home');
@@ -226,7 +226,7 @@ test('shouldAddToTimeline() considers plugin', t => {
 
     setPluginFilters(
         (tweet: Tweet) => tw.id !== tweet.id,
-        (tweet: Tweet) => rp.id !== tweet.id
+        (tweet: Tweet) => rp.id !== tweet.id,
     );
 
     const should_add_tweet_to = s.shouldAddToTimeline(tw);
@@ -304,7 +304,7 @@ test('moveing focus randomly doesnot raise an error', t => {
         }
         t.true(
             s.focus_index !== undefined,
-            `before: ${prev.focus_index}, after: ${s.focus_index}, r: ${r}`
+            `before: ${prev.focus_index}, after: ${s.focus_index}, r: ${r}`,
         );
     }
 });
@@ -469,7 +469,7 @@ test('deleteStatusWithId() deletes statuses in timelines', t => {
     t.is(s1.mention.size, 2);
     t.deepEqual(
         s1.home.map(i => (i as Tweet).id).toArray(),
-        [tw3.id, rp.id, tw2.id, rt.id]
+        [tw3.id, rp.id, tw2.id, rt.id],
     );
 
     const s2 = s.deleteStatusWithId(tw2.id);
@@ -477,7 +477,7 @@ test('deleteStatusWithId() deletes statuses in timelines', t => {
     t.is(s2.mention.size, 2);
     t.deepEqual(
         s2.home.map(i => (i as Tweet).id).toArray(),
-        [tw3.id, rp.id, tw.id, rt.id]
+        [tw3.id, rp.id, tw.id, rt.id],
     );
 
     const s3 = s.deleteStatusWithId(rt.retweeted_status.id);
@@ -485,21 +485,21 @@ test('deleteStatusWithId() deletes statuses in timelines', t => {
     t.is(s3.mention.size, 1);
     t.deepEqual(
         s3.home.map(i => (i as Tweet).id).toArray(),
-        [rp.id, tw.id, tw2.id]
+        [rp.id, tw.id, tw2.id],
     );
     t.deepEqual(
         s3.mention.map(i => (i as Tweet).id).toArray(),
-        [rp.id]
+        [rp.id],
     );
 
     const s4 = s.deleteStatusWithId('123456');
     t.deepEqual(
         s4.home.map(i => (i as Tweet).id).toArray(),
-        s.home.map(i => (i as Tweet).id).toArray()
+        s.home.map(i => (i as Tweet).id).toArray(),
     );
     t.deepEqual(
         s4.mention.map(i => (i as Tweet).id).toArray(),
-        s.mention.map(i => (i as Tweet).id).toArray()
+        s.mention.map(i => (i as Tweet).id).toArray(),
     );
 });
 

@@ -176,7 +176,7 @@ declare namespace DraftJS {
         create(
             type: EntityType,
             mutability: EntityMutability,
-            data?: Object
+            data?: Object,
         ): string;
         add(instance: EntityInstance): string;
         get(key: string): EntityInstance;
@@ -228,7 +228,7 @@ declare module 'draft-js' {
         insertAtomicBlock(
             editorState: EditorState,
             entitiyKey: string,
-            character: string
+            character: string,
         ): void;
     };
 
@@ -250,11 +250,11 @@ declare module 'draft-js' {
 
         findStyleRanges(
             filterFn: (value: CharacterMetadata) => boolean,
-            callback: (start: number, end: number) => void
+            callback: (start: number, end: number) => void,
         ): void;
         findEntityRanges(
             filterFn: (value: CharacterMetadata) => boolean,
-            callback: (start: number, end: number) => void
+            callback: (start: number, end: number) => void,
         ): void;
     }
     export interface ContentBlock extends Immutable.Map<string, any> {
@@ -368,17 +368,17 @@ declare module 'draft-js' {
         static push(
             editorState: EditorState,
             contentState: ContentState,
-            changeType: DraftJS.EditorChangeType
+            changeType: DraftJS.EditorChangeType,
         ): EditorState;
         static undo(editorState: EditorState): EditorState;
         static redo(editorState: EditorState): EditorState;
         static acceptSelection(
             editorState: EditorState,
-            selectionState: SelectionState
+            selectionState: SelectionState,
         ): EditorState;
         static forceSelection(
             editorState: EditorState,
-            selectionState: SelectionState
+            selectionState: SelectionState,
         ): EditorState;
         static moveSelectionToEnd(editorState: EditorState): EditorState;
         static moveFocusToEnd(editorState: EditorState): EditorState;
@@ -563,7 +563,7 @@ declare module 'draft-js' {
             rangeToReplace: SelectionState,
             text: string,
             inlineStyle?: DraftJS.InlineStyle,
-            entityKey?: string
+            entityKey?: string,
         ): ContentState;
 
         insertText(
@@ -571,54 +571,54 @@ declare module 'draft-js' {
             targetRange: SelectionState,
             text: string,
             inlineStyle?: DraftJS.InlineStyle,
-            entityKey?: string
+            entityKey?: string,
         ): ContentState;
 
         moveText(
             contentState: ContentState,
             removalRange: SelectionState,
-            targetRange: SelectionState
+            targetRange: SelectionState,
         ): ContentState;
 
         replaceWithFragment(
             contentState: ContentState,
             targetRange: SelectionState,
-            fragment: BlockMap
+            fragment: BlockMap,
         ): ContentState;
 
         removeRange(
             contentState: ContentState,
             rangeToRemove: SelectionState,
-            removalDirection: 'backward' | 'forward'
+            removalDirection: 'backward' | 'forward',
         ): ContentState;
 
         splitBlock(
             contentState: ContentState,
-            selectionState: SelectionState
+            selectionState: SelectionState,
         ): ContentState;
 
         applyInlineStyle(
             contentState: ContentState,
             selectionState: SelectionState,
-            inlineStyle: string
+            inlineStyle: string,
         ): ContentState;
 
         removeInlineStyle(
             contentState: ContentState,
             selectionState: SelectionState,
-            inlineStyle: string
+            inlineStyle: string,
         ): ContentState;
 
         setBlockType(
             contentState: ContentState,
             selectionState: SelectionState,
-            blockType: DraftJS.BlockType
+            blockType: DraftJS.BlockType,
         ): ContentState;
 
         applyEntity(
             contentState: ContentState,
             selectionState: SelectionState,
-            entityKey: string
+            entityKey: string,
         ): ContentState;
     };
 

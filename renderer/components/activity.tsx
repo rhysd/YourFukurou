@@ -108,7 +108,7 @@ function renderCreatedAt(status: Tweet) {
         <ExternalLink
             className={classNames(
                 'activity__created-at',
-                {'activity__created-at_focused': true}
+                {'activity__created-at_focused': true},
             )}
             url={status.statusPageUrl()}
         >{status.getCreatedAtString()}</ExternalLink>
@@ -145,7 +145,7 @@ function renderCollapsed(props: TwitterActivityProps) {
         <div
             className={classNames(
                 'activity activity_mini',
-                {'activity_focused': !!focused}
+                {'activity_focused': !!focused},
             )}
             onClick={onClick}
         >

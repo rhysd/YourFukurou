@@ -63,7 +63,7 @@ export default class KeyBinds<ActionType> {
 
     constructor(
         default_map: I.Map<string, ActionType>,
-        public handlers: I.Map<ActionType, () => void>
+        public handlers: I.Map<ActionType, () => void>,
     ) {
         this.enabled = true;
         this.keymap = I.Map<PreparsedSeq, ActionType>(

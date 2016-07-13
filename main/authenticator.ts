@@ -12,10 +12,10 @@ import {OAuth} from 'oauth';
 const config_path = join(app.getPath('userData'), 'tokens.json');
 
 function authenticate_with_request_tokens(
-        oauth: OAuth,
-        request_token: string,
-        request_token_secret: string): Promise<AccessToken> {
-
+    oauth: OAuth,
+    request_token: string,
+    request_token_secret: string,
+): Promise<AccessToken> {
     return new Promise((resolve, reject) => {
         let login_window = new BrowserWindow({
             width: 800,
@@ -80,7 +80,7 @@ export function authenticate(consumer_key: string, consumer_secret: string): Pro
             consumer_secret,
             '1.0A',
             'https://example.com', // Note: Will not be used
-            'HMAC-SHA1'
+            'HMAC-SHA1',
         );
         oauth.getOAuthRequestToken((err, token, token_secret) => {
             log.debug('Request token:', token);

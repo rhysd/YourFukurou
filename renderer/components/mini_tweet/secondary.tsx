@@ -20,7 +20,7 @@ function renderRetweeted(props: MiniTweetSecondaryProps) {
         <div
             className={classNames(
                 'mini-tweet__secondary-retweeted',
-                {'mini-tweet__secondary-retweeted_focused': props.focused}
+                {'mini-tweet__secondary-retweeted_focused': props.focused},
             )}
         >
             <i className="fa fa-retweet"/>
@@ -43,13 +43,13 @@ const MiniTweetSecondary = (props: MiniTweetSecondaryProps) => {
         <div
             className={classNames(
                 'mini-tweet__secondary',
-                {'mini-tweet__secondary_2cols': s.isQuotedTweet()}
+                {'mini-tweet__secondary_2cols': s.isQuotedTweet()},
             )}
         >
             <ScreenName
                 className={classNames(
                     'mini-tweet__secondary-screenname',
-                    {'mini-tweet__secondary-screenname_focused': props.focused}
+                    {'mini-tweet__secondary-screenname_focused': props.focused},
                 )}
                 user={s.user}
             />

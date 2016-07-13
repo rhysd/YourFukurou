@@ -160,7 +160,7 @@ export function createMenuTemplate() {
             {
                 label: 'Bring All to Front',
                 role: 'front',
-            }
+            },
         );
     }
     return Menu.buildFromTemplate(template);

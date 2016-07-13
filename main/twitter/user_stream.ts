@@ -7,7 +7,7 @@ export default class TwitterUserStream {
 
     constructor(
         private sender: Sender,
-        public client: Twit
+        public client: Twit,
     ) {
         this.stream = null;
     }

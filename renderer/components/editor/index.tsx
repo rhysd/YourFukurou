@@ -116,17 +116,17 @@ export class TweetEditor extends React.Component<TweetEditorProps, {}> {
             case 'EMOJI':
                 return selectAutoCompleteSuggestion(
                     suggestion.code!,
-                    completion.query!
+                    completion.query!,
                 );
             case 'SCREENNAME':
                 return selectAutoCompleteSuggestion(
                     suggestion.description + ' ',
-                    completion.query!
+                    completion.query!,
                 );
             case 'HASHTAG':
                 return selectAutoCompleteSuggestion(
                     suggestion.description + ' ',
-                    completion.query!
+                    completion.query!,
                 );
             default:
                 log.error('Invalid completion label on getSelectAction()');

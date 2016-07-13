@@ -19,7 +19,7 @@ const MiniTweetIcon = (props: MiniTweetIconProps) => {
             <img
                 className={classNames(
                     'mini-tweet__icon-image',
-                    {'mini-tweet__icon-image_2cols': props.quoted}
+                    {'mini-tweet__icon-image_2cols': props.quoted},
                 )}
                 src={u.icon_url_73x73}
                 alt={s}
