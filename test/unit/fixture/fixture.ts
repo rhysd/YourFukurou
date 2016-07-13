@@ -24,7 +24,7 @@ export default class Fixture {
             }
             dir = path.dirname(dir);
         }
-        return null;
+        throw new Error(`JSON file for ${name} was not found!`);
     }
 
     readJson<T>(name: string): T {

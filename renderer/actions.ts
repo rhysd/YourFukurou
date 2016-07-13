@@ -176,7 +176,7 @@ export function completeMissingStatuses(sep_index: number, timeline_kind?: Timel
         const timeline = getState().timeline;
         const kind = timeline_kind || timeline.kind;
         const items = timeline.getTimeline(kind);
-        getMissingItemsAt(sep_index, kind, items).then(missings => {
+        getMissingItemsAt(sep_index, kind, items).then((missings: Item[]) => {
             dispatch({
                 type: Kind.CompleteMissingStatuses,
                 timeline: kind,

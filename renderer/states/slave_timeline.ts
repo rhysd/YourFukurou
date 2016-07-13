@@ -51,7 +51,7 @@ export class UserTimeline implements SlaveTimeline {
         );
     }
 
-    close() {
+    close(): null {
         KeymapTransition.escapeFromCurrentKeymaps();
         return null;
     }
@@ -119,7 +119,7 @@ export class ConversationTimeline implements SlaveTimeline {
         return this.items.get(this.focus_index);
     }
 
-    close() {
+    close(): null {
         KeymapTransition.escapeFromCurrentKeymaps();
         return null;
     }
