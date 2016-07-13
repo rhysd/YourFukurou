@@ -15,18 +15,8 @@
     "target": "es2015",
     "sourceMap": true
   },
-  "files": [
-    "authenticator.ts",
-    "config.ts",
-    "main.ts",
-    "menu.ts",
-    "twitter/user_stream.ts",
-    "twitter/dummy_user_stream.ts",
-    "typings/config.d.ts",
-    "typings/loglevel-message-prefix.d.ts",
-    "typings/twit.d.ts",
-    "typings/node-oauth.d.ts",
-    "typings/channel.d.ts",
-    "typings/lib.d.ts"
+  "include": [
+    "**/*.ts",
+    "typings/*.d.ts"
   ]
 }

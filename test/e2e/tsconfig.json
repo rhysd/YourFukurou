@@ -8,18 +8,8 @@
     "noEmitOnError": true,
     "target": "es2015"
   },
-  "files": [
-    "helper/timeouts.ts",
-    "helper/yourfukurou.ts",
-    "page/editor.ts",
-    "page/message.ts",
-    "page/side_menu.ts",
-    "page/timeline.ts",
-    "page/tweet.ts",
-    "story/initial_timeline.ts",
-    "story/send_and_delete_tweet.ts",
-    "story/switch_timeline.ts",
-    "story/actions.ts",
+  "include": [
+    "**/*.ts",
     "typings/spectron.d.ts"
   ]
 }
