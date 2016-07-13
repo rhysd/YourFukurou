@@ -246,7 +246,7 @@ interface Listenable {
 // Need to create common class for MediaPreviewKeyMaps and SlaveTimelineKeyMaps
 export default class SlaveTimelineKeyMaps {
     private keybinds: KeyBinds<SlaveTimelineAction>;
-    private listening: Listenable;
+    private listening: Listenable | null;
     private handler: (e: KeyboardEvent) => void;
 
     constructor() {

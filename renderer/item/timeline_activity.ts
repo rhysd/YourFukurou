@@ -8,8 +8,8 @@ export default class TimelineActivity implements Item {
     constructor(
         public kind: TimelineActivityKind,
         public status: Tweet,
-        public by: TwitterUser[]) {
-    }
+        public by: TwitterUser[],
+    ) {}
 
     notExistsYet(id: number) {
         for (const u of this.by) {

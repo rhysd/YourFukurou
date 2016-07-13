@@ -56,7 +56,7 @@ export default class Accounts {
             })
             .then(num_modified => {
                 if (num_modified > 0) {
-                    return;
+                    return null;
                 }
                 return this.table.add(userToEntry(json));
             })
@@ -92,10 +92,10 @@ export default class Accounts {
                 e.json = u;
                 delete users[e.id];
             })
-            .then(num_modified => {
+            .then(() => {
                 const keys = Object.keys(users);
                 if (keys.length === 0) {
-                    return;
+                    return null;
                 }
                 return this.table.bulkAdd(keys.map(id => userToEntry(users[id])));
             })

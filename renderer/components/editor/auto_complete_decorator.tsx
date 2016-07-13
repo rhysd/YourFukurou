@@ -39,7 +39,7 @@ function createAutoCompleteComponent(label: AutoCompleteLabel) {
 
         updateComplationState() {
             const rect = this.node.getBoundingClientRect();
-            this.props.dispatch(
+            this.props.dispatch!(
                 updateAutoCompletion(rect.left, rect.bottom + 1, this.props.decoratedText, this.label)
             );
         }
@@ -53,7 +53,7 @@ function createAutoCompleteComponent(label: AutoCompleteLabel) {
         }
 
         componentWillUnmount() {
-            this.props.dispatch(stopAutoCompletion());
+            this.props.dispatch!(stopAutoCompletion());
         }
 
         render() {

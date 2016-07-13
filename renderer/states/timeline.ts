@@ -26,21 +26,12 @@ function containsStatusInTimeline(is: List<Item>, t: Tweet) {
 
 function updateStatusIn(items: List<Item>, status: Tweet) {
     const status_id = status.id;
-    const predicate = (item: Item) => {
-        if (item instanceof Tweet) {
-            return item.getMainStatus().id === status_id;
-        } else if (item instanceof TimelineActivity) {
-            return item.status.id === status_id;
-        } else {
-            return false;
-        }
-    };
 
     // Note:
     // One status may appear in timeline twice. (the status itself and RT for it).
     // So we need to search 2 indices for the status in timeline.
 
-    const indices = items.reduce((acc, item, idx) => {
+    const indices = items.reduce((acc: number[], item: Item, idx: number) => {
         if (item instanceof Tweet) {
             if (item.getMainStatus().id === status_id) {
                 acc.push(idx);
@@ -103,15 +94,15 @@ export default class TimelineState {
         public kind: TimelineKind,
         public home: List<Item>,
         public mention: List<Item>,
-        public user: TwitterUser,
+        public user: TwitterUser | null,
         public notified: Notified,
         public rejected_ids: List<number>,
         public no_retweet_ids: List<number>,
-        public focus_index: number,
-        public friend_ids: List<number>
+        public focus_index: number | null,
+        public friend_ids: List<number>,
     ) {}
 
-    updateActivityInMention(kind: TimelineActivityKind, status: Tweet, from: TwitterUser): [List<Item>, number] {
+    updateActivityInMention(kind: TimelineActivityKind, status: Tweet, from: TwitterUser): [List<Item>, number | null] {
         const status_id = status.id;
         const index = this.mention.findIndex(item => {
             if (item instanceof TimelineActivity) {
@@ -178,11 +169,11 @@ export default class TimelineState {
             }
         }
 
-        if (status.isRetweet() && this.rejected_ids.contains(status.retweeted_status.user.id)) {
+        if (status.isRetweet() && this.rejected_ids.contains(status.retweeted_status!.user.id)) {
             return true;
         }
 
-        if (status.isQuotedTweet() && this.rejected_ids.contains(status.quoted_status.user.id)) {
+        if (status.isQuotedTweet() && this.rejected_ids.contains(status.quoted_status!.user.id)) {
             return true;
         }
 
@@ -214,7 +205,7 @@ export default class TimelineState {
 
     // Note:
     // Currently this method is only for home timeline.
-    updateRelatedStatuses(status: Tweet) {
+    updateRelatedStatuses(status: Tweet): List<Item> {
         const s = status.getMainStatus();
         const id = s.id;
         const in_reply_to_id = s.in_reply_to_status_id;
@@ -228,7 +219,7 @@ export default class TimelineState {
                 if (i && i === id) {
                     statuses.push(item);
                 }
-                if (in_reply_to_id === item.id) {
+                if (in_reply_to_id! === item.id) {
                     status.in_reply_to_status = item;
                 }
             }
@@ -239,15 +230,15 @@ export default class TimelineState {
 
         // Note:
         // Update existing statuses in timeline considering the newly added status.
-        return this.home.map(item => {
+        return this.home.map((item: Item) => {
             if (item instanceof Tweet) {
                 const main = item.getMainStatus();
-                if (main.id === in_reply_to_id) {
+                if (main.id === in_reply_to_id!) {
                     const cloned = item.clone();
                     cloned.related_statuses.push(status);
                     log.debug('Related status updated:', cloned.related_statuses, cloned.json);
                     return cloned;
-                } else if (main.in_reply_to_status_id === id) {
+                } else if (main.in_reply_to_status_id! === id) {
                     // Note:
                     // When above 'main.id === in_reply_to_id' condition is met,
                     // it never reaches here because no status can refer the same status
@@ -262,7 +253,7 @@ export default class TimelineState {
         }).toList();
     }
 
-    putInHome(status: Tweet): [List<Item>, number] {
+    putInHome(status: Tweet): [List<Item>, number|null] {
         const home = this.updateRelatedStatuses(status);
         const in_home = this.kind === 'home';
         if (!status.isRetweet()) {
@@ -272,10 +263,10 @@ export default class TimelineState {
             ];
         }
 
-        const status_id = status.retweeted_status.id;
+        const status_id = status.retweeted_status!.id;
         const index = home.findIndex(item => {
             if (item instanceof Tweet) {
-                return item.isRetweet() && item.retweeted_status.id === status_id;
+                return item.isRetweet() && item.retweeted_status!.id === status_id;
             } else {
                 return false;
             }
@@ -290,6 +281,7 @@ export default class TimelineState {
 
         return [
             home.delete(index).unshift(status),
+            // home.delete(index).unshift(status),
             in_home && (this.focus_index < index) ?
                 this.nextFocusIndex(home.size) : this.focus_index,
         ];
@@ -338,7 +330,7 @@ export default class TimelineState {
 
         if (should_add_to.mention) {
             if (status.isRetweet()) {
-                [mention, focus_index] = this.updateActivityInMention('retweeted', status.retweeted_status, status.user);
+                [mention, focus_index] = this.updateActivityInMention('retweeted', status.retweeted_status!, status.user);
             } else {
                 mention = this.mention.unshift(status);
                 if (this.kind === 'mention') {
@@ -358,7 +350,7 @@ export default class TimelineState {
 
         const notified = this.updateNotified(
             should_add_to.home    && this.kind !== 'home'    || this.notified.home,
-            should_add_to.mention && this.kind !== 'mention' || this.notified.mention
+            should_add_to.mention && this.kind !== 'mention' || this.notified.mention,
         );
 
         return this.update({home, mention, notified, focus_index});
@@ -385,8 +377,12 @@ export default class TimelineState {
         return this.update({home, mention, focus_index});
     }
 
-    focusOn(index: number) {
-        const size = this.getCurrentTimeline().size;
+    focusOn(index: number | null) {
+        if (index === null) {
+            return this.update({focus_index: null});
+        }
+        const tl = this.getCurrentTimeline();
+        const size = tl.size;
         if (index < 0 || (size - 1) < index) {
             log.debug('Focus index out of range:', index, size);
             return this;
@@ -414,7 +410,8 @@ export default class TimelineState {
     }
 
     focusBottom() {
-        return this.focusOn(this.getCurrentTimeline().size - 1);
+        const tl = this.getCurrentTimeline();
+        return this.focusOn(tl.size - 1);
     }
 
     switchTimeline(kind: TimelineKind) {
@@ -423,7 +420,7 @@ export default class TimelineState {
         }
         const notified = this.updateNotified(
             kind === 'home' ? false : this.notified.home,
-            kind === 'mention' ? false : this.notified.mention
+            kind === 'mention' ? false : this.notified.mention,
         );
         return this.update({kind, notified, focus_index: null});
     }
@@ -435,7 +432,7 @@ export default class TimelineState {
                     log.debug('Deleted status:', item);
                     return false;
                 }
-                if (item.isRetweet() && item.retweeted_status.id === id) {
+                if (item.isRetweet() && item.retweeted_status!.id === id) {
                     log.debug('Deleted retweet:', item.retweeted_status);
                     return false;
                 }
@@ -501,6 +498,11 @@ export default class TimelineState {
     }
 
     updateUser(update_json: Twitter.User) {
+        if (this.user === null) {
+            log.error('User is not set yet', this);
+            return this;
+        }
+
         const j = this.user.json;
         for (const prop in update_json) {
             const v = (update_json as any)[prop];
@@ -525,8 +527,8 @@ export default class TimelineState {
             case 'mention':
                 return this.mention;
             default:
-                log.error('Invalid timeline:', this.kind);
-                return null;
+                log.error('Invalid timeline kind', this);
+                return List<Item>(); // Fallback
         }
     }
 
@@ -538,7 +540,7 @@ export default class TimelineState {
 
         const predicate = (i: Item) => {
             if (i instanceof Tweet) {
-                if (i.isRetweet() && will_added.indexOf(i.retweeted_status.user.id) !== -1) {
+                if (i.isRetweet() && will_added.indexOf(i.retweeted_status!.user.id) !== -1) {
                     return false;
                 }
                 return will_added.indexOf(i.user.id) === -1;
@@ -566,7 +568,7 @@ export default class TimelineState {
     addNoRetweetUserIds(ids: number[]) {
         const predicate = (i: Item) => {
             if (i instanceof Tweet) {
-                return !i.isRetweet() || ids.indexOf(i.retweeted_status.user.id) === -1;
+                return !i.isRetweet() || ids.indexOf(i.retweeted_status!.user.id) === -1;
             } else {
                 return true;
             }
@@ -583,7 +585,7 @@ export default class TimelineState {
     }
 
     removeRejectedIds(ids: number[]) {
-        const rejected_ids = this.rejected_ids.filter(id => ids.indexOf(id) === -1).toList();
+        const rejected_ids = this.rejected_ids.filter((id: number) => ids.indexOf(id) === -1).toList();
 
         // Note:
         // There is no way to restore muted/blocked tweets in timeline
@@ -591,6 +593,11 @@ export default class TimelineState {
     }
 
     updateActivity(kind: TimelineActivityKind, status: Tweet, from: TwitterUser) {
+        if (this.user === null) {
+            log.error('User is not set yet.');
+            return this;
+        }
+
         if (from.id === this.user.id) {
             // Note:
             // 'favorite' user event on stream is sent both when owner creates and when owner's
@@ -630,7 +637,7 @@ export default class TimelineState {
     }
 
     removeFriends(ids: number[]) {
-        const friend_ids = this.friend_ids.filter(id => ids.indexOf(id) === -1).toList();
+        const friend_ids = this.friend_ids.filter((id: number) => ids.indexOf(id) === -1).toList();
         return this.update({friend_ids});
     }
 
@@ -668,7 +675,7 @@ export default class TimelineState {
         notified?: Notified;
         rejected_ids?: List<number>;
         no_retweet_ids?: List<number>;
-        focus_index?: number;
+        focus_index?: number | null;
         friend_ids?: List<number>;
     }) {
         return new TimelineState(
@@ -680,7 +687,7 @@ export default class TimelineState {
             next.rejected_ids   === undefined ? this.rejected_ids : next.rejected_ids,
             next.no_retweet_ids === undefined ? this.no_retweet_ids : next.no_retweet_ids,
             next.focus_index    === undefined ? this.focus_index : next.focus_index,
-            next.friend_ids     === undefined ? this.friend_ids : next.friend_ids
+            next.friend_ids     === undefined ? this.friend_ids : next.friend_ids,
         );
     }
 }
@@ -695,6 +702,6 @@ export const DefaultTimelineState =
         List<number>(),
         List<number>(),
         null,
-        List<number>()
+        List<number>(),
     );
 

@@ -115,10 +115,11 @@ export class TwitterUser {
         return this.json.profile_link_color;
     }
 
-    get user_site_url() {
-        if (this.json.entities && this.json.entities.url &&
-            this.json.entities.url.urls.length > 0) {
-            return this.json.entities.url.urls[0];
+    get user_site_url(): Twitter.UrlEntity | null {
+        if (this.json.entities &&
+            this.json.entities.url &&
+            this.json.entities.url.urls!.length > 0) {
+            return this.json.entities.url.urls![0];
         } else if (this.json.url) {
             // Note: fallback
             return {
@@ -176,11 +177,11 @@ export class TwitterUser {
 export default class Tweet implements Item {
     public user: TwitterUser;
     public related_statuses: Tweet[];
-    public in_reply_to_status: Tweet;
-    private retweeted_status_memo: Tweet;
-    private quoted_status_memo: Tweet;
-    private parsed_tokens_memo: TweetTextToken[];
-    private created_at_memo: Date;
+    public in_reply_to_status: Tweet | null;
+    private retweeted_status_memo: Tweet | null;
+    private quoted_status_memo: Tweet | null;
+    private parsed_tokens_memo: TweetTextToken[] | null;
+    private created_at_memo: Date | null;
 
     constructor(public json: Twitter.Status) {
         this.user = new TwitterUser(json.user);
@@ -203,7 +204,7 @@ export default class Tweet implements Item {
                 this.created_at_memo = new Date(created_at);
             }
         }
-        return this.created_at_memo;
+        return this.created_at_memo!;
     }
 
     get retweeted() {
@@ -305,7 +306,7 @@ export default class Tweet implements Item {
 
     getMainStatus() {
         if (this.json.retweeted_status) {
-            return this.retweeted_status;
+            return this.retweeted_status!;
         } else {
             return this;
         }

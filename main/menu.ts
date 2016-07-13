@@ -2,7 +2,7 @@ import {join} from 'path';
 import {Menu, shell, app} from 'electron';
 import openAboutWindow from 'about-window';
 
-export function createMenuTemplate(main: Electron.BrowserWindow) {
+export function createMenuTemplate() {
     let help_submenu = [
         {
             label: 'About YourFukurou',
@@ -160,12 +160,12 @@ export function createMenuTemplate(main: Electron.BrowserWindow) {
             {
                 label: 'Bring All to Front',
                 role: 'front',
-            }
+            },
         );
     }
     return Menu.buildFromTemplate(template);
 }
 
-export default function setApplicationMenu(main: Electron.BrowserWindow) {
-    Menu.setApplicationMenu(createMenuTemplate(main));
+export default function setApplicationMenu() {
+    Menu.setApplicationMenu(createMenuTemplate());
 }

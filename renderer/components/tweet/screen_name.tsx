@@ -47,7 +47,7 @@ const dispatchToProps =
                     });
                 },
             },
-            props
+            props,
         );
 
 export default connect(null, dispatchToProps)(ScreenName);

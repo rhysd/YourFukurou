@@ -28,7 +28,7 @@ function renderThumb(entity: Twitter.MediaEntity, nth: number, props: TweetMedia
             className="tweet__media-wrapper"
             onClick={e => {
                 e.stopPropagation();
-                props.dispatch(openPicturePreview(media_urls, nth));
+                props.dispatch!(openPicturePreview(media_urls, nth));
             }}
             key={nth}
         >

@@ -1,7 +1,7 @@
 declare namespace ReactList {
     import React = __React;
     export interface Props extends React.Props<any> {
-        itemRenderer: (index: number, key: string) => React.ReactElement<ReactList>;
+        itemRenderer: (index: number, key: string) => React.ReactElement<ReactList> | undefined;
         length: number;
         type?: 'simple' | 'uniform' | 'variable';
         axis?: 'x' | 'y';

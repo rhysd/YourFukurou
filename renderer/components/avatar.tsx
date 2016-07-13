@@ -1,5 +1,4 @@
 import * as React from 'react';
-const shell = global.require('electron').shell;
 
 interface AvatarProps extends React.Props<any> {
     screenName: string;

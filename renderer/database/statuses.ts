@@ -3,20 +3,17 @@ import {Twitter} from 'twit';
 import log from '../log';
 import Tweet from '../item/tweet';
 
-// https://github.com/dfahlander/Dexie.js#hello-world-typescript
-const Promise = Dexie.Promise;
-
 interface StatusesScheme {
     id: string;
     screen_name: string;
     user_id: number;
-    in_reply_to_status_id: string;
-    in_reply_to_user_id: number;
+    in_reply_to_status_id: string | null;
+    in_reply_to_user_id: number | null;
     created_at: Date;
-    retweeted_status_id: string;
-    retweeted_user_id: number;
-    quoted_status_id: string;
-    quoted_user_id: number;
+    retweeted_status_id: string | null;
+    retweeted_user_id: number | null;
+    quoted_status_id: string | null;
+    quoted_user_id: number | null;
     json: Twitter.Status;
 }
 
@@ -43,13 +40,13 @@ export default class Statuses {
             id: tw.id,
             screen_name: tw.user.screen_name,
             user_id: tw.user.id,
-            in_reply_to_status_id: tw.in_reply_to_status_id,
-            in_reply_to_user_id: tw.in_reply_to_user_id,
+            in_reply_to_status_id: tw.in_reply_to_status_id || null,
+            in_reply_to_user_id: tw.in_reply_to_user_id || null,
             created_at: tw.created_at,
             retweeted_status_id: rt === null ? null : rt.id,
             retweeted_user_id: rt === null ? null : rt.user.id,
-            quoted_status_id: rt === null ? null : qt.id,
-            quoted_user_id: rt === null ? null : qt.user.id,
+            quoted_status_id: qt === null ? null : qt.id,
+            quoted_user_id: qt === null ? null : qt.user.id,
             json: tw.json,
         };
     }

@@ -3,22 +3,20 @@ import {connect} from 'react-redux';
 import {Editor, EditorState, getDefaultKeyBinding} from 'draft-js';
 import {getTweetLength} from 'twitter-text';
 import {List} from 'immutable';
+import {Twitter} from 'twit';
 import {
     changeEditorState,
     closeEditor,
     showMessage,
-    downAutoCompletionFocus,
-    upAutoCompletionFocus,
     selectAutoCompleteSuggestion,
 } from '../../actions';
 import IconButton from '../icon_button';
 import KeymapTransition from '../../keybinds/keymap_transition';
-import Tweet, {TwitterUser} from '../../item/tweet';
+import Tweet from '../../item/tweet';
 import log from '../../log';
 import State from '../../states/root';
 import EditorCompletionState from '../../states/editor_completion';
 import AutoCompleteSuggestions, {SuggestionItem} from './suggestions';
-import {AutoCompleteLabel} from './auto_complete_decorator';
 import TweetText from '../tweet/text';
 import TweetSecondary from '../tweet/secondary';
 import PopupIcon from '../tweet/popup_icon';
@@ -27,9 +25,8 @@ import DB from '../../database/db';
 
 interface TweetEditorProps extends React.Props<any> {
     editor: EditorState;
-    inReplyTo: Tweet;
+    inReplyTo: Tweet | null;
     completion: EditorCompletionState;
-    user: TwitterUser;
     friends: List<number>;
     dispatch?: Redux.Dispatch;
 }
@@ -109,7 +106,7 @@ export class TweetEditor extends React.Component<TweetEditorProps, {}> {
 
     close() {
         this.refs.body.addEventListener('animationend', () => {
-            this.props.dispatch(closeEditor());
+            this.props.dispatch!(closeEditor());
         });
         this.refs.body.className = 'tweet-form animated fadeOutUp';
     }
@@ -118,21 +115,21 @@ export class TweetEditor extends React.Component<TweetEditorProps, {}> {
         switch (completion.label) {
             case 'EMOJI':
                 return selectAutoCompleteSuggestion(
-                    suggestion.code,
-                    completion.query
+                    suggestion.code!,
+                    completion.query!,
                 );
             case 'SCREENNAME':
                 return selectAutoCompleteSuggestion(
                     suggestion.description + ' ',
-                    completion.query
+                    completion.query!,
                 );
             case 'HASHTAG':
                 return selectAutoCompleteSuggestion(
                     suggestion.description + ' ',
-                    completion.query
+                    completion.query!,
                 );
             default:
-                log.error('Invalid completion label:', completion.label);
+                log.error('Invalid completion label on getSelectAction()');
                 return null;
         }
     }
@@ -146,7 +143,7 @@ export class TweetEditor extends React.Component<TweetEditorProps, {}> {
         if (!s) {
             return false;
         }
-        this.props.dispatch(this.getSelectAction(s, completion));
+        this.props.dispatch!(this.getSelectAction(s, completion));
         return true;
     }
 
@@ -156,8 +153,8 @@ export class TweetEditor extends React.Component<TweetEditorProps, {}> {
         if (content.hasText()) {
             const irt = inReplyTo ? inReplyTo.getMainStatus().id : null;
             TwitterRestApi.updateStatus(content.getPlainText(), irt)
-                .then(json => {
-                    dispatch(showMessage('Tweeted!', 'info'));
+                .then((json: Twitter.Status) => {
+                    dispatch!(showMessage('Tweeted!', 'info'));
                     DB.hashtag_completion_history.storeHashtagsInTweet(json);
                     DB.accounts.upCompletionCountOfMentions(json);
 
@@ -219,7 +216,7 @@ export class TweetEditor extends React.Component<TweetEditorProps, {}> {
                         onEscape={() => this.close()}
                         onTab={this.tabHandler}
                         onBlur={this.blurHandler}
-                        onChange={e => this.props.dispatch(changeEditorState(e))}
+                        onChange={e => this.props.dispatch!(changeEditorState(e))}
                         ref="editor"
                     />
                     <div className={'tweet-form__counter tweet-form__counter_' + count_state}>
@@ -244,7 +241,6 @@ function select(state: State): TweetEditorProps {
         editor: state.editor.core,
         inReplyTo: state.editor.in_reply_to_status,
         completion: state.editorCompletion,
-        user: state.timeline.user,
         friends: state.timeline.friend_ids,
     };
 }

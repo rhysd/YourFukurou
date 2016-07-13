@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {Twitter} from 'twit';
 import * as classNames from 'classnames';
-import log from '../../log';
 import Tweet, {TwitterUser} from '../../item/tweet';
 import TweetActionButton from './action_button';
 import TweetText from './text';
@@ -40,7 +39,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
             <span
                 className={classNames(
                     'tweet__primary-created-at',
-                    {'tweet__primary-created-at_focused': this.props.focused}
+                    {'tweet__primary-created-at_focused': this.props.focused},
                 )}
                 onClick={this.props.onClickConversation}
             >
@@ -57,7 +56,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
             <div
                 className={classNames(
                     'tweet__primary-conversation',
-                    {'tweet__primary-conversation_focused': this.props.focused}
+                    {'tweet__primary-conversation_focused': this.props.focused},
                 )}
                 onClick={this.props.onClickConversation}
             >
@@ -66,7 +65,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         );
     }
 
-    renderQuotedStatus(s: Tweet): JSX.Element {
+    renderQuotedStatus(s: Tweet): JSX.Element | undefined {
         const q = s.quoted_status;
         if (q === null) {
             return undefined;
@@ -97,7 +96,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                     <div
                         className={classNames(
                             'tweet-actions',
-                            {'tweet-actions_focused': focused}
+                            {'tweet-actions_focused': focused},
                         )}
                         style={{display: focused ? 'flex' : 'none'}}
                         ref={r => {this.actions_elem = r; }}

@@ -16,7 +16,7 @@ function likedActivity() {
     return new TimelineActivity(
         'liked',
         fixture.tweet(),
-        [fixture.user()]
+        [fixture.user()],
     );
 }
 
@@ -24,7 +24,7 @@ function retweetedActivity() {
     return new TimelineActivity(
         'retweeted',
         fixture.tweet(),
-        [fixture.user()]
+        [fixture.user()],
     );
 }
 

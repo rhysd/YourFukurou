@@ -1,7 +1,6 @@
 import {BrowserWindow} from 'electron';
 import log from './log';
 import {ipcMain as ipc} from 'electron';
-import {readFile} from 'fs';
 
 export class Sender {
     constructor(

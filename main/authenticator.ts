@@ -12,10 +12,10 @@ import {OAuth} from 'oauth';
 const config_path = join(app.getPath('userData'), 'tokens.json');
 
 function authenticate_with_request_tokens(
-        oauth: OAuth,
-        request_token: string,
-        request_token_secret: string): Promise<AccessToken> {
-
+    oauth: OAuth,
+    request_token: string,
+    request_token_secret: string,
+): Promise<AccessToken> {
     return new Promise((resolve, reject) => {
         let login_window = new BrowserWindow({
             width: 800,
@@ -24,9 +24,9 @@ function authenticate_with_request_tokens(
                 webSecurity: true,
                 nodeIntegration: false,
             },
-        });
+        }) as (Electron.BrowserWindow | null);
 
-        login_window.webContents.on('will-navigate', (event: Event, url: string) => {
+        login_window!.webContents.on('will-navigate', (event: Event, url: string) => {
             event.preventDefault();
             log.debug('Login window: will-navigate: ', url);
 
@@ -39,7 +39,7 @@ function authenticate_with_request_tokens(
                 log.debug('access token:', token);
 
                 if (err) {
-                    setTimeout(() => login_window.close(), 0);
+                    setTimeout(() => login_window!.close(), 0);
                     reject(err);
                     return;
                 }
@@ -55,18 +55,18 @@ function authenticate_with_request_tokens(
                     if (e) {
                         log.warn('Failed to store tokens to a token.json', e);
                     }
-                    login_window.close();
+                    login_window!.close();
                 });
             });
         });
 
-        login_window.on('closed', () => {
+        login_window!.on('closed', () => {
             login_window = null;
         });
 
         const login_url = `https://twitter.com/oauth/authenticate?oauth_token=${request_token}`;
         log.debug('Start authentication:', login_url);
-        login_window.loadURL(login_url);
+        login_window!.loadURL(login_url);
     });
 }
 
@@ -80,7 +80,7 @@ export function authenticate(consumer_key: string, consumer_secret: string): Pro
             consumer_secret,
             '1.0A',
             'https://example.com', // Note: Will not be used
-            'HMAC-SHA1'
+            'HMAC-SHA1',
         );
         oauth.getOAuthRequestToken((err, token, token_secret) => {
             log.debug('Request token:', token);

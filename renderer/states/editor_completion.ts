@@ -1,14 +1,14 @@
 import {AutoCompleteLabel} from '../components/editor/auto_complete_decorator';
-import {searchSuggestionItems, SuggestionItem} from '../components/editor/suggestions';
+import {SuggestionItem} from '../components/editor/suggestions';
 
 export default class EditorCompletionState {
     constructor(
-        public query: string,
-        public label: AutoCompleteLabel,
+        public query: string | null,
+        public label: AutoCompleteLabel | null,
         public pos_top: number,
         public pos_left: number,
         public suggestions: SuggestionItem[],
-        public focus_idx: number
+        public focus_idx: number | null,
     ) {}
 
     searchSuggestions(suggestions: SuggestionItem[], query: string, top: number, left: number, label: AutoCompleteLabel) {
@@ -21,7 +21,7 @@ export default class EditorCompletionState {
                 top,
                 left,
                 suggestions,
-                null
+                null,
             );
         }
         return new EditorCompletionState(
@@ -41,7 +41,7 @@ export default class EditorCompletionState {
             this.pos_top,
             this.pos_left,
             this.suggestions,
-            new_id
+            new_id,
         );
     }
 

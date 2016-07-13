@@ -6,7 +6,6 @@ import * as classNames from 'classnames';
 import {AutoCompleteLabel} from './auto_complete_decorator';
 import {selectAutoCompleteSuggestion} from '../../actions';
 import EditorCompletionState from '../../states/editor_completion';
-import {TwitterUser} from '../../item/tweet';
 import DB from '../../database/db';
 import log from '../../log';
 
@@ -31,14 +30,14 @@ export const EmojiEntry = connect()(
     (props: EmojiEntryProps) => {
         function onClick(e: React.MouseEvent) {
             e.preventDefault();
-            props.dispatch(selectAutoCompleteSuggestion(props.code, props.text));
+            props.dispatch!(selectAutoCompleteSuggestion(props.code, props.text));
         }
 
         return (
             <div
                 className={classNames(
                     'autocomplete__suggestion-item',
-                    {'autocomplete__suggestion-item_focused': props.focused}
+                    {'autocomplete__suggestion-item_focused': props.focused},
                 )}
                 onClick={onClick}
             >
@@ -61,14 +60,14 @@ export const ScreenNameEntry = connect()(
     (props: ScreenNameEntryProps) => {
         function onClick(e: React.MouseEvent) {
             e.preventDefault();
-            props.dispatch(selectAutoCompleteSuggestion(props.name + ' ', props.query));
+            props.dispatch!(selectAutoCompleteSuggestion(props.name + ' ', props.query));
         }
 
         return (
             <div
                 className={classNames(
                     'autocomplete__suggestion-item',
-                    {'autocomplete__suggestion-item_focused': props.focused}
+                    {'autocomplete__suggestion-item_focused': props.focused},
                 )}
                 onClick={onClick}
             >
@@ -94,14 +93,14 @@ export const HashtagEntry = connect()(
     (props: HashtagEntryProps) => {
         function onClick(e: React.MouseEvent) {
             e.preventDefault();
-            props.dispatch(selectAutoCompleteSuggestion(props.text + ' ', props.query));
+            props.dispatch!(selectAutoCompleteSuggestion(props.text + ' ', props.query));
         }
 
         return (
             <div
                 className={classNames(
                     'autocomplete__suggestion-item',
-                    {'autocomplete__suggestion-item_focused': props.focused}
+                    {'autocomplete__suggestion-item_focused': props.focused},
                 )}
                 onClick={onClick}
             >
@@ -132,18 +131,18 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
     }
 
     renderSuggestionItems() {
-        if (this.props.suggestions.length === 0) {
+        const {suggestions, query, label} = this.props;
+        if (suggestions.length === 0) {
             return undefined;
         }
-        const query = this.props.query;
         const idx = this.props.focus_idx;
-        switch (this.props.label) {
+        switch (label) {
             case 'EMOJI': {
-                return this.props.suggestions.map((s, i) =>
+                return suggestions.map((s, i) =>
                     <EmojiEntry
-                        code={s.code}
+                        code={s.code!}
                         name={s.description}
-                        text={query}
+                        text={query!}
                         focused={idx !== null && idx === i}
                         key={i}
                     />
@@ -151,11 +150,11 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
             }
 
             case 'SCREENNAME': {
-                return this.props.suggestions.map((s, i) =>
+                return suggestions.map((s, i) =>
                     <ScreenNameEntry
-                        icon_url={s.icon_url}
+                        icon_url={s.icon_url!}
                         name={s.description}
-                        query={query}
+                        query={query!}
                         focused={idx !== null && idx === i}
                         key={i}
                     />
@@ -163,9 +162,9 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
             }
 
             case 'HASHTAG': {
-                return this.props.suggestions.map((s, i) =>
+                return suggestions.map((s, i) =>
                     <HashtagEntry
-                        query={query}
+                        query={query!}
                         text={s.description}
                         focused={idx !== null && idx === i}
                         key={i}
@@ -174,7 +173,7 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
             }
 
             default:
-                log.error('Invalid suggestion label: ' + this.props.label);
+                log.error('Invalid suggestion label on renderSuggestionItems()');
                 return undefined;
         }
     }

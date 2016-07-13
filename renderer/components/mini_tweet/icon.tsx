@@ -7,7 +7,7 @@ interface MiniTweetIconProps extends React.Props<any> {
     quoted: boolean;
 }
 
-const MiniTweetIcon: React.StatelessComponent<MiniTweetIconProps> = props => {
+const MiniTweetIcon = (props: MiniTweetIconProps) => {
     const u = props.user;
     const s = '@' + u.screen_name;
 
@@ -19,7 +19,7 @@ const MiniTweetIcon: React.StatelessComponent<MiniTweetIconProps> = props => {
             <img
                 className={classNames(
                     'mini-tweet__icon-image',
-                    {'mini-tweet__icon-image_2cols': props.quoted}
+                    {'mini-tweet__icon-image_2cols': props.quoted},
                 )}
                 src={u.icon_url_73x73}
                 alt={s}

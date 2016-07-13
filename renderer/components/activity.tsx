@@ -103,12 +103,12 @@ function renderCollapsedRestUsers(activity: TimelineActivity) {
     );
 }
 
-function renderCreatedAt(status: Tweet, focused: boolean) {
+function renderCreatedAt(status: Tweet) {
     return (
         <ExternalLink
             className={classNames(
                 'activity__created-at',
-                {'activity__created-at_focused': true}
+                {'activity__created-at_focused': true},
             )}
             url={status.statusPageUrl()}
         >{status.getCreatedAtString()}</ExternalLink>
@@ -125,15 +125,15 @@ function renderExpanded(props: TwitterActivityProps) {
 
     return (
         <div
-            className={classNames('activity', {activity_focused: focused})}
+            className={classNames('activity', {activity_focused: !!focused})}
             onClick={onClick}
         >
             <div className="activity__header">
                 {renderBadge(kind)} {behaved} by {renderUserIcons(activity.by, MaxIconsExpanded)} {renderExpandedRestUsers(activity)}
-                {renderCreatedAt(activity.status, focused)}
+                {renderCreatedAt(activity.status)}
             </div>
             <div className="activity__text" title={activity.status.text}>
-                <TweetText status={activity.status} focused={focused}/>
+                <TweetText status={activity.status} focused={!!focused}/>
             </div>
         </div>
     );
@@ -145,7 +145,7 @@ function renderCollapsed(props: TwitterActivityProps) {
         <div
             className={classNames(
                 'activity activity_mini',
-                {'activity_focused': focused}
+                {'activity_focused': !!focused},
             )}
             onClick={onClick}
         >
@@ -153,14 +153,14 @@ function renderCollapsed(props: TwitterActivityProps) {
                 {renderBadge(activity.kind)} {renderUserIcons(activity.by, MaxIconsCollapsed)} {renderCollapsedRestUsers(activity)}
             </div>
             <div className="activity__text activity__text_mini" title={activity.status.text}>
-                <TweetText status={activity.status} focused={focused}/>
+                <TweetText status={activity.status} focused={!!focused}/>
             </div>
         </div>
     );
 }
 
-export const TwitterActivity: React.StatelessComponent<TwitterActivityProps> =
-    props => props.collapsed ?  renderCollapsed(props) : renderExpanded(props);
+export const TwitterActivity =
+    (props: TwitterActivityProps) => props.collapsed ?  renderCollapsed(props) : renderExpanded(props);
 
 function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchProps {
     return {

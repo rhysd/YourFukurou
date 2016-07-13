@@ -1,46 +1,20 @@
 import {EditorState} from 'draft-js';
 import {Twitter} from 'twit';
 import {List} from 'immutable';
-import Kind from './action_kinds';
+import Action from './action_type';
 import Item from './item/item';
 import Tweet, {TwitterUser} from './item/tweet';
 import Separator from './item/separator';
 import {AutoCompleteLabel} from './components/editor/auto_complete_decorator';
 import State from './states/root';
-import TimelineState, {TimelineKind} from './states/timeline';
+import {TimelineKind} from './states/timeline';
 import {MessageKind} from './reducers/message';
-import {searchSuggestionItems, SuggestionItem} from './components/editor/suggestions';
+import {searchSuggestionItems} from './components/editor/suggestions';
 import log from './log';
 import notifyTweet from './notification/tweet';
 import notifyLiked from './notification/like';
 import TwitterRestApi from './twitter/rest_api';
 import DB from './database/db';
-
-export interface Action {
-    type: symbol;
-    item?: Item;
-    items?: Item[];
-    text?: string;
-    msg_kind?: MessageKind;
-    tweet_id?: string;
-    status?: Tweet;
-    statuses?: Tweet[];
-    user?: TwitterUser;
-    user_json?: Twitter.User;
-    editor?: EditorState;
-    in_reply_to_id?: string;
-    query?: string;
-    left?: number;
-    top?: number;
-    timeline?: TimelineKind;
-    mentions?: Tweet[];
-    completion_label?: AutoCompleteLabel;
-    suggestions?: SuggestionItem[];
-    ids?: number[];
-    index?: number;
-    media_urls?: string[];
-    user_id?: number;
-}
 
 type ThunkAction = (dispatch: Redux.Dispatch, getState: () => State) => void;
 
@@ -49,12 +23,12 @@ export function addTweetToTimeline(status: Tweet): ThunkAction {
         const timeline = getState().timeline;
         setImmediate(() => {
             dispatch({
-                type: Kind.AddTweetToTimeline,
+                type: 'AddTweetToTimeline',
                 status,
             });
 
             const should_add_to = timeline.shouldAddToTimeline(status);
-            if (should_add_to.home || should_add_to.mention) {
+            if (timeline.user && (should_add_to.home || should_add_to.mention)) {
                 notifyTweet(status, timeline.user);
             }
         });
@@ -63,7 +37,7 @@ export function addTweetToTimeline(status: Tweet): ThunkAction {
 
 export function addTweetsToTimeline(statuses: Tweet[]): Action {
     return {
-        type: Kind.AddTweetsToTimeline,
+        type: 'AddTweetsToTimeline',
         statuses,
     };
 }
@@ -71,7 +45,7 @@ export function addTweetsToTimeline(statuses: Tweet[]): Action {
 export function addMentions(mentions: Tweet[]): ThunkAction {
     return dispatch => {
         setImmediate(() => dispatch({
-            type: Kind.AddMentions,
+            type: 'AddMentions',
             mentions,
         }));
     };
@@ -79,27 +53,27 @@ export function addMentions(mentions: Tweet[]): ThunkAction {
 
 export function addRejectedUserIds(ids: number[]): Action {
     return {
-        type: Kind.AddRejectedUserIds,
+        type: 'AddRejectedUserIds',
         ids,
     };
 }
 
 export function removeRejectedUserIds(ids: number[]): Action {
     return {
-        type: Kind.RemoveRejectedUserIds,
+        type: 'RemoveRejectedUserIds',
         ids,
     };
 }
 
 export function addNoRetweetUserIds(ids: number[]): Action {
     return {
-        type: Kind.AddNoRetweetUserIds,
+        type: 'AddNoRetweetUserIds',
         ids,
     };
 }
 
 
-function getMissingTweets(kind: TimelineKind, max_id: string, since_id: string) {
+function getMissingTweets(kind: TimelineKind, max_id: string | undefined, since_id: string | undefined) {
     switch (kind) {
         case 'home':
             return TwitterRestApi.missingHomeTimeline(max_id, since_id);
@@ -115,8 +89,8 @@ function getMissingTweets(kind: TimelineKind, max_id: string, since_id: string) 
 function getMissingItemsAt(sep_index: number, kind: TimelineKind, current_items: List<Item>) {
     const size = current_items.size;
 
-    let before: Tweet = null;
-    let after: Tweet = null;
+    let before: Tweet | null = null;
+    let after: Tweet | null = null;
 
     let idx = sep_index - 1;
     while (idx >= 0) {
@@ -176,9 +150,9 @@ export function completeMissingStatuses(sep_index: number, timeline_kind?: Timel
         const timeline = getState().timeline;
         const kind = timeline_kind || timeline.kind;
         const items = timeline.getTimeline(kind);
-        getMissingItemsAt(sep_index, kind, items).then(missings => {
+        getMissingItemsAt(sep_index, kind, items).then((missings: Item[]) => {
             dispatch({
-                type: Kind.CompleteMissingStatuses,
+                type: 'CompleteMissingStatuses',
                 timeline: kind,
                 index: sep_index,
                 items: missings,
@@ -190,7 +164,7 @@ export function completeMissingStatuses(sep_index: number, timeline_kind?: Timel
 export function showMessage(text: string, msg_kind: MessageKind): ThunkAction {
     return dispatch => {
         window.requestIdleCallback(() => dispatch({
-            type: Kind.ShowMessage,
+            type: 'ShowMessage',
             text,
             msg_kind,
         }));
@@ -199,28 +173,28 @@ export function showMessage(text: string, msg_kind: MessageKind): ThunkAction {
 
 export function dismissMessage(): Action {
     return {
-        type: Kind.DismissMessage,
+        type: 'DismissMessage',
     };
 }
 
 export function notImplementedYet(): ThunkAction {
     return dispatch => {
         window.requestIdleCallback(() => dispatch({
-            type: Kind.NotImplementedYet,
+            type: 'NotImplementedYet',
         }));
     };
 }
 
 export function addSeparator(): Action {
     return {
-        type: Kind.AddSeparator,
+        type: 'AddSeparator',
     };
 }
 
 export function retweetSucceeded(status: Tweet): ThunkAction {
     return dispatch => {
         window.requestIdleCallback(() => dispatch({
-            type: Kind.RetweetSucceeded,
+            type: 'RetweetSucceeded',
             status,
         }));
     };
@@ -229,7 +203,7 @@ export function retweetSucceeded(status: Tweet): ThunkAction {
 export function unretweetSucceeded(status: Tweet): ThunkAction {
     return dispatch => {
         window.requestIdleCallback(() => dispatch({
-            type: Kind.UnretweetSucceeded,
+            type: 'UnretweetSucceeded',
             status,
         }));
     };
@@ -238,7 +212,7 @@ export function unretweetSucceeded(status: Tweet): ThunkAction {
 export function likeSucceeded(status: Tweet): ThunkAction {
     return dispatch => {
         window.requestIdleCallback(() => dispatch({
-            type: Kind.LikeSucceeded,
+            type: 'LikeSucceeded',
             status,
         }));
     };
@@ -247,7 +221,7 @@ export function likeSucceeded(status: Tweet): ThunkAction {
 export function unlikeSucceeded(status: Tweet): ThunkAction {
     return dispatch => {
         window.requestIdleCallback(() => dispatch({
-            type: Kind.UnlikeSucceeded,
+            type: 'UnlikeSucceeded',
             status,
         }));
     };
@@ -257,7 +231,7 @@ export function statusLiked(status: Tweet, from: TwitterUser): ThunkAction {
     return (dispatch, getState) => {
         const timeline = getState().timeline;
         dispatch({
-            type: Kind.StatusLiked,
+            type: 'StatusLiked',
             user: from,
             status,
         });
@@ -266,7 +240,7 @@ export function statusLiked(status: Tweet, from: TwitterUser): ThunkAction {
             // Note:
             // We don't check the status is marked as 'rejected' because activities are related to
             // owner's tweet and it must not be rejected.
-            if (from.id !== timeline.user.id) {
+            if (timeline.user && from.id !== timeline.user.id) {
                 notifyLiked(status, from);
             }
         });
@@ -277,7 +251,7 @@ export function setCurrentUser(user: TwitterUser): Action {
     DB.accounts.storeAccount(user.json);
     DB.my_accounts.storeMyAccount(user.json.id);
     return {
-        type: Kind.SetCurrentUser,
+        type: 'SetCurrentUser',
         user,
     };
 }
@@ -286,7 +260,7 @@ export function updateCurrentUser(user_json: Twitter.User): Action {
     DB.accounts.storeAccount(user_json);
     DB.my_accounts.storeMyAccount(user_json.id);
     return {
-        type: Kind.UpdateCurrentUser,
+        type: 'UpdateCurrentUser',
         user_json,
     };
 }
@@ -294,7 +268,7 @@ export function updateCurrentUser(user_json: Twitter.User): Action {
 export function deleteStatusInTimeline(tweet_id: string): ThunkAction {
     return dispatch => {
         setImmediate(() => dispatch({
-            type: Kind.DeleteStatusInTimeline,
+            type: 'DeleteStatusInTimeline',
             tweet_id,
         }));
     };
@@ -302,21 +276,21 @@ export function deleteStatusInTimeline(tweet_id: string): ThunkAction {
 
 export function changeEditorState(editor: EditorState): Action {
     return {
-        type: Kind.ChangeEditorState,
+        type: 'ChangeEditorState',
         editor,
     };
 }
 
 export function openEditor(text?: string): Action {
     return {
-        type: Kind.OpenEditor,
+        type: 'OpenEditor',
         text,
     };
 }
 
 export function openEditorForReply(in_reply_to: Tweet, owner: TwitterUser, text?: string): Action {
     return {
-        type: Kind.OpenEditorForReply,
+        type: 'OpenEditorForReply',
         status: in_reply_to,
         user: owner,
         text,
@@ -325,19 +299,19 @@ export function openEditorForReply(in_reply_to: Tweet, owner: TwitterUser, text?
 
 export function closeEditor(): Action {
     return {
-        type: Kind.CloseEditor,
+        type: 'CloseEditor',
     };
 }
 
 export function toggleEditor(): Action {
     return {
-        type: Kind.ToggleEditor,
+        type: 'ToggleEditor',
     };
 }
 
 export function selectAutoCompleteSuggestion(text: string, query: string): Action {
     return {
-        type: Kind.SelectAutoCompleteSuggestion,
+        type: 'SelectAutoCompleteSuggestion',
         text,
         query,
     };
@@ -347,7 +321,7 @@ export function updateAutoCompletion(left: number, top: number, query: string, l
     return dispatch => {
         searchSuggestionItems(query, label)
             .then(suggestions => dispatch({
-                type: Kind.UpdateAutoCompletion,
+                type: 'UpdateAutoCompletion',
                 left,
                 top,
                 query,
@@ -360,32 +334,32 @@ export function updateAutoCompletion(left: number, top: number, query: string, l
 
 export function stopAutoCompletion(): Action {
     return {
-        type: Kind.StopAutoCompletion,
+        type: 'StopAutoCompletion',
     };
 }
 
 export function downAutoCompletionFocus(): Action {
     return {
-        type: Kind.DownAutoCompletionFocus,
+        type: 'DownAutoCompletionFocus',
     };
 }
 
 export function upAutoCompletionFocus(): Action {
     return {
-        type: Kind.UpAutoCompletionFocus,
+        type: 'UpAutoCompletionFocus',
     };
 }
 
 export function changeCurrentTimeline(timeline: TimelineKind): Action {
     return {
-        type: Kind.ChangeCurrentTimeline,
+        type: 'ChangeCurrentTimeline',
         timeline,
     };
 }
 
 export function openPicturePreview(media_urls: string[], index?: number): Action {
     return {
-        type: Kind.OpenPicturePreview,
+        type: 'OpenPicturePreview',
         media_urls,
         index,
     };
@@ -393,78 +367,78 @@ export function openPicturePreview(media_urls: string[], index?: number): Action
 
 export function closeTweetMedia(): Action {
     return {
-        type: Kind.CloseTweetMedia,
+        type: 'CloseTweetMedia',
     };
 }
 
 export function moveToNthPicturePreview(index: number): Action {
     return {
-        type: Kind.MoveToNthPicturePreview,
+        type: 'MoveToNthPicturePreview',
         index,
     };
 }
 
 export function focusOnItem(index: number): Action {
     return {
-        type: Kind.FocusOnItem,
+        type: 'FocusOnItem',
         index,
     };
 }
 
 export function unfocusItem(): Action {
     return {
-        type: Kind.UnfocusItem,
+        type: 'UnfocusItem',
     };
 }
 
 export function focusNextItem(): Action {
     return {
-        type: Kind.FocusNextItem,
+        type: 'FocusNextItem',
     };
 }
 
 export function focusPrevItem(): Action {
     return {
-        type: Kind.FocusPrevItem,
+        type: 'FocusPrevItem',
     };
 }
 
 export function focusTopItem(): Action {
     return {
-        type: Kind.FocusTopItem,
+        type: 'FocusTopItem',
     };
 }
 
 export function focusBottomItem(): Action {
     return {
-        type: Kind.FocusBottomItem,
+        type: 'FocusBottomItem',
     };
 }
 
 export function addFriends(ids: number[]): Action {
     return {
-        type: Kind.AddFriends,
+        type: 'AddFriends',
         ids,
     };
 }
 
 export function removeFriends(ids: number[]): Action {
     return {
-        type: Kind.RemoveFriends,
+        type: 'RemoveFriends',
         ids,
     };
 }
 
 export function resetFriends(ids: number[]): Action {
     return {
-        type: Kind.ResetFriends,
+        type: 'ResetFriends',
         ids,
     };
 }
 
 export function openUserTimeline(user: TwitterUser): Action {
     return {
-        type: Kind.OpenUserTimeline,
+        type: 'OpenUserTimeline',
         user,
     };
 }
@@ -486,12 +460,12 @@ function mergeHigherOrder(left: Tweet[], right: Tweet[]) {
         const cmp = l.compareId(r);
 
         if (cmp < 0) {
-            ret.push(right.shift());
+            ret.push(right.shift()!);
         } else if (cmp > 0) {
-            ret.push(left.shift());
+            ret.push(left.shift()!);
         } else {
             // Note: Remove duplicates
-            ret.push(left.shift());
+            ret.push(left.shift()!);
             right.shift();
         }
     }
@@ -528,10 +502,10 @@ export function gatherConversationStatuses(status: Tweet) {
 }
 
 export function openConversationTimeline(status: Tweet): ThunkAction {
-    return (dispatch, getState) => {
+    return dispatch => {
         gatherConversationStatuses(status)
             .then(statuses => dispatch({
-                type: Kind.OpenConversationTimeline,
+                type: 'OpenConversationTimeline',
                 statuses,
             }));
     };
@@ -539,13 +513,13 @@ export function openConversationTimeline(status: Tweet): ThunkAction {
 
 export function closeSlaveTimeline(): Action {
     return {
-        type: Kind.CloseSlaveTimeline,
+        type: 'CloseSlaveTimeline',
     };
 }
 
 export function addUserTweets(user_id: number, statuses: Tweet[]): Action {
     return {
-        type: Kind.AddUserTweets,
+        type: 'AddUserTweets',
         user_id,
         statuses,
     };
@@ -553,7 +527,7 @@ export function addUserTweets(user_id: number, statuses: Tweet[]): Action {
 
 export function appendPastItems(user_id: number, items: Item[]): Action {
     return {
-        type: Kind.AppendPastItems,
+        type: 'AppendPastItems',
         user_id,
         items,
     };
@@ -561,38 +535,38 @@ export function appendPastItems(user_id: number, items: Item[]): Action {
 
 export function focusSlaveNext(): Action {
     return {
-        type: Kind.FocusSlaveNext,
+        type: 'FocusSlaveNext',
     };
 }
 
 export function focusSlavePrev(): Action {
     return {
-        type: Kind.FocusSlavePrev,
+        type: 'FocusSlavePrev',
     };
 }
 
 export function focusSlaveTop(): Action {
     return {
-        type: Kind.FocusSlaveTop,
+        type: 'FocusSlaveTop',
     };
 }
 
 export function focusSlaveBottom(): Action {
     return {
-        type: Kind.FocusSlaveBottom,
+        type: 'FocusSlaveBottom',
     };
 }
 
 export function focusSlaveOn(index: number): Action {
     return {
-        type: Kind.FocusSlaveOn,
+        type: 'FocusSlaveOn',
         index,
     };
 }
 
 export function blurSlaveTimeline(): Action {
     return {
-        type: Kind.BlurSlaveTimeline,
+        type: 'BlurSlaveTimeline',
     };
 }
 

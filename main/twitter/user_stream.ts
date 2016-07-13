@@ -1,16 +1,13 @@
-import {readFile} from 'fs';
-import {join} from 'path';
-import {app} from 'electron';
 import * as Twit from 'twit';
 import log from '../log';
 import {Sender} from '../ipc';
 
 export default class TwitterUserStream {
-    private stream: Twit.Stream;
+    private stream: (Twit.Stream | null);
 
     constructor(
         private sender: Sender,
-        public client: Twit
+        public client: Twit,
     ) {
         this.stream = null;
     }
@@ -41,7 +38,9 @@ export default class TwitterUserStream {
         });
 
         this.stream.on('user_event', e => {
-            log.debug(`${e.event.toUpperCase()}: From: @${e.source.screen_name}, To: @${e.target.screen_name}: `, e.target_object);
+            if (e.source && e.target) {
+                log.debug(`${e.event.toUpperCase()}: From: @${e.source.screen_name}, To: @${e.target.screen_name}: `, e.target_object);
+            }
         });
 
         this.stream.on('follow', e => {
@@ -54,6 +53,10 @@ export default class TwitterUserStream {
         });
 
         this.stream.on('unknown_user_event', msg => {
+            if (!msg.target) {
+                log.warn("'target' is not found: ", msg);
+                return;
+            }
             switch (msg.event) {
                 case 'mute':
                     this.sender.send('yf:rejected-ids', [msg.target.id]);

@@ -55,7 +55,7 @@ render(
     <Provider store={Store}>
         <App/>
     </Provider>,
-    document.getElementById('yourfukurou')
+    document.getElementById('yourfukurou')!,
 );
 
 /*

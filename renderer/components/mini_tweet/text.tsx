@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {Twitter} from 'twit';
 import * as classNames from 'classnames';
 import Tweet from '../../item/tweet';
 import TweetText from '../tweet/text';
@@ -29,7 +28,7 @@ function renderQuoted(s: Tweet, focused: boolean, onClick: (e: React.MouseEvent)
         <div
             className={classNames(
                 'mini-tweet__quoted',
-                {'mini-tweet__quote_focused': focused}
+                {'mini-tweet__quote_focused': focused},
             )}
             title={q.text}
         >
@@ -43,7 +42,7 @@ function renderQuoted(s: Tweet, focused: boolean, onClick: (e: React.MouseEvent)
     );
 }
 
-export const MiniTweetText: React.StatelessComponent<MiniTweetTextProps> = props => {
+export const MiniTweetText = (props: MiniTweetTextProps) => {
     const tw = props.status.getMainStatus();
     return (
         <div className="mini-tweet__text" title={tw.text}>

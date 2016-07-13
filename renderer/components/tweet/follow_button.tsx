@@ -7,7 +7,7 @@ import TwitterRestApi from '../../twitter/rest_api';
 
 interface ConnectedProps extends React.Props<any> {
     user: TwitterUser;
-    friends: List<number>;
+    friends?: List<number>;
 }
 
 interface DispatchProps {
@@ -16,8 +16,9 @@ interface DispatchProps {
 
 type FollowButtonProps = ConnectedProps & DispatchProps;
 
-export const FollowButton: React.StatelessComponent<FollowButtonProps> = props => {
-    const following = props.friends.includes(props.user.id);
+export const FollowButton = (props: FollowButtonProps) => {
+    const following =
+        props.friends === undefined ? false : props.friends.includes(props.user.id);
     const modifier =
         following ?
             'follow-button_will-unfollow' :
@@ -35,7 +36,9 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
     return {
         onClick: e => {
             e.stopPropagation();
-            const following = props.friends.includes(props.user.id);
+            const following =
+                props.friends === undefined ?
+                    false : props.friends.includes(props.user.id);
             if (following) {
                 TwitterRestApi.unfollow(props.user.id)
                     .then(u => dispatch(showMessage(`Unfollowed @${u.screen_name}`, 'info')));

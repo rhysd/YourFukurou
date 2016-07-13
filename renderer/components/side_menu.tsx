@@ -5,10 +5,8 @@ import State from '../states/root';
 import IconButton from './icon_button';
 import Icon from './icon';
 import {
-    showMessage,
     toggleEditor,
     changeCurrentTimeline,
-    notImplementedYet,
 } from '../actions';
 import {TwitterUser} from '../item/tweet';
 import {TimelineKind, Notified} from '../states/timeline';
@@ -37,7 +35,7 @@ export const SideMenuButton = (props: SideMenuButtonProps) => {
             <IconButton
                 className={classNames(
                     'side-menu__button',
-                    {'side-menu__button_active': props.active}
+                    {'side-menu__button_active': props.active},
                 )}
                 name={props.name}
                 tip={props.tip}
@@ -135,14 +133,20 @@ function select(state: State) {
 
 function mapDispatch(dispatch: Redux.Dispatch) {
     return {
-        onEdit: () => dispatch(toggleEditor()),
-        onHome: () => dispatch(changeCurrentTimeline('home')),
-        onMention: () => dispatch(changeCurrentTimeline('mention')),
+        onEdit: () => {
+            dispatch(toggleEditor());
+        },
+        onHome: () => {
+            dispatch(changeCurrentTimeline('home'));
+        },
+        onMention: () => {
+            dispatch(changeCurrentTimeline('mention'));
+        },
     };
 }
 
 export default connect(
     select,
     mapDispatch,
-    (s, d) => Object.assign({}, s, d)
-)(SideMenu);
+    (s, d) => Object.assign({}, s, d),
+)(SideMenu as React.StatelessComponent<Props>);

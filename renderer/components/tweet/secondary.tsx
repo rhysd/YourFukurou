@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import Tweet, {TwitterUser} from '../../item/tweet';
+import Tweet from '../../item/tweet';
 import ScreenName from './screen_name';
 import Icon from '../icon';
 
@@ -18,7 +18,7 @@ function retweetedBy(tw: Tweet, focused: boolean) {
         <div
             className={classNames(
                 'tweet__secondary-retweetedby',
-                {'tweet__secondary-retweetedby_focused': focused}
+                {'tweet__secondary-retweetedby_focused': focused},
             )}
         >
             <i className="fa fa-retweet"/> <ScreenName user={tw.user}/> <Icon size={12} user={tw.user}/>
@@ -27,20 +27,20 @@ function retweetedBy(tw: Tweet, focused: boolean) {
 }
 
 const TweetSecondary = (props: TweetSecondaryProps) => {
-    const {status, focused} = props;
-    const user = status.getMainStatus().user;
+    const focused = !!props.focused;
+    const user = props.status.getMainStatus().user;
     return <div className="tweet__secondary">
         <ScreenName
             className={classNames(
                 'tweet__secondary-screenname',
-                {'tweet__secondary-screenname_focused': focused}
+                {'tweet__secondary-screenname_focused': focused},
             )}
             user={user}
         />
         <div className="tweet__secondary-name" title={user.name}>
             {user.name}
         </div>
-        {retweetedBy(status, focused)}
+        {retweetedBy(props.status, focused)}
     </div>;
 };
 export default TweetSecondary;

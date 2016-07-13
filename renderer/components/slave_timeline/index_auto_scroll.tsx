@@ -3,7 +3,7 @@ import log from '../../log';
 
 interface IndexAutoScrollProps extends React.Props<IndexAutoScroll> {
     className?: string;
-    index: number;
+    index: number | null;
 }
 
 export default class IndexAutoScroll extends React.Component<IndexAutoScrollProps, {}> {

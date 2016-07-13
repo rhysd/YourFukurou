@@ -1,15 +1,13 @@
-import {Twitter} from 'twit';
-import Kind from '../action_kinds';
-import {Action} from '../actions';
+import Action from '../action_type';
 import TweetMediaState, {DefaultTweetMediaState} from '../states/tweet_media';
 
 export default function tweetMedia(state: TweetMediaState = DefaultTweetMediaState, action: Action) {
     switch (action.type) {
-        case Kind.OpenPicturePreview:
+        case 'OpenPicturePreview':
             return state.openMedia(action.media_urls, action.index);
-        case Kind.CloseTweetMedia:
+        case 'CloseTweetMedia':
             return state.closeMedia();
-        case Kind.MoveToNthPicturePreview:
+        case 'MoveToNthPicturePreview':
             return state.moveToNthMedia(action.index);
         default:
             return state;

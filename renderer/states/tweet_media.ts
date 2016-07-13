@@ -4,15 +4,15 @@ export default class TweetMediaState {
     constructor(
         public is_open: boolean,
         public index: number,
-        public picture_urls: string[]
+        public picture_urls: string[],
     ) {}
 
-    openMedia(urls: string[], start_idx: number) {
+    openMedia(urls: string[], start_idx?: number) {
         KeymapTransition.enterMediaPreview();
         return new TweetMediaState(
             true,
             start_idx || 0,
-            urls
+            urls,
         );
     }
 
@@ -21,7 +21,7 @@ export default class TweetMediaState {
         return new TweetMediaState(
             false,
             this.index,
-            this.picture_urls
+            this.picture_urls,
         );
     }
 
@@ -32,7 +32,7 @@ export default class TweetMediaState {
         return new TweetMediaState(
             this.is_open,
             nth,
-            this.picture_urls
+            this.picture_urls,
         );
     }
 }

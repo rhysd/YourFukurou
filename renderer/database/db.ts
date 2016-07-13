@@ -26,10 +26,10 @@ export class Database {
     constructor () {
         this.db = new Dexie('YourFukurou') as TypedDexie;
         this.db.version(1).stores({
-            accounts: Accounts.getScheme(1),
-            my_accounts: MyAccounts.getScheme(1),
-            hashtags: Hashtags.getScheme(1),
-            statuses: Statuses.getScheme(1),
+            accounts: Accounts.getScheme(1)!,
+            my_accounts: MyAccounts.getScheme(1)!,
+            hashtags: Hashtags.getScheme(1)!,
+            statuses: Statuses.getScheme(1)!,
         });
 
         this.accounts = new Accounts(this.db.accounts);

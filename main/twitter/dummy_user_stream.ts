@@ -1,4 +1,3 @@
-import * as Twit from 'twit';
 import log from '../log';
 import {Sender} from '../ipc';
 import {readFile} from 'fs';
@@ -40,7 +39,10 @@ export default class DummyUserStream {
             const random_range =
                 (min: number, max: number) => Math.random() * (max - min) + min;
 
-            const send_all = () => {
+            // Note:
+            // const send_all = () => { ... raises a 'use variable before definition' error
+            let send_all: () => void;
+            send_all = () => {
                 this.sender.send('yf:tweet', tweets[idx]);
                 ++idx;
                 if (idx < tweets.length && this.running) {

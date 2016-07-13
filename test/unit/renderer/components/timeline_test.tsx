@@ -10,7 +10,6 @@ import Item from '../../../../renderer/item/item';
 import {Timeline} from '../../../../renderer/components/timeline';
 import Message from '../../../../renderer/components/message';
 import {MessageState} from '../../../../renderer/reducers/message';
-import Kind from '../../../../renderer/action_kinds';
 
 function doNothing(_: any) {
     // do nothing;
@@ -58,7 +57,7 @@ test('can render overlay', t => {
     t.is(overlay.length, 1);
     overlay.simulate('click', {stopPropagation: doNothing});
     t.true(cb.called);
-    t.is(cb.args[0][0].type, Kind.CloseSlaveTimeline);
+    t.is(cb.args[0][0].type, 'CloseSlaveTimeline');
 });
 
 test('put Lightbox', t => {
