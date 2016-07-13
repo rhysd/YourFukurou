@@ -1,22 +1,21 @@
-import Kind from '../action_kinds';
-import {Action} from '../actions';
+import Action from '../action_type';
 import EditorCompletionState, {DefaultEditorCompletionState} from '../states/editor_completion';
 
 export default function editorCompletion(state: EditorCompletionState = DefaultEditorCompletionState, action: Action) {
     switch (action.type) {
-        case Kind.UpdateAutoCompletion:
+        case 'UpdateAutoCompletion':
             return state.searchSuggestions(
-                action.suggestions!,
-                action.query!,
-                action.top!,
-                action.left!,
-                action.completion_label!
+                action.suggestions,
+                action.query,
+                action.top,
+                action.left,
+                action.completion_label
             );
-        case Kind.DownAutoCompletionFocus:      return state.downFocus();
-        case Kind.UpAutoCompletionFocus:        return state.upFocus();
-        case Kind.StopAutoCompletion:           return DefaultEditorCompletionState;
-        case Kind.SelectAutoCompleteSuggestion: return DefaultEditorCompletionState;
-        default:                                return state;
+        case 'DownAutoCompletionFocus':      return state.downFocus();
+        case 'UpAutoCompletionFocus':        return state.upFocus();
+        case 'StopAutoCompletion':           return DefaultEditorCompletionState;
+        case 'SelectAutoCompleteSuggestion': return DefaultEditorCompletionState;
+        default:                             return state;
     }
 }
 

@@ -7,7 +7,7 @@ export default class TweetMediaState {
         public picture_urls: string[]
     ) {}
 
-    openMedia(urls: string[], start_idx: number) {
+    openMedia(urls: string[], start_idx?: number) {
         KeymapTransition.enterMediaPreview();
         return new TweetMediaState(
             true,

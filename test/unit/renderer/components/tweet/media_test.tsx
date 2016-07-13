@@ -4,8 +4,7 @@ import {shallow} from 'enzyme';
 import test from 'ava';
 import {spy} from 'sinon';
 import {TweetMedia} from '../../../../../renderer/components/tweet/media';
-import {Action} from '../../../../../renderer/actions';
-import Kind from '../../../../../renderer/action_kinds';
+import Action from '../../../../../renderer/action_type';
 
 function doNothing() {
     // Do nothing
@@ -38,8 +37,10 @@ test('clicking picture dispatches corresponding action', t => {
     c.find('.tweet__media-wrapper').at(0).simulate('click', e);
     t.true(cb.called);
     const action = cb.args[0][0] as Action;
-    t.is(action.type, Kind.OpenPicturePreview);
-    t.is(action.media_urls[0], media[0].media_url);
-    t.is(action.index, 0);
+    t.is(action.type, 'OpenPicturePreview');
+    if (action.type === 'OpenPicturePreview') {
+        t.is(action.media_urls[0], media[0].media_url);
+        t.is(action.index, 0);
+    }
 });
 

@@ -1,5 +1,4 @@
-import Kind from '../action_kinds';
-import {Action} from '../actions';
+import Action from '../action_type';
 
 export type MessageKind = 'info' | 'error';
 export interface MessageState {
@@ -9,14 +8,14 @@ export interface MessageState {
 
 export default function message(state: MessageState | null = null, action: Action): MessageState | null {
     switch (action.type) {
-        case Kind.ShowMessage:
+        case 'ShowMessage':
             return {
-                text: action.text!,
-                kind: action.msg_kind!,
+                text: action.text,
+                kind: action.msg_kind,
             };
-        case Kind.DismissMessage:
+        case 'DismissMessage':
             return null;
-        case Kind.NotImplementedYet:
+        case 'NotImplementedYet':
             return {
                 text: 'Sorry, this feature is not implemented yet.',
                 kind: 'error',
