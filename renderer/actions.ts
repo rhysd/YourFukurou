@@ -54,7 +54,7 @@ export function addTweetToTimeline(status: Tweet): ThunkAction {
             });
 
             const should_add_to = timeline.shouldAddToTimeline(status);
-            if (should_add_to.home || should_add_to.mention) {
+            if (timeline.user && (should_add_to.home || should_add_to.mention)) {
                 notifyTweet(status, timeline.user);
             }
         });
@@ -99,7 +99,7 @@ export function addNoRetweetUserIds(ids: number[]): Action {
 }
 
 
-function getMissingTweets(kind: TimelineKind, max_id: string, since_id: string) {
+function getMissingTweets(kind: TimelineKind, max_id: string | undefined, since_id: string | undefined) {
     switch (kind) {
         case 'home':
             return TwitterRestApi.missingHomeTimeline(max_id, since_id);
@@ -115,8 +115,8 @@ function getMissingTweets(kind: TimelineKind, max_id: string, since_id: string) 
 function getMissingItemsAt(sep_index: number, kind: TimelineKind, current_items: List<Item>) {
     const size = current_items.size;
 
-    let before: Tweet = null;
-    let after: Tweet = null;
+    let before: Tweet | null = null;
+    let after: Tweet | null = null;
 
     let idx = sep_index - 1;
     while (idx >= 0) {
@@ -266,7 +266,7 @@ export function statusLiked(status: Tweet, from: TwitterUser): ThunkAction {
             // Note:
             // We don't check the status is marked as 'rejected' because activities are related to
             // owner's tweet and it must not be rejected.
-            if (from.id !== timeline.user.id) {
+            if (timeline.user && from.id !== timeline.user.id) {
                 notifyLiked(status, from);
             }
         });
@@ -486,12 +486,12 @@ function mergeHigherOrder(left: Tweet[], right: Tweet[]) {
         const cmp = l.compareId(r);
 
         if (cmp < 0) {
-            ret.push(right.shift());
+            ret.push(right.shift()!);
         } else if (cmp > 0) {
-            ret.push(left.shift());
+            ret.push(left.shift()!);
         } else {
             // Note: Remove duplicates
-            ret.push(left.shift());
+            ret.push(left.shift()!);
             right.shift();
         }
     }

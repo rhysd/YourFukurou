@@ -69,10 +69,8 @@ export default class KeyBinds<ActionType> {
         this.keymap = I.Map<PreparsedSeq, ActionType>(
             default_map
             .entrySeq()
-            .map(
-                (kv: [string, ActionType]) =>
-                    [this.parseSequence(kv[0]), kv[1]]
-            ).filter(kv => !!kv[0])
+            .map((kv: [string, ActionType]) => [this.parseSequence(kv[0]), kv[1]])
+            .filter((kv: [PreparsedSeq, ActionType]) => !!kv[0])
         );
         log.debug('Editor keymap:', this.keymap);
     }
@@ -91,7 +89,7 @@ export default class KeyBinds<ActionType> {
         this.handlers = this.handlers.set(action, handler);
     }
 
-    parseSequence(seq: string): PreparsedSeq {
+    parseSequence(seq: string): PreparsedSeq | null {
         const m = seq.match(ReCharFromSeq);
         if (m === null) {
             return null;
@@ -124,7 +122,7 @@ export default class KeyBinds<ActionType> {
         return p;
     }
 
-    resolveEvent(key: KeyEvent): ActionType {
+    resolveEvent(key: KeyEvent): ActionType | null {
         if (!this.enabled) {
             return null;
         }
@@ -136,7 +134,7 @@ export default class KeyBinds<ActionType> {
 
         const filtered = this.keymap
                 .keySeq()
-                .filter(p =>
+                .filter((p: PreparsedSeq) =>
                     (key.ctrlKey === p.ctrlKey) &&
                     (key.metaKey === p.metaKey) &&
                     (key.altKey === p.altKey) &&

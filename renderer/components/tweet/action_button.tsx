@@ -111,10 +111,19 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
         onClick: e => {
             e.stopPropagation();
             switch (props.kind) {
-                case 'reply':   dispatch(openEditorForReply(props.status, props.owner)); break;
-                case 'retweet': onRetweetClicked(props.status, dispatch); break;
-                case 'like':    onLikeClicked(props.status, dispatch); break;
-                default:        break;
+                case 'reply':
+                    if (props.owner) {
+                        dispatch(openEditorForReply(props.status, props.owner));
+                    }
+                    break;
+                case 'retweet':
+                    onRetweetClicked(props.status, dispatch);
+                    break;
+                case 'like':
+                    onLikeClicked(props.status, dispatch);
+                    break;
+                default:
+                    break;
             }
         },
     };

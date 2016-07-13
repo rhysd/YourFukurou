@@ -7,12 +7,12 @@ export interface MessageState {
     kind: MessageKind;
 }
 
-export default function message(state: MessageState = null, action: Action) {
+export default function message(state: MessageState | null = null, action: Action): MessageState | null {
     switch (action.type) {
         case Kind.ShowMessage:
             return {
-                text: action.text,
-                kind: action.msg_kind,
+                text: action.text!,
+                kind: action.msg_kind!,
             };
         case Kind.DismissMessage:
             return null;

@@ -10,7 +10,7 @@ interface AppProps extends React.Props<any> {
     editorOpen: boolean;
 }
 
-const App: React.StatelessComponent<AppProps> = props => (
+const App = (props: AppProps) => (
     <div className="app-root">
         <SideMenu/>
         <div className="app-root__main">

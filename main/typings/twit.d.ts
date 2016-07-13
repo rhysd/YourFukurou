@@ -60,7 +60,7 @@ declare module 'twit' {
             export interface UrlEntity {
                 display_url: string;
                 expanded_url: string;
-                indices: [number, number];
+                indices: [number, number] | null;
                 url: string;
             }
             export interface UserMentionEntity {
@@ -173,8 +173,8 @@ declare module 'twit' {
                 created_at: string;
                 entities: Entities;
                 extended_entities: Entities;
-                favorite_count?: number;
-                favorited?: boolean;
+                favorite_count: number;
+                favorited: boolean;
                 filter_level: 'none' | 'low' | 'medium';
                 geo?: Object;
                 in_reply_to_screen_name?: string;

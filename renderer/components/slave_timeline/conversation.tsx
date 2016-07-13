@@ -3,7 +3,7 @@ import {List} from 'immutable';
 import IndexAutoScroll from './index_auto_scroll';
 import {ConversationTimeline} from '../../states/slave_timeline';
 import Tweet from '../tweet/index';
-import {TwitterUser} from '../../item/tweet';
+import TweetItem, {TwitterUser} from '../../item/tweet';
 
 interface ConversationSlaveProps extends React.Props<any> {
     timeline: ConversationTimeline;
@@ -14,7 +14,7 @@ interface ConversationSlaveProps extends React.Props<any> {
 function renderTweets(props: ConversationSlaveProps) {
     const {timeline, owner, friends} = props;
     const focused_idx = timeline.focus_index;
-    return timeline.items.map((status, idx) => (
+    return timeline.items.map((status: TweetItem, idx: number) => (
         <Tweet
             status={status}
             owner={owner}
@@ -27,7 +27,7 @@ function renderTweets(props: ConversationSlaveProps) {
     ));
 }
 
-const ConversationSlave: React.StatelessComponent<ConversationSlaveProps> = props => (
+const ConversationSlave = (props: ConversationSlaveProps) => (
     <IndexAutoScroll
         className="conversation-timeline__tweets"
         index={props.timeline.focus_index}

@@ -22,7 +22,7 @@ interface ConnectedProps extends React.Props<any> {
     timeline?: TimelineKind;
     focused?: boolean;
     related?: boolean;
-    focused_user?: boolean;
+    focusedUser?: boolean;
     friends?: List<number>;
     itemIndex?: number;
 }
@@ -48,27 +48,28 @@ function getModifier(tw: TweetItem, props: TweetProps) {
         return 'tweet__body_related';
     }
 
-    if (props.focused_user) {
+    if (props.focusedUser) {
         return 'tweet__body_user-related';
     }
 
     return '';
 }
 
-const Tweet: React.StatelessComponent<TweetProps> = props => {
+const Tweet = (props: TweetProps) => {
     const tw = props.status.getMainStatus();
+    const focused = !!props.focused;
     return (
         <UndraggableClickable
             className={'tweet__body ' + getModifier(tw, props)}
             onClick={props.onClick}
         >
             <PopupIcon user={tw.user} friends={props.friends}/>
-            <TweetSecondary status={props.status} focused={props.focused}/>
+            <TweetSecondary status={props.status} focused={focused}/>
             <TweetPrimary
                 status={props.status}
                 owner={props.owner}
                 onClickConversation={props.onClickConversation}
-                focused={props.focused}
+                focused={focused}
             />
         </UndraggableClickable>
     );
@@ -81,12 +82,13 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
             if (props.itemIndex === undefined) {
                 return;
             }
+            const focused = !!props.focused;
             if (props.inSlaveTimeline) {
-                const action = props.focused ?
+                const action = focused ?
                     blurSlaveTimeline() : focusSlaveOn(props.itemIndex);
                 dispatch(action);
             } else {
-                const action = props.focused ?
+                const action = focused ?
                     unfocusItem() : focusOnItem(props.itemIndex);
                 dispatch(action);
             }

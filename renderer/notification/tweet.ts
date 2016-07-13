@@ -60,9 +60,9 @@ export default function notifyTweet(tw: Tweet, owner: TwitterUser) {
 
     if (AppConfig.notification.reply && tw.in_reply_to_user_id === owner.id) {
         return notifyReply(tw);
-    } else if (AppConfig.notification.retweet && tw.isRetweet() && tw.retweeted_status.user.id === owner.id) {
+    } else if (AppConfig.notification.retweet && tw.isRetweet() && tw.retweeted_status!.user.id === owner.id) {
         return notifyRetweet(tw);
-    } else if (AppConfig.notification.quoted && tw.isQuotedTweet() && tw.quoted_status.user.id === owner.id) {
+    } else if (AppConfig.notification.quoted && tw.isQuotedTweet() && tw.quoted_status!.user.id === owner.id) {
         return notifyQuoted(tw);
     }
     return null;

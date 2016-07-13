@@ -133,9 +133,15 @@ function select(state: State) {
 
 function mapDispatch(dispatch: Redux.Dispatch) {
     return {
-        onEdit: () => dispatch(toggleEditor()),
-        onHome: () => dispatch(changeCurrentTimeline('home')),
-        onMention: () => dispatch(changeCurrentTimeline('mention')),
+        onEdit: () => {
+            dispatch(toggleEditor());
+        },
+        onHome: () => {
+            dispatch(changeCurrentTimeline('home'));
+        },
+        onMention: () => {
+            dispatch(changeCurrentTimeline('mention'));
+        },
     };
 }
 
@@ -143,4 +149,4 @@ export default connect(
     select,
     mapDispatch,
     (s, d) => Object.assign({}, s, d)
-)(SideMenu);
+)(SideMenu as React.StatelessComponent<Props>);

@@ -18,7 +18,7 @@ interface ConnectedProps extends React.Props<any> {
     timeline: TimelineKind;
     focused?: boolean;
     related?: boolean;
-    focused_user?: boolean;
+    focusedUser?: boolean;
     itemIndex?: number;
 }
 
@@ -42,7 +42,7 @@ function getModifier(tw: Tweet, props: MiniTweetProps) {
         return 'mini-tweet_related';
     }
 
-    if (props.focused_user) {
+    if (props.focusedUser) {
         return 'mini-tweet_user-related';
     }
 
@@ -62,14 +62,14 @@ export function renderPicIcon(tw: Tweet, onClick: (e: React.MouseEvent) => void)
     );
 }
 
-const MiniTweet: React.StatelessComponent<MiniTweetProps> = props => {
+const MiniTweet = (props: MiniTweetProps) => {
     const {status, onClick, focused, onPicClicked} = props;
     const tw = status.getMainStatus();
     return (
         <UndraggableClickable className={'mini-tweet ' + getModifier(tw, props)} onClick={onClick}>
             <MiniTweetIcon user={tw.user} quoted={tw.isQuotedTweet()}/>
-            <MiniTweetSecondary status={status} focused={focused}/>
-            <MiniTweetText status={status} focused={focused}/>
+            <MiniTweetSecondary status={status} focused={!!focused}/>
+            <MiniTweetText status={status} focused={!!focused}/>
             {renderPicIcon(tw, onPicClicked)}
         </UndraggableClickable>
     );

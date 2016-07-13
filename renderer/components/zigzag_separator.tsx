@@ -50,7 +50,7 @@ export default class ZigZagSeparator extends React.Component<Props, State> {
                 <div className="zigzag-separator__top"/>
                 <div
                     className={classNames({
-                        'zigzag-separator__focused-middle': this.props.focused,
+                        'zigzag-separator__focused-middle': !!this.props.focused,
                         'zigzag-separator__middle': !this.props.focused,
                     }, 'zigzag-separator__jagged')}
                 />

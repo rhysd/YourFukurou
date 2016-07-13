@@ -27,7 +27,7 @@ import {
 } from '../actions';
 import TwitterRestApi from '../twitter/rest_api';
 
-function getCurrentStatus(): Tweet {
+function getCurrentStatus(): Tweet | null {
     const timeline = Store.getState().timeline;
     const idx = timeline.focus_index;
     if (idx === null) {
@@ -56,7 +56,7 @@ function openMedia() {
 
     let media = status.media;
     if (media.length === 0 && status.hasQuote()) {
-        media = status.quoted_status.media;
+        media = status.quoted_status!.media;
     }
     if (media.length === 0) {
         return;

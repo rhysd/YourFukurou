@@ -30,7 +30,7 @@ interface TimelineProps extends React.Props<any> {
     items: List<Item>;
     owner: TwitterUser;
     media: TweetMediaState;
-    focus_index: number;
+    focus_index: number | null;
     friends: List<number>;
     overlay: boolean;
     dispatch?: Redux.Dispatch;
@@ -54,7 +54,7 @@ function getStatusIdsRelatedTo(status: TweetItem): string[] {
 
     let s = status;
     while (s.in_reply_to_status_id !== null) {
-        ret.push(status.in_reply_to_status_id);
+        ret.push(s.in_reply_to_status_id!);
         if (s.in_reply_to_status === null) {
             break;
         }
@@ -98,11 +98,13 @@ export class Timeline extends React.Component<TimelineProps, {}> {
         }
     }
 
-    renderItem(idx: number, key: string, related_ids: string[], focused_user_id: number) {
+    renderItem(idx: number, key: string, related_ids: string[], focused_user_id: number | null) {
         const {items, focus_index, kind, owner, friends, dispatch} = this.props;
         const i = items.get(idx);
         const focused = idx === focus_index;
         if (i instanceof TweetItem) {
+            const is_focused_user = focused_user_id === null ?
+                false : (focused_user_id === i.getMainStatus().user.id);
             if (Config.shouldExpandTweet(focused)) {
                 return <Tweet
                     status={i}
@@ -110,7 +112,7 @@ export class Timeline extends React.Component<TimelineProps, {}> {
                     owner={owner}
                     focused={focused}
                     related={related_ids.indexOf(i.id) !== -1}
-                    focused_user={focused_user_id === i.getMainStatus().user.id}
+                    focusedUser={is_focused_user}
                     friends={friends}
                     itemIndex={idx}
                     key={key}
@@ -122,7 +124,7 @@ export class Timeline extends React.Component<TimelineProps, {}> {
                     owner={owner}
                     focused={focused}
                     related={related_ids.indexOf(i.id) !== -1}
-                    focused_user={focused_user_id === i.getMainStatus().user.id}
+                    focusedUser={is_focused_user}
                     itemIndex={idx}
                     key={key}
                 />;
@@ -139,7 +141,7 @@ export class Timeline extends React.Component<TimelineProps, {}> {
             return <ZigZagSeparator
                 itemIndex={idx}
                 focused={focused}
-                dispatch={dispatch}
+                dispatch={dispatch!}
                 key={key}
             />;
         } else {
@@ -181,9 +183,9 @@ export class Timeline extends React.Component<TimelineProps, {}> {
                 isOpen
                 backdropClosesModal
                 width={window.innerWidth - 120}
-                onClickNext={() => dispatch(moveToNthPicturePreview(next_idx))}
-                onClickPrev={() => dispatch(moveToNthPicturePreview(prev_idx))}
-                onClose={() => dispatch(closeTweetMedia())}
+                onClickNext={() => dispatch!(moveToNthPicturePreview(next_idx))}
+                onClickPrev={() => dispatch!(moveToNthPicturePreview(prev_idx))}
+                onClose={() => dispatch!(closeTweetMedia())}
                 enableKeyboardInput={true}
             />
         );
@@ -191,7 +193,7 @@ export class Timeline extends React.Component<TimelineProps, {}> {
 
     onOverlayClicked(e: React.MouseEvent) {
         e.stopPropagation();
-        this.props.dispatch(closeSlaveTimeline());
+        this.props.dispatch!(closeSlaveTimeline());
     }
 
     renderOverlay() {
@@ -230,7 +232,7 @@ export class Timeline extends React.Component<TimelineProps, {}> {
                     <Message
                         text={message.text}
                         kind={message.kind}
-                        dispatch={dispatch}
+                        dispatch={dispatch!}
                     />}
                 <ReactList
                     itemRenderer={(idx, key) => this.renderItem(idx, key, related_ids, focused_user_id)}
@@ -252,7 +254,7 @@ function select(state: State): TimelineProps {
         message: state.message,
         items: state.timeline.getCurrentTimeline(),
         kind: state.timeline.kind,
-        owner: state.timeline.user,
+        owner: state.timeline.user!,
         media: state.tweetMedia,
         focus_index: state.timeline.focus_index,
         friends: state.timeline.friend_ids,

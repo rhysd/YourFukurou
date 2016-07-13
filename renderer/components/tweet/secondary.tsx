@@ -27,8 +27,8 @@ function retweetedBy(tw: Tweet, focused: boolean) {
 }
 
 const TweetSecondary = (props: TweetSecondaryProps) => {
-    const {status, focused} = props;
-    const user = status.getMainStatus().user;
+    const focused = !!props.focused;
+    const user = props.status.getMainStatus().user;
     return <div className="tweet__secondary">
         <ScreenName
             className={classNames(
@@ -40,7 +40,7 @@ const TweetSecondary = (props: TweetSecondaryProps) => {
         <div className="tweet__secondary-name" title={user.name}>
             {user.name}
         </div>
-        {retweetedBy(status, focused)}
+        {retweetedBy(props.status, focused)}
     </div>;
 };
 export default TweetSecondary;

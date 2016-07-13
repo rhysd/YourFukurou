@@ -9,9 +9,9 @@
 // Note:
 // Should we validate configuration and show an alert if invalid configuration is found?
 export class CachedConfig {
-    private remote_config_memo: Config;
-    private notification_memo: NotificationConfig;
-    private mute_memo: MuteConfig;
+    private remote_config_memo: Config | null;
+    private notification_memo: NotificationConfig | null;
+    private mute_memo: MuteConfig | null;
 
     constructor() {
         this.remote_config_memo = null;
@@ -23,7 +23,7 @@ export class CachedConfig {
         if (this.remote_config_memo === null) {
             this.remote_config_memo = global.require('electron').remote.getGlobal('config');
         }
-        return this.remote_config_memo;
+        return this.remote_config_memo!;
     }
 
     get notification() {
@@ -45,7 +45,7 @@ export class CachedConfig {
                 };
             }
         }
-        return this.notification_memo;
+        return this.notification_memo!;
     }
 
     get mute() {
@@ -63,7 +63,7 @@ export class CachedConfig {
                 };
             }
         }
-        return this.mute_memo;
+        return this.mute_memo!;
     }
 
     notificationSilent() {

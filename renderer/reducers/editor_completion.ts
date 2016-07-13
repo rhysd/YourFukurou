@@ -6,11 +6,11 @@ export default function editorCompletion(state: EditorCompletionState = DefaultE
     switch (action.type) {
         case Kind.UpdateAutoCompletion:
             return state.searchSuggestions(
-                action.suggestions,
-                action.query,
-                action.top,
-                action.left,
-                action.completion_label
+                action.suggestions!,
+                action.query!,
+                action.top!,
+                action.left!,
+                action.completion_label!
             );
         case Kind.DownAutoCompletionFocus:      return state.downFocus();
         case Kind.UpAutoCompletionFocus:        return state.upFocus();

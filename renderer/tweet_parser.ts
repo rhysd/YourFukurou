@@ -110,7 +110,7 @@ export default class TweetTextParser {
         return null;
     }
 
-    eatEntity(match: RegExpExecArray): TweetTextToken {
+    eatEntity(match: RegExpExecArray): TweetTextToken | null {
         const s = match[0];
         if (s.startsWith('http')) {
             return this.getUrlFrom(s);

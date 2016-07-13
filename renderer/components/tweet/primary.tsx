@@ -65,7 +65,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
         );
     }
 
-    renderQuotedStatus(s: Tweet): JSX.Element {
+    renderQuotedStatus(s: Tweet): JSX.Element | undefined {
         const q = s.quoted_status;
         if (q === null) {
             return undefined;

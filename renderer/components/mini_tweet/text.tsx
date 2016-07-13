@@ -42,7 +42,7 @@ function renderQuoted(s: Tweet, focused: boolean, onClick: (e: React.MouseEvent)
     );
 }
 
-export const MiniTweetText: React.StatelessComponent<MiniTweetTextProps> = props => {
+export const MiniTweetText = (props: MiniTweetTextProps) => {
     const tw = props.status.getMainStatus();
     return (
         <div className="mini-tweet__text" title={tw.text}>

@@ -7,7 +7,7 @@ import TwitterProfile from './profile';
 
 interface TweetIconProps extends React.Props<any> {
     user: TwitterUser;
-    friends: List<number>;
+    friends?: List<number>;
 }
 
 // TODO:

@@ -61,7 +61,7 @@ interface Listenable {
 
 export default class MediaPreviewKeyMaps {
     private keybinds: KeyBinds<MediaPreviewAction>;
-    private listening: Listenable;
+    private listening: Listenable | null;
     private handler: (e: KeyboardEvent) => void;
 
     constructor() {

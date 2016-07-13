@@ -3,12 +3,12 @@ import {SuggestionItem} from '../components/editor/suggestions';
 
 export default class EditorCompletionState {
     constructor(
-        public query: string,
-        public label: AutoCompleteLabel,
+        public query: string | null,
+        public label: AutoCompleteLabel | null,
         public pos_top: number,
         public pos_left: number,
         public suggestions: SuggestionItem[],
-        public focus_idx: number
+        public focus_idx: number | null
     ) {}
 
     searchSuggestions(suggestions: SuggestionItem[], query: string, top: number, left: number, label: AutoCompleteLabel) {

@@ -22,7 +22,7 @@ function renderSlave(props: SlaveTimelineProps) {
             timeline={slave}
             friends={props.friends}
             owner={props.owner}
-            dispatch={props.dispatch}
+            dispatch={props.dispatch!}
         />;
     } else if (slave instanceof ConversationTimeline) {
         return <ConversationSlave
@@ -36,7 +36,7 @@ function renderSlave(props: SlaveTimelineProps) {
     }
 }
 
-const SlaveTimelineComponent: React.StatelessComponent<SlaveTimelineProps> = props => {
+const SlaveTimelineComponent = (props: SlaveTimelineProps) => {
     if (props.slave === null) {
         return null;
     }
@@ -50,8 +50,12 @@ function select(state: State): SlaveTimelineProps {
     return {
         slave: state.slaveTimeline,
         friends: state.timeline.friend_ids,
-        owner: state.timeline.user,
+        owner: state.timeline.user!,
     };
 }
 
-export default connect(select)(SlaveTimelineComponent);
+// Note:
+// Need to cast because type inferrance in react-redux.d.ts depends on StatelessComponent interface.
+// And we can't use React.StatelessComponent<SlaveTimelineProps> for type of SlaveTimelineComponent because
+// its 'props' parameter will be inferred as 'SlaveTimelineProps | undefined'.
+export default connect(select)(SlaveTimelineComponent as React.StatelessComponent<SlaveTimelineProps>);

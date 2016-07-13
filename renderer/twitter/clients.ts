@@ -15,7 +15,7 @@ export interface UnderlyingClient {
 }
 
 export class TwitClient implements UnderlyingClient {
-    private client: Twit;
+    private client: Twit | null;
 
     constructor() {
         this.client = null;
@@ -32,6 +32,10 @@ export class TwitClient implements UnderlyingClient {
 
     post<T>(name: string, params: Object = {}): Promise<T> {
         return new Promise<T>((resolve, reject) => {
+            if (this.client === null) {
+                log.error('Client is not set up yet');
+                return;
+            }
             this.client.post(name, params, (err, data, res) => {
                 if (err) {
                     this.showApiFailure(name, err, res);
@@ -46,6 +50,10 @@ export class TwitClient implements UnderlyingClient {
 
     get<T>(name: string, params: Object = {}): Promise<T> {
         return new Promise<T>((resolve, reject) => {
+            if (this.client === null) {
+                log.error('Client is not set up yet');
+                return;
+            }
             this.client.get(name, params, (err, data, res) => {
                 if (err) {
                     this.showApiFailure(name, err, res);

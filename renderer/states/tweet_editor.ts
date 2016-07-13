@@ -17,7 +17,7 @@ export default class TweetEditorState {
     constructor(
         public core: EditorState,
         public is_open: boolean,
-        public in_reply_to_status: Tweet
+        public in_reply_to_status: Tweet | null
     ) {}
 
     onDraftEditorChange(new_core: EditorState) {

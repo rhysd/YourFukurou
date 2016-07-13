@@ -12,7 +12,7 @@ type Size = 'normal' | 'big';
 
 interface ConnectedProps extends React.Props<any> {
     user: TwitterUser;
-    friends: List<number>;
+    friends?: List<number>;
     size?: Size;
 }
 
@@ -137,7 +137,7 @@ function renderFooter(user: TwitterUser) {
     );
 }
 
-export const TwitterProfile: React.StatelessComponent<TwitterProfileProps> = props => {
+export const TwitterProfile = (props: TwitterProfileProps) => {
     const u = props.user;
     const style = {
         width: props.size && props.size === 'big' ? undefined : '300px',
@@ -159,7 +159,10 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
     return {
         onBannerClick: e => {
             e.stopPropagation();
-            dispatch(openPicturePreview([props.user.max_size_banner_url]));
+            const url = props.user.max_size_banner_url;
+            if (url !== null) {
+                dispatch(openPicturePreview([url]));
+            }
         },
         onIconClick: e => {
             e.stopPropagation();

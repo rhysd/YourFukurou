@@ -14,10 +14,10 @@ export class TwitterRestApi {
         this.client.setupClient(options);
     }
 
-    updateStatus(text: string, in_reply_to?: string) {
+    updateStatus(text: string, in_reply_to?: string | null) {
         const params = {
             status: text,
-            in_reply_to_status_id: undefined as string,
+            in_reply_to_status_id: undefined as string|undefined,
             trim_user: false,
         };
         if (in_reply_to) {
@@ -146,7 +146,7 @@ export class TwitterRestApi {
             .then(res => {
                 const related_ids = [status_id];
                 return res.statuses.reduce((result, status) => {
-                    const in_reply_to = status.in_reply_to_status_id_str;
+                    const in_reply_to = status.in_reply_to_status_id_str!;
                     if (related_ids.indexOf(in_reply_to) !== -1) {
                         result.push(status);
                         related_ids.push(status.id_str);
@@ -156,11 +156,11 @@ export class TwitterRestApi {
             });
     }
 
-    missingHomeTimeline(max_id: string, since_id: string) {
+    missingHomeTimeline(max_id?: string, since_id?: string) {
         return this.missingTimeline('statuses/home_timeline', max_id, since_id);
     }
 
-    missingMentionTimeline(max_id: string, since_id: string) {
+    missingMentionTimeline(max_id?: string, since_id?: string) {
         return this.missingTimeline('statuses/mentions_timeline', max_id, since_id);
     }
 
@@ -173,7 +173,7 @@ export class TwitterRestApi {
     // [Tweet, Tweet, Tweet, ..., Tweet]
     //
     // Both max_id and since_id can be undefined.
-    private missingTimeline(path: string, max_id: string, since_id: string) {
+    private missingTimeline(path: string, max_id?: string, since_id?: string) {
         const params = {
             include_entities: true,
             max_id,

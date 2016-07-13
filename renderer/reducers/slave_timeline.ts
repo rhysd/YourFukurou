@@ -5,13 +5,13 @@ import SlaveTimeline, {
     ConversationTimeline,
 } from '../states/slave_timeline';
 
-export default function slaveTimeline(state: SlaveTimeline = null, action: Action) {
+export default function slaveTimeline(state: SlaveTimeline | null = null, action: Action) {
     if (action.type === Kind.OpenUserTimeline) {
-        return new UserTimeline(action.user);
+        return new UserTimeline(action.user!);
     }
 
     if (action.type === Kind.OpenConversationTimeline) {
-        return ConversationTimeline.fromArray(action.statuses);
+        return ConversationTimeline.fromArray(action.statuses!);
     }
 
     if (state === null) {
@@ -21,13 +21,13 @@ export default function slaveTimeline(state: SlaveTimeline = null, action: Actio
     switch (action.type) {
         case Kind.AddUserTweets:
             if (state instanceof UserTimeline) {
-                return state.user.id === action.user_id ? state.addTweets(action.statuses) : state;
+                return state.user.id === action.user_id! ? state.addTweets(action.statuses!) : state;
             } else {
                 return state;
             }
         case Kind.AppendPastItems:
             if (state instanceof UserTimeline) {
-                return state.user.id === action.user_id ? state.appendPastItems(action.items) : state;
+                return state.user.id === action.user_id! ? state.appendPastItems(action.items!) : state;
             } else {
                 return state;
             }
@@ -37,7 +37,7 @@ export default function slaveTimeline(state: SlaveTimeline = null, action: Actio
         case Kind.FocusSlavePrev:     return state.focusPrev();
         case Kind.FocusSlaveTop:      return state.focusTop();
         case Kind.FocusSlaveBottom:   return state.focusBottom();
-        case Kind.FocusSlaveOn:       return state.focusOn(action.index);
+        case Kind.FocusSlaveOn:       return state.focusOn(action.index!);
         case Kind.BlurSlaveTimeline:  return state.blur();
         default:                      return state;
     }

@@ -45,11 +45,11 @@ interface TweetTextProps extends React.Props<any> {
     focused?: boolean;
 }
 
-const TweetText: React.StatelessComponent<TweetTextProps> = props => {
+const TweetText = (props: TweetTextProps) => {
     const class_name = props.className || 'tweet__text';
     return (
         <div className={class_name}>
-            {props.status.parsed_tokens.map(mapTokenToElement.bind(null, class_name, props.focused))}
+            {props.status.parsed_tokens.map(mapTokenToElement.bind(null, class_name, !!props.focused))}
         </div>
     );
 };

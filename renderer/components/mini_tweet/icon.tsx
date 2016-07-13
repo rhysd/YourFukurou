@@ -7,7 +7,7 @@ interface MiniTweetIconProps extends React.Props<any> {
     quoted: boolean;
 }
 
-const MiniTweetIcon: React.StatelessComponent<MiniTweetIconProps> = props => {
+const MiniTweetIcon = (props: MiniTweetIconProps) => {
     const u = props.user;
     const s = '@' + u.screen_name;
 

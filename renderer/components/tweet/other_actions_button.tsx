@@ -41,7 +41,7 @@ function copyJson(status: Tweet, dispatch: Redux.Dispatch) {
 }
 
 function renderDeleteThisTweet(props: OtherActionsButtonProps) {
-    const isMyTweet = props.status.user.id === props.owner.id;
+    const isMyTweet = props.owner && props.status.user.id === props.owner.id;
     if (!isMyTweet) {
         return undefined;
     }
@@ -75,7 +75,7 @@ function correctThisTweet(status: Tweet, owner: TwitterUser, dispatch: Redux.Dis
 }
 
 function renderCorrectThisTweet(props: OtherActionsButtonProps) {
-    const isMyTweet = props.status.user.id === props.owner.id;
+    const isMyTweet = props.owner && props.status.user.id === props.owner.id;
     if (!isMyTweet) {
         return undefined;
     }
@@ -175,7 +175,9 @@ function mapDispatch(dispatch: Redux.Dispatch, props: ConnectedProps): DispatchP
         },
         onCorrectTweet: e => {
             e.stopPropagation();
-            correctThisTweet(props.status, props.owner, dispatch);
+            if (props.owner) {
+                correctThisTweet(props.status, props.owner, dispatch);
+            }
         },
     };
 }

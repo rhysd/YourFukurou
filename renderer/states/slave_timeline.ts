@@ -5,13 +5,13 @@ import Separator from '../item/separator';
 import KeymapTransition from '../keybinds/keymap_transition';
 
 interface SlaveTimeline {
-    getFocusedItem(): Item;
-    close(): SlaveTimeline;
+    getFocusedItem(): Item | null;
+    close(): null;
     focusNext(): SlaveTimeline;
     focusPrev(): SlaveTimeline;
     focusTop(): SlaveTimeline;
     focusBottom(): SlaveTimeline;
-    focusOn(index: number): SlaveTimeline;
+    focusOn(index: number | null): SlaveTimeline;
     blur(): SlaveTimeline;
 }
 export default SlaveTimeline;
@@ -20,7 +20,7 @@ export class UserTimeline implements SlaveTimeline {
     constructor(
         public user: TwitterUser,
         public items: List<Item> = List<Item>([new Separator()]),
-        public focus_index: number = null
+        public focus_index: number | null = null
     ) {
         KeymapTransition.enterSlaveTimeline();
     }
@@ -51,7 +51,7 @@ export class UserTimeline implements SlaveTimeline {
         );
     }
 
-    close(): UserTimeline {
+    close() {
         KeymapTransition.escapeFromCurrentKeymaps();
         return null;
     }
@@ -88,7 +88,7 @@ export class UserTimeline implements SlaveTimeline {
         return this.focusOn(this.items.size - 1);
     }
 
-    focusOn(idx: number) {
+    focusOn(idx: number | null) {
         if (idx === this.focus_index) {
             return this;
         }
@@ -107,7 +107,7 @@ export class ConversationTimeline implements SlaveTimeline {
 
     constructor(
         public items: List<Tweet>,
-        public focus_index: number = null
+        public focus_index: number | null = null
     ) {
         KeymapTransition.enterSlaveTimeline();
     }
@@ -119,7 +119,7 @@ export class ConversationTimeline implements SlaveTimeline {
         return this.items.get(this.focus_index);
     }
 
-    close(): ConversationTimeline {
+    close() {
         KeymapTransition.escapeFromCurrentKeymaps();
         return null;
     }
@@ -156,7 +156,7 @@ export class ConversationTimeline implements SlaveTimeline {
         return this.focusOn(this.items.size - 1);
     }
 
-    focusOn(idx: number) {
+    focusOn(idx: number | null) {
         if (idx === this.focus_index) {
             return this;
         }
