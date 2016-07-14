@@ -4,14 +4,14 @@ import {completeMissingStatuses} from '../actions';
 import {Dispatch} from '../store';
 
 interface Props extends React.Props<ZigZagSeparator> {
-    itemIndex?: number;
-    focused?: boolean;
-    onClick?: (e: React.MouseEvent) => void;
-    dispatch: Dispatch;
+    readonly itemIndex?: number;
+    readonly focused?: boolean;
+    readonly onClick?: (e: React.MouseEvent) => void;
+    readonly dispatch: Dispatch;
 }
 
 interface State {
-    loading: boolean;
+    readonly loading: boolean;
 }
 
 export default class ZigZagSeparator extends React.Component<Props, State> {

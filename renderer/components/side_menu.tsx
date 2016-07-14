@@ -16,11 +16,11 @@ import {Dispatch} from '../store';
 const {shell} = global.require('electron');
 
 interface SideMenuButtonProps extends React.Props<any> {
-    active: boolean;
-    notified: boolean;
-    name: string;
-    tip: string;
-    onClick: (event: React.MouseEvent) => void;
+    readonly active: boolean;
+    readonly notified: boolean;
+    readonly name: string;
+    readonly tip: string;
+    readonly onClick: (event: React.MouseEvent) => void;
 }
 
 export const SideMenuButton = (props: SideMenuButtonProps) => {

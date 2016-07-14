@@ -12,14 +12,14 @@ import {Dispatch} from '../../store';
 type Size = 'normal' | 'big';
 
 interface ConnectedProps extends React.Props<any> {
-    user: TwitterUser;
-    friends?: List<number>;
-    size?: Size;
+    readonly user: TwitterUser;
+    readonly friends?: List<number>;
+    readonly size?: Size;
 }
 
 interface DispatchProps {
-    onBannerClick: (e: React.MouseEvent) => void;
-    onIconClick: (e: React.MouseEvent) => void;
+    readonly onBannerClick: (e: React.MouseEvent) => void;
+    readonly onIconClick: (e: React.MouseEvent) => void;
 }
 
 type TwitterProfileProps = ConnectedProps & DispatchProps;

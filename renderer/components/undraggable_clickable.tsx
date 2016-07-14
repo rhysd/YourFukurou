@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 interface Props extends React.Props<any> {
-    className?: string;
-    onClick: (e: React.MouseEvent) => void;
+    readonly className?: string;
+    readonly onClick: (e: React.MouseEvent) => void;
 }
 
 export default class UndraggableClickable extends React.Component<Props, {}> {

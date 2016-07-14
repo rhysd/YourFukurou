@@ -3,8 +3,8 @@ import * as classNames from 'classnames';
 import {TwitterUser} from '../../item/tweet';
 
 interface MiniTweetIconProps extends React.Props<any> {
-    user: TwitterUser;
-    quoted: boolean;
+    readonly user: TwitterUser;
+    readonly quoted: boolean;
 }
 
 const MiniTweetIcon = (props: MiniTweetIconProps) => {

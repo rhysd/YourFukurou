@@ -25,11 +25,11 @@ import TwitterRestApi from '../../twitter/rest_api';
 import DB from '../../database/db';
 
 interface TweetEditorProps extends React.Props<any> {
-    editor: EditorState;
-    inReplyTo: Tweet | null;
-    completion: EditorCompletionState;
-    friends: List<number>;
-    dispatch?: Dispatch;
+    readonly editor: EditorState;
+    readonly inReplyTo: Tweet | null;
+    readonly completion: EditorCompletionState;
+    readonly friends: List<number>;
+    readonly dispatch?: Dispatch;
 }
 
 // TODO:

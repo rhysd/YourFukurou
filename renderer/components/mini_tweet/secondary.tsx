@@ -4,8 +4,8 @@ import ScreenName from '../tweet/screen_name';
 import Tweet from '../../item/tweet';
 
 interface MiniTweetSecondaryProps extends React.Props<any> {
-    status: Tweet;
-    focused: boolean;
+    readonly status: Tweet;
+    readonly focused: boolean;
 }
 
 function renderRetweeted(props: MiniTweetSecondaryProps) {

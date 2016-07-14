@@ -9,12 +9,12 @@ import {openPicturePreview} from '../../actions';
 import {Dispatch} from '../../store';
 
 interface ConnectedProps extends React.Props<any> {
-    status: Tweet;
-    focused: boolean;
+    readonly status: Tweet;
+    readonly focused: boolean;
 }
 
 interface DispatchProps {
-    onClick: (e: React.MouseEvent) => void;
+    readonly onClick: (e: React.MouseEvent) => void;
 }
 
 type MiniTweetTextProps = ConnectedProps & DispatchProps;

@@ -18,9 +18,9 @@ export default SlaveTimeline;
 
 export class UserTimeline implements SlaveTimeline {
     constructor(
-        public user: TwitterUser,
-        public items: List<Item> = List<Item>([new Separator()]),
-        public focus_index: number | null = null,
+        public readonly user: TwitterUser,
+        public readonly items: List<Item> = List<Item>([new Separator()]),
+        public readonly focus_index: number | null = null,
     ) {
         KeymapTransition.enterSlaveTimeline();
     }
@@ -106,8 +106,8 @@ export class ConversationTimeline implements SlaveTimeline {
     }
 
     constructor(
-        public items: List<Tweet>,
-        public focus_index: number | null = null,
+        public readonly items: List<Tweet>,
+        public readonly focus_index: number | null = null,
     ) {
         KeymapTransition.enterSlaveTimeline();
     }

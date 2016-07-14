@@ -7,12 +7,12 @@ interface AccessToken {
 
 declare namespace ElectronWindowState {
     interface WindowState {
-        x: number;
-        y: number;
-        width: number;
-        height: number;
-        isMaximized: boolean;
-        isFullScreen: boolean;
+        readonly x: number;
+        readonly y: number;
+        readonly width: number;
+        readonly height: number;
+        readonly isMaximized: boolean;
+        readonly isFullScreen: boolean;
         manage(win: Electron.BrowserWindow): void;
         saveState(win: Electron.BrowserWindow): void;
     }

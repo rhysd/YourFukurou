@@ -15,9 +15,9 @@ const editorDecolator = new CompositeDecorator([
 
 export default class TweetEditorState {
     constructor(
-        public core: EditorState,
-        public is_open: boolean,
-        public in_reply_to_status: Tweet | null,
+        public readonly core: EditorState,
+        public readonly is_open: boolean,
+        public readonly in_reply_to_status: Tweet | null,
     ) {}
 
     onDraftEditorChange(new_core: EditorState) {

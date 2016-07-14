@@ -17,14 +17,14 @@ const MaxIconsExpanded = 10;
 const MaxIconsCollapsed = 4;
 
 interface ConnectedProps extends React.Props<any> {
-    activity: TimelineActivity;
-    focused?: boolean;
-    collapsed?: boolean;
-    itemIndex?: number;
+    readonly activity: TimelineActivity;
+    readonly focused?: boolean;
+    readonly collapsed?: boolean;
+    readonly itemIndex?: number;
 }
 
 interface DispatchProps {
-    onClick: (e: MouseEvent) => void;
+    readonly onClick: (e: MouseEvent) => void;
 }
 
 type TwitterActivityProps = ConnectedProps & DispatchProps;

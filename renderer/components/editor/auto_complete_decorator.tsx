@@ -21,11 +21,11 @@ function createAutoCompleteStrategy(re: RegExp) {
 }
 
 export interface AutoCompleteProps extends React.Props<any> {
-    decoratedText: string;
-    dir: string;
-    entityKey: string;
-    offsetKey: string;
-    dispatch?: Dispatch;
+    readonly decoratedText: string;
+    readonly dir: string;
+    readonly entityKey: string;
+    readonly offsetKey: string;
+    readonly dispatch?: Dispatch;
 }
 
 function createAutoCompleteComponent(label: AutoCompleteLabel) {

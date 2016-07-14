@@ -10,10 +10,10 @@ import log from '../../log';
 import {Dispatch} from '../../store';
 
 interface SlaveTimelineProps extends React.Props<any> {
-    slave: SlaveTimeline;
-    friends: List<number>;
-    owner: TwitterUser;
-    dispatch?: Dispatch;
+    readonly slave: SlaveTimeline;
+    readonly friends: List<number>;
+    readonly owner: TwitterUser;
+    readonly dispatch?: Dispatch;
 }
 
 function renderSlave(props: SlaveTimelineProps) {

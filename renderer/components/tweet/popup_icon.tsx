@@ -6,8 +6,8 @@ import {TwitterUser} from '../../item/tweet';
 import TwitterProfile from './profile';
 
 interface TweetIconProps extends React.Props<any> {
-    user: TwitterUser;
-    friends?: List<number>;
+    readonly user: TwitterUser;
+    readonly friends?: List<number>;
 }
 
 // TODO:

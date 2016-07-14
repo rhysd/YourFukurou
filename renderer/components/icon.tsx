@@ -9,13 +9,13 @@ import TwitterRestApi from '../twitter/rest_api';
 import {Dispatch} from '../store';
 
 interface ConnectedProps {
-    user: TwitterUser;
-    size: number;
-    border?: string;
+    readonly user: TwitterUser;
+    readonly size: number;
+    readonly border?: string;
 }
 
 interface DispatchProps {
-    onClick: (e: React.MouseEvent) => void;
+    readonly onClick: (e: React.MouseEvent) => void;
 }
 
 type IconProps = ConnectedProps & DispatchProps & React.Props<any>;

@@ -2,8 +2,8 @@ import Action from '../action_type';
 
 export type MessageKind = 'info' | 'error';
 export interface MessageState {
-    text: string;
-    kind: MessageKind;
+    readonly text: string;
+    readonly kind: MessageKind;
 }
 
 export default function message(state: MessageState | null = null, action: Action): MessageState | null {

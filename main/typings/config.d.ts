@@ -1,24 +1,24 @@
 interface NotificationConfig {
-    reply: boolean;
-    retweet: boolean;
-    quoted: boolean;
-    like: boolean;
+    readonly reply: boolean;
+    readonly retweet: boolean;
+    readonly quoted: boolean;
+    readonly like: boolean;
 }
 
 interface MuteConfig {
-    home: boolean;
-    mention: boolean;
+    readonly home: boolean;
+    readonly mention: boolean;
 }
 
 interface Config {
-    notification: boolean | NotificationConfig;
-    notification_sound: boolean | string;
-    hotkey_accelerator: string | null;
-    expand_tweet: 'always' | 'focused' | 'never';
-    plugin: string[];
-    mute: boolean | MuteConfig;
-    max_timeline_items: number | null;
-    proxy: string | null;
-    sticky_window: boolean;
-    caffeinated: boolean;
+    readonly notification: boolean | NotificationConfig;
+    readonly notification_sound: boolean | string;
+    readonly hotkey_accelerator: string | null;
+    readonly expand_tweet: 'always' | 'focused' | 'never';
+    readonly plugin: string[];
+    readonly mute: boolean | MuteConfig;
+    readonly max_timeline_items: number | null;
+    readonly proxy: string | null;
+    readonly sticky_window: boolean;
+    readonly caffeinated: boolean;
 }

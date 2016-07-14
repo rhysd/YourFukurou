@@ -7,8 +7,8 @@ import TweetText from './text';
 import TweetMedia from './media';
 
 interface QuotedTweetProps extends React.Props<any> {
-    status: TweetItem;
-    focused: boolean;
+    readonly status: TweetItem;
+    readonly focused: boolean;
 }
 
 function renderMedia(media: Twitter.MediaEntity[]) {

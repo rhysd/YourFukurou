@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 interface AvatarProps extends React.Props<any> {
-    screenName: string;
-    imageUrl?: string;
-    size?: number;
-    border?: string;
-    onClick: (e: React.MouseEvent) => void;
+    readonly screenName: string;
+    readonly imageUrl?: string;
+    readonly size?: number;
+    readonly border?: string;
+    readonly onClick: (e: React.MouseEvent) => void;
 }
 
 function getStyle(props: AvatarProps) {

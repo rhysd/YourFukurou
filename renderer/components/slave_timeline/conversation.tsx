@@ -6,9 +6,9 @@ import Tweet from '../tweet/index';
 import TweetItem, {TwitterUser} from '../../item/tweet';
 
 interface ConversationSlaveProps extends React.Props<any> {
-    timeline: ConversationTimeline;
-    owner: TwitterUser;
-    friends: List<number>;
+    readonly timeline: ConversationTimeline;
+    readonly owner: TwitterUser;
+    readonly friends: List<number>;
 }
 
 function renderTweets(props: ConversationSlaveProps) {

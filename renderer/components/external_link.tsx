@@ -3,9 +3,9 @@ import * as React from 'react';
 const openExternal = global.require('electron').shell.openExternal;
 
 interface ExternalLinkProps extends React.Props<any> {
-    url: string;
-    className?: string;
-    title?: string;
+    readonly url: string;
+    readonly className?: string;
+    readonly title?: string;
 }
 
 const ExternalLink = (props: ExternalLinkProps) => (

@@ -5,10 +5,10 @@ import {MessageKind} from '../reducers/message';
 import {Dispatch} from '../store';
 
 interface MessageProps extends React.Props<any> {
-    text: string;
-    kind: MessageKind;
-    dispatch: Dispatch;
-    duration?: number;
+    readonly text: string;
+    readonly kind: MessageKind;
+    readonly dispatch: Dispatch;
+    readonly duration?: number;
 };
 
 export default class Message extends React.Component<MessageProps, {}> {

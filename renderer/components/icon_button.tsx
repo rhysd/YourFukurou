@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 interface IconButtonProps extends React.Props<any> {
-    name: string;
-    className?: string;
-    color?: string;
-    tip?: string;
-    onClick?: (event: React.MouseEvent) => void;
+    readonly name: string;
+    readonly className?: string;
+    readonly color?: string;
+    readonly tip?: string;
+    readonly onClick?: (event: React.MouseEvent) => void;
 }
 
 const IconButton = (props: IconButtonProps) => (

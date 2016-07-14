@@ -20,11 +20,11 @@ export interface SuggestionItem {
 }
 
 interface EmojiEntryProps extends React.Props<any> {
-    code: string;
-    text: string;
-    name: string;
-    focused: boolean;
-    dispatch?: Dispatch;
+    readonly code: string;
+    readonly text: string;
+    readonly name: string;
+    readonly focused: boolean;
+    readonly dispatch?: Dispatch;
 }
 
 export const EmojiEntry = connect()(
@@ -50,11 +50,11 @@ export const EmojiEntry = connect()(
 );
 
 interface ScreenNameEntryProps extends React.Props<any> {
-    icon_url: string;
-    name: string;
-    query: string;
-    focused: boolean;
-    dispatch?: Dispatch;
+    readonly icon_url: string;
+    readonly name: string;
+    readonly query: string;
+    readonly focused: boolean;
+    readonly dispatch?: Dispatch;
 }
 
 export const ScreenNameEntry = connect()(
@@ -84,10 +84,10 @@ export const ScreenNameEntry = connect()(
 );
 
 interface HashtagEntryProps extends React.Props<any> {
-    query: string;
-    text: string;
-    focused: boolean;
-    dispatch?: Dispatch;
+    readonly query: string;
+    readonly text: string;
+    readonly focused: boolean;
+    readonly dispatch?: Dispatch;
 }
 
 export const HashtagEntry = connect()(

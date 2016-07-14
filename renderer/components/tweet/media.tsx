@@ -5,8 +5,8 @@ import {openPicturePreview} from '../../actions';
 import {Dispatch} from '../../store';
 
 interface TweetMediaProps extends React.Props<any> {
-    entities: Twitter.MediaEntity[];
-    dispatch?: Dispatch;
+    readonly entities: Twitter.MediaEntity[];
+    readonly dispatch?: Dispatch;
 }
 
 function renderThumb(entity: Twitter.MediaEntity, nth: number, props: TweetMediaProps) {

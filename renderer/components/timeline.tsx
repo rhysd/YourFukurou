@@ -26,15 +26,15 @@ import Config from '../config';
 import {Dispatch} from '../store';
 
 interface TimelineProps extends React.Props<any> {
-    message: MessageState;
-    kind: TimelineKind;
-    items: List<Item>;
-    owner: TwitterUser;
-    media: TweetMediaState;
-    focus_index: number | null;
-    friends: List<number>;
-    overlay: boolean;
-    dispatch?: Dispatch;
+    readonly message: MessageState;
+    readonly kind: TimelineKind;
+    readonly items: List<Item>;
+    readonly owner: TwitterUser;
+    readonly media: TweetMediaState;
+    readonly focus_index: number | null;
+    readonly friends: List<number>;
+    readonly overlay: boolean;
+    readonly dispatch?: Dispatch;
 }
 
 function nop() {

@@ -91,15 +91,15 @@ function setBadge(visible: boolean) {
 // This must be an immutable class because it is a part of state in a reducer
 export default class TimelineState {
     constructor(
-        public kind: TimelineKind,
-        public home: List<Item>,
-        public mention: List<Item>,
-        public user: TwitterUser | null,
-        public notified: Notified,
-        public rejected_ids: List<number>,
-        public no_retweet_ids: List<number>,
-        public focus_index: number | null,
-        public friend_ids: List<number>,
+        public readonly kind: TimelineKind,
+        public /*readonly*/ home: List<Item>,
+        public /*readonly*/ mention: List<Item>,
+        public readonly user: TwitterUser | null,
+        public /*readonly*/ notified: Notified,
+        public readonly rejected_ids: List<number>,
+        public readonly no_retweet_ids: List<number>,
+        public /*readonly*/ focus_index: number | null,
+        public readonly friend_ids: List<number>,
     ) {}
 
     updateActivityInMention(kind: TimelineActivityKind, status: Tweet, from: TwitterUser): [List<Item>, number | null] {

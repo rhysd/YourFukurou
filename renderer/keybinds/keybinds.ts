@@ -2,12 +2,12 @@ import * as I from 'immutable';
 import log from '../log';
 
 export interface KeyEvent {
-    code: string;
-    charcode: number;
-    ctrlKey: boolean;
-    metaKey: boolean;
-    altKey: boolean;
-    shiftKey: boolean;
+    readonly code: string;
+    readonly charcode: number;
+    readonly ctrlKey: boolean;
+    readonly metaKey: boolean;
+    readonly altKey: boolean;
+    readonly shiftKey: boolean;
 }
 
 interface PreparsedSeq {

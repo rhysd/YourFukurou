@@ -7,7 +7,7 @@ import TweetEditor from './editor/index';
 import SlaveTimeline from './slave_timeline/index';
 
 interface AppProps extends React.Props<any> {
-    editorOpen: boolean;
+    readonly editorOpen: boolean;
 }
 
 const App = (props: AppProps) => (

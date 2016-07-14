@@ -7,12 +7,12 @@ import TwitterRestApi from '../../twitter/rest_api';
 import {Dispatch} from '../../store';
 
 interface ConnectedProps extends React.Props<any> {
-    user: TwitterUser;
-    friends?: List<number>;
+    readonly user: TwitterUser;
+    readonly friends?: List<number>;
 }
 
 interface DispatchProps {
-    onClick: (e: React.MouseEvent) => void;
+    readonly onClick: (e: React.MouseEvent) => void;
 }
 
 type FollowButtonProps = ConnectedProps & DispatchProps;

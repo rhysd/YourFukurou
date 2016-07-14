@@ -8,158 +8,158 @@ import {MessageKind} from './reducers/message';
 import { SuggestionItem} from './components/editor/suggestions';
 
 type ActionType = {
-    type: 'AddSeparator';
+    readonly type: 'AddSeparator';
 } | {
-    type: 'ChangeCurrentTimeline';
-    timeline: TimelineKind;
+    readonly type: 'ChangeCurrentTimeline';
+    readonly timeline: TimelineKind;
 } | {
-    type: 'ShowMessage';
-    text: string;
-    msg_kind: MessageKind;
+    readonly type: 'ShowMessage';
+    readonly text: string;
+    readonly msg_kind: MessageKind;
 } | {
-    type: 'DismissMessage';
+    readonly type: 'DismissMessage';
 } | {
-    type: 'NotImplementedYet';
+    readonly type: 'NotImplementedYet';
 } | {
-    type: 'AddTweetToTimeline';
-    status: Tweet;
+    readonly type: 'AddTweetToTimeline';
+    readonly status: Tweet;
 } | {
-    type: 'AddTweetsToTimeline';
-    statuses: Tweet[];
+    readonly type: 'AddTweetsToTimeline';
+    readonly statuses: Tweet[];
 } | {
-    type: 'SetCurrentUser';
-    user: TwitterUser;
+    readonly type: 'SetCurrentUser';
+    readonly user: TwitterUser;
 } | {
-    type: 'UpdateCurrentUser';
-    user_json: Twitter.User;
+    readonly type: 'UpdateCurrentUser';
+    readonly user_json: Twitter.User;
 } | {
-    type: 'DeleteStatusInTimeline';
-    tweet_id: string;
+    readonly type: 'DeleteStatusInTimeline';
+    readonly tweet_id: string;
 } | {
-    type: 'AddMentions';
-    mentions: Tweet[];
+    readonly type: 'AddMentions';
+    readonly mentions: Tweet[];
 } | {
-    type: 'AddRejectedUserIds';
-    ids: number[];
+    readonly type: 'AddRejectedUserIds';
+    readonly ids: number[];
 } | {
-    type: 'RemoveRejectedUserIds';
-    ids: number[];
+    readonly type: 'RemoveRejectedUserIds';
+    readonly ids: number[];
 } | {
-    type: 'AddNoRetweetUserIds';
-    ids: number[];
+    readonly type: 'AddNoRetweetUserIds';
+    readonly ids: number[];
 } | {
-    type: 'CompleteMissingStatuses';
-    timeline: TimelineKind;
-    index: number;
-    items: Item[];
+    readonly type: 'CompleteMissingStatuses';
+    readonly timeline: TimelineKind;
+    readonly index: number;
+    readonly items: Item[];
 } | {
-    type: 'RetweetSucceeded';
-    status: Tweet;
+    readonly type: 'RetweetSucceeded';
+    readonly status: Tweet;
 } | {
-    type: 'UnretweetSucceeded';
-    status: Tweet;
+    readonly type: 'UnretweetSucceeded';
+    readonly status: Tweet;
 } | {
-    type: 'LikeSucceeded';
-    status: Tweet;
+    readonly type: 'LikeSucceeded';
+    readonly status: Tweet;
 } | {
-    type: 'UnlikeSucceeded';
-    status: Tweet;
+    readonly type: 'UnlikeSucceeded';
+    readonly status: Tweet;
 } | {
-    type: 'StatusLiked';
-    user: TwitterUser;
-    status: Tweet;
+    readonly type: 'StatusLiked';
+    readonly user: TwitterUser;
+    readonly status: Tweet;
 } | {
-    type: 'ChangeEditorState';
-    editor: EditorState;
+    readonly type: 'ChangeEditorState';
+    readonly editor: EditorState;
 } | {
-    type: 'OpenEditor';
-    text?: string;
+    readonly type: 'OpenEditor';
+    readonly text?: string;
 } | {
-    type: 'OpenEditorForReply';
-    status: Tweet;
-    user: TwitterUser;
-    text?: string;
+    readonly type: 'OpenEditorForReply';
+    readonly status: Tweet;
+    readonly user: TwitterUser;
+    readonly text?: string;
 } | {
-    type: 'CloseEditor';
+    readonly type: 'CloseEditor';
 } | {
-    type: 'ToggleEditor';
+    readonly type: 'ToggleEditor';
 } | {
-    type: 'SelectAutoCompleteSuggestion';
-    text: string;
-    query: string;
+    readonly type: 'SelectAutoCompleteSuggestion';
+    readonly text: string;
+    readonly query: string;
 } | {
-    type: 'UpdateAutoCompletion';
-    left: number;
-    top: number;
-    query: string;
-    suggestions: SuggestionItem[];
-    completion_label: AutoCompleteLabel;
+    readonly type: 'UpdateAutoCompletion';
+    readonly left: number;
+    readonly top: number;
+    readonly query: string;
+    readonly suggestions: SuggestionItem[];
+    readonly completion_label: AutoCompleteLabel;
 } | {
-    type: 'StopAutoCompletion';
+    readonly type: 'StopAutoCompletion';
 } | {
-    type: 'DownAutoCompletionFocus';
+    readonly type: 'DownAutoCompletionFocus';
 } | {
-    type: 'UpAutoCompletionFocus';
+    readonly type: 'UpAutoCompletionFocus';
 } | {
-    type: 'OpenPicturePreview';
-    media_urls: string[];
-    index?: number;
+    readonly type: 'OpenPicturePreview';
+    readonly media_urls: string[];
+    readonly index?: number;
 } | {
-    type: 'CloseTweetMedia';
+    readonly type: 'CloseTweetMedia';
 } | {
-    type: 'MoveToNthPicturePreview';
-    index: number;
+    readonly type: 'MoveToNthPicturePreview';
+    readonly index: number;
 } | {
-    type: 'FocusOnItem';
-    index: number;
+    readonly type: 'FocusOnItem';
+    readonly index: number;
 } | {
-    type: 'UnfocusItem';
+    readonly type: 'UnfocusItem';
 } | {
-    type: 'FocusNextItem';
+    readonly type: 'FocusNextItem';
 } | {
-    type: 'FocusPrevItem';
+    readonly type: 'FocusPrevItem';
 } | {
-    type: 'FocusTopItem';
+    readonly type: 'FocusTopItem';
 } | {
-    type: 'FocusBottomItem';
+    readonly type: 'FocusBottomItem';
 } | {
-    type: 'AddFriends';
-    ids: number[];
+    readonly type: 'AddFriends';
+    readonly ids: number[];
 } | {
-    type: 'RemoveFriends';
-    ids: number[];
+    readonly type: 'RemoveFriends';
+    readonly ids: number[];
 } | {
-    type: 'ResetFriends';
-    ids: number[];
+    readonly type: 'ResetFriends';
+    readonly ids: number[];
 } | {
-    type: 'OpenUserTimeline';
-    user: TwitterUser;
+    readonly type: 'OpenUserTimeline';
+    readonly user: TwitterUser;
 } | {
-    type: 'OpenConversationTimeline';
-    statuses: Tweet[];
+    readonly type: 'OpenConversationTimeline';
+    readonly statuses: Tweet[];
 } | {
-    type: 'CloseSlaveTimeline';
+    readonly type: 'CloseSlaveTimeline';
 } | {
-    type: 'AddUserTweets';
-    user_id: number;
-    statuses: Tweet[];
+    readonly type: 'AddUserTweets';
+    readonly user_id: number;
+    readonly statuses: Tweet[];
 } | {
-    type: 'AppendPastItems';
-    user_id: number;
-    items: Item[];
+    readonly type: 'AppendPastItems';
+    readonly user_id: number;
+    readonly items: Item[];
 } | {
-    type: 'BlurSlaveTimeline';
+    readonly type: 'BlurSlaveTimeline';
 } | {
-    type: 'FocusSlaveNext';
+    readonly type: 'FocusSlaveNext';
 } | {
-    type: 'FocusSlavePrev';
+    readonly type: 'FocusSlavePrev';
 } | {
-    type: 'FocusSlaveTop';
+    readonly type: 'FocusSlaveTop';
 } | {
-    type: 'FocusSlaveBottom';
+    readonly type: 'FocusSlaveBottom';
 } | {
-    type: 'FocusSlaveOn';
-    index: number;
+    readonly type: 'FocusSlaveOn';
+    readonly index: number;
 };
 
 export default ActionType;

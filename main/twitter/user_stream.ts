@@ -6,8 +6,8 @@ export default class TwitterUserStream {
     private stream: (Twit.Stream | null);
 
     constructor(
-        private sender: Sender,
-        public client: Twit,
+        private readonly sender: Sender,
+        public  readonly client: Twit,
     ) {
         this.stream = null;
     }

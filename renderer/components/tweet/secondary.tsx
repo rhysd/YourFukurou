@@ -5,8 +5,8 @@ import ScreenName from './screen_name';
 import Icon from '../icon';
 
 interface TweetSecondaryProps extends React.Props<any> {
-    status: Tweet;
-    focused?: boolean;
+    readonly status: Tweet;
+    readonly focused?: boolean;
 }
 
 function retweetedBy(tw: Tweet, focused: boolean) {

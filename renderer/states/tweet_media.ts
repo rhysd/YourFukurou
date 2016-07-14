@@ -2,9 +2,9 @@ import KeymapTransition from '../keybinds/keymap_transition';
 
 export default class TweetMediaState {
     constructor(
-        public is_open: boolean,
-        public index: number,
-        public picture_urls: string[],
+        public readonly is_open: boolean,
+        public readonly index: number,
+        public readonly picture_urls: string[],
     ) {}
 
     openMedia(urls: string[], start_idx?: number) {

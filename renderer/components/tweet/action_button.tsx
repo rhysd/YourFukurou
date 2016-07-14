@@ -16,13 +16,13 @@ import {Dispatch} from '../../store';
 type TweetActionKind = 'reply' | 'like' | 'retweet';
 
 interface ConnectedProps extends React.Props<any> {
-    status: Tweet;
-    kind: TweetActionKind;
-    owner?: TwitterUser;
+    readonly status: Tweet;
+    readonly kind: TweetActionKind;
+    readonly owner?: TwitterUser;
 }
 
 interface DispatchProps {
-    onClick: (e: React.MouseEvent) => void;
+    readonly onClick: (e: React.MouseEvent) => void;
 }
 
 type TweetActionButtonProps = ConnectedProps & DispatchProps;

@@ -12,7 +12,7 @@ before_script:
 script:
     - npm run dep
     - npm run build
-    # - npm run lint
+    - npm run lint
     - npm run unit-test
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run e2e-test; fi
 

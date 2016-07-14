@@ -2,8 +2,8 @@ import * as React from 'react';
 import log from '../../log';
 
 interface IndexAutoScrollProps extends React.Props<IndexAutoScroll> {
-    className?: string;
-    index: number | null;
+    readonly className?: string;
+    readonly index: number | null;
 }
 
 export default class IndexAutoScroll extends React.Component<IndexAutoScrollProps, {}> {

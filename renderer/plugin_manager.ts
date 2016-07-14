@@ -9,11 +9,11 @@ export interface Plugin {
     // Filter function takes an item and returns boolean value:
     //   `true` if the item should *remain*
     //   `false` if the item should NOT *remain*
-    filter?: {
-        home_timeline?: (tw: Tweet, timeline: TimelineState) => boolean;
-        mention_timeline?: (tw: Tweet, timeline: TimelineState) => boolean;
-        tweet_notification?: (tw: Tweet) => boolean;
-        like_notification?: (tw: Tweet, by_user: TwitterUser) => boolean;
+    readonly filter?: {
+        readonly home_timeline?: (tw: Tweet, timeline: TimelineState) => boolean;
+        readonly mention_timeline?: (tw: Tweet, timeline: TimelineState) => boolean;
+        readonly tweet_notification?: (tw: Tweet) => boolean;
+        readonly like_notification?: (tw: Tweet, by_user: TwitterUser) => boolean;
     };
 
     // Note:

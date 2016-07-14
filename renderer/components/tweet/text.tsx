@@ -40,9 +40,9 @@ function mapTokenToElement(class_prefix: string, focused: boolean, token: TweetT
 }
 
 interface TweetTextProps extends React.Props<any> {
-    status: Tweet;
-    className?: string;
-    focused?: boolean;
+    readonly status: Tweet;
+    readonly className?: string;
+    readonly focused?: boolean;
 }
 
 const TweetText = (props: TweetTextProps) => {

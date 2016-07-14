@@ -9,12 +9,12 @@ import TwitterRestApi from '../../twitter/rest_api';
 import {Dispatch} from '../../store';
 
 interface ConnectedProps extends React.Props<any> {
-    user: TwitterUser;
-    className?: string;
+    readonly user: TwitterUser;
+    readonly className?: string;
 }
 
 type Props = ConnectedProps & {
-    onClick: (e: React.MouseEvent) => void;
+    readonly onClick: (e: React.MouseEvent) => void;
 }
 
 export const ScreenName = (props: Props) => {

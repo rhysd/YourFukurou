@@ -9,10 +9,10 @@ import TweetMedia from './media';
 import OtherActionsButton from './other_actions_button';
 
 interface TweetPrimaryProps extends React.Props<any> {
-    owner: TwitterUser;
-    status: Tweet;
-    focused: boolean;
-    onClickConversation: (e: React.MouseEvent) => void;
+    readonly owner: TwitterUser;
+    readonly status: Tweet;
+    readonly focused: boolean;
+    readonly onClickConversation: (e: React.MouseEvent) => void;
 }
 
 export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}> {

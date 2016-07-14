@@ -14,18 +14,18 @@ import {
 import {Dispatch} from '../../store';
 
 interface ConnectedProps extends React.Props<any> {
-    status: Tweet;
-    owner: TwitterUser;
-    timeline: TimelineKind;
-    focused?: boolean;
-    related?: boolean;
-    focusedUser?: boolean;
-    itemIndex?: number;
+    readonly status: Tweet;
+    readonly owner: TwitterUser;
+    readonly timeline: TimelineKind;
+    readonly focused?: boolean;
+    readonly related?: boolean;
+    readonly focusedUser?: boolean;
+    readonly itemIndex?: number;
 }
 
 interface DispatchProps {
-    onPicClicked: (e: React.MouseEvent) => void;
-    onClick: (e: React.MouseEvent) => void;
+    readonly onPicClicked: (e: React.MouseEvent) => void;
+    readonly onClick: (e: React.MouseEvent) => void;
 }
 
 type MiniTweetProps = ConnectedProps & DispatchProps;

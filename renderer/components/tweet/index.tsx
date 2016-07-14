@@ -17,20 +17,20 @@ import {
 } from '../../actions';
 
 interface ConnectedProps extends React.Props<any> {
-    status: TweetItem;
-    owner: TwitterUser;
-    inSlaveTimeline?: boolean;
-    timeline?: TimelineKind;
-    focused?: boolean;
-    related?: boolean;
-    focusedUser?: boolean;
-    friends?: List<number>;
-    itemIndex?: number;
+    readonly status: TweetItem;
+    readonly owner: TwitterUser;
+    readonly inSlaveTimeline?: boolean;
+    readonly timeline?: TimelineKind;
+    readonly focused?: boolean;
+    readonly related?: boolean;
+    readonly focusedUser?: boolean;
+    readonly friends?: List<number>;
+    readonly itemIndex?: number;
 }
 
 interface DispatchProps {
-    onClick: (e: React.MouseEvent) => void;
-    onClickConversation: (e: React.MouseEvent) => void;
+    readonly onClick: (e: React.MouseEvent) => void;
+    readonly onClickConversation: (e: React.MouseEvent) => void;
 }
 
 type TweetProps = ConnectedProps & DispatchProps;

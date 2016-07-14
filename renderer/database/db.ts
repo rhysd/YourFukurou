@@ -9,10 +9,10 @@ import HashtagCompletionHistory from './hashtag_completion_history';
 // Simply notify tables' type information to TypeScript compiler
 // https://github.com/dfahlander/Dexie.js/wiki/Typescript#create-a-subclass
 interface TypedDexie extends Dexie {
-    accounts: AccountsTable;
-    my_accounts: MyAccountsTable;
-    hashtags: HashtagsTable;
-    statuses: StatusesTable;
+    readonly accounts: AccountsTable;
+    readonly my_accounts: MyAccountsTable;
+    readonly hashtags: HashtagsTable;
+    readonly statuses: StatusesTable;
 }
 
 export class Database {

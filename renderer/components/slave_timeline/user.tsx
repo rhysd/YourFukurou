@@ -42,10 +42,10 @@ export function dispatchOlderTweets(timeline: UserTimeline, dispatch: Dispatch) 
 }
 
 interface UserSlaveProps extends React.Props<UserSlave> {
-    timeline: UserTimeline;
-    owner: TwitterUser;
-    friends: List<number>;
-    dispatch: Dispatch;
+    readonly timeline: UserTimeline;
+    readonly owner: TwitterUser;
+    readonly friends: List<number>;
+    readonly dispatch: Dispatch;
 }
 
 export default class UserSlave extends React.Component<UserSlaveProps, {}> {

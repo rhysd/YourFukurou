@@ -14,17 +14,17 @@ const electron = global.require('electron');
 const InDebugMode = global.process.env.NODE_ENV === 'development';
 
 interface ConnectedProps {
-    status: Tweet;
-    owner?: TwitterUser;
+    readonly status: Tweet;
+    readonly owner?: TwitterUser;
 }
 
 interface DispatchProps {
-    onDeleteTweet: (e: React.MouseEvent) => void;
-    onUrlOpen: (e: React.MouseEvent) => void;
-    onStatusOpen: (e: React.MouseEvent) => void;
-    onCopyUrl: (e: React.MouseEvent) => void;
-    onCopyJson: (e: React.MouseEvent) => void;
-    onCorrectTweet: (e: React.MouseEvent) => void;
+    readonly onDeleteTweet: (e: React.MouseEvent) => void;
+    readonly onUrlOpen: (e: React.MouseEvent) => void;
+    readonly onStatusOpen: (e: React.MouseEvent) => void;
+    readonly onCopyUrl: (e: React.MouseEvent) => void;
+    readonly onCopyJson: (e: React.MouseEvent) => void;
+    readonly onCorrectTweet: (e: React.MouseEvent) => void;
 }
 
 type OtherActionsButtonProps = ConnectedProps & DispatchProps & React.Props<any>;
