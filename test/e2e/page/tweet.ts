@@ -1,5 +1,4 @@
 import Editor from './editor';
-import {DefaultTimeout} from '../helper/timeouts';
 
 const API_RESPONSE_TIME = 2000;
 

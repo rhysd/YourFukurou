@@ -49,10 +49,10 @@ test(async (t) => {
     let tw = await timeline.findTweetByText(text);
     t.not(tw, null);
     */
-    let tw = await timeline.firstTweet();
+    const tw = await timeline.firstTweet();
 
     await tw.click(); // Focus to show action buttons
     await tw.delete();
-    tw = await timeline.findTweetByText(text);
-    t.is(tw, null);
+    const tw2 = await timeline.findTweetByText(text);
+    t.is(tw2, null);
 });

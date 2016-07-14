@@ -5,7 +5,10 @@
     "preserveConstEnums": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
     "noEmitOnError": true,
+    "strictNullChecks": true,
     "target": "es2015"
   },
   "include": [

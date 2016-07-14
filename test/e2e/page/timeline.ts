@@ -1,4 +1,3 @@
-import Message from './message';
 import Tweet from './tweet';
 import {DefaultTimeout} from '../helper/timeouts';
 

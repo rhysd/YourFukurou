@@ -8,21 +8,21 @@ declare namespace WebdriverIO {
         ignoreWarnings?: boolean;
     }
     export interface AuditResult {
-        message: string;
-        failed: boolean;
-        results: {
-            code: string;
-            elements: string[];
-            message: string;
-            severity: 'Warning' | 'Severe';
-            url: string;
+        readonly message: string;
+        readonly failed: boolean;
+        readonly results: {
+            readonly code: string;
+            readonly elements: string[];
+            readonly message: string;
+            readonly severity: 'Warning' | 'Severe';
+            readonly url: string;
         };
     }
     export interface ConsoleMessage {
-        level: string;
-        message: string;
-        source: string;
-        timestamp: number;
+        readonly level: string;
+        readonly message: string;
+        readonly source: string;
+        readonly timestamp: number;
     }
     export interface Client<T> {
         getMainProcessLogs(): Promise<string[]>;
@@ -54,12 +54,12 @@ declare module 'spectron' {
         chromeDriverLogPath?: string;
     }
     export class Application {
-        client: WebdriverIO.Client<void>;
-        electron: any;
-        browserWindow: any;
-        webContents: any;
-        mainProcess: any;
-        rendererProcess: any;
+        readonly client: WebdriverIO.Client<void>;
+        readonly electron: any;
+        readonly browserWindow: any;
+        readonly webContents: any;
+        readonly mainProcess: any;
+        readonly rendererProcess: any;
 
         constructor(options: ApplicationOptions);
         start(): void;
