@@ -600,6 +600,24 @@ test('resetFriends() replaces friend IDs with specified ones', t => {
     t.deepEqual(s1.friend_ids.toArray(), [4444, 5555, 6666]);
 });
 
-// TODO: Add tests for no-retweet IDs
+test('addNoRetweetUserIds() adds IDs to no-retweet ID list', t => {
+    const s = getState();
+    t.is(s.no_retweet_ids.size, 0);
+    const s1 = s.addNoRetweetUserIds([1111, 2222, 3333]);
+    t.deepEqual(s1.no_retweet_ids.toArray(), [1111, 2222, 3333]);
+    const s2 = s1.addNoRetweetUserIds([2222, 3333, 4444]);
+    t.deepEqual(s2.no_retweet_ids.toArray(), [1111, 2222, 3333, 4444]);
+});
+
+test('addNoRetweetUserIds() removes retweets retweeted by the ID users', t => {
+    const rt = fixture.retweeted();
+    const tw = fixture.tweet_other();
+    const tw2 = fixture.tweet();
+    const s1 = getState([tw, rt, tw2]);
+
+    const home = s1.addNoRetweetUserIds([tw.user.id, rt.user.id]).home.toArray();
+    t.deepEqual(home.map(i => (i as Tweet).id), [tw.id, tw2.id]);
+});
+
 // TODO: Add tests for update activities
 // TODO: Add tests for replacing separator with missing statuses

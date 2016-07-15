@@ -566,22 +566,25 @@ export default class TimelineState {
     }
 
     addNoRetweetUserIds(ids: number[]) {
-        const predicate = (i: Item) => {
+        ids = ids.filter(id => !this.no_retweet_ids.contains(id));
+
+        const no_retweet_ids = this.no_retweet_ids.concat(ids).toList();
+        const home = this.home.filter((i: Item) => {
             if (i instanceof Tweet) {
-                return !i.isRetweet() || ids.indexOf(i.retweeted_status!.user.id) === -1;
+                return !i.isRetweet() || ids.indexOf(i.user.id) === -1;
             } else {
                 return true;
             }
-        };
+        }).toList();
 
-        const home = this.home.filter(predicate).toList();
-        const mention = this.mention.filter(predicate).toList();
-        const no_retweet_ids = this.no_retweet_ids.concat(ids).toList();
+        // Note:
+        // Mention timeline does not include retweet status.  We might update
+        // retweet activities in mention timeline.
 
         // XXX:
         // Next focus index calculation is too complicated.  I skipped it.
 
-        return this.update({home, mention, no_retweet_ids});
+        return this.update({home, no_retweet_ids});
     }
 
     removeRejectedIds(ids: number[]) {
