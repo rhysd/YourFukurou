@@ -576,7 +576,7 @@ export default class TimelineState {
 
         const home = this.home.filter(predicate).toList();
         const mention = this.mention.filter(predicate).toList();
-        const no_retweet_ids = this.no_retweet_ids.merge(ids);
+        const no_retweet_ids = this.no_retweet_ids.concat(ids).toList();
 
         // XXX:
         // Next focus index calculation is too complicated.  I skipped it.
@@ -632,7 +632,7 @@ export default class TimelineState {
         }
 
         return this.update({
-            friend_ids: this.friend_ids.merge(will_added),
+            friend_ids: this.friend_ids.concat(will_added).toList(),
         });
     }
 

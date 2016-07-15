@@ -3,6 +3,7 @@ import * as React from 'react';
 import {shallow} from 'enzyme';
 import test from 'ava';
 import Suggestions, {SuggestionItem, EmojiEntry, ScreenNameEntry, HashtagEntry} from '../../../../../renderer/components/editor/suggestions';
+import {AutoCompleteLabel} from '../../../../../renderer/components/editor/auto_complete_decorator';
 import EditorCompletionState from '../../../../../renderer/states/editor_completion';
 
 const Item = {
@@ -11,13 +12,12 @@ const Item = {
     description: 'This is description',
 } as SuggestionItem;
 
-function emptyState() {
-    return new EditorCompletionState('', null, 0, 0, [Item], null);
+function emptyState(label: AutoCompleteLabel | null = null, items: SuggestionItem[] = [Item], focus: number | null = null) {
+    return new EditorCompletionState('', label, 0, 0, items, focus);
 }
 
 test('show emoji completion result', t => {
-    const s = emptyState();
-    s.label = 'EMOJI';
+    const s = emptyState('EMOJI');
     const c = shallow(<Suggestions {...s}/>);
     const e = c.find(EmojiEntry);
     t.true(e.length > 0);
@@ -25,8 +25,7 @@ test('show emoji completion result', t => {
 });
 
 test('show screen name completion result', t => {
-    const s = emptyState();
-    s.label = 'SCREENNAME';
+    const s = emptyState('SCREENNAME');
     const c = shallow(<Suggestions {...s}/>);
     const sn = c.find(ScreenNameEntry);
     t.true(sn.length > 0);
@@ -35,8 +34,7 @@ test('show screen name completion result', t => {
 });
 
 test('show hashtag completion result', t => {
-    const s = emptyState();
-    s.label = 'HASHTAG';
+    const s = emptyState('HASHTAG');
     const c = shallow(<Suggestions {...s}/>);
     const h = c.find(HashtagEntry);
     t.true(h.length > 0);
@@ -44,10 +42,7 @@ test('show hashtag completion result', t => {
 });
 
 test('handle focused completion item', t => {
-    const s = emptyState();
-    s.label = 'EMOJI';
-    s.suggestions = [Item, Item, Item];
-    s.focus_idx = 1;
+    const s = emptyState('EMOJI', [Item, Item, Item], 1);
     const c = shallow(<Suggestions {...s}/>);
     const e = c.find(EmojiEntry);
     t.is(e.length, 3);

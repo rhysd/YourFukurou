@@ -55,7 +55,7 @@ function getState(
 function setMuteConfig(c: {home?: boolean, mention?: boolean}) {
     const mute = {home: !!c.home, mention: !!c.mention};
     /* tslint:disable */
-    Config['remote_config_memo'].mute = mute;
+    (Config['remote_config_memo'] as any).mute = mute;
     Config['mute_memo'] = mute;
     /* tslint:enable */
 }
@@ -127,13 +127,13 @@ test('switchTimeline() changes current timeline kind', t => {
 test('shouldAddToTimeline() should reject muted or blocked tweets', t => {
     const tw = fixture.tweet_other();
     const rp = fixture.in_reply_to_from_other();
-    const s = getState();
+    const s = getState().update({
+        rejected_ids: List<number>([tw.user.id, rp.user.id]),
+    });
 
     // Post condition
     t.true(tw.user.id !== s.user.id);
     t.true(rp.user.id !== s.user.id);
-
-    s.rejected_ids = List<number>([tw.user.id, rp.user.id]);
 
     {
         const should_add_to = s.shouldAddToTimeline(tw);
@@ -188,8 +188,9 @@ test('shouldAddToTimeline() should reject RT also', t => {
     const each_ids = [rt.user.id, rt.retweeted_status.user.id];
 
     for (const id of each_ids) {
-        s.rejected_ids = List<number>([id]);
-        const should_add_to = s.shouldAddToTimeline(rt);
+        const should_add_to =
+            s.update({rejected_ids: List<number>([id])})
+                .shouldAddToTimeline(rt);
         t.false(should_add_to.home);
         t.false(should_add_to.mention);
     }
@@ -197,8 +198,7 @@ test('shouldAddToTimeline() should reject RT also', t => {
 
 test('shouldAddToTimeline() considers mute config', t => {
     const tw = fixture.in_reply_to_from_other();
-    const s = getState();
-    s.rejected_ids = List<number>([tw.user.id]);
+    const s = getState().update({rejected_ids: List<number>([tw.user.id])});
 
     const configs = [
         {home: true, mention: true},
@@ -562,3 +562,44 @@ test('addRejectedIds() removes statuses having newly added IDs from timelines', 
     t.is((s3.home.get(1) as Tweet).id, tw.id);
     t.is(s3.mention.size, 0);
 });
+
+test('removeRejectedIds() removes specified IDs from rejected IDs', t => {
+    const s1 = DefaultTimelineState.removeRejectedIds([1111, 2222, 3333]);
+    t.is(s1.rejected_ids.size, 0);
+
+    const s2 = DefaultTimelineState
+        .update({rejected_ids: List<number>([1111, 2222])})
+        .removeRejectedIds([2222, 3333]);
+
+    t.deepEqual(s2.rejected_ids.toArray(), [1111]);
+});
+
+test('addFriends() add IDs to friend list', t => {
+    const s1 = getState().addFriends([1111, 2222, 3333]);
+    t.deepEqual(s1.friend_ids.toArray(), [1111, 2222, 3333]);
+    t.is(s1.addFriends([]), s1);
+    t.is(s1.addFriends([2222]), s1);
+
+    const s2 = s1.addFriends([2222, 4444]);
+    t.deepEqual(s2.friend_ids.toArray(), [1111, 2222, 3333, 4444]);
+});
+
+test('removeFriends() removes IDs from friend list', t => {
+    const s = getState().addFriends([1111, 2222, 3333]);
+    t.is(s.removeFriends([]).friend_ids.size, s.friend_ids.size);
+
+    const s1 = s.removeFriends([2222, 3333, 4444]);
+    t.deepEqual(s1.friend_ids.toArray(), [1111]);
+});
+
+test('resetFriends() replaces friend IDs with specified ones', t => {
+    const s = getState().addFriends([1111, 2222, 3333]);
+    t.is(s.resetFriends([]).friend_ids.size, 0);
+
+    const s1 = s.resetFriends([4444, 5555, 6666]);
+    t.deepEqual(s1.friend_ids.toArray(), [4444, 5555, 6666]);
+});
+
+// TODO: Add tests for no-retweet IDs
+// TODO: Add tests for update activities
+// TODO: Add tests for replacing separator with missing statuses

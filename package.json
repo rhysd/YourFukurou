@@ -46,7 +46,7 @@
     "node": ">=6.0"
   },
   "devDependencies": {
-    "ava": "github:avajs/ava",
+    "ava": "github:avajs/ava#05f1890eb7b60eb54cbc12d24d78b353bbd844f6",
     "browserify": "^13.0.1",
     "electron-packager": "^7.1.0",
     "enzyme": "^2.3.0",
