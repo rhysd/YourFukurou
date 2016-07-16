@@ -644,11 +644,44 @@ test('updateActivity() adds "liked" status to mention', t => {
     t.false(s2.notified.home);
 });
 
-// test('updateActivity() updates activity count of related status in timeline', t => {
-//     t.pass(); // TODO
-// });
-// test('updateActivity() does not move focus on updating activity in timeline', t => {
-//     t.pass(); // TODO
-// });
+test('updateActivity() updates activity count of related status in timeline', t => {
+    const tw = fixture.tweet();
+    const tw2 = fixture.tweet_other();
+    const updated = tw.clone();
+    const rp = fixture.in_reply_to_from_other();
+
+    const s1 = getState([tw2, tw]).updateActivity('liked', updated, fixture.other_user());
+    t.is(s1.home.get(1), updated);
+    t.is(s1.home.get(0), tw2);
+
+    const s2 = getState()
+            .updateActivity('liked', tw, fixture.other_user())
+            .addMentions([rp]);
+    t.is(s2.mention.size, 2);
+    t.true(s2.mention.get(0) instanceof Tweet);
+    t.true(s2.mention.get(1) instanceof Activity);
+
+    // Updated activity will be put on the top of mention
+    const s3 = s2.updateActivity('liked', tw, fixture.other_user2());
+    t.is(s3.mention.size, 2);
+    t.true(s3.mention.get(0) instanceof Activity);
+    t.true(s3.mention.get(1) instanceof Tweet);
+});
+
+test.only('updateActivity() does not move focus on updating activity in timeline', t => {
+    const tw = fixture.tweet();
+    const rp = fixture.in_reply_to_from_other();
+
+    const s = getState([], 'mention', [tw])
+            .updateActivity('liked', tw, fixture.other_user())
+            .addMentions([rp]);
+
+    const s1 = s.focusOn(0).updateActivity('liked', tw, fixture.other_user2());
+    // Continue to focus on the tweet as before activity updated
+    t.is(s1.focus_index, 1);
+
+    const s2 = s.focusOn(2).updateActivity('liked', tw, fixture.other_user2());
+    t.is(s2.focus_index, 2);
+});
 
 // TODO: Add tests for replacing separator with missing statuses

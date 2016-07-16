@@ -112,20 +112,22 @@ export default class TimelineState {
             }
         });
 
-        const next_focus_index =
-            this.kind === 'mention' && (index === -1 || index < this.focus_index) ?
-                this.nextFocusIndex(this.mention.size + 1) : this.focus_index;
-
         if (index === -1) {
-            return [this.mention.unshift(new TimelineActivity(kind, status, [from])), next_focus_index];
+            return [
+                this.mention.unshift(new TimelineActivity(kind, status, [from])),
+                this.nextFocusIndex(this.mention.size + 1),
+            ];
         } else {
             const will_updated = this.mention.get(index);
             if (will_updated instanceof TimelineActivity) {
                 const updated = will_updated.update(status, from);
-                return [this.mention.delete(index).unshift(updated), next_focus_index];
+                return [
+                    this.mention.delete(index).unshift(updated),
+                    index > this.focus_index ? this.nextFocusIndex(this.mention.size) : this.focus_index,
+                ];
             } else {
                 log.error('Invalid activity for update:', will_updated);
-                return [this.mention, next_focus_index];
+                return [this.mention, this.focus_index];
             }
         }
     }
