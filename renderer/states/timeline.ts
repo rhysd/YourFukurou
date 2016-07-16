@@ -611,21 +611,16 @@ export default class TimelineState {
 
         const status_updated = this.updateStatus(status);
 
-        // Note:
-        // this.updateStatus doesn't update timeline if no item is updated.
-        // So I need to update explicitly when timeline is not updated yet.
-        const next = status_updated === this ? status_updated.update({}) : status_updated;
-
-        [next.mention, next.focus_index] = next.updateActivityInMention(kind, status, from);
-        if (MaxTimelineLength !== null && next.mention.size > MaxTimelineLength) {
-            next.mention = next.mention.take(MaxTimelineLength).toList();
+        let [mention, focus_index] = this.updateActivityInMention(kind, status, from);
+        if (MaxTimelineLength !== null && mention.size > MaxTimelineLength) {
+            mention = mention.take(MaxTimelineLength).toList();
         }
 
-        if (this.kind !== 'mention' && !this.notified.mention) {
-            next.notified = this.updateNotified(this.notified.home, true);
-        }
+        const notified = this.kind !== 'mention' && !this.notified.mention?
+                this.updateNotified(this.notified.home, true) :
+                this.notified;
 
-        return next;
+        return status_updated.update({mention, focus_index, notified});
     }
 
     addFriends(ids: number[]) {

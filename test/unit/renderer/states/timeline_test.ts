@@ -619,7 +619,7 @@ test('addNoRetweetUserIds() removes retweets retweeted by the ID users', t => {
     t.deepEqual(home.map(i => (i as Tweet).id), [tw.id, tw2.id]);
 });
 
-test.only('updateActivity() adds "liked" status to mention', t => {
+test('updateActivity() adds "liked" status to mention', t => {
     const tw = fixture.tweet();
     const u = fixture.other_user();
     const u2 = fixture.other_user2();
@@ -632,12 +632,16 @@ test.only('updateActivity() adds "liked" status to mention', t => {
     t.is(l.by.length, 1);
     t.is(l.by[0].id, u.id);
     t.is(l.status.id, tw.id);
+    t.true(s1.notified.mention);
+    t.false(s1.notified.home);
 
-    const s2 = s1.updateActivity('liked', tw, u2);
+    const s2 = s1.update({notified: {home: false, mention: false}}).updateActivity('liked', tw, u2);
     t.is(s2.mention.size, 1);
     const l2 = s2.mention.get(0) as Activity;
     t.is(l2.by.length, 2);
     t.is(l2.by[0].id, u2.id);
+    t.true(s2.notified.mention);
+    t.false(s2.notified.home);
 });
 
 // test('updateActivity() updates activity count of related status in timeline', t => {
