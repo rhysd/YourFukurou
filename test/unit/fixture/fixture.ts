@@ -93,4 +93,12 @@ export default class Fixture {
     user() {
         return new TwitterUser(this.readJson<Twitter.User>('user'));
     }
+
+    other_user() {
+        return new TwitterUser(this.readJson<Twitter.User>('other_user'));
+    }
+
+    other_user2() {
+        return new TwitterUser(this.readJson<Twitter.User>('other_user2'));
+    }
 }

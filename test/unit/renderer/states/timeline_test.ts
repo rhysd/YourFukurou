@@ -619,5 +619,32 @@ test('addNoRetweetUserIds() removes retweets retweeted by the ID users', t => {
     t.deepEqual(home.map(i => (i as Tweet).id), [tw.id, tw2.id]);
 });
 
-// TODO: Add tests for update activities
+test.only('updateActivity() adds "liked" status to mention', t => {
+    const tw = fixture.tweet();
+    const u = fixture.other_user();
+    const u2 = fixture.other_user2();
+
+    const s1 = getState().updateActivity('liked', tw, u);
+    t.is(s1.mention.size, 1);
+    const l = s1.mention.get(0) as Activity;
+    t.true(l instanceof Activity);
+    t.is(l.kind, 'liked');
+    t.is(l.by.length, 1);
+    t.is(l.by[0].id, u.id);
+    t.is(l.status.id, tw.id);
+
+    const s2 = s1.updateActivity('liked', tw, u2);
+    t.is(s2.mention.size, 1);
+    const l2 = s2.mention.get(0) as Activity;
+    t.is(l2.by.length, 2);
+    t.is(l2.by[0].id, u2.id);
+});
+
+// test('updateActivity() updates activity count of related status in timeline', t => {
+//     t.pass(); // TODO
+// });
+// test('updateActivity() does not move focus on updating activity in timeline', t => {
+//     t.pass(); // TODO
+// });
+
 // TODO: Add tests for replacing separator with missing statuses
