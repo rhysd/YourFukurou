@@ -433,7 +433,7 @@ test('addSeparator() adds one separator at once', t => {
     t.is(s3.mention.size, 1);
 });
 
-test('addTweets() and addMentions() adds multiple tweets', t => {
+test('addNewTweets() and addMentions() adds multiple tweets', t => {
     const tw = fixture.tweet();
     const rp = fixture.in_reply_to_from_other();
     const rt = fixture.retweeted();
@@ -668,7 +668,7 @@ test('updateActivity() updates activity count of related status in timeline', t 
     t.true(s3.mention.get(1) instanceof Tweet);
 });
 
-test.only('updateActivity() does not move focus on updating activity in timeline', t => {
+test('updateActivity() does not move focus on updating activity in timeline', t => {
     const tw = fixture.tweet();
     const rp = fixture.in_reply_to_from_other();
 
@@ -682,6 +682,46 @@ test.only('updateActivity() does not move focus on updating activity in timeline
 
     const s2 = s.focusOn(2).updateActivity('liked', tw, fixture.other_user2());
     t.is(s2.focus_index, 2);
+});
+
+test('replaceSeparatorWithItems() replaces separator with items', t => {
+    const tw = fixture.tweet();
+    const tw2 = fixture.tweet_other();
+    const rp = fixture.in_reply_to_from_other();
+    const rt = fixture.retweeted();
+
+    const s = getState([tw, new Separator, tw2]);
+
+    const s1 = s.replaceSeparatorWithItems('home', 1, [tw, tw2, tw]);
+    t.is(s1.home.size, 5);
+    t.deepEqual(s1.home.toArray().map(i => (i as Tweet).id), [tw.id, tw.id, tw2.id, tw.id, tw2.id]);
+
+    const s2 = getState().addSeparator().addNewTweets([rp, rt]);
+    t.is(s2.mention.size, 3);
+
+    const s3 = s2.replaceSeparatorWithItems('mention', 2, [rp, tw, tw2]);
+    t.deepEqual(s3.mention.toArray().map(i => {
+        if (i instanceof Activity) {
+            return i.status.id;
+        } else if (i instanceof Tweet) {
+            return i.id;
+        } else {
+            return null;
+        }
+    }), [rt.retweeted_status.id, rp.id, rp.id, tw.id, tw2.id]);
+});
+
+test('replaceSeparatorWithItems() filters rejected ID users\' tweets', t => {
+    const tw = fixture.tweet_other();
+    const s1 = getState([new Separator]).addRejectedIds([tw.user.id]);
+    const s2 = s1.replaceSeparatorWithItems('home', 0, [tw]);
+    t.is(s2.home.size, 0);
+
+    setMuteConfig({home: true, mention: true});
+    const rp = fixture.in_reply_to_from_other();
+    const s3 = getState([], 'mention', [new Separator]).addRejectedIds([rp.user.id]);
+    const s4 = s3.replaceSeparatorWithItems('mention', 0, [rp]);
+    t.is(s4.mention.size, 0);
 });
 
 // TODO: Add tests for replacing separator with missing statuses

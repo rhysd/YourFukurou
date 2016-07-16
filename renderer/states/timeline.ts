@@ -132,8 +132,6 @@ export default class TimelineState {
         }
     }
 
-    // TODO:
-    // Should consider separator
     nextFocusIndex(next_size: number) {
         if (this.focus_index === null || next_size === 0) {
             return null;
@@ -144,8 +142,6 @@ export default class TimelineState {
         return this.focus_index + 1;
     }
 
-    // TODO:
-    // Should consider separator
     prevFocusIndex(next_size: number) {
         if (this.focus_index === null || next_size === 0) {
             return null;
@@ -647,11 +643,35 @@ export default class TimelineState {
     }
 
     replaceSeparatorWithItems(kind: TimelineKind, sep_index: number, items: Item[]) {
+        // Note:
+        // We don't need to check this.shouldAddToTimeline() here because items are already
+        // considered to be added to each timeline.
+        // (e.g. items for mention timeline were fetched with reply-only search so items only contain
+        // replies and mentions.)
+        const filtered = items.filter(item => {
+            if (item instanceof Tweet) {
+                const rejected = this.checkMutedOrBlocked(item);
+                switch (kind) {
+                    case 'home':
+                        return !PM.shouldRejectTweetInHomeTimeline(item, this) &&
+                                (!AppConfig.mute.home || !rejected);
+                    case 'mention':
+                        return !PM.shouldRejectTweetInMentionTimeline(item, this) &&
+                                (!AppConfig.mute.mention || !rejected);
+                    default:
+                        log.error('Invalid kind on filtering missing statuses', kind);
+                        return true;
+                }
+            } else {
+                return true;
+            }
+        });
+
         switch (kind) {
             case 'home':
-                const home = replaceSeparatorWithItemsIn(this.home, sep_index, items);
+                const home = replaceSeparatorWithItemsIn(this.home, sep_index, filtered);
                 let next = this.update({home});
-                for (const i of items.reverse()) {
+                for (const i of filtered.reverse()) {
                     if (i instanceof Tweet) {
                         next.home = next.updateRelatedStatuses(i);
                     }
@@ -659,7 +679,7 @@ export default class TimelineState {
                 return next;
             case 'mention':
                 return this.update({
-                    mention: replaceSeparatorWithItemsIn(this.mention, sep_index, items),
+                    mention: replaceSeparatorWithItemsIn(this.mention, sep_index, filtered),
                 });
             default:
                 log.debug('Invalid timeline for replacing separator with statuses');
