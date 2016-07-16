@@ -614,7 +614,7 @@ export default class TimelineState {
             mention = mention.take(MaxTimelineLength).toList();
         }
 
-        const notified = this.kind !== 'mention' && !this.notified.mention?
+        const notified = this.kind !== 'mention' && !this.notified.mention ?
                 this.updateNotified(this.notified.home, true) :
                 this.notified;
 

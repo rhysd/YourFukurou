@@ -711,17 +711,21 @@ test('replaceSeparatorWithItems() replaces separator with items', t => {
     }), [rt.retweeted_status.id, rp.id, rp.id, tw.id, tw2.id]);
 });
 
-test('replaceSeparatorWithItems() filters rejected ID users\' tweets', t => {
+test("replaceSeparatorWithItems() filters rejected ID users' tweets", t => {
     const tw = fixture.tweet_other();
+    const rp = fixture.in_reply_to_from_other();
     const s1 = getState([new Separator]).addRejectedIds([tw.user.id]);
     const s2 = s1.replaceSeparatorWithItems('home', 0, [tw]);
     t.is(s2.home.size, 0);
 
     setMuteConfig({home: true, mention: true});
-    const rp = fixture.in_reply_to_from_other();
     const s3 = getState([], 'mention', [new Separator]).addRejectedIds([rp.user.id]);
     const s4 = s3.replaceSeparatorWithItems('mention', 0, [rp]);
     t.is(s4.mention.size, 0);
+
+    setMuteConfig({home: false, mention: false});
+    const s5 = getState([], 'mention', [new Separator]).addRejectedIds([rp.user.id]);
+    const s6 = s5.replaceSeparatorWithItems('mention', 0, [rp]);
+    t.is(s6.mention.size, 1);
 });
 
-// TODO: Add tests for replacing separator with missing statuses
