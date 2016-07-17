@@ -313,3 +313,21 @@ $ npm run unit-test
 $ npm run test
 ```
 
+Currently this application doesn't support 2-step verification.  If you're using 2-step verification, please avoid first login by setting access tokens manually for now.
+
+At first please get access token and access token secret.  Then please put below text file to `{application directory}/tokens.json`.  Note that you can also use `$YOURFUKUROU_ACCESS_TOKEN` and `$YOURFUKUROU_ACCESS_TOKEN_SECRET` environment variables.
+
+```json
+{
+  "token": "your-access-token",
+  "token_secret": "your-access-token-secret"
+}
+```
+
+If you authenticated with your original consumer key and comsumer key secret, please also set them to environment variables.
+
+```sh
+$ export YOURFUKUROU_CONSUMER_KEY=your-consumer-key
+$ export YOURFUKUROU_CONSUMER_KEY_SECRET=your-consumer-key-secret
+```
+
