@@ -1,5 +1,3 @@
-import KeymapTransition from '../keybinds/keymap_transition';
-
 export default class TweetMediaState {
     constructor(
         public readonly is_open: boolean,
@@ -8,7 +6,6 @@ export default class TweetMediaState {
     ) {}
 
     openMedia(urls: string[], start_idx?: number) {
-        KeymapTransition.enterMediaPreview();
         return new TweetMediaState(
             true,
             start_idx || 0,
@@ -17,7 +14,6 @@ export default class TweetMediaState {
     }
 
     closeMedia() {
-        KeymapTransition.escapeFromCurrentKeymaps();
         return new TweetMediaState(
             false,
             this.index,

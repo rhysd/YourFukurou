@@ -16,6 +16,7 @@ import notifyLiked from './notification/like';
 import TwitterRestApi from './twitter/rest_api';
 import {Dispatch} from './store';
 import DB from './database/db';
+import KeymapTransition from './keybinds/keymap_transition';
 
 type ThunkAction = (dispatch: Dispatch, getState: () => State) => void;
 
@@ -358,17 +359,23 @@ export function changeCurrentTimeline(timeline: TimelineKind): Action {
     };
 }
 
-export function openPicturePreview(media_urls: string[], index?: number): Action {
-    return {
-        type: 'OpenPicturePreview',
-        media_urls,
-        index,
+export function openPicturePreview(media_urls: string[], index?: number): ThunkAction {
+    return dispatch => {
+        KeymapTransition.enterMediaPreview();
+        dispatch({
+            type: 'OpenPicturePreview',
+            media_urls,
+            index,
+        });
     };
 }
 
-export function closeTweetMedia(): Action {
-    return {
-        type: 'CloseTweetMedia',
+export function closeTweetMedia(): ThunkAction {
+    return dispatch => {
+        KeymapTransition.escapeFromCurrentKeymaps();
+        dispatch({
+            type: 'CloseTweetMedia',
+        });
     };
 }
 

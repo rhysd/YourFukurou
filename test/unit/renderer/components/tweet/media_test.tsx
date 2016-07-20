@@ -36,7 +36,10 @@ test('clicking picture dispatches corresponding action', t => {
     };
     c.find('.tweet__media-wrapper').at(0).simulate('click', e);
     t.true(cb.called);
-    const action = cb.args[0][0] as Action;
+    const thunk = cb.args[0][0];
+    const dispatch = spy();
+    thunk(dispatch);
+    const action = dispatch.args[0][0] as Action;
     t.is(action.type, 'OpenPicturePreview');
     if (action.type === 'OpenPicturePreview') {
         t.is(action.media_urls[0], media[0].media_url);
