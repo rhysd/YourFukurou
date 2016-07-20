@@ -57,7 +57,10 @@ test('can render overlay', t => {
     t.is(overlay.length, 1);
     overlay.simulate('click', {stopPropagation: doNothing});
     t.true(cb.called);
-    t.is(cb.args[0][0].type, 'CloseSlaveTimeline');
+    const thunk = cb.args[0][0];
+    const dispatch = spy();
+    thunk(dispatch);
+    t.is(dispatch.args[0][0].type, 'CloseSlaveTimeline');
 });
 
 test('put Lightbox', t => {

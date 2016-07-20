@@ -82,8 +82,6 @@ type ActionType = {
 } | {
     readonly type: 'CloseEditor';
 } | {
-    readonly type: 'ToggleEditor';
-} | {
     readonly type: 'SelectAutoCompleteSuggestion';
     readonly text: string;
     readonly query: string;

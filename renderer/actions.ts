@@ -283,32 +283,41 @@ export function changeEditorState(editor: EditorState): Action {
     };
 }
 
-export function openEditor(text?: string): Action {
-    return {
-        type: 'OpenEditor',
-        text,
+export function openEditor(text?: string): ThunkAction {
+    return dispatch => {
+        KeymapTransition.enterEditor();
+        dispatch({
+            type: 'OpenEditor',
+            text,
+        });
     };
 }
 
-export function openEditorForReply(in_reply_to: Tweet, owner: TwitterUser, text?: string): Action {
-    return {
-        type: 'OpenEditorForReply',
-        status: in_reply_to,
-        user: owner,
-        text,
+export function openEditorForReply(in_reply_to: Tweet, owner: TwitterUser, text?: string): ThunkAction {
+    return dispatch => {
+        KeymapTransition.enterEditor();
+        dispatch({
+            type: 'OpenEditorForReply',
+            status: in_reply_to,
+            user: owner,
+            text,
+        });
     };
 }
 
-export function closeEditor(): Action {
-    return {
-        type: 'CloseEditor',
+export function closeEditor(): ThunkAction {
+    return dispatch => {
+        KeymapTransition.escapeFromCurrentKeymaps();
+        dispatch({
+            type: 'CloseEditor',
+        });
     };
 }
 
-export function toggleEditor(): Action {
-    return {
-        type: 'ToggleEditor',
-    };
+export function toggleEditor(): ThunkAction {
+    return (dispatch, getState) => (
+        getState().editor.is_open ? closeEditor : openEditor
+    )()(dispatch, getState);
 }
 
 export function selectAutoCompleteSuggestion(text: string, query: string): Action {
@@ -444,10 +453,13 @@ export function resetFriends(ids: number[]): Action {
     };
 }
 
-export function openUserTimeline(user: TwitterUser): Action {
-    return {
-        type: 'OpenUserTimeline',
-        user,
+export function openUserTimeline(user: TwitterUser): ThunkAction {
+    return dispatch => {
+        KeymapTransition.enterSlaveTimeline();
+        dispatch({
+            type: 'OpenUserTimeline',
+            user,
+        });
     };
 }
 
@@ -512,16 +524,22 @@ export function gatherConversationStatuses(status: Tweet) {
 export function openConversationTimeline(status: Tweet): ThunkAction {
     return dispatch => {
         gatherConversationStatuses(status)
-            .then(statuses => dispatch({
-                type: 'OpenConversationTimeline',
-                statuses,
-            }));
+            .then(statuses => {
+                KeymapTransition.enterSlaveTimeline();
+                dispatch({
+                    type: 'OpenConversationTimeline',
+                    statuses,
+                });
+            });
     };
 }
 
-export function closeSlaveTimeline(): Action {
-    return {
-        type: 'CloseSlaveTimeline',
+export function closeSlaveTimeline(): ThunkAction {
+    return dispatch => {
+        KeymapTransition.escapeFromCurrentKeymaps();
+        dispatch({
+            type: 'CloseSlaveTimeline',
+        });
     };
 }
 

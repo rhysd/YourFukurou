@@ -8,7 +8,6 @@ export default function editor(state: TweetEditorState = DefaultTweetEditorState
         case 'OpenEditor':                   return state.openEditor(action.text);
         case 'OpenEditorForReply':           return state.openEditorWithInReplyTo(action.status, action.user, action.text);
         case 'CloseEditor':                  return state.closeEditor();
-        case 'ToggleEditor':                 return state.toggleEditor();
         default:                             return state;
     }
 }

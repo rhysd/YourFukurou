@@ -2,7 +2,6 @@ import {List} from 'immutable';
 import Item from '../item/item';
 import Tweet, {TwitterUser} from '../item/tweet';
 import Separator from '../item/separator';
-import KeymapTransition from '../keybinds/keymap_transition';
 
 interface SlaveTimeline {
     getFocusedItem(): Item | null;
@@ -21,9 +20,7 @@ export class UserTimeline implements SlaveTimeline {
         public readonly user: TwitterUser,
         public readonly items: List<Item> = List<Item>([new Separator()]),
         public readonly focus_index: number | null = null,
-    ) {
-        KeymapTransition.enterSlaveTimeline();
-    }
+    ) {}
 
     getFocusedItem() {
         if (this.focus_index === null) {
@@ -52,7 +49,6 @@ export class UserTimeline implements SlaveTimeline {
     }
 
     close(): null {
-        KeymapTransition.escapeFromCurrentKeymaps();
         return null;
     }
 
@@ -108,9 +104,7 @@ export class ConversationTimeline implements SlaveTimeline {
     constructor(
         public readonly items: List<Tweet>,
         public readonly focus_index: number | null = null,
-    ) {
-        KeymapTransition.enterSlaveTimeline();
-    }
+    ) {}
 
     getFocusedItem() {
         if (this.focus_index === null) {
@@ -120,7 +114,6 @@ export class ConversationTimeline implements SlaveTimeline {
     }
 
     close(): null {
-        KeymapTransition.escapeFromCurrentKeymaps();
         return null;
     }
 
