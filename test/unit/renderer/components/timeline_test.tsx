@@ -59,7 +59,8 @@ test('can render overlay', t => {
     t.true(cb.called);
     const thunk = cb.args[0][0];
     const dispatch = spy();
-    thunk(dispatch);
+    const getState = () => ({}) as any;
+    thunk(dispatch, getState);
     t.is(dispatch.args[0][0].type, 'CloseSlaveTimeline');
 });
 
