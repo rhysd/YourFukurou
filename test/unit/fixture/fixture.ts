@@ -50,6 +50,10 @@ export default class Fixture {
         return new Tweet(this.readJson<Twitter.Status>('reply_myself'));
     }
 
+    reply_from_other_to_others() {
+        return new Tweet(this.readJson<Twitter.Status>('reply_from_other_to_others'));
+    }
+
     retweet() {
         return new Tweet(this.readJson<Twitter.Status>('retweet'));
     }
