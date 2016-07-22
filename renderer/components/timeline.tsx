@@ -17,11 +17,11 @@ import State from '../states/root';
 import {TimelineKind} from '../states/timeline';
 import TweetMediaState from '../states/tweet_media';
 import {MessageState} from '../reducers/message';
+import {closeSlaveTimeline} from '../actions/slave_timeline';
 import {
     closeTweetMedia,
     moveToNthPicturePreview,
-    closeSlaveTimeline,
-} from '../actions';
+} from '../actions/tweet_media';
 import Config from '../config';
 import {Dispatch} from '../store';
 

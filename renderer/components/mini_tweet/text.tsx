@@ -5,7 +5,7 @@ import Tweet from '../../item/tweet';
 import TweetText from '../tweet/text';
 import ScreenName from '../tweet/screen_name';
 import {renderPicIcon} from './index';
-import {openPicturePreview} from '../../actions';
+import {openPicturePreview} from '../../actions/tweet_media';
 import {Dispatch} from '../../store';
 
 interface ConnectedProps extends React.Props<any> {

@@ -11,7 +11,7 @@ import {Dispatch} from '../store';
 import {
     focusOnItem,
     unfocusItem,
-} from '../actions';
+} from '../actions/timeline';
 
 const MaxIconsExpanded = 10;
 const MaxIconsCollapsed = 4;

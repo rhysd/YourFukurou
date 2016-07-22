@@ -1,11 +1,13 @@
 import {EditorState} from 'draft-js';
 import {Twitter} from 'twit';
-import Item from './item/item';
-import Tweet, {TwitterUser} from './item/tweet';
-import {AutoCompleteLabel} from './components/editor/auto_complete_decorator';
-import {TimelineKind} from './states/timeline';
-import {MessageKind} from './reducers/message';
-import { SuggestionItem} from './components/editor/suggestions';
+import Item from '../item/item';
+import Tweet, {TwitterUser} from '../item/tweet';
+import {AutoCompleteLabel} from '../components/editor/auto_complete_decorator';
+import {TimelineKind} from '../states/timeline';
+import {MessageKind} from '../reducers/message';
+import {SuggestionItem} from '../components/editor/suggestions';
+import {Dispatch} from '../store';
+import State from '../states/root';
 
 type ActionType = {
     readonly type: 'AddSeparator';
@@ -161,3 +163,5 @@ type ActionType = {
 };
 
 export default ActionType;
+
+export type ThunkAction = (dispatch: Dispatch, getState: () => State) => void;

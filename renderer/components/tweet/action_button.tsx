@@ -2,14 +2,14 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import Tweet, {TwitterUser} from '../../item/tweet';
 import IconButton from '../icon_button';
+import {showMessage} from '../../actions/message';
+import {openEditorForReply} from '../../actions/editor';
 import {
-    showMessage,
-    openEditorForReply,
     retweetSucceeded,
     unretweetSucceeded,
     likeSucceeded,
     unlikeSucceeded,
-} from '../../actions';
+} from '../../actions/timeline';
 import TwitterRestApi from '../../twitter/rest_api';
 import {Dispatch} from '../../store';
 

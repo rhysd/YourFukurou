@@ -1,4 +1,4 @@
-const {ipcRenderer: ipc} = global.require('electron');
+import {showMessage} from './actions/message';
 import {
     addTweetToTimeline,
     addTweetsToTimeline,
@@ -10,18 +10,19 @@ import {
     removeRejectedUserIds,
     addNoRetweetUserIds,
     addSeparator,
-    showMessage,
-    statusLiked,
     setCurrentUser,
     updateCurrentUser,
     deleteStatusInTimeline,
-} from './actions';
+    statusLiked,
+} from './actions/timeline';
 import Store from './store';
 import log from './log';
 import Tweet, {TwitterUser} from './item/tweet';
 import DB from './database/db';
 import {Twitter, Options} from 'twit';
 import TwitterRestApi from './twitter/rest_api';
+
+const {ipcRenderer: ipc} = global.require('electron');
 
 interface Listeners {
     [c: string]: Electron.IpcRendererEventListener;

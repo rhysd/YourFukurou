@@ -4,7 +4,7 @@ import Tweet, {TwitterUser} from '../../item/tweet';
 import {
     openUserTimeline,
     addUserTweets,
-} from '../../actions';
+} from '../../actions/slave_timeline';
 import TwitterRestApi from '../../twitter/rest_api';
 import {Dispatch} from '../../store';
 

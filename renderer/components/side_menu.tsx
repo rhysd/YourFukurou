@@ -4,10 +4,8 @@ import * as classNames from 'classnames';
 import State from '../states/root';
 import IconButton from './icon_button';
 import Icon from './icon';
-import {
-    toggleEditor,
-    changeCurrentTimeline,
-} from '../actions';
+import {toggleEditor} from '../actions/editor';
+import {changeCurrentTimeline} from '../actions/timeline';
 import {TwitterUser} from '../item/tweet';
 import {TimelineKind, Notified} from '../states/timeline';
 import log from '../log';

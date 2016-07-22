@@ -12,7 +12,7 @@ import {Twitter} from 'twit';
 import Store from './store';
 import IpcChannelProxy from './ipc_channel_proxy';
 import App from './components/app';
-import {setCurrentUser} from './actions';
+import {setCurrentUser} from './actions/timeline';
 import DB from './database/db';
 import PM from './plugin_manager';
 import KeymapTransition from './keybinds/keymap_transition';

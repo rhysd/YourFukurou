@@ -95,7 +95,6 @@
       "test/e2e/story/*.js",
       "test/unit/renderer/js/test/unit/renderer/**/*.js"
     ],
-    "timeout": "60s",
-    "serial": true
+    "timeout": "60s"
   }
 }

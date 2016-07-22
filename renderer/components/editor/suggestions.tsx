@@ -4,7 +4,7 @@ import {emoji} from 'node-emoji';
 import Dexie from 'dexie';
 import * as classNames from 'classnames';
 import {AutoCompleteLabel} from './auto_complete_decorator';
-import {selectAutoCompleteSuggestion} from '../../actions';
+import {selectAutoCompleteSuggestion} from '../../actions/editor';
 import EditorCompletionState from '../../states/editor_completion';
 import DB from '../../database/db';
 import log from '../../log';

@@ -2,7 +2,7 @@ import Tweet, {TwitterUser} from '../item/tweet';
 import log from '../log';
 import PM from '../plugin_manager';
 import AppConfig from '../config';
-import {changeCurrentTimeline} from '../actions';
+import {changeCurrentTimeline} from '../actions/timeline';
 import Store from '../store';
 
 export default function notifyLiked(tw: Tweet, by: TwitterUser) {

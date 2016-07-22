@@ -6,25 +6,29 @@ import Tweet from '../item/tweet';
 import Separator from '../item/separator';
 import TimelineActivity from '../item/timeline_activity';
 import {
+    openUserTimeline,
+    addUserTweets,
+    openConversationTimeline,
+} from '../actions/slave_timeline';
+import {showMessage} from '../actions/message';
+import {openPicturePreview} from '../actions/tweet_media';
+import {
+    openEditor,
+    openEditorForReply,
+} from '../actions/editor';
+import {
+    changeCurrentTimeline,
+    completeMissingStatuses,
     focusNextItem,
     focusPrevItem,
     focusTopItem,
     focusBottomItem,
     unfocusItem,
-    openEditor,
-    openEditorForReply,
-    changeCurrentTimeline,
-    openPicturePreview,
     likeSucceeded,
     unlikeSucceeded,
     retweetSucceeded,
     unretweetSucceeded,
-    openUserTimeline,
-    addUserTweets,
-    showMessage,
-    openConversationTimeline,
-    completeMissingStatuses,
-} from '../actions';
+} from '../actions/timeline';
 import TwitterRestApi from '../twitter/rest_api';
 
 function getCurrentStatus(): Tweet | null {

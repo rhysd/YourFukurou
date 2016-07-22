@@ -9,12 +9,14 @@ import UndraggableClickable from '../undraggable_clickable';
 import {TimelineKind} from '../../states/timeline';
 import {Dispatch} from '../../store';
 import {
-    focusOnItem,
-    unfocusItem,
     focusSlaveOn,
     blurSlaveTimeline,
     openConversationTimeline,
-} from '../../actions';
+} from '../../actions/slave_timeline';
+import {
+    focusOnItem,
+    unfocusItem,
+} from '../../actions/timeline';
 
 interface ConnectedProps extends React.Props<any> {
     readonly status: TweetItem;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Twitter} from 'twit';
-import {openPicturePreview} from '../../actions';
+import {openPicturePreview} from '../../actions/tweet_media';
 import {Dispatch} from '../../store';
 
 interface TweetMediaProps extends React.Props<any> {

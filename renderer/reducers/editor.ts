@@ -1,4 +1,4 @@
-import Action from '../action_type';
+import Action from '../actions/type';
 import TweetEditorState, {DefaultTweetEditorState} from '../states/tweet_editor';
 
 export default function editor(state: TweetEditorState = DefaultTweetEditorState, action: Action) {

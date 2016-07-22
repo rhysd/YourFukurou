@@ -1,4 +1,4 @@
-import Action from '../action_type';
+import Action from '../actions/type';
 
 export type MessageKind = 'info' | 'error';
 export interface MessageState {

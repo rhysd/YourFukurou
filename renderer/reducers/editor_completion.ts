@@ -1,4 +1,4 @@
-import Action from '../action_type';
+import Action from '../actions/type';
 import EditorCompletionState, {DefaultEditorCompletionState} from '../states/editor_completion';
 
 export default function editorCompletion(state: EditorCompletionState = DefaultEditorCompletionState, action: Action) {

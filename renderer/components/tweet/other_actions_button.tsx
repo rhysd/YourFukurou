@@ -2,11 +2,11 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import Tooltip = require('rc-tooltip');
 import Tweet, {TwitterUser} from '../../item/tweet';
+import {showMessage} from '../../actions/message';
 import {
-    showMessage,
     openEditor,
     openEditorForReply,
-} from '../../actions';
+} from '../../actions/editor';
 import TwitterRestApi from '../../twitter/rest_api';
 import {Dispatch} from '../../store';
 

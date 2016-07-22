@@ -1,4 +1,4 @@
-import Action from '../action_type';
+import Action from '../actions/type';
 import SlaveTimeline, {
     UserTimeline,
     ConversationTimeline,

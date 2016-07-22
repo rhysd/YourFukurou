@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import {completeMissingStatuses} from '../actions';
+import {completeMissingStatuses} from '../actions/timeline';
 import {Dispatch} from '../store';
 
 interface Props extends React.Props<ZigZagSeparator> {

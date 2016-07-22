@@ -2,7 +2,7 @@ import * as Twit from 'twit';
 import {IncomingMessage} from 'http';
 import {join} from 'path';
 import log from '../log';
-import {showMessage} from '../actions';
+import {showMessage} from '../actions/message';
 import Store from '../store';
 
 const {app} = global.require('electron');

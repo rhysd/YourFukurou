@@ -1,7 +1,7 @@
 import * as I from 'immutable';
 import KeyBinds from './keybinds';
 import Store from '../store';
-import {moveToNthPicturePreview, closeTweetMedia} from '../actions';
+import {moveToNthPicturePreview, closeTweetMedia} from '../actions/tweet_media';
 import log from '../log';
 
 function nextPic() {

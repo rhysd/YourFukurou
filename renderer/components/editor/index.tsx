@@ -4,12 +4,12 @@ import {Editor, EditorState, getDefaultKeyBinding} from 'draft-js';
 import {getTweetLength} from 'twitter-text';
 import {List} from 'immutable';
 import {Twitter} from 'twit';
+import {showMessage} from '../../actions/message';
 import {
     changeEditorState,
     closeEditor,
-    showMessage,
     selectAutoCompleteSuggestion,
-} from '../../actions';
+} from '../../actions/editor';
 import IconButton from '../icon_button';
 import KeymapTransition from '../../keybinds/keymap_transition';
 import Tweet from '../../item/tweet';

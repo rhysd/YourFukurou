@@ -117,6 +117,9 @@ export default class TweetEditorState {
     }
 
     openEditor(preset_text?: string) {
+        if (this.is_open) {
+            return this;
+        }
         return new TweetEditorState(
             preset_text ? this.setTextToEditor(preset_text) : this.core,
             true,
@@ -125,6 +128,9 @@ export default class TweetEditorState {
     }
 
     closeEditor() {
+        if (!this.is_open) {
+            return this;
+        }
         return new TweetEditorState(
             EditorState.push(
                 this.core,

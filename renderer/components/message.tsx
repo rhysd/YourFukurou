@@ -1,6 +1,6 @@
 import * as React from 'react';
 import IconButton from './icon_button';
-import {dismissMessage} from '../actions';
+import {dismissMessage} from '../actions/message';
 import {MessageKind} from '../reducers/message';
 import {Dispatch} from '../store';
 

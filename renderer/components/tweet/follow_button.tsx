@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {List} from 'immutable';
 import {TwitterUser} from '../../item/tweet';
-import {showMessage} from '../../actions';
+import {showMessage} from '../../actions/message';
 import TwitterRestApi from '../../twitter/rest_api';
 import {Dispatch} from '../../store';
 

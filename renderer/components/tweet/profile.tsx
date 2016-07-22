@@ -6,7 +6,7 @@ import ScreenName from './screen_name';
 import FollowButton from './follow_button';
 import ExternalLink from '../external_link';
 import {TwitterUser} from '../../item/tweet';
-import {openPicturePreview} from '../../actions';
+import {openPicturePreview} from '../../actions/tweet_media';
 import {Dispatch} from '../../store';
 
 type Size = 'normal' | 'big';

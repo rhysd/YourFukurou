@@ -9,18 +9,22 @@ import {
     focusSlaveTop,
     focusSlaveBottom,
     blurSlaveTimeline,
+    openUserTimeline,
+    addUserTweets,
+    openConversationTimeline,
+} from '../actions/slave_timeline';
+import {showMessage} from '../actions/message';
+import {openPicturePreview} from '../actions/tweet_media';
+import {
     openEditor,
     openEditorForReply,
-    openPicturePreview,
+} from '../actions/editor';
+import {
     likeSucceeded,
     unlikeSucceeded,
     retweetSucceeded,
     unretweetSucceeded,
-    openUserTimeline,
-    addUserTweets,
-    showMessage,
-    openConversationTimeline,
-} from '../actions';
+} from '../actions/timeline';
 import {UserTimeline} from '../states/slave_timeline';
 import log from '../log';
 import TwitterRestApi from '../twitter/rest_api';

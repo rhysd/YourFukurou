@@ -9,7 +9,7 @@ import TweetItem, {TwitterUser} from '../../item/tweet';
 import Separator from '../../item/separator';
 import {UserTimeline} from '../../states/slave_timeline';
 import log from '../../log';
-import {appendPastItems} from '../../actions';
+import {appendPastItems} from '../../actions/slave_timeline';
 import TwitterRestApi from '../../twitter/rest_api';
 import {Dispatch} from '../../store';
 

@@ -7,9 +7,9 @@ import Store from '../store';
 import {
     upAutoCompletionFocus,
     downAutoCompletionFocus,
-    closeEditor,
     stopAutoCompletion,
-} from '../actions';
+} from '../actions/editor_completion';
+import {closeEditor} from '../actions/editor';
 
 const hasCommandModifier = KeyBindingUtil.hasCommandModifier;
 const isCtrlKeyCommand = KeyBindingUtil.isCtrlKeyCommand;
