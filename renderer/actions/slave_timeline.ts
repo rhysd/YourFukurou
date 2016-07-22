@@ -87,8 +87,8 @@ export function openConversationTimeline(status: Tweet): ThunkAction {
 }
 
 export function closeSlaveTimeline(): ThunkAction {
-    return dispatch => {
-        KeymapTransition.escapeFromCurrentKeymaps();
+    return (dispatch, getState) => {
+        KeymapTransition.escapeFromCurrentKeymaps(getState());
         dispatch({
             type: 'CloseSlaveTimeline',
         });

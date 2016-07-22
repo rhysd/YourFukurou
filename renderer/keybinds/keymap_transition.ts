@@ -2,7 +2,6 @@ import GlobalKeyMaps from './global';
 import EditorKeyMaps from './editor';
 import MediaPreviewKeyMaps from './media_preview';
 import SlaveTimelineKeyMaps from './slave_timeline';
-import Store from '../store';
 import State from '../states/root';
 import log from '../log';
 
@@ -23,8 +22,7 @@ export class KeymapTransition {
         this.current = this.global;
     }
 
-    escapeFromCurrentKeymaps() {
-        const state = Store.getState();
+    escapeFromCurrentKeymaps(state: State) {
         const current = this.current;
         if (current instanceof EditorKeyMaps) {
             this.escapeFromEditor(state);

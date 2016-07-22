@@ -13,8 +13,8 @@ export function openPicturePreview(media_urls: string[], index?: number): ThunkA
 }
 
 export function closeTweetMedia(): ThunkAction {
-    return dispatch => {
-        KeymapTransition.escapeFromCurrentKeymaps();
+    return (dispatch, getState) => {
+        KeymapTransition.escapeFromCurrentKeymaps(getState());
         dispatch({
             type: 'CloseTweetMedia',
         });

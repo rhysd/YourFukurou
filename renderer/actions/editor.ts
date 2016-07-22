@@ -41,8 +41,8 @@ export function openEditorForReply(in_reply_to: Tweet, owner: TwitterUser, text?
 }
 
 export function closeEditor(): ThunkAction {
-    return dispatch => {
-        KeymapTransition.escapeFromCurrentKeymaps();
+    return (dispatch, getState) => {
+        KeymapTransition.escapeFromCurrentKeymaps(getState());
         dispatch({
             type: 'CloseEditor',
         });
