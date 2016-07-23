@@ -12,6 +12,7 @@ interface SlaveTimeline {
     focusBottom(): SlaveTimeline;
     focusOn(index: number | null): SlaveTimeline;
     blur(): SlaveTimeline;
+    getTitle(): string;
 }
 export default SlaveTimeline;
 
@@ -94,6 +95,10 @@ export class UserTimeline implements SlaveTimeline {
             idx,
         );
     }
+
+    getTitle() {
+        return `Profile: @${this.user.screen_name}`;
+    }
 }
 
 export class ConversationTimeline implements SlaveTimeline {
@@ -157,6 +162,10 @@ export class ConversationTimeline implements SlaveTimeline {
             this.items,
             idx,
         );
+    }
+
+    getTitle() {
+        return 'Conversation';
     }
 }
 

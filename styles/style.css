@@ -1168,7 +1168,7 @@ body {
 
 .slave-timeline__overlay {
   width: 20%;
-  height: 100vh;
+  min-height: 100%;
   background-color: black;
   -webkit-animation-name: fadeInOverlay;
   animation-name: fadeInOverlay;
@@ -1178,9 +1178,32 @@ body {
   animation-fill-mode: both;
 }
 
+.slave-timeline__header {
+  flex: none;
+  display: flex;
+  flex-direction: row;
+  padding: 8px;
+  align-items: center;
+  border-bottom: solid 1px var(--color-timeline-border);
+  color: var(--color-weak-text-link);
+}
+
+.slave-timeline__back {
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--color-weak-text-link);
+}
+
+.slave-timeline__title {
+  flex: auto;
+  font-size: 1.3rem;
+  text-align: center;
+}
+
 .slave-timeline__timeline {
   width: 80%;
-  height: 100vh;
+  height: 100%;
   border-left: solid 1px var(--color-timeline-border);
   -webkit-animation-duration: 0.5s;
   animation-duration: 0.5s;

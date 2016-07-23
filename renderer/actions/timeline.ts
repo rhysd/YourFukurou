@@ -9,6 +9,7 @@ import DB from '../database/db';
 import Item from '../item/item';
 import Tweet, {TwitterUser} from '../item/tweet';
 import TwitterRestApi from '../twitter/rest_api';
+import log from '../log';
 
 export function addTweetToTimeline(status: Tweet): ThunkAction {
     return (dispatch, getState) => {

@@ -20,10 +20,10 @@ interface Props extends React.Props<SlaveTimelineWrapper> {
 export class SlaveTimelineWrapper extends React.Component<Props, {}> {
     constructor(props: Props) {
         super(props);
-        this.onOverlayClicked = this.onOverlayClicked.bind(this);
+        this.backToTimeline = this.backToTimeline.bind(this);
     }
 
-    onOverlayClicked(e: React.MouseEvent) {
+    backToTimeline(e: React.MouseEvent) {
         e.stopPropagation();
         this.props.dispatch!(closeSlaveTimeline());
     }
@@ -49,10 +49,24 @@ export class SlaveTimelineWrapper extends React.Component<Props, {}> {
         }
     }
 
+    renderHeader() {
+        return <div className="slave-timeline__header">
+            <div
+                className="slave-timeline__back"
+                title="Back to Timeline"
+                onClick={this.backToTimeline}
+            >
+                <i className="fa fa-angle-left fa-2x"/>
+            </div>
+            <div className="slave-timeline__title">{this.props.slave.getTitle()}</div>
+        </div>;
+    }
+
     render() {
         return <div className="slave-timeline__wrapper">
-            <div className="slave-timeline__overlay" onClick={this.onOverlayClicked}/>
+            <div className="slave-timeline__overlay" onClick={this.backToTimeline}/>
             <div className="slave-timeline__timeline animated slideInRight">
+                {this.renderHeader()}
                 {this.renderSlave()}
             </div>
         </div>;
