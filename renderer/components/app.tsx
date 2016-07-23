@@ -8,6 +8,7 @@ import SlaveTimeline from './slave_timeline/index';
 
 interface AppProps extends React.Props<any> {
     readonly editorOpen: boolean;
+    readonly slaveOpen: boolean;
 }
 
 const App = (props: AppProps) => (
@@ -17,7 +18,7 @@ const App = (props: AppProps) => (
             {props.editorOpen ? <TweetEditor/> : undefined}
             <div className="app-root__timeline">
                 <Timeline/>
-                <SlaveTimeline/>
+                {props.slaveOpen ? <SlaveTimeline/> : undefined}
             </div>
         </div>
     </div>
@@ -26,6 +27,7 @@ const App = (props: AppProps) => (
 function select(state: State): AppProps {
     return {
         editorOpen: state.editor.is_open,
+        slaveOpen: state.slaveTimeline !== null,
     };
 }
 

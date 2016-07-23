@@ -2,7 +2,6 @@ import {fixture} from '../../helper';
 import * as React from 'react';
 import {shallow} from 'enzyme';
 import test from 'ava';
-import {spy} from 'sinon';
 import {List} from 'immutable';
 import * as ReactList from 'react-list';
 import Lightbox from 'react-images';
@@ -18,7 +17,7 @@ function doNothing(_: any) {
 // XXX:
 // Importing states/tweet_media.ts occurs an error in reducers/tweet_media.ts
 // Error reports the state which tweetMedia() receives is undefined.
-function renderTimeline(msg: MessageState = null, overlay: boolean = false, dispatch: (a: any) => void = doNothing) {
+function renderTimeline(msg: MessageState = null, dispatch: (a: any) => void = doNothing) {
     return shallow(
         <Timeline
             message={msg}
@@ -28,7 +27,6 @@ function renderTimeline(msg: MessageState = null, overlay: boolean = false, disp
             media={{is_open: false} as any}
             focus_index={null}
             friends={List<number>()}
-            overlay={overlay}
             dispatch={dispatch}
         />
     );
@@ -39,7 +37,6 @@ test('render infinite list with <ReactList/>', t => {
     const l = c.find(ReactList);
     t.is(l.length, 1);
     t.is(l.props().length, 1);
-    t.is(c.find('.timeline__overlay').length, 0);
 });
 
 test('render <Message/> when message is set', t => {
@@ -48,20 +45,6 @@ test('render <Message/> when message is set', t => {
     t.is(msg.length, 1);
     t.is(msg.props().kind, 'info');
     t.is(msg.props().text, 'This is text');
-});
-
-test('can render overlay', t => {
-    const cb = spy();
-    const c = renderTimeline(null, true, cb);
-    const overlay = c.find('.timeline__overlay');
-    t.is(overlay.length, 1);
-    overlay.simulate('click', {stopPropagation: doNothing});
-    t.true(cb.called);
-    const thunk = cb.args[0][0];
-    const dispatch = spy();
-    const getState = () => ({}) as any;
-    thunk(dispatch, getState);
-    t.is(dispatch.args[0][0].type, 'CloseSlaveTimeline');
 });
 
 test('put Lightbox', t => {

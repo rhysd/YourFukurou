@@ -17,7 +17,6 @@ import State from '../states/root';
 import {TimelineKind} from '../states/timeline';
 import TweetMediaState from '../states/tweet_media';
 import {MessageState} from '../reducers/message';
-import {closeSlaveTimeline} from '../actions/slave_timeline';
 import {
     closeTweetMedia,
     moveToNthPicturePreview,
@@ -33,7 +32,6 @@ interface TimelineProps extends React.Props<any> {
     readonly media: TweetMediaState;
     readonly focus_index: number | null;
     readonly friends: List<number>;
-    readonly overlay: boolean;
     readonly dispatch?: Dispatch;
 }
 
@@ -192,18 +190,6 @@ export class Timeline extends React.Component<TimelineProps, {}> {
         );
     }
 
-    onOverlayClicked(e: React.MouseEvent) {
-        e.stopPropagation();
-        this.props.dispatch!(closeSlaveTimeline());
-    }
-
-    renderOverlay() {
-        if (!this.props.overlay) {
-            return undefined;
-        }
-        return <div className="timeline__overlay" onClick={this.onOverlayClicked.bind(this)}/>;
-    }
-
     componentWillReceiveProps(next: TimelineProps) {
         // Note:
         // When we should manage visible range of timline, we can notify the range to store
@@ -220,14 +206,11 @@ export class Timeline extends React.Component<TimelineProps, {}> {
     // When 'expand_tweet' == 'never' or 'expand_tweet' == 'focused' and focus == null,
     // we can know all elements' height.  Scrolling can be optimized.
     render() {
-        const {message, dispatch, items, overlay} = this.props;
+        const {message, dispatch, items} = this.props;
         const related_ids = this.getRelatedStatusIds();
         const focused_user_id = this.getFocusedUserId();
-        const style = {
-            overflowY: overlay ? 'visible' : undefined,
-        };
         return (
-            <div className="timeline" style={style}>
+            <div className="timeline">
                 {message === null ?
                     undefined :
                     <Message
@@ -244,7 +227,6 @@ export class Timeline extends React.Component<TimelineProps, {}> {
                     ref="list"
                 />
                 {this.renderLightbox()}
-                {this.renderOverlay()}
             </div>
         );
     }
@@ -259,7 +241,6 @@ function select(state: State): TimelineProps {
         media: state.tweetMedia,
         focus_index: state.timeline.focus_index,
         friends: state.timeline.friend_ids,
-        overlay: state.slaveTimeline !== null,
     };
 }
 export default connect(select)(Timeline);
