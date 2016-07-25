@@ -7,7 +7,6 @@ import Tweet from './tweet/index';
 import MiniTweet from './mini_tweet/index';
 import ZigZagSeparator from './zigzag_separator';
 import TwitterActivity from './activity';
-import Message from './message';
 import Item from '../item/item';
 import TweetItem, {TwitterUser} from '../item/tweet';
 import TimelineActivity from '../item/timeline_activity';
@@ -16,7 +15,6 @@ import log from '../log';
 import State from '../states/root';
 import {TimelineKind} from '../states/timeline';
 import TweetMediaState from '../states/tweet_media';
-import {MessageState} from '../reducers/message';
 import {
     closeTweetMedia,
     moveToNthPicturePreview,
@@ -25,7 +23,6 @@ import Config from '../config';
 import {Dispatch} from '../store';
 
 interface TimelineProps extends React.Props<any> {
-    readonly message: MessageState;
     readonly kind: TimelineKind;
     readonly items: List<Item>;
     readonly owner: TwitterUser;
@@ -149,6 +146,21 @@ export class Timeline extends React.Component<TimelineProps, {}> {
         }
     }
 
+    renderVirtualScroll() {
+        const related_ids = this.getRelatedStatusIds();
+        const focused_user_id = this.getFocusedUserId();
+        return (
+            <ReactList
+                itemRenderer={(idx, key) => this.renderItem(idx, key, related_ids, focused_user_id)}
+                length={this.props.items.size}
+                type="variable"
+                threshold={500}
+                useTranslate3d
+                ref="list"
+            />
+        );
+    }
+
     renderLightbox() {
         const {media, dispatch} = this.props;
 
@@ -206,26 +218,9 @@ export class Timeline extends React.Component<TimelineProps, {}> {
     // When 'expand_tweet' == 'never' or 'expand_tweet' == 'focused' and focus == null,
     // we can know all elements' height.  Scrolling can be optimized.
     render() {
-        const {message, dispatch, items} = this.props;
-        const related_ids = this.getRelatedStatusIds();
-        const focused_user_id = this.getFocusedUserId();
         return (
             <div className="timeline">
-                {message === null ?
-                    undefined :
-                    <Message
-                        text={message.text}
-                        kind={message.kind}
-                        dispatch={dispatch!}
-                    />}
-                <ReactList
-                    itemRenderer={(idx, key) => this.renderItem(idx, key, related_ids, focused_user_id)}
-                    length={items.size}
-                    type="variable"
-                    threshold={500}
-                    useTranslate3d
-                    ref="list"
-                />
+                {this.renderVirtualScroll()}
                 {this.renderLightbox()}
             </div>
         );
@@ -234,7 +229,6 @@ export class Timeline extends React.Component<TimelineProps, {}> {
 
 function select(state: State): TimelineProps {
     return {
-        message: state.message,
         items: state.timeline.getCurrentTimeline(),
         kind: state.timeline.kind,
         owner: state.timeline.user!,

@@ -572,7 +572,7 @@ body {
   width: 100%;
   position: absolute;
   top: 0;
-  left: 0;
+  left: var(--sidemenu-width);
   right: 0;
   display: flex;
   align-items: center;
