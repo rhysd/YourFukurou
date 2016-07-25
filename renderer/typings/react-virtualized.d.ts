@@ -10,18 +10,18 @@ declare module 'react-virtualized' {
         }) => void;
     }
     export class AutoSizer extends React.Component<AutoSizerProps, {}> {}
-    export interface AutoSizerChildren {
+    export interface AutoSizerChild {
         (size: {
             height: number;
             width: number;
-        }): React.ComponentClass<any>;
+        }): JSX.Element | undefined;
     }
 
     export interface CellMeasurerProps {
         cellRenderer: (indices: {
             columnIndex: number;
             rowIndex: number;
-        }) => React.ReactElement<any>;
+        }) => JSX.Element | undefined;
         columnCount: number;
         rowCount: number;
         width?: number;
@@ -29,12 +29,12 @@ declare module 'react-virtualized' {
         container?: React.ReactNode | React.ComponentClass<any> | (() => React.ReactNode | React.ComponentClass<any>);
     }
     export class CellMeasurer extends React.Component<CellMeasurerProps, {}> {}
-    export interface CellMeasurerChildren {
+    export interface CellMeasurerChild {
         (args: {
             getColumnWidth: () => number;
             getRowHeight: () => number;
             resetMeasurements: () => void;
-        }): React.ComponentClass<any>;
+        }): JSX.Element | undefined;
     }
 
     export interface VirtualScrollProps {
@@ -44,7 +44,7 @@ declare module 'react-virtualized' {
         rowRenderer: (args: {
             index: number;
             isScrolling: boolean;
-        }) => React.ReactNode;
+        }) => JSX.Element | undefined;
         rowCount: number;
         className?: string;
         estimatedRowSize?: number;
