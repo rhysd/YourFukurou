@@ -2,6 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {List} from 'immutable';
 import Lightbox, {LightboxImage} from 'react-images';
+import * as ReactList from 'react-list';
 import Tweet from './tweet/index';
 import MiniTweet from './mini_tweet/index';
 import ZigZagSeparator from './zigzag_separator';
@@ -20,13 +21,6 @@ import {
 } from '../actions/tweet_media';
 import Config from '../config';
 import {Dispatch} from '../store';
-import {
-    AutoSizer,
-    AutoSizerChild,
-    CellMeasurer,
-    CellMeasurerChild,
-    VirtualScroll,
-} from 'react-virtualized';
 
 interface TimelineProps extends React.Props<any> {
     readonly kind: TimelineKind;
@@ -67,6 +61,11 @@ function getStatusIdsRelatedTo(status: TweetItem): string[] {
 }
 
 export class Timeline extends React.Component<TimelineProps, {}> {
+    refs: {
+        list: ReactList.Node;
+        [key: string]: React.Component<any, any> | Element;
+    };
+
     getFocusedUserId() {
         const {focus_index, items} = this.props;
         if (focus_index === null) {
@@ -95,7 +94,7 @@ export class Timeline extends React.Component<TimelineProps, {}> {
         }
     }
 
-    renderItem(idx: number, key: string | number, related_ids: string[], focused_user_id: number | null) {
+    renderItem(idx: number, key: string, related_ids: string[], focused_user_id: number | null) {
         const {items, focus_index, kind, owner, friends, dispatch} = this.props;
         const i = items.get(idx);
         const focused = idx === focus_index;
@@ -150,27 +149,15 @@ export class Timeline extends React.Component<TimelineProps, {}> {
     renderVirtualScroll() {
         const related_ids = this.getRelatedStatusIds();
         const focused_user_id = this.getFocusedUserId();
-        const size = this.props.items.size;
         return (
-            <AutoSizer>
-                {(({height, width}) => (
-                    <CellMeasurer
-                        cellRenderer={({rowIndex}) => this.renderItem(rowIndex, rowIndex, related_ids, focused_user_id)}
-                        columnCount={1}
-                        rowCount={size}
-                    >
-                        {(({getRowHeight}) => (
-                            <VirtualScroll
-                                width={width}
-                                height={height}
-                                rowCount={size}
-                                rowHeight={getRowHeight}
-                                rowRenderer={({index}) => this.renderItem(index, index, related_ids, focused_user_id)}
-                            />
-                        )) as CellMeasurerChild}
-                    </CellMeasurer>
-                )) as AutoSizerChild}
-            </AutoSizer>
+            <ReactList
+                itemRenderer={(idx, key) => this.renderItem(idx, key, related_ids, focused_user_id)}
+                length={this.props.items.size}
+                type="variable"
+                threshold={500}
+                useTranslate3d
+                ref="list"
+            />
         );
     }
 
@@ -221,9 +208,7 @@ export class Timeline extends React.Component<TimelineProps, {}> {
         // by dispatching action with the result of `this.refs.list.getVisibleRange()`.
         if (next.focus_index !== this.props.focus_index && next.focus_index !== null) {
             log.debug('Focus moves to:', next.focus_index);
-            /* XXX
             this.refs.list.scrollAround(next.focus_index);
-            */
         }
     }
 
