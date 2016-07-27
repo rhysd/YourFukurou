@@ -16,7 +16,7 @@ function renderApp(editorOpen: boolean = false, slaveOpen: boolean = false, mess
             editorOpen={editorOpen}
             slaveOpen={slaveOpen}
             message={message}
-            dispatch={() => {}}
+            dispatch={() => { /* empty */ }}
         />
     );
 }
