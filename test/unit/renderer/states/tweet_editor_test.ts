@@ -32,6 +32,13 @@ test('clearEditor() sets empty text to editor', t => {
             .clearEditor();
     t.true(s.is_open);
     t.is(s.core.getCurrentContent().getPlainText(), '');
+
+    const u = fixture.user();
+    const tw = fixture.tweet_other();
+    const s2 = DefaultTweetEditorState
+            .openEditorWithInReplyTo(tw, u)
+            .clearEditor();
+    t.is(s2.in_reply_to_status, null);
 });
 
 test('openEditorWithInReplyTo() sets screen names for reply', t => {
@@ -70,4 +77,18 @@ test('openEditorWithInReplyTo() does not set owner\'s screen name', t => {
 
     const s3 = DefaultTweetEditorState.openEditorWithInReplyTo(rp3, u);
     t.is(s3.core.getCurrentContent().getPlainText(), '');
+});
+
+test('onSelect() replace query string with selected text', t => {
+    const testcases = [
+        ['Test @foo', '@foo', '@foobar', 'Test @foobar'],
+        ['#foo', '#foo', '#foobar', '#foobar'],
+        [':', ':', ':dog:', ':dog:'],
+    ];
+
+    for (const [before, query, text, after] of testcases) {
+        const s = DefaultTweetEditorState.openEditor(before);
+        const selected = s.onSelect(query, text);
+        t.is(selected.core.getCurrentContent().getPlainText(), after);
+    }
 });
