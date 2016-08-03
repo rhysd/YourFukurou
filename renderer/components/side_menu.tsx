@@ -13,6 +13,13 @@ import {Dispatch} from '../store';
 
 const {shell} = global.require('electron');
 
+// Note:
+// In OS X, title bar is hidden and we need to allocate the space for insets of window.
+// Otherwise, natural padding is added at the top of side menu.
+const TitleBarInsetPadding = {
+    paddingTop: global.process.platform === 'darwin' ? '32px' : '12px',
+};
+
 interface SideMenuButtonProps extends React.Props<any> {
     readonly active: boolean;
     readonly notified: boolean;
@@ -74,7 +81,7 @@ function openSearchPage() {
 export const SideMenu = (props: Props) => {
     const {kind, user, notified, editor_open, onEdit, onHome, onMention} = props;
     return (
-        <div className="side-menu">
+        <div className="side-menu" style={TitleBarInsetPadding}>
             <Icon size={48} user={user}/>
             <SideMenuButton
                 active={editor_open}

@@ -78,7 +78,6 @@ body {
 .side-menu {
   display: flex;
   flex-direction: column;
-  padding-top: 32px; /* for title bar inset */
   height: 100%;
   width: var(--sidemenu-width);
   background-color: var(--bg-color-light);
