@@ -64,10 +64,15 @@ export class SlaveTimelineWrapper extends React.Component<Props, {}> {
     }
 
     renderHeader(timeline: SlaveTimeline) {
+        const slave = this.props.slave;
+        const back_message =
+            slave.timeline_stack.size <= 1 ?
+                "Back to Timeline" :
+                slave.timeline_stack.get(-2).getTitle();
         return <div className="slave-timeline__header">
             <div
                 className="slave-timeline__back"
-                title="Back to Timeline"
+                title={back_message}
                 onClick={this.back}
             >
                 <i className="fa fa-angle-left fa-2x"/>
