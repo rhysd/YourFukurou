@@ -33,7 +33,7 @@ import Separator from '../item/separator';
 import {dispatchOlderTweets} from '../components/slave_timeline/user';
 
 function getCurrentUser() {
-    const slave = Store.getState().slaveTimeline;
+    const slave = Store.getState().slaveTimeline.getCurrent();
     if (slave instanceof UserTimeline) {
         return slave.user;
     } else {
@@ -56,7 +56,7 @@ function openUserWebsite() {
 }
 
 function getFocusedStatus() {
-    const item = Store.getState().slaveTimeline.getFocusedItem();
+    const item = Store.getState().slaveTimeline.getCurrent().getFocusedItem();
     if (item instanceof Tweet) {
         return item;
     } else {

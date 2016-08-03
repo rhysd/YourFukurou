@@ -9,6 +9,7 @@ import PM from '../plugin_manager';
 import AppConfig from '../config';
 
 const MaxTimelineLength = AppConfig.remote_config.max_timeline_items;
+const Platform = global.process.platform;
 const remote = global.require('electron').remote;
 
 export type TimelineKind = 'home' | 'mention';
@@ -84,7 +85,9 @@ function replaceSeparatorWithItemsIn(tl: List<Item>, sep_index: number, items: I
 }
 
 function setBadge(visible: boolean) {
-    window.requestIdleCallback(() => remote.app.dock.setBadge(visible ? ' ' : ''));
+    if (Platform === 'darwin') {
+        window.requestIdleCallback(() => remote.app.dock.setBadge(visible ? ' ' : ''));
+    }
 }
 
 // Note:

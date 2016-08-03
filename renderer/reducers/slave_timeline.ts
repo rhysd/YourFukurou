@@ -1,43 +1,47 @@
 import Action from '../actions/type';
-import SlaveTimeline, {
-    UserTimeline,
-    ConversationTimeline,
-} from '../states/slave_timeline';
+import SlaveTimelineState, {DefaultSlaveTimelineState} from '../states/slave_timeline';
 
-export default function slaveTimeline(state: SlaveTimeline | null = null, action: Action) {
+export default function slaveTimeline(state: SlaveTimelineState = DefaultSlaveTimelineState, action: Action) {
     if (action.type === 'OpenUserTimeline') {
-        return new UserTimeline(action.user);
+        return state.openUserTimeline(action.user);
     }
 
     if (action.type === 'OpenConversationTimeline') {
-        return ConversationTimeline.fromArray(action.statuses);
-    }
-
-    if (state === null) {
-        return state;
+        return state.openConversationTimeline(action.statuses);
     }
 
     switch (action.type) {
         case 'AddUserTweets':
-            if (state instanceof UserTimeline) {
-                return state.user.id === action.user_id ? state.addTweets(action.statuses) : state;
-            } else {
-                return state;
-            }
+            const statuses = action.statuses;
+            return state.modifyUserTimeline(
+                action.user_id,
+                u => u.addTweets(statuses),
+            );
         case 'AppendPastItems':
-            if (state instanceof UserTimeline) {
-                return state.user.id === action.user_id ? state.appendPastItems(action.items) : state;
-            } else {
-                return state;
-            }
+            const items = action.items;
+            return state.modifyUserTimeline(
+                action.user_id,
+                u => u.appendPastItems(items),
+            );
         // TODO: Add the user's tweet received from user stream
-        case 'CloseSlaveTimeline': return state.close();
-        case 'FocusSlaveNext':     return state.focusNext();
-        case 'FocusSlavePrev':     return state.focusPrev();
-        case 'FocusSlaveTop':      return state.focusTop();
-        case 'FocusSlaveBottom':   return state.focusBottom();
-        case 'FocusSlaveOn':       return state.focusOn(action.index);
-        case 'BlurSlaveTimeline':  return state.blur();
-        default:                   return state;
+        case 'CloseSlaveTimeline':
+            return state.closeCurrentTimeline();
+        case 'BackSlaveTimeline':
+            return state.backToPreviousTimeline();
+        case 'FocusSlaveNext':
+            return state.modifySlaveTimeline(s => s.focusNext());
+        case 'FocusSlavePrev':
+            return state.modifySlaveTimeline(s => s.focusPrev());
+        case 'FocusSlaveTop':
+            return state.modifySlaveTimeline(s => s.focusTop());
+        case 'FocusSlaveBottom':
+            return state.modifySlaveTimeline(s => s.focusBottom());
+        case 'FocusSlaveOn':
+            const index = action.index;
+            return state.modifySlaveTimeline(s => s.focusOn(index));
+        case 'BlurSlaveTimeline':
+            return state.modifySlaveTimeline(s => s.blur());
+        default:
+            return state;
     }
 }
