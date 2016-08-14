@@ -22,6 +22,8 @@ interface Props extends React.Props<SlaveTimelineWrapper> {
 }
 
 export class SlaveTimelineWrapper extends React.Component<Props, {}> {
+    timeline_node: HTMLElement;
+
     constructor(props: Props) {
         super(props);
         this.back = this.back.bind(this);
@@ -81,13 +83,44 @@ export class SlaveTimelineWrapper extends React.Component<Props, {}> {
         </div>;
     }
 
+    animate(kind: string) {
+        if (!this.timeline_node) {
+            return;
+        }
+        let listener: () => void;
+        listener = () => {
+            this.timeline_node.className = 'slave-timeline__timeline';
+            this.timeline_node.removeEventListener('animationend', listener);
+        };
+        this.timeline_node.addEventListener('animationend', listener);
+        this.timeline_node.className = 'slave-timeline__timeline animated ' + kind;
+    }
+
+    componentDidMount() {
+        this.animate('slideInRight');
+    }
+
+    // XXX:
+    // Use requestIdleCallback to delay animation after DOM rendering finishes.
+    // It avoids to mix animation and DOM update.
+    componentDidUpdate(prev: Props) {
+        if (this.props.slave.timeline_stack.size > prev.slave.timeline_stack.size) {
+            window.requestIdleCallback(() => this.animate('slideInRight'));
+        } else if (this.props.slave.timeline_stack.size < prev.slave.timeline_stack.size) {
+            window.requestIdleCallback(() => this.animate('slideOutRight'));
+        }
+    }
+
     render() {
         // Note:
         // Current timeline must exist because renderer of this component already checked it.
         const timeline = this.props.slave.getCurrent()!;
         return <div className="slave-timeline__wrapper">
             <div className="slave-timeline__overlay" onClick={this.close}/>
-            <div className="slave-timeline__timeline animated slideInRight">
+            <div
+                className="slave-timeline__timeline"
+                ref={r => { this.timeline_node = r; }}
+            >
                 {this.renderHeader(timeline)}
                 {this.renderSlave(timeline)}
             </div>
