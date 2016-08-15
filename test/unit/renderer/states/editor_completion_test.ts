@@ -21,6 +21,6 @@ test('searchSuggestions() set the search result', t => {
     t.is(s2.suggestions[0].code, 'dog');
     t.is(s2.suggestions[1].code, 'cat');
     t.is(s2.label, 'EMOJI');
-    t.is(s2.top, 42);
-    t.is(s2.left, 21);
+    t.is(s2.pos_top, 42);
+    t.is(s2.pos_left, 21);
 });
