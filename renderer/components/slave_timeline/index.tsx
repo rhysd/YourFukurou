@@ -69,7 +69,7 @@ export class SlaveTimelineWrapper extends React.Component<Props, {}> {
         const slave = this.props.slave;
         const back_message =
             slave.timeline_stack.size <= 1 ?
-                "Back to Timeline" :
+                'Back to Timeline' :
                 slave.timeline_stack.get(-2).getTitle();
         return <div className="slave-timeline__header">
             <div
