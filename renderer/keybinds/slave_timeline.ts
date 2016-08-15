@@ -138,7 +138,7 @@ function reply(status: Tweet) {
 }
 
 function replyOrCompleteMissingStatuses() {
-    const tl = Store.getState().slaveTimeline;
+    const tl = Store.getState().slaveTimeline.getCurrent();
     const item = tl.getFocusedItem();
     if (item instanceof Tweet) {
         reply(item);

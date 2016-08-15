@@ -7,11 +7,15 @@ import {spy} from 'sinon';
 import {SlaveTimelineWrapper} from '../../../../../renderer/components/slave_timeline/index';
 import UserSlave from '../../../../../renderer/components/slave_timeline/user';
 import ConversationSlave from '../../../../../renderer/components/slave_timeline/conversation';
-import {ConversationTimeline, UserTimeline} from '../../../../../renderer/states/slave_timeline';
+import SlaveTimelineState, {SlaveTimeline, ConversationTimeline, UserTimeline} from '../../../../../renderer/states/slave_timeline';
+
+function getSlaveTimelineOf(...ts: SlaveTimeline[]) {
+    return new SlaveTimelineState(List<SlaveTimeline>(ts));
+}
 
 test('user timeline is shown in slave timeline', t => {
     const u = fixture.user();
-    const tl = new UserTimeline(u);
+    const tl = getSlaveTimelineOf(new UserTimeline(u));
     const c = shallow(
         <SlaveTimelineWrapper
             slave={tl}
@@ -27,7 +31,7 @@ test('user timeline is shown in slave timeline', t => {
 test('conversation timeline is shown in slave timeline', t => {
     const u = fixture.user();
     const tw = fixture.tweet_other();
-    const tl = ConversationTimeline.fromArray([tw, tw, tw]);
+    const tl = getSlaveTimelineOf(ConversationTimeline.fromArray([tw, tw, tw]));
     const c = shallow(
         <SlaveTimelineWrapper
             slave={tl}
@@ -42,7 +46,7 @@ test('conversation timeline is shown in slave timeline', t => {
 
 test('overlay is shown and will close slave timeline when it is clicked', t => {
     const u = fixture.user();
-    const tl = new UserTimeline(u);
+    const tl = getSlaveTimelineOf(new UserTimeline(u));
     const cb = spy();
     const c = shallow(
         <SlaveTimelineWrapper
@@ -71,7 +75,7 @@ test('overlay is shown and will close slave timeline when it is clicked', t => {
 
 test('Header text and back button is shown', t => {
     const u = fixture.user();
-    const tl = new UserTimeline(u);
+    const tl = getSlaveTimelineOf(new UserTimeline(u));
     const cb = spy();
     const c = shallow(
         <SlaveTimelineWrapper
