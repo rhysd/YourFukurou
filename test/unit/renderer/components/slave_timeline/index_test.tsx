@@ -108,3 +108,34 @@ test('Header text and back button is shown', t => {
     const action = dispatch.args[0][0];
     t.is(action.type, 'CloseSlaveTimeline');
 });
+
+test('Top slave timeline in stack is shown and can back to previous timeline', t => {
+    const u = fixture.user();
+    const tw = fixture.tweet_other();
+    const cb = spy();
+    const tl = getSlaveTimelineOf(
+        ConversationTimeline.fromArray([tw, tw, tw]),
+        new UserTimeline(u),
+    );
+    const c = shallow(
+        <SlaveTimelineWrapper
+            slave={tl}
+            owner={u}
+            friends={List<number>()}
+            dispatch={cb}
+        />
+    );
+    t.is(c.find(UserSlave).length, 1);
+
+    const header = c.find('.slave-timeline__header');
+    const title = header.find('.slave-timeline__title');
+    t.is(title.text(), `Profile: @${u.screen_name}`);
+
+    const back = header.find('.slave-timeline__back');
+    back.simulate('click', {
+        stopPropagation() { /* do nothing */ },
+    });
+    t.true(cb.called);
+    const action = cb.args[0][0];
+    t.is(action.type, 'BackSlaveTimeline');
+});
