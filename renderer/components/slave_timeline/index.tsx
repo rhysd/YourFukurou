@@ -104,9 +104,11 @@ export class SlaveTimelineWrapper extends React.Component<Props, {}> {
     // Use requestIdleCallback to delay animation after DOM rendering finishes.
     // It avoids to mix animation and DOM update.
     componentDidUpdate(prev: Props) {
-        if (this.props.slave.timeline_stack.size > prev.slave.timeline_stack.size) {
+        const current_size = this.props.slave.timeline_stack.size;
+        const prev_size = prev.slave.timeline_stack.size;
+        if (current_size > prev_size) {
             window.requestIdleCallback(() => this.animate('slideInRight'));
-        } else if (this.props.slave.timeline_stack.size < prev.slave.timeline_stack.size) {
+        } else if (current_size < prev_size && current_size !== 0) {
             window.requestIdleCallback(() => this.animate('slideOutRight'));
         }
     }
