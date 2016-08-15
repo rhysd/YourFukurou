@@ -95,6 +95,12 @@ export function closeSlaveTimeline(): ThunkAction {
     };
 }
 
+export function backSlaveTimeline(): Action {
+    return {
+        type: 'BackSlaveTimeline',
+    };
+}
+
 export function addUserTweets(user_id: number, statuses: Tweet[]): Action {
     return {
         type: 'AddUserTweets',

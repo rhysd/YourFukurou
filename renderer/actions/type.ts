@@ -140,6 +140,8 @@ type ActionType = {
 } | {
     readonly type: 'CloseSlaveTimeline';
 } | {
+    readonly type: 'BackSlaveTimeline';
+} | {
     readonly type: 'AddUserTweets';
     readonly user_id: number;
     readonly statuses: Tweet[];

@@ -2,10 +2,10 @@ import {List} from 'immutable';
 import Item from '../item/item';
 import Tweet, {TwitterUser} from '../item/tweet';
 import Separator from '../item/separator';
+import log from '../log';
 
-interface SlaveTimeline {
+export interface SlaveTimeline {
     getFocusedItem(): Item | null;
-    close(): null;
     focusNext(): SlaveTimeline;
     focusPrev(): SlaveTimeline;
     focusTop(): SlaveTimeline;
@@ -14,7 +14,6 @@ interface SlaveTimeline {
     blur(): SlaveTimeline;
     getTitle(): string;
 }
-export default SlaveTimeline;
 
 export class UserTimeline implements SlaveTimeline {
     constructor(
@@ -47,10 +46,6 @@ export class UserTimeline implements SlaveTimeline {
             next_items,
             this.focus_index,
         );
-    }
-
-    close(): null {
-        return null;
     }
 
     blur() {
@@ -118,10 +113,6 @@ export class ConversationTimeline implements SlaveTimeline {
         return this.items.get(this.focus_index);
     }
 
-    close(): null {
-        return null;
-    }
-
     blur() {
         return this.focusOn(null);
     }
@@ -168,4 +159,74 @@ export class ConversationTimeline implements SlaveTimeline {
         return 'Conversation';
     }
 }
+
+export default class SlaveTimelineState {
+    constructor(
+        public readonly timeline_stack: List<SlaveTimeline>,
+    ) {}
+
+    openUserTimeline(user: TwitterUser) {
+        return new SlaveTimelineState(
+            this.timeline_stack.push(new UserTimeline(user))
+        );
+    }
+
+    openConversationTimeline(statuses: Tweet[]) {
+        return new SlaveTimelineState(
+            this.timeline_stack.push(ConversationTimeline.fromArray(statuses))
+        );
+    }
+
+    closeCurrentTimeline() {
+        if (this.timeline_stack.size === 0) {
+            log.error('Try to back from empty slave timeline!: ', this);
+            return this;
+        }
+        return new SlaveTimelineState(List<SlaveTimeline>());
+    }
+
+    backToPreviousTimeline() {
+        if (this.timeline_stack.size <= 1) {
+            log.warn('Maybe invalid slave timeline state: Trying to back to empty:', this);
+            return this.closeCurrentTimeline();
+        }
+        return new SlaveTimelineState(this.timeline_stack.pop());
+    }
+
+    getCurrent() {
+        return this.timeline_stack.last() || null;
+    }
+
+    modifyUserTimeline(user_id: number, modifier: (u: UserTimeline) => UserTimeline) {
+        const current = this.timeline_stack.last();
+        if (current === undefined) {
+            return this;
+        }
+        if (!(current instanceof UserTimeline)) {
+            return this;
+        }
+        if (current.user.id !== user_id) {
+            return this;
+        }
+        const modified = modifier(current);
+        if (modified === current) {
+            return this;
+        }
+        return new SlaveTimelineState(this.timeline_stack.set(-1, modified));
+    }
+
+    modifySlaveTimeline(modifier: (s: SlaveTimeline) => SlaveTimeline) {
+        const current = this.timeline_stack.last();
+        if (current === undefined) {
+            return this;
+        }
+        const modified = modifier(current);
+        if (modified === current) {
+            return this;
+        }
+        return new SlaveTimelineState(this.timeline_stack.set(-1, modified));
+    }
+}
+
+export const DefaultSlaveTimelineState = new SlaveTimelineState(List<SlaveTimeline>());
 

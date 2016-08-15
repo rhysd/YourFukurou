@@ -12,6 +12,7 @@ import {
     openUserTimeline,
     addUserTweets,
     openConversationTimeline,
+    backSlaveTimeline,
 } from '../actions/slave_timeline';
 import {showMessage} from '../actions/message';
 import {openPicturePreview} from '../actions/tweet_media';
@@ -33,7 +34,7 @@ import Separator from '../item/separator';
 import {dispatchOlderTweets} from '../components/slave_timeline/user';
 
 function getCurrentUser() {
-    const slave = Store.getState().slaveTimeline;
+    const slave = Store.getState().slaveTimeline.getCurrent();
     if (slave instanceof UserTimeline) {
         return slave.user;
     } else {
@@ -56,7 +57,7 @@ function openUserWebsite() {
 }
 
 function getFocusedStatus() {
-    const item = Store.getState().slaveTimeline.getFocusedItem();
+    const item = Store.getState().slaveTimeline.getCurrent().getFocusedItem();
     if (item instanceof Tweet) {
         return item;
     } else {
@@ -137,7 +138,7 @@ function reply(status: Tweet) {
 }
 
 function replyOrCompleteMissingStatuses() {
-    const tl = Store.getState().slaveTimeline;
+    const tl = Store.getState().slaveTimeline.getCurrent();
     const item = tl.getFocusedItem();
     if (item instanceof Tweet) {
         reply(item);
@@ -178,6 +179,15 @@ function conversation() {
     Store.dispatch(openConversationTimeline(status.getMainStatus()));
 }
 
+function backSlaveTimelineStack() {
+    const slave = Store.getState().slaveTimeline;
+    if (slave.timeline_stack.size <= 1) {
+        Store.dispatch(closeSlaveTimeline());
+    } else {
+        Store.dispatch(backSlaveTimeline());
+    }
+}
+
 export type SlaveTimelineAction =
     'open-tweet-form' |
     'open-media' |
@@ -196,6 +206,7 @@ export type SlaveTimelineAction =
     'blur' |
     'open-user-page' |
     'open-user-website' |
+    'back' |
     'close';
 
 const DefaultMap = I.Map<string, SlaveTimelineAction>({
@@ -216,6 +227,8 @@ const DefaultMap = I.Map<string, SlaveTimelineAction>({
     'escape': 'blur',
     'ctrl+u': 'open-user-page',
     'ctrl+w': 'open-user-website',
+    'h': 'back',
+    'backspace': 'back',
     'x': 'close',
 });
 
@@ -226,6 +239,7 @@ const ActionHandlers = I.Map<SlaveTimelineAction, () => void>({
     'focus-top': () => Store.dispatch(focusSlaveTop()),
     'focus-bottom': () => Store.dispatch(focusSlaveBottom()),
     'blur': () => Store.dispatch(blurSlaveTimeline()),
+    'back': backSlaveTimelineStack,
     'open-tweet-form': () => Store.dispatch(openEditor()),
     'open-media': openMedia,
     'open-links': openLinks,

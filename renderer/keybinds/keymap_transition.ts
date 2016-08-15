@@ -77,7 +77,7 @@ export class KeymapTransition {
     private escapeFromEditor(state: State) {
         const next =
             state.tweetMedia.is_open ? this.media_preview :
-            state.slaveTimeline !== null ? this.slave_timeline :
+            state.slaveTimeline.timeline_stack.size > 0 ? this.slave_timeline :
             this.global;
         this.doTransition(next);
     }
@@ -85,7 +85,7 @@ export class KeymapTransition {
     private escapeFromMediaPreview(state: State) {
         const next =
             state.editor.is_open ? this.editor :
-            state.slaveTimeline !== null ? this.slave_timeline :
+            state.slaveTimeline.timeline_stack.size > 0 ? this.slave_timeline :
             this.global;
         this.doTransition(next);
     }
@@ -97,7 +97,6 @@ export class KeymapTransition {
             this.global;
         this.doTransition(next);
     }
-
 }
 
 export default new KeymapTransition();

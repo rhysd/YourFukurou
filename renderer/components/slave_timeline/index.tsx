@@ -5,69 +5,126 @@ import UserSlave from './user';
 import ConversationSlave from './conversation';
 import {TwitterUser} from '../../item/tweet';
 import State from '../../states/root';
-import SlaveTimeline, {UserTimeline, ConversationTimeline} from '../../states/slave_timeline';
+import SlaveTimelineState, {
+    SlaveTimeline,
+    UserTimeline,
+    ConversationTimeline,
+} from '../../states/slave_timeline';
 import log from '../../log';
 import {Dispatch} from '../../store';
-import {closeSlaveTimeline} from '../../actions/slave_timeline';
+import {closeSlaveTimeline, backSlaveTimeline} from '../../actions/slave_timeline';
 
 interface Props extends React.Props<SlaveTimelineWrapper> {
-    readonly slave: SlaveTimeline;
+    readonly slave: SlaveTimelineState;
     readonly friends: List<number>;
     readonly owner: TwitterUser;
     readonly dispatch?: Dispatch;
 }
 
 export class SlaveTimelineWrapper extends React.Component<Props, {}> {
+    timeline_node: HTMLElement;
+
     constructor(props: Props) {
         super(props);
-        this.backToTimeline = this.backToTimeline.bind(this);
+        this.back = this.back.bind(this);
+        this.close = this.close.bind(this);
     }
 
-    backToTimeline(e: React.MouseEvent) {
+    back(e: React.MouseEvent) {
+        e.stopPropagation();
+        if (this.props.slave.timeline_stack.size <= 1) {
+            this.props.dispatch!(closeSlaveTimeline());
+        } else {
+            this.props.dispatch!(backSlaveTimeline());
+        }
+    }
+
+    close(e: React.MouseEvent) {
         e.stopPropagation();
         this.props.dispatch!(closeSlaveTimeline());
     }
 
-    renderSlave() {
-        const {slave, friends, owner, dispatch} = this.props;
-        if (slave instanceof UserTimeline) {
+    renderSlave(timeline: SlaveTimeline) {
+        const {friends, owner, dispatch} = this.props;
+        if (timeline instanceof UserTimeline) {
             return <UserSlave
-                timeline={slave}
+                timeline={timeline}
                 friends={friends}
                 owner={owner}
                 dispatch={dispatch!}
             />;
-        } else if (slave instanceof ConversationTimeline) {
+        } else if (timeline instanceof ConversationTimeline) {
             return <ConversationSlave
-                timeline={slave}
+                timeline={timeline}
                 friends={friends}
                 owner={owner}
             />;
         } else {
-            log.error('Trying rendering invalid slave timeline:', slave);
+            log.error('Trying rendering invalid slave timeline:', timeline);
             return undefined;
         }
     }
 
-    renderHeader() {
+    renderHeader(timeline: SlaveTimeline) {
+        const slave = this.props.slave;
+        const back_message =
+            slave.timeline_stack.size <= 1 ?
+                "Back to Timeline" :
+                slave.timeline_stack.get(-2).getTitle();
         return <div className="slave-timeline__header">
             <div
                 className="slave-timeline__back"
-                title="Back to Timeline"
-                onClick={this.backToTimeline}
+                title={back_message}
+                onClick={this.back}
             >
                 <i className="fa fa-angle-left fa-2x"/>
             </div>
-            <div className="slave-timeline__title">{this.props.slave.getTitle()}</div>
+            <div className="slave-timeline__title">{timeline.getTitle()}</div>
         </div>;
     }
 
+    animate(kind: string) {
+        if (!this.timeline_node) {
+            return;
+        }
+        let listener: () => void;
+        listener = () => {
+            this.timeline_node.className = 'slave-timeline__timeline';
+            this.timeline_node.removeEventListener('animationend', listener);
+        };
+        this.timeline_node.addEventListener('animationend', listener);
+        this.timeline_node.className = 'slave-timeline__timeline animated ' + kind;
+    }
+
+    componentDidMount() {
+        this.animate('slideInRight');
+    }
+
+    // XXX:
+    // Use requestIdleCallback to delay animation after DOM rendering finishes.
+    // It avoids to mix animation and DOM update.
+    componentDidUpdate(prev: Props) {
+        const current_size = this.props.slave.timeline_stack.size;
+        const prev_size = prev.slave.timeline_stack.size;
+        if (current_size > prev_size) {
+            window.requestIdleCallback(() => this.animate('slideInRight'));
+        } else if (current_size < prev_size && current_size !== 0) {
+            window.requestIdleCallback(() => this.animate('slideOutRight'));
+        }
+    }
+
     render() {
+        // Note:
+        // Current timeline must exist because renderer of this component already checked it.
+        const timeline = this.props.slave.getCurrent()!;
         return <div className="slave-timeline__wrapper">
-            <div className="slave-timeline__overlay" onClick={this.backToTimeline}/>
-            <div className="slave-timeline__timeline animated slideInRight">
-                {this.renderHeader()}
-                {this.renderSlave()}
+            <div className="slave-timeline__overlay" onClick={this.close}/>
+            <div
+                className="slave-timeline__timeline"
+                ref={r => { this.timeline_node = r; }}
+            >
+                {this.renderHeader(timeline)}
+                {this.renderSlave(timeline)}
             </div>
         </div>;
     }

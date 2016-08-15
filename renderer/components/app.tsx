@@ -39,7 +39,7 @@ export const App = (props: AppProps) => (
 function select(state: State): AppProps {
     return {
         editorOpen: state.editor.is_open,
-        slaveOpen: state.slaveTimeline !== null,
+        slaveOpen: state.slaveTimeline.timeline_stack.size !== 0,
         message: state.message,
     };
 }
