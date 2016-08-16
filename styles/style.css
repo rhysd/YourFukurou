@@ -1145,7 +1145,7 @@ body {
 /* slave-timeline {{{ */
 
 .slave-timeline__wrapper {
-  width: calc(100vw - 72px);
+  width: calc(100vw - var(--sidemenu-width));
   height: 100vh;
   position: fixed;
   top: 0;
