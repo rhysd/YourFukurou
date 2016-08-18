@@ -11,7 +11,7 @@ test.afterEach.always(async (t) => {
     const yf = t.context.yf;
     if (yf && yf.isRunning()) {
         await yf.dumpLogsTo('send_and_delete_tweet_log.json');
-        await yf.captureScreenShot('screenshot_send_and_delete_tweet.png');
+        await yf.captureScreenShot('send_and_delete_tweet');
         await yf.stop();
     }
 });

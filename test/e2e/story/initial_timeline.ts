@@ -11,7 +11,7 @@ test.afterEach.always(async (t) => {
     const yf = t.context.yf;
     if (yf && yf.isRunning()) {
         await yf.dumpLogsTo('initial_timeline_log.json');
-        await yf.captureScreenShot('screenshot_initial_timeline.png');
+        await yf.captureScreenShot('initial_timeline');
         await yf.stop();
     }
 });

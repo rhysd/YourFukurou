@@ -15,8 +15,9 @@ export default class YourFukurou extends Application {
     }
 
     captureScreenShot(name: string, dir?: string) {
+        const file = `screenshot_${name}_${process.platform}.png`;
         this.browserWindow.capturePage().then((img: Buffer) => {
-            writeFileSync(join(dir || '.', name), img);
+            writeFileSync(join(dir || '.', file), img);
         });
     }
 
