@@ -4,6 +4,8 @@ import Tweet, {TwitterUser} from '../item/tweet';
 import Separator from '../item/separator';
 import log from '../log';
 
+// TODO:
+// moving focus is common operation.  They should be defined in parent class.
 export interface SlaveTimeline {
     getFocusedItem(): Item | null;
     focusNext(): SlaveTimeline;
