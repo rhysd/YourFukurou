@@ -14,7 +14,7 @@ script:
     - npm run build
     - npm run lint
     - npm run unit-test
-    - npm run e2e-test
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run e2e-test; fi
 
 after_failure:
     - ./scripts/travis-after-failure.sh
