@@ -22,6 +22,7 @@ export type EditorAction = 'send-tweet'
                             | 'select-next-suggestion'
                             | 'select-previous-suggestion';
 
+/* tslint:disable:object-literal-key-quotes */
 const DefaultMap = I.Map<string, EditorAction>({
     'ctrl+enter': 'send-tweet',
     'ctrl+g': 'cancel-suggestion',

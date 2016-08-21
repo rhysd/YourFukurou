@@ -42,7 +42,7 @@ const QuotedTweet = (props: QuotedTweetProps) => {
     return (
         <div className={classNames(
             'tweet__quoted',
-            {'tweet__quoted_focused': props.focused},
+            {tweet__quoted_focused: props.focused},
         )}>
             {renderHeader(s)}
             <TweetText className="tweet__quoted-text" status={s}/>

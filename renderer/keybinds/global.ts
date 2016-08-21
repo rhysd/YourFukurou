@@ -198,6 +198,8 @@ export type GlobalAction =
   | 'focus-top'
   | 'focus-bottom';
 
+/* tslint:disable:object-literal-key-quotes */
+
 const DefaultMap = I.Map<string, GlobalAction>({
     'tab': 'open-tweet-form',
     'c': 'conversation',

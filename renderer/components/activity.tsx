@@ -146,7 +146,7 @@ function renderCollapsed(props: TwitterActivityProps) {
         <div
             className={classNames(
                 'activity activity_mini',
-                {'activity_focused': !!focused},
+                {activity_focused: !!focused},
             )}
             onClick={onClick}
         >

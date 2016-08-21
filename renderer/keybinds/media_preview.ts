@@ -37,6 +37,8 @@ export type MediaPreviewAction =
         'previous-picture' |
         'close-preview';
 
+/* tslint:disable:object-literal-key-quotes */
+
 const DefaultMap = I.Map<string, MediaPreviewAction>({
     'j': 'next-picture',
     'k': 'previous-picture',

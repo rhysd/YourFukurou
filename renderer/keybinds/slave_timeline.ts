@@ -209,6 +209,8 @@ export type SlaveTimelineAction =
     'back' |
     'close';
 
+/* tslint:disable:object-literal-key-quotes */
+
 const DefaultMap = I.Map<string, SlaveTimelineAction>({
     'tab': 'open-tweet-form',
     'c': 'conversation',
