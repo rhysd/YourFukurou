@@ -175,7 +175,7 @@ function getMissingItemsAt(sep_index: number, kind: TimelineKind, current_items:
             if (items.length === 0) {
                 return [] as Item[];
             }
-        } else {
+        } else if (sep_index !== 0) {
             log.error('First status of missing statuses sequence is not a max_id status', items);
         }
 
