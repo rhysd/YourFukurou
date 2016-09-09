@@ -274,6 +274,13 @@ declare module 'twit' {
                 target?: User;
                 target_object?: any;
             }
+            export interface StreamTargetEvent {
+                created_at: string;
+                event: string;
+                source: User;
+                target: User;
+                target_object?: any;
+            }
         }
 
         interface MediaParam {
@@ -351,6 +358,7 @@ declare module 'twit' {
             on(event: 'list_user_subscribed', cb: (e: Twitter.StreamEvent) => void): this;
             on(event: 'list_user_unsubscribed', cb: (e: Twitter.StreamEvent) => void): this;
             on(event: 'message', cb: (msg: any) => void): this;
+            on(event: 'mute', cb: (e: Twitter.StreamTargetEvent) => void): this;
             on(event: 'quoted_tweet', cb: (e: Twitter.StreamEvent) => void): this;
             on(event: 'reconnect', cb: (request: any, response: IncomingMessage, connectInterval: number) => void): this;
             on(event: 'retweeted_retweet', cb: (e: Twitter.StreamEvent) => void): this;
@@ -361,6 +369,7 @@ declare module 'twit' {
             on(event: 'unfavorite', cb: (e: Twitter.StreamEvent) => void): this;
             on(event: 'unfollow', cb: (e: Twitter.StreamEvent) => void): this;
             on(event: 'unknown_user_event', cb: (e: Twitter.StreamEvent) => void): this;
+            on(event: 'unmute', cb: (e: Twitter.StreamTargetEvent) => void): this;
             on(event: 'user_event', cb: (e: Twitter.StreamEvent) => void): this;
             on(event: 'user_update', cb: (e: Twitter.StreamEvent) => void): this;
             on(event: 'user_withheld', cb: (msg: any) => void): this;

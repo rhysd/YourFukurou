@@ -86,7 +86,7 @@ export class TwitterRestApi {
 
     verifyCredentials() {
         const params = {
-            include_entities: true,
+            include_entities: 'true',
         };
         return this.client.get<User>('account/verify_credentials', params);
     }

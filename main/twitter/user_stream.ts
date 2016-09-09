@@ -52,18 +52,20 @@ export default class TwitterUserStream {
             this.sender.send('yf:unfollow', e.target);
         });
 
+        this.stream.on('mute', e => {
+            this.sender.send('yf:rejected-ids', [e.target.id]);
+        });
+
+        this.stream.on('unmute', e => {
+            this.sender.send('yf:unrejected-ids', [e.target.id]);
+        });
+
         this.stream.on('unknown_user_event', msg => {
             if (!msg.target) {
                 log.warn("'target' is not found: ", msg);
                 return;
             }
             switch (msg.event) {
-                case 'mute':
-                    this.sender.send('yf:rejected-ids', [msg.target.id]);
-                    break;
-                case 'unmute':
-                    this.sender.send('yf:unrejected-ids', [msg.target.id]);
-                    break;
                 case 'access_revoked':
                     // TODO:
                     break;
