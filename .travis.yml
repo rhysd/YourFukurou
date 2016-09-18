@@ -6,6 +6,9 @@ os:
     - osx
     - linux
 
+sudo: required
+dist: trusty
+
 before_script:
     - source scripts/travis-before-script.sh
 
