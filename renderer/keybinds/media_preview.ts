@@ -1,5 +1,5 @@
 import * as I from 'immutable';
-import KeyBinds from './keybinds';
+import KeyBinds, {Listenable} from './keybinds';
 import Store from '../store';
 import {moveToNthPicturePreview, closeTweetMedia} from '../actions/tweet_media';
 import log from '../log';
@@ -55,11 +55,6 @@ const ActionHandlers = I.Map<MediaPreviewAction, () => void>({
     'previous-picture': prevPic,
     'close-preview': () => Store.dispatch(closeTweetMedia()),
 });
-
-interface Listenable {
-    addEventListener(e: string, cb: (e: Event) => any, capture?: boolean): void;
-    removeEventListener(e: string, cb: (e: Event) => any): void;
-}
 
 export default class MediaPreviewKeyMaps {
     private keybinds: KeyBinds<MediaPreviewAction>;

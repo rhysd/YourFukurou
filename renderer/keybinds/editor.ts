@@ -1,7 +1,7 @@
 import * as I from 'immutable';
 import * as React from 'react';
 import {KeyBindingUtil} from 'draft-js';
-import KeyBinds from './keybinds';
+import KeyBinds, {Listenable} from './keybinds';
 import log from '../log';
 import Store from '../store';
 import {
@@ -94,7 +94,7 @@ export default class EditorKeymaps {
         );
     }
 
-    enable() {
+    enable(_: Listenable) {
         this.keybinds.enabled = true;
     }
 

@@ -169,3 +169,8 @@ export default class KeyBinds<ActionType> {
         return true;
     }
 }
+
+export interface Listenable {
+    addEventListener(e: string, cb: (e: Event) => any, capture?: boolean): void;
+    removeEventListener(e: string, cb: (e: Event) => any): void;
+}

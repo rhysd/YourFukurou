@@ -1,6 +1,6 @@
 import * as I from 'immutable';
 import {Twitter} from 'twit';
-import KeyBinds from './keybinds';
+import KeyBinds, {Listenable} from './keybinds';
 import Store from '../store';
 import {
     closeSlaveTimeline,
@@ -74,7 +74,7 @@ function openMedia() {
 
     let media = status.media;
     if (media.length === 0 && status.hasQuote()) {
-        media = status.quoted_status.media;
+        media = status.quoted_status!.media;
     }
     if (media.length === 0) {
         return;
@@ -255,11 +255,6 @@ const ActionHandlers = I.Map<SlaveTimelineAction, () => void>({
     'open-user-page': openUserPage,
     'open-user-website': openUserWebsite,
 });
-
-interface Listenable {
-    addEventListener(e: string, cb: (e: Event) => any, capture?: boolean): void;
-    removeEventListener(e: string, cb: (e: Event) => any): void;
-}
 
 // Note:
 // Need to create common class for MediaPreviewKeyMaps and SlaveTimelineKeyMaps

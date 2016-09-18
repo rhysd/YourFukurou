@@ -8,7 +8,12 @@ export default class HashtagCompletionHistory {
 
     getHashtags(): string[] {
         if (this.data === undefined) {
-            this.data = JSON.parse(window.localStorage.getItem(StorageKey)) || [];
+            const stored = window.localStorage.getItem(StorageKey);
+            if (stored === null) {
+                this.data = [];
+            } else {
+                this.data = JSON.parse(stored);
+            }
         }
         return this.data;
     }

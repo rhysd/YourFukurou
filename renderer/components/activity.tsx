@@ -24,7 +24,7 @@ interface ConnectedProps extends React.Props<any> {
 }
 
 interface DispatchProps {
-    readonly onClick: (e: MouseEvent) => void;
+    readonly onClick: (e: React.MouseEvent) => void;
 }
 
 type TwitterActivityProps = ConnectedProps & DispatchProps;

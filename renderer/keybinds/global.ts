@@ -1,6 +1,6 @@
 import * as I from 'immutable';
 import {Twitter} from 'twit';
-import KeyBinds from './keybinds';
+import KeyBinds, {Listenable} from './keybinds';
 import Store from '../store';
 import Tweet from '../item/tweet';
 import Separator from '../item/separator';
@@ -245,11 +245,6 @@ const ActionHandlers = I.Map<GlobalAction, () => void>({
 // Note:
 // At constructor, we need to load user defined key actions asynchronously.
 
-interface Listenable {
-    addEventListener(e: string, cb: (e: Event) => any, capture?: boolean): void;
-    removeEventListener(e: string, cb: (e: Event) => any): void;
-}
-
 export default class GlobalKeyMaps {
     private keybinds: KeyBinds<GlobalAction>;
     private handler: (e: KeyboardEvent) => void;
@@ -268,7 +263,7 @@ export default class GlobalKeyMaps {
         this.listening.addEventListener('keydown', this.handler);
     }
 
-    enable() {
+    enable(_: Listenable) {
         if (this.keybinds.enabled || this.listening === null) {
             return;
         }
