@@ -1,8 +1,11 @@
 /// <reference path="../../../typings/globals/node/index.d.ts" />
 /// <reference path="../../../typings/globals/q/index.d.ts" />
 /// <reference path="../../../typings/globals/webdriverio/index.d.ts" />
-/// <reference path="../../../typings/globals/github-electron/electron-prebuilt/index.d.ts" />
 
+declare module 'electron' {
+    const app_path: string;
+    export = app_path;
+}
 declare namespace WebdriverIO {
     export interface AuditOptions {
         ignoreWarnings?: boolean;
@@ -68,3 +71,4 @@ declare module 'spectron' {
         isRunning(): boolean;
     }
 }
+

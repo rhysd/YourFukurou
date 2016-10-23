@@ -1,7 +1,7 @@
 import {join} from 'path';
 import {writeFileSync} from 'fs';
 import {Application} from 'spectron';
-import * as electron from 'electron-prebuilt';
+import * as electron from 'electron';
 
 export default class YourFukurou extends Application {
     constructor(config_path?: string) {
