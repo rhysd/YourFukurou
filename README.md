@@ -25,7 +25,7 @@ Goals :bird::
 
 - OS X: `~/Library/Application\ Support/YourFukurou/`
 - Linux: `~/.config/YourFukurou/`
-- Windows: `%APPDATA%\YourFukurou\`.
+- Windows: `%APPDATA%\YourFukurou\`
 
 ## User CSS
 
@@ -105,7 +105,7 @@ These shortcuts are applied when preview of pictures in tweet is opened.  Global
 | `ctrl+f`        | Like focused tweet.                        | `like`             |
 | `ctrl+D`        | Delete focused tweet.                      | `delete-status`    |
 | `enter`         | Open tweet form to reply to focused tweet. | `reply`            |
-| `escape` or `x` | Back to main timeline                      | `close`            |
+| `escape` or `x` | Back to main timeline.                     | `close`            |
 
 ## JSON Configuration File
 
