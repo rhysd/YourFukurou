@@ -33,6 +33,10 @@ function createAutoCompleteComponent(label: AutoCompleteLabel) {
         node: HTMLElement;
         label: AutoCompleteLabel;
 
+        onNodeRef = (ref: HTMLElement) => {
+            this.node = ref;
+        }
+
         constructor(props: AutoCompleteProps) {
             super(props);
             this.label = label;
@@ -60,7 +64,7 @@ function createAutoCompleteComponent(label: AutoCompleteLabel) {
         render() {
             return <span
                 className={'tweet-form__decorated-' + label}
-                ref={r => { this.node = r; }}
+                ref={this.onNodeRef}
             >{this.props.children}</span>;
         }
     }

@@ -36,80 +36,88 @@ interface TweetEditorProps extends React.Props<any> {
 // We need to use CSSTransitionGroup to add open/close animation
 //   https://facebook.github.io/react/docs/animation.html
 export class TweetEditor extends React.Component<TweetEditorProps, {}> {
-    keyBindingHandler: (e: React.KeyboardEvent) => string;
-    keyCommandHandler: (cmd: string) => boolean;
-    returnHandler: (e: React.KeyboardEvent) => boolean;
-    blurHandler: (e: React.SyntheticEvent) => void;
-    tabHandler: (e: React.KeyboardEvent) => void;
-    refs: {
-        body: HTMLElement;
-        editor: HTMLElement;
-        [s: string]: React.Component<any, any> | Element;
-    };
+    body: HTMLElement;
+    editor: Editor;
 
-    constructor(props: TweetEditorProps) {
-        super(props);
-        this.keyBindingHandler = e => {
-            // Note: When RETURN key is pressed
-            if (e.keyCode === 10 || e.keyCode === 13) {
-                // XXX:
-                // When 'handleReturn' prop is specified, this keybinding
-                // handler is also executed.  But the keyCommandHandler
-                // is never executed.
-                // So we need to handle an action for RETURN key in
-                // returnHandler and this handler doesn't need to handle
-                // the event (it is handled by returnHandler).
-                return getDefaultKeyBinding(e);
-            }
-
-            const action = KeymapTransition.editor.resolveEvent(e);
-            if (action !== null) {
-                log.debug('Handling custom keymap:', action);
-                return action;
-            }
-
-            return getDefaultKeyBinding(e);
-        };
-        this.keyCommandHandler =
-            cmd => KeymapTransition.editor.handleAction(cmd);
-        this.returnHandler =
-            e => {
-                const a = KeymapTransition.editor.resolveReturnAction(e);
-                log.debug('Handling return key:', a);
-                switch (a) {
-                    case 'send-tweet': {
-                        this.sendTweet();
-                        return true;
-                    }
-                    case 'choose-suggestion': {
-                        return this.selectAutoCompletionItem();
-                    }
-                    default:
-                        return false;
-                }
-            };
-        this.blurHandler = e => {
-            e.preventDefault();
-            this.refs.editor.focus();
-        };
-        this.tabHandler =
-            e => {
-                e.preventDefault();
-                const action = KeymapTransition.editor.resolveEvent(e);
-                if (action === null) {
-                    return false;
-                }
-                log.debug('Handling tab key:', action);
-                KeymapTransition.editor.handleAction(action);
-                return true;
-            };
+    onBodyRef = (ref: HTMLElement) => {
+        this.body = ref;
     }
 
+    onEditorRef = (ref: Editor) => {
+        this.editor = ref;
+    }
+
+    handleKeyBinding = (e: React.KeyboardEvent) => {
+        // Note: When RETURN key is pressed
+        if (e.keyCode === 10 || e.keyCode === 13) {
+            // XXX:
+            // When 'handleReturn' prop is specified, this keybinding
+            // handler is also executed.  But the handleKeyCommand
+            // is never executed.
+            // So we need to handle an action for RETURN key in
+            // handleReturn and this handler doesn't need to handle
+            // the event (it is handled by handleReturn).
+            return getDefaultKeyBinding(e);
+        }
+
+        const action = KeymapTransition.editor.resolveEvent(e);
+        if (action !== null) {
+            log.debug('Handling custom keymap:', action);
+            return action;
+        }
+
+        return getDefaultKeyBinding(e);
+    }
+
+    handleKeyCommand = (cmd: DraftJS.EditorCommand) => KeymapTransition.editor.handleAction(cmd)
+
+    handleReturn = (e: React.KeyboardEvent) => {
+        const a = KeymapTransition.editor.resolveReturnAction(e);
+        log.debug('Handling return key:', a);
+        switch (a) {
+            case 'send-tweet': {
+                this.sendTweet();
+                return true;
+            }
+            case 'choose-suggestion': {
+                return this.selectAutoCompletionItem();
+            }
+            default:
+                return false;
+        }
+    }
+
+    handleBlur = (e: React.KeyboardEvent) => {
+        e.preventDefault();
+        this.editor.focus();
+    }
+
+    handleTab = (e: React.KeyboardEvent) => {
+        e.preventDefault();
+        const action = KeymapTransition.editor.resolveEvent(e);
+        if (action === null) {
+            return false;
+        }
+        log.debug('Handling tab key:', action);
+        KeymapTransition.editor.handleAction(action);
+        return true;
+    }
+
+    handleClose = () => {
+        this.close();
+    }
+
+    handleChange = (e: EditorState) => {
+        this.props.dispatch!(changeEditorState(e));
+    }
+
+    handleSend = () => this.sendTweet()
+
     close() {
-        this.refs.body.addEventListener('animationend', () => {
+        this.body.addEventListener('animationend', () => {
             this.props.dispatch!(closeEditor());
         });
-        this.refs.body.className = 'tweet-form animated fadeOutUp';
+        this.body.className = 'tweet-form animated fadeOutUp';
     }
 
     getSelectAction(suggestion: SuggestionItem, completion: EditorCompletionState) {
@@ -168,7 +176,7 @@ export class TweetEditor extends React.Component<TweetEditorProps, {}> {
     }
 
     componentDidMount() {
-        this.refs.editor.focus();
+        this.editor.focus();
     }
 
     renderInReplyTo() {
@@ -197,28 +205,28 @@ export class TweetEditor extends React.Component<TweetEditorProps, {}> {
                     undefined :
                     <AutoCompleteSuggestions {...completion}/>;
 
-        return <div className="tweet-form animated fadeInDown" ref="body">
+        return <div className="tweet-form animated fadeInDown" ref={this.onBodyRef}>
             {this.renderInReplyTo()}
             <div className="tweet-form__editor">
                 <IconButton
                     className="tweet-form__cancel-btn"
                     name="times"
                     tip="cancel"
-                    onClick={() => this.close()}
+                    onClick={this.handleClose}
                 />
                 <div className="tweet-form__input">
                     <Editor
                         editorState={this.props.editor}
                         placeholder="Tweet..."
-                        handleKeyCommand={this.keyCommandHandler}
-                        handleReturn={this.returnHandler}
-                        keyBindingFn={this.keyBindingHandler}
+                        handleKeyCommand={this.handleKeyCommand}
+                        handleReturn={this.handleReturn}
+                        keyBindingFn={this.handleKeyBinding}
                         stripPastedStyles
-                        onEscape={() => this.close()}
-                        onTab={this.tabHandler}
-                        onBlur={this.blurHandler}
-                        onChange={e => this.props.dispatch!(changeEditorState(e))}
-                        ref="editor"
+                        onEscape={this.handleClose}
+                        onTab={this.handleTab}
+                        onBlur={this.handleBlur}
+                        onChange={this.handleChange}
+                        ref={this.onEditorRef}
                     />
                     <div className={'tweet-form__counter tweet-form__counter_' + count_state}>
                         {char_count}
@@ -228,7 +236,7 @@ export class TweetEditor extends React.Component<TweetEditorProps, {}> {
                     <IconButton
                         name="twitter"
                         tip="send tweet"
-                        onClick={() => this.sendTweet()}
+                        onClick={this.handleSend}
                     />
                 </div>
                 {suggestions}

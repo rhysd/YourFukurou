@@ -61,10 +61,32 @@ function getStatusIdsRelatedTo(status: TweetItem): string[] {
 }
 
 export class Timeline extends React.Component<TimelineProps, {}> {
-    refs: {
-        list: ReactList.Node;
-        [key: string]: React.Component<any, any> | Element;
-    };
+    list: ReactList.Node;
+
+    // Note:
+    // react-list provides a ref which passes its node instance.
+    // But in react.d.ts, ref's type is hard-coded as string | ...  and the ReactList.
+    // Node argument type causes an type mismatch error. So I specified the type as 'any'.
+    onListRef = (ref: any) => {
+        this.list = ref;
+    }
+
+    handleClickNext = () => {
+        const {dispatch, media} = this.props;
+        const next_idx = (media.index + 1) % media.picture_urls.length;
+        dispatch!(moveToNthPicturePreview(next_idx));
+    }
+
+    handleClickPrev = () => {
+        const {dispatch, media} = this.props;
+        const idx = media.index;
+        const prev_idx = idx === 0 ? (media.picture_urls.length - 1) : (idx - 1);
+        dispatch!(moveToNthPicturePreview(prev_idx));
+    }
+
+    handleClickClose = () => {
+        this.props.dispatch!(closeTweetMedia());
+    }
 
     getFocusedUserId() {
         const {focus_index, items} = this.props;
@@ -149,20 +171,24 @@ export class Timeline extends React.Component<TimelineProps, {}> {
     renderVirtualScroll() {
         const related_ids = this.getRelatedStatusIds();
         const focused_user_id = this.getFocusedUserId();
+        // Note:
+        // Caluculating 'related_ids' and 'focused_user_id' for each item
+        // is not good for performance. So define itemRenderer for each rendering.
+        const renderer = (idx: number, key: string) => this.renderItem(idx, key, related_ids, focused_user_id);
         return (
             <ReactList
-                itemRenderer={(idx, key) => this.renderItem(idx, key, related_ids, focused_user_id)}
+                itemRenderer={renderer}
                 length={this.props.items.size}
                 type="variable"
                 threshold={500}
                 useTranslate3d
-                ref="list"
+                ref={this.onListRef}
             />
         );
     }
 
     renderLightbox() {
-        const {media, dispatch} = this.props;
+        const {media} = this.props;
 
         if (!media.is_open || media.picture_urls.length === 0) {
             return <Lightbox
@@ -183,10 +209,6 @@ export class Timeline extends React.Component<TimelineProps, {}> {
         const images: LightboxImage[] =
             media.picture_urls.map(e => ({ src: e }));
 
-        const idx = media.index;
-        const next_idx = (idx + 1) % images.length;
-        const prev_idx = idx === 0 ? (images.length - 1) : (idx - 1);
-
         return (
             <Lightbox
                 currentImage={media.index}
@@ -194,9 +216,9 @@ export class Timeline extends React.Component<TimelineProps, {}> {
                 isOpen
                 backdropClosesModal
                 width={window.innerWidth - 120}
-                onClickNext={() => dispatch!(moveToNthPicturePreview(next_idx))}
-                onClickPrev={() => dispatch!(moveToNthPicturePreview(prev_idx))}
-                onClose={() => dispatch!(closeTweetMedia())}
+                onClickNext={this.handleClickNext}
+                onClickPrev={this.handleClickPrev}
+                onClose={this.handleClickClose}
                 enableKeyboardInput={true}
             />
         );
@@ -205,10 +227,10 @@ export class Timeline extends React.Component<TimelineProps, {}> {
     componentWillReceiveProps(next: TimelineProps) {
         // Note:
         // When we should manage visible range of timline, we can notify the range to store
-        // by dispatching action with the result of `this.refs.list.getVisibleRange()`.
+        // by dispatching action with the result of `this.list.getVisibleRange()`.
         if (next.focus_index !== this.props.focus_index && next.focus_index !== null) {
             log.debug('Focus moves to:', next.focus_index);
-            this.refs.list.scrollAround(next.focus_index);
+            this.list.scrollAround(next.focus_index);
         }
     }
 

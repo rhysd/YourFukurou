@@ -39,7 +39,7 @@ export default class ZigZagSeparator extends React.Component<Props, State> {
             return (
                 <div className="zigzag-separator_loading">
                     <div className="zigzag-separator_loading-icon">
-                        <i className="fa fa-spinner fa-pulse fa-lg fa-fw"></i>
+                        <i className="fa fa-spinner fa-pulse fa-lg fa-fw"/>
                         <span className="sr-only">Loading...</span>
                     </div>
                 </div>

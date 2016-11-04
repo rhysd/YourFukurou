@@ -18,6 +18,10 @@ interface TweetPrimaryProps extends React.Props<any> {
 export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}> {
     actions_elem: HTMLElement;
 
+    onActionElemRef = (r: HTMLElement) => {
+        this.actions_elem = r;
+    }
+
     constructor(props: TweetPrimaryProps) {
         super(props);
         this.showActions = this.showActions.bind(this);
@@ -99,7 +103,7 @@ export default class TweetPrimary extends React.Component<TweetPrimaryProps, {}>
                             {'tweet-actions_focused': focused},
                         )}
                         style={{display: focused ? 'flex' : 'none'}}
-                        ref={r => {this.actions_elem = r; }}
+                        ref={this.onActionElemRef}
                     >
                         <TweetActionButton kind="reply" owner={owner} status={s}/>
                         <TweetActionButton kind="retweet" owner={owner} status={s}/>

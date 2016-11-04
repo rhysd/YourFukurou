@@ -8,16 +8,22 @@ interface ExternalLinkProps extends React.Props<any> {
     readonly title?: string;
 }
 
-const ExternalLink = (props: ExternalLinkProps) => (
-    <span
-        className={props.className + ' external-link'}
-        title={props.title}
-        onClick={e => {
-            e.stopPropagation();
-            openExternal(props.url);
-        }}
-    >
-        {props.children}
-    </span>
-);
-export default ExternalLink;
+export default class ExternalLink extends React.Component<ExternalLinkProps, {}> {
+    handleClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        openExternal(this.props.url);
+    }
+
+    render() {
+        const {className, title, children} = this.props;
+        return (
+            <span
+                className={className + ' external-link'}
+                title={title}
+                onClick={this.handleClick}
+            >
+                {children}
+            </span>
+        );
+    }
+}

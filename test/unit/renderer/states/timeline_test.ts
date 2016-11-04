@@ -690,7 +690,7 @@ test('replaceSeparatorWithItems() replaces separator with items', t => {
     const rp = fixture.in_reply_to_from_other();
     const rt = fixture.retweeted();
 
-    const s = getState([tw, new Separator, tw2]);
+    const s = getState([tw, new Separator(), tw2]);
 
     const s1 = s.replaceSeparatorWithItems('home', 1, [tw, tw2, tw]);
     t.is(s1.home.size, 5);
@@ -714,17 +714,17 @@ test('replaceSeparatorWithItems() replaces separator with items', t => {
 test("replaceSeparatorWithItems() filters rejected ID users' tweets", t => {
     const tw = fixture.tweet_other();
     const rp = fixture.in_reply_to_from_other();
-    const s1 = getState([new Separator]).addRejectedIds([tw.user.id]);
+    const s1 = getState([new Separator()]).addRejectedIds([tw.user.id]);
     const s2 = s1.replaceSeparatorWithItems('home', 0, [tw]);
     t.is(s2.home.size, 0);
 
     setMuteConfig({home: true, mention: true});
-    const s3 = getState([], 'mention', [new Separator]).addRejectedIds([rp.user.id]);
+    const s3 = getState([], 'mention', [new Separator()]).addRejectedIds([rp.user.id]);
     const s4 = s3.replaceSeparatorWithItems('mention', 0, [rp]);
     t.is(s4.mention.size, 0);
 
     setMuteConfig({home: false, mention: false});
-    const s5 = getState([], 'mention', [new Separator]).addRejectedIds([rp.user.id]);
+    const s5 = getState([], 'mention', [new Separator()]).addRejectedIds([rp.user.id]);
     const s6 = s5.replaceSeparatorWithItems('mention', 0, [rp]);
     t.is(s6.mention.size, 1);
 });

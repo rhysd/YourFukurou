@@ -1,4 +1,5 @@
 {
+  "extends": ["tslint:recommended", "tslint-react"],
   "rules": {
     "align": [
       true,
@@ -123,6 +124,8 @@
       "check-operator",
       "check-separator",
       "check-type"
-    ]
+    ],
+    "jsx-no-multiline-js": false,
+    "jsx-alignment": false
   }
 }

@@ -24,6 +24,10 @@ interface Props extends React.Props<SlaveTimelineWrapper> {
 export class SlaveTimelineWrapper extends React.Component<Props, {}> {
     timeline_node: HTMLElement;
 
+    onTimelineNodeRef = (ref: HTMLElement) => {
+        this.timeline_node = ref;
+    }
+
     constructor(props: Props) {
         super(props);
         this.back = this.back.bind(this);
@@ -121,7 +125,7 @@ export class SlaveTimelineWrapper extends React.Component<Props, {}> {
             <div className="slave-timeline__overlay" onClick={this.close}/>
             <div
                 className="slave-timeline__timeline"
-                ref={r => { this.timeline_node = r; }}
+                ref={this.onTimelineNodeRef}
             >
                 {this.renderHeader(timeline)}
                 {this.renderSlave(timeline)}

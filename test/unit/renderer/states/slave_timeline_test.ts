@@ -46,20 +46,20 @@ test('UserTimeline.appendPastItems() adds statuses to bottom of current timeline
     const tw2 = fixture.retweeted();
     const tw3 = fixture.in_reply_to();
 
-    const t1 = makeUserTimeline(fixture.user(), [tw1, new Separator]).appendPastItems([tw2, tw3]);
+    const t1 = makeUserTimeline(fixture.user(), [tw1, new Separator()]).appendPastItems([tw2, tw3]);
     t.is((t1.items.get(0) as Tweet).id, tw1.id);
     t.is((t1.items.get(1) as Tweet).id, tw2.id);
     t.is((t1.items.get(2) as Tweet).id, tw3.id);
     t.is(t1.focus_index, null);
 
-    const t2 = makeUserTimeline(fixture.user(), [tw1, new Separator], 1).appendPastItems([tw2, tw3]);
+    const t2 = makeUserTimeline(fixture.user(), [tw1, new Separator()], 1).appendPastItems([tw2, tw3]);
     t.is(t2.focus_index, 1);
 });
 
 test('UserTimeline.blur() loses its focus', t => {
-    const t1 = makeUserTimeline(fixture.user(), [new Separator], 0);
+    const t1 = makeUserTimeline(fixture.user(), [new Separator()], 0);
     t.is(t1.blur().focus_index, null);
-    const t2 = makeUserTimeline(fixture.user(), [new Separator]);
+    const t2 = makeUserTimeline(fixture.user(), [new Separator()]);
     t.is(t2.blur().focus_index, null);
 });
 

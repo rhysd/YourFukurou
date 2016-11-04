@@ -24,13 +24,18 @@ function renderThumb(entity: Twitter.MediaEntity, nth: number, props: TweetMedia
 
     const media_urls = props.entities.map(e => e.media_url);
 
+    // Note:
+    // 'nth' depends on the item index. So we need to prepare a callback for
+    // each image item to handle click event.
+    const handle_click = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        props.dispatch!(openPicturePreview(media_urls, nth));
+    };
+
     return (
         <div
             className="tweet__media-wrapper"
-            onClick={e => {
-                e.stopPropagation();
-                props.dispatch!(openPicturePreview(media_urls, nth));
-            }}
+            onClick={handle_click}
             key={nth}
         >
             <img

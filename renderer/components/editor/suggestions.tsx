@@ -109,6 +109,10 @@ export type SuggestionsProps = EditorCompletionState & React.Props<AutoCompleteS
 export default class AutoCompleteSuggestions extends React.Component<SuggestionsProps, {}> {
     node: HTMLElement;
 
+    onNodeRef = (r: HTMLElement) => {
+        this.node = r;
+    }
+
     moveElement() {
         // XXX:
         // Minus 75px for the width of side menu.
@@ -174,7 +178,7 @@ export default class AutoCompleteSuggestions extends React.Component<Suggestions
 
     render() {
         return (
-            <div className="autocomplete__suggestions" ref={r => { this.node = r; }}>
+            <div className="autocomplete__suggestions" ref={this.onNodeRef}>
                 {this.renderSuggestionItems()}
             </div>
         );

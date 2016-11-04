@@ -10,13 +10,15 @@ import Timeline from '../../../../renderer/components/timeline';
 import {App} from '../../../../renderer/components/app';
 import {MessageState} from '../../../../renderer/reducers/message';
 
+function nop() { /* Do nothing */ }
+
 function renderApp(editorOpen: boolean = false, slaveOpen: boolean = false, message: MessageState = null) {
     return shallow(
         <App
             editorOpen={editorOpen}
             slaveOpen={slaveOpen}
             message={message}
-            dispatch={() => { /* empty */ }}
+            dispatch={nop}
         />
     );
 }

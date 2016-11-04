@@ -14,7 +14,11 @@ interface MessageProps extends React.Props<any> {
 export default class Message extends React.Component<MessageProps, {}> {
     node: HTMLElement;
 
-    setupDismiss() {
+    onNodeRef = (ref: HTMLElement) => {
+        this.node = ref;
+    }
+
+    setupDismiss = () => {
         if (this.node === null) {
             // Note: When already this component was removed
             return;
@@ -29,7 +33,7 @@ export default class Message extends React.Component<MessageProps, {}> {
     componentDidMount() {
         const duration = this.props.duration || 3000;
         if (duration !== Infinity) {
-            setTimeout(() => this.setupDismiss(), duration);
+            setTimeout(this.setupDismiss, duration);
         }
     }
 
@@ -45,7 +49,7 @@ export default class Message extends React.Component<MessageProps, {}> {
         return (
             <div
                 className={`message__body message__body_${this.props.kind} animated fadeInDown`}
-                ref={r => { this.node = r; }}
+                ref={this.onNodeRef}
             >
                 <div className="message__icon">
                     <i className={`fa fa-${this.getIcon()}`}/>
@@ -56,7 +60,7 @@ export default class Message extends React.Component<MessageProps, {}> {
                 <IconButton
                     className="message__x-btn"
                     name="times-circle-o"
-                    onClick={() => this.setupDismiss()}
+                    onClick={this.setupDismiss}
                 />
             </div>
         );

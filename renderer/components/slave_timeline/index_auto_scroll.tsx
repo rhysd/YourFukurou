@@ -8,6 +8,7 @@ interface IndexAutoScrollProps extends React.Props<IndexAutoScroll> {
 
 export default class IndexAutoScroll extends React.Component<IndexAutoScrollProps, {}> {
     root: HTMLElement;
+    onRootRef = (r: HTMLElement) => { this.root = r; };
 
     scrollTweetIntoView(index: number) {
         if (!this.root) {
@@ -45,7 +46,7 @@ export default class IndexAutoScroll extends React.Component<IndexAutoScrollProp
         return (
             <div
                 className={this.props.className}
-                ref={r => { this.root = r; }}
+                ref={this.onRootRef}
             >
                 {this.props.children}
             </div>
