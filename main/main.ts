@@ -173,7 +173,11 @@ function openWindow(access: AccessToken) {
             win.setVisibleOnAllWorkspaces(true);
             win.on('blur', () => {
                 if (win && !win.isFullScreen() && !win.webContents.isDevToolsFocused()) {
-                    win.hide();
+                    if (process.platform === 'darwin') {
+                        app.hide();
+                    } else {
+                        win.hide();
+                    }
                 }
             });
         }
